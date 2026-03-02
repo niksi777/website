@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body class="bg-transparent text-white">
+<div id="root"></div>
+
+<script type="text/babel">
+
+function App() {
+
+  const [players, setPlayers] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("/players")
+      .then(res => res.json())
+      .then(data => setPlayers(data))
+      .catch(err => console.log(err));
+  }, []);
+
+  const topFive = players.slice(0,5);
+
+  return (
+    <div className="w-[820px] px-14 py-12">
+
+      <div className="text-center mb-12">
+        <img src="assets/gamba.png" className="h-20 mx-auto mb-6 object-contain" />
+        <div className="text-2xl tracking-wide font-light">
+          $500 LEADERBOARD
+        </div>
+      </div>
+
+      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 shadow-[0_0_60px_rgba(255,255,255,0.05)]">
+
+        <div className="grid grid-cols-3 text-xs uppercase tracking-widest opacity-40 mb-6">
+          <div>Name</div>
+          <div className="text-center">Reward</div>
+          <div className="text-right">Wager</div>
+        </div>
+
+        {topFive.map((p,i) => {
+
+          const isTop = i === 0;
+          const isSecond = i === 1;
+          const isThird = i === 2;
+
+          let highlight = "bg-white/0";
+
+          if (isTop) highlight = "bg-white/10 shadow-[0_0_30px_rgba(255,255,255,0.1)]";
+          if (isSecond) highlight = "bg-white/7";
+          if (isThird) highlight = "bg-white/5";
+
+          return (
+            <div
+              key={p.id}
+              className={`grid grid-cols-3 items-center py-4 px-4 rounded-xl mb-2 transition-all duration-500 ${highlight}`}
+            >
+              <div className="flex items-center gap-4">
+                <div className="text-white/50 w-6">
+                  {p.position}.
+                </div>
+                <img
+                  src={p.avatar}
+                  className="w-9 h-9 rounded-full object-cover border border-white/10"
+                />
+                <span className="font-medium tracking-wide">
+                  {p.username}
+                </span>
+              </div>
+
+              <div className="text-center text-xl font-semibold">
+                ${Number(p.reward).toFixed(2)}
+              </div>
+
+              <div className="text-right text-xl font-semibold">
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0
+                }).format(p.wager)}
+              </div>
+            </div>
+          );
+        })}
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+
+</script>
+</body>
+</html>
