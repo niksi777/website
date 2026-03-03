@@ -81,7 +81,7 @@ async function updateLeaderboard() {
 }
 
 // Update every 30 seconds
-setInterval(updateLeaderboard, 1800000);
+setInterval(updateLeaderboard, 3200000);
 updateLeaderboard();
 
 // API endpoint for overlay + website
@@ -103,4 +103,5 @@ app.get("/players", (req, res) => {
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
 });
+
 
