@@ -26,6 +26,33 @@ db.serialize(() => {
   `);
 });
 
+
+async function updateAcebet() {
+
+  try {
+
+    const response = await fetch(
+      "https://api.acebet.co/affiliates/detailed-summary/v2/2023-01-01",
+      {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    console.log("ACEBET DATA:", data);
+
+  } catch(err) {
+    console.log("Acebet error:", err);
+  }
+
+}
+
+
+
 // Fetch Gamba leaderboard
 async function updateLeaderboard() {
   try {
@@ -110,6 +137,48 @@ app.get("/players", (req, res) => {
   );
 });
 
+app.get("/acebet", async (req, res) => {
+
+  try {
+
+    const response = await fetch(
+      "https://api.acebet.co/affiliates/detailed-summary/v2/2023-01-01",
+      {
+        headers: {
+          "Authorization": "Bearer DIN_TOKEN_HER",
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "User-Agent": "Mozilla/5.0"
+        }
+      }
+    );
+
+    const text = await response.text();
+
+    console.log("ACEBET RAW RESPONSE:");
+    console.log(text);
+
+    res.send(text);
+
+  } catch (err) {
+
+    console.log("Acebet API error:", err);
+    res.json([]);
+
+  }
+
+});
+
+
+app.get("/ip", async (req, res) => {
+  try {
+    const response = await fetch("https://api.ipify.org?format=json");
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.json({ error: "Could not detect IP" });
+  }
+});
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
