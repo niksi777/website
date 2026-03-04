@@ -29,16 +29,18 @@ db.serialize(() => {
 // Fetch Gamba leaderboard
 async function updateLeaderboard() {
   try {
-    const url =
-      "https://gamba.com/_api/@?operationName=getRaceById" +
-      "&variables=%7B%22raceId%22%3A8682%7D" +
-      "&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22f2215aa98152288fd3b357d0a96f1d186e1ce1d9b8764ee6353f6aec0d26beee%22%7D%7D";
+    const raceId = 8914;
+
+const url =
+  "https://gamba.com/_api/@?operationName=getRaceById" +
+  `&variables=%7B%22raceId%22%3A${raceId}%7D` +
+  "&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22f2215aa98152288fd3b357d0a96f1d186e1ce1d9b8764ee6353f6aec0d26beee%22%7D%7D";
 
     const response = await fetch(url, {
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Referer":
-          "https://gamba.com/promotions/exclusive-leaderboards/8682",
+          "https://gamba.com/promotions/exclusive-leaderboards/8914",
         "Origin": "https://gamba.com",
       },
     });
@@ -51,12 +53,21 @@ async function updateLeaderboard() {
     }
 
     const race = json.data.getRaceById;
-    const competitors = race.competitors;
-    const prizes = race.prize_distribution;
+const competitors = race.competitors;
+const prizes = race.prize_distribution;
 
-    db.run("DELETE FROM players");
+console.log("Race ID:", raceId);
+console.log("Competitors:", competitors ? competitors.length : 0);
 
-    competitors.forEach((player) => {
+if (!competitors || competitors.length === 0) {
+  console.log("No competitors returned — keeping existing data");
+  return;
+}
+
+// Only wipe DB if valid competitors exist
+db.run("DELETE FROM players");
+
+competitors.forEach((player) => {
       const prize = prizes.find(
         (p) => p.position === player.position
       );
@@ -103,5 +114,4 @@ app.get("/players", (req, res) => {
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
 });
-
 
