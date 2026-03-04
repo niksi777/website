@@ -16,9 +16,12 @@
 <script type="text/babel">
 
 function App() {
-  const [players, setPlayers] = React.useState([]);
 
-    const [timeLeft, setTimeLeft] = React.useState("");
+
+
+
+
+   
 
   React.useEffect(() => {
     const endDate = new Date("2026-03-03T23:59:59Z").getTime();
@@ -63,19 +66,22 @@ function App() {
       <div className="relative text-center py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
 
         {/* LEFT MENU */}
-<div className="absolute top-8 left-10">
-  <nav className="flex items-center space-x-8 text-sm tracking-wide">
+<div className="flex justify-center mb-12">
+  <nav className="flex items-center gap-10 px-8 py-4 
+                  bg-white/5 backdrop-blur-md 
+                  border border-white/10 
+                  rounded-2xl shadow-lg">
 
     <a
       href="/"
-      className="text-white/70 hover:text-white transition"
+      className="text-sm tracking-wide text-white/70 hover:text-white transition"
     >
-      Leaderboard
+      Home
     </a>
 
     <a
       href="/giveaway.html"
-      className="text-white/70 hover:text-white transition"
+      className="text-sm tracking-wide text-white/70 hover:text-white transition"
     >
       Giveaway
     </a>
@@ -88,118 +94,88 @@ function App() {
 
         <div className="mt-8">
   <img 
-    src="/assets/gamba2.png"
-    className="h-12 mx-auto object-contain opacity-90"
+    src="/assets/niksi.png"
+    className="h-36 mx-auto object-contain opacity-90"
 
   />
 
   
 </div>
-        <div className="mt-4 text-sm text-gray-400">
-  Ends In{" "}
-  <span className="text-green-400 font-semibold">
-    {timeLeft}
-  </span>
-</div>
+        
 
       </div>
       <p className="mt6 text-gray-400 max-w-2x1 mx-auto text-1g">
         
       </p>
 
-{/* GAMBA SECTION */}
-<div className="max-w-5xl mx-auto px-6 pb-24">
+
 
   {/* SIGN UP BUTTON */}
-  <div className="flex justify-center mb-12">
+  <div className="max-w-5xl mx-auto mb-20 px-6">
+
+  <div className="grid md:grid-cols-2 gap-10">
+
+    {/* GAMBA CARD */}
     <a
-      href="https://gamba.com?c=niksi"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-white text-black px-10 py-4 rounded-2xl font-semibold tracking-wide hover:scale-105 transition-all duration-200 shadow-xl"
+      href="/gamba.html"
+      className="group flex flex-col items-center justify-center 
+                 bg-[#111827] border border-white/10 
+                 rounded-3xl px-12 py-10 
+                 shadow-2xl 
+                 hover:bg-white/5 transition-all duration-300"
     >
-      Sign Up Here
-    </a>
-  </div>
+      <img
+        src="/assets/gamba2.png"
+        alt="Gamba"
+        className="h-14 object-contain mb-6 
+                   group-hover:scale-105 
+                   transition-transform duration-300"
+      />
 
-  {/* Leaderboard Card */}
-  <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
-
-  {/* Small Top-Right Button */}
-  <div className="absolute top-8 right-10">
-    <a
-      href="https://gamba.com/promotions/exclusive-leaderboards/8682"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-white text-black px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-all duration-200 shadow"
-    >
-      View on Gamba
-    </a>
-  </div>
-
-  {/* Centered Prize Section */}
-  <div className="mb-12 text-center">
-    <h2 className="text-2xl font-semibold tracking-wide">
-      Total Prizepool{" "}
-      <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-        $500
+      <span className="text-xl font-semibold tracking-wide">
+        <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
+          $1,500
+        </span>{" "}
+        LEADERBOARD
       </span>
-    </h2>
-
-    <p className="text-gray-500 text-sm mt-2">
-      All wager counts for this leaderboard
-    </p>
-  
-  </div>
+    </a>
 
 
-    {/* Leaderboard Table */}
-    <div className="space-y-4">
+    {/* ACEBET CARD */}
+    <a
+      href="/acebet.html"
+      className="group flex flex-col items-center justify-center 
+                 bg-[#111827] border border-white/10 
+                 rounded-3xl px-12 py-10 
+                 shadow-2xl 
+                 hover:bg-white/5 transition-all duration-300"
+    >
+      <img
+        src="/assets/acebet.png"
+        alt="AceBet"
+        className="h-14 object-contain mb-6 
+                   group-hover:scale-105 
+                   transition-transform duration-300"
+      />
 
-      {/* Header Row */}
-      <div className="grid grid-cols-3 text-gray-400 text-sm uppercase tracking-wider border-b border-white/10 pb-3">
-        <div>USERNAME</div>
-        <div className="text-center">PRIZE</div>
-        <div className="text-right">TOTAL WAGER</div>
-      </div>
-
-      {players.slice(0, 15).map((p, i) => (
-        <div
-          key={p.id}
-          className="grid grid-cols-3 items-center bg-white/5 hover:bg-white/10 transition rounded-xl px-5 py-4 border border-white/5"
-        >
-          <div className="flex items-center gap-3 font-medium">
-            <span className="text-gray-400 w-6">
-              {i + 1}.
-            </span>
-            {p.username}
-          </div>
-
-          <div className="text-center font-semibold">
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2
-            }).format(p.reward)}
-          </div>
-
-          <div className="text-right font-semibold">
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2
-            }).format(p.wager)}
-          </div>
-        </div>
-      ))}
-
-    </div>
+      <span className="text-xl font-semibold tracking-wide">
+        <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
+          $1,000
+        </span>{" "}
+        LEADERBOARD
+      </span>
+    </a>
 
   </div>
 
 </div>
 
-    </div>
+  {/* Leaderboard Card */}
+  
+
+</div>
+
+    
   );
 }
 
