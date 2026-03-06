@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Niksi $500 GAMBA leaderboard</title>
+  <title>Niksi $1.000 ACEBET leaderboard</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -14,7 +14,7 @@
 <div id="root"></div>
 
 <script type="text/babel">
-
+const [acebetPlayers, setAcebetPlayers] = React.useState([]);
 function App() {
   const [players, setPlayers] = React.useState([]);
 
@@ -59,26 +59,36 @@ React.useEffect(() => {
 }, []);
 
   const fetchPlayers = async () => {
-  const res = await fetch("/players");
+  const res = await fetch("/acebet");
   const data = await res.json();
-  setPlayers(data);
+
+  console.log("ACEBET DATA:", data);
+
+  if (data.leaderboard) {
+    setPlayers(data.leaderboard);
+  }
 };
 
 const fetchAcebet = async () => {
   const res = await fetch("/acebet");
   const data = await res.json();
+
   console.log("ACEBET DATA:", data);
+
+  if (data && data.leaderboard) {
+    setAcebetPlayers(data.leaderboard);
+  }
 };
 
 React.useEffect(() => {
 
-  // fetch gamba leaderboard
   fetchPlayers();
-
-  // fetch acebet data
   fetchAcebet();
 
-  const interval = setInterval(fetchPlayers, 10000);
+  const interval = setInterval(() => {
+    fetchPlayers();
+    fetchAcebet();
+  }, 10000);
 
   return () => clearInterval(interval);
 
@@ -119,7 +129,7 @@ React.useEffect(() => {
 
         <div className="mt-8">
   <img 
-    src="/assets/gamba2.png"
+    src="/assets/acebet.png"
     className="h-12 mx-auto object-contain opacity-90"
 
   />
@@ -144,7 +154,7 @@ React.useEffect(() => {
   {/* SIGN UP BUTTON */}
   <div className="flex justify-center mb-12">
     <a
-      href="https://gamba.com?c=niksi"
+      href="https://acebet.co/welcome/r/niksi"
       target="_blank"
       rel="noopener noreferrer"
       className="bg-white text-black px-10 py-4 rounded-2xl font-semibold tracking-wide hover:scale-105 transition-all duration-200 shadow-xl"
@@ -159,7 +169,7 @@ React.useEffect(() => {
   {/* Small Top-Right Button */}
   <div className="absolute top-8 right-10">
     <a
-      href="https://gamba.com/promotions/exclusive-leaderboards/8914"
+      href="https://acebet.co/affiliates/creator/niksi?leaderboardId=250"
       target="_blank"
       rel="noopener noreferrer"
       className="bg-white text-black px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-all duration-200 shadow"
@@ -173,7 +183,7 @@ React.useEffect(() => {
     <h2 className="text-2xl font-semibold tracking-wide">
       Total Prizepool{" "}
       <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-        $1.500
+        $1.000
       </span>
     </h2>
 
@@ -238,4 +248,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 
 </script>
 </body>
+
 </html>
