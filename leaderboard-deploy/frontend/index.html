@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Niksi $500 GAMBA leaderboard</title>
+  <title>NIKSI777</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -17,35 +17,35 @@
 
 function App() {
 
-
+const [timeLeft, setTimeLeft] = React.useState("");
 
 
 
    
 
-  React.useEffect(() => {
-    const endDate = new Date("2026-03-03T23:59:59Z").getTime();
+ React.useEffect(() => {
+  const endDate = new Date("2026-03-29T01:00:00Z").getTime(); // change date if needed
 
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = endDate - now;
+  const interval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = endDate - now;
 
-      if (distance <= 0) {
-        setTimeLeft("Race Ended");
-        clearInterval(interval);
-        return;
-      }
+    if (distance <= 0) {
+      setTimeLeft("Race Ended");
+      clearInterval(interval);
+      return;
+    }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((distance / (1000 * 60)) % 60);
-      const seconds = Math.floor((distance / 1000) % 60);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
 
-      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-    }, 1000);
+    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+  }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => clearInterval(interval);
+}, []);
 
   const fetchPlayers = async () => {
     const res = await fetch("/players");
@@ -116,29 +116,16 @@ function App() {
   <div className="grid md:grid-cols-2 gap-10">
 
     {/* GAMBA CARD */}
-    <a
-      href="/gamba.html"
-      className="group flex flex-col items-center justify-center 
-                 bg-[#111827] border border-white/10 
-                 rounded-3xl px-12 py-10 
-                 shadow-2xl 
-                 hover:bg-white/5 transition-all duration-300"
-    >
-      <img
-        src="/assets/gamba2.png"
-        alt="Gamba"
-        className="h-14 object-contain mb-6 
-                   group-hover:scale-105 
-                   transition-transform duration-300"
-      />
+    <span className="text-xl font-semibold tracking-wide">
+  <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
+    $1,500
+  </span>{" "}
+  LEADERBOARD
+</span>
 
-      <span className="text-xl font-semibold tracking-wide">
-        <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-          $1,500
-        </span>{" "}
-        LEADERBOARD
-      </span>
-    </a>
+<p className="mt-3 text-sm text-gray-400">
+  Ends in: {timeLeft}
+</p>
 
 
     {/* ACEBET CARD */}
@@ -159,11 +146,15 @@ function App() {
       />
 
       <span className="text-xl font-semibold tracking-wide">
-        <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-          $1,000
-        </span>{" "}
-        LEADERBOARD
-      </span>
+  <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
+    $1,000
+  </span>{" "}
+  LEADERBOARD
+</span>
+
+<p className="mt-3 text-sm text-gray-400">
+  Ends in: {timeLeft}
+</p>
     </a>
 
   </div>
@@ -184,3 +175,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
+
