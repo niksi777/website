@@ -17,6 +17,7 @@
 
 function App() {
   const [players, setPlayers] = React.useState([]);
+  const [prevPlayers, setPrevPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
 
   const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
@@ -46,6 +47,7 @@ function App() {
   const fetchPlayers = async () => {
     const res = await fetch("/players");
     const data = await res.json();
+    setPrevPlayers(players);
     setPlayers(data);
   };
 
@@ -177,45 +179,72 @@ function App() {
             {players.slice(0, 15).map((p, i) => {
 
   let glowClass = "bg-white/5 border-white/5";
+  let crown = "";
+  let movement = "";
 
+  // 🥇🥈🥉 Glow + Crown
   if (i === 0) {
-    glowClass = "bg-yellow-500/10 border-yellow-400/40 shadow-[0_0_20px_rgba(250,204,21,0.4)]";
+    glowClass = "bg-yellow-500/10 border-yellow-400/40 shadow-[0_0_20px_rgba(250,204,21,0.6)]";
+    crown = "👑";
   } else if (i === 1) {
-    glowClass = "bg-gray-400/10 border-gray-300/30 shadow-[0_0_15px_rgba(200,200,200,0.3)]";
+    glowClass = "bg-gray-400/10 border-gray-300/30 shadow-[0_0_15px_rgba(200,200,200,0.4)]";
   } else if (i === 2) {
-    glowClass = "bg-orange-500/10 border-orange-400/30 shadow-[0_0_15px_rgba(251,146,60,0.3)]";
+    glowClass = "bg-orange-500/10 border-orange-400/30 shadow-[0_0_15px_rgba(251,146,60,0.4)]";
+  }
+
+  // 🔼🔽 Rank movement detection
+  const prevIndex = prevPlayers.findIndex(x => x.id === p.id);
+
+  if (prevIndex !== -1) {
+    if (prevIndex > i) {
+      movement = "↑";
+    } else if (prevIndex < i) {
+      movement = "↓";
+    }
   }
 
   return (
     <div
       key={p.id}
-      className={`grid grid-cols-3 items-center ${glowClass} hover:bg-white/10 transition rounded-xl px-5 py-4 border`}
+      className={`grid grid-cols-3 items-center ${glowClass} 
+                  transition-all duration-500 transform 
+                  ${movement === "↑" ? "-translate-y-1" : ""} 
+                  ${movement === "↓" ? "translate-y-1" : ""} 
+                  hover:bg-white/10 rounded-xl px-5 py-4 border`}
     >
-                <div className="flex items-center gap-3 font-medium">
-                  <span className="w-6">
-  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
-</span>
-                  {p.username}
-                </div>
 
-                <div className="text-center font-semibold">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: 2
-                  }).format(p.reward)}
-                </div>
+      {/* USERNAME */}
+      <div className="flex items-center gap-3 font-medium">
+        <span className="w-8 flex items-center gap-1">
+          {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
+          <span className="text-xs text-green-400">{movement}</span>
+        </span>
+        {crown && <span className="text-yellow-400">{crown}</span>}
+        {p.username}
+      </div>
 
-                <div className="text-right font-semibold">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: 2
-                  }).format(p.wager)}
-                </div>
-              </div>
-            );
-    })}
+      {/* PRIZE */}
+      <div className="text-center font-semibold">
+        {new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2
+        }).format(p.reward)}
+      </div>
+
+      {/* WAGER */}
+      <div className="text-right font-semibold">
+        {new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2
+        }).format(p.wager)}
+      </div>
+
+    </div>
+  );
+
+})}
 
           </div>
 
