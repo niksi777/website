@@ -17,42 +17,33 @@
 
 function App() {
   const [players, setPlayers] = React.useState([]);
-
-    const [timeLeft, setTimeLeft] = React.useState("");
-
-// 🔥 Set race start time to 01:00 local time
-// Race end date
-// Race end time
-const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
-
-React.useEffect(() => {
-
   const [timeLeft, setTimeLeft] = React.useState("");
 
-// ✅ March 19 at 01:00 LOCAL TIME (Denmark)
-const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
+  // ✅ Correct: defined once
+  const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
 
-React.useEffect(() => {
-  const timer = setInterval(() => {
-    const now = Date.now();
-    const diff = raceEnd - now;
+  // ✅ ONE useEffect only
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const diff = raceEnd - now;
 
-    if (diff <= 0) {
-      setTimeLeft("Race Ended");
-      clearInterval(timer);
-      return;
-    }
+      if (diff <= 0) {
+        setTimeLeft("Race Ended");
+        clearInterval(timer);
+        return;
+      }
 
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const m = Math.floor((diff / (1000 * 60)) % 60);
-    const s = Math.floor((diff / 1000) % 60);
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
 
-    setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-  }, 1000);
+      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
+    }, 1000);
 
-  return () => clearInterval(timer);
-}, []);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchPlayers = async () => {
     const res = await fetch("/players");
