@@ -66,13 +66,31 @@ const [timeLeft, setTimeLeft] = React.useState("");
       <div className="relative text-center py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
 
         {/* LEFT MENU */}
-<div className="flex justify-center mb-12">
+<div className="flex justify-center mb-6">
   <nav className="flex items-center gap-10 px-8 py-4 
                   bg-white/5 backdrop-blur-md 
                   border border-white/10 
                   rounded-2xl shadow-lg">
-  </div>
-  <div className="flex justify-center gap-6 mb-10">
+
+    <a
+      href="/"
+      className="text-sm tracking-wide text-white/70 hover:text-white transition"
+    >
+      Home
+    </a>
+
+    <a
+      href="/giveaway.html"
+      className="text-sm tracking-wide text-white/70 hover:text-white transition"
+    >
+      Giveaway
+    </a>
+
+  </nav>
+</div>
+
+{/* SOCIAL ICONS */}
+<div className="flex justify-center gap-6 mb-10">
 
   {/* KICK */}
   <a 
