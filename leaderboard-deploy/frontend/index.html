@@ -17,162 +17,132 @@
 
 function App() {
 
-const [timeLeft, setTimeLeft] = React.useState("");
+  const [timeLeft, setTimeLeft] = React.useState("");
 
+  React.useEffect(() => {
+    const endDate = new Date(2026, 2, 19, 1, 0, 0).getTime();
 
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const distance = endDate - now;
 
-   
+      if (distance <= 0) {
+        setTimeLeft("Race Ended");
+        clearInterval(interval);
+        return;
+      }
 
- React.useEffect(() => {
- const endDate = new Date(2026, 2, 19, 1, 0, 0).getTime(); // change date if needed
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
 
-  const interval = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = endDate - now;
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    }, 1000);
 
-    if (distance <= 0) {
-      setTimeLeft("Race Ended");
-      clearInterval(interval);
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((distance / (1000 * 60)) % 60);
-    const seconds = Math.floor((distance / 1000) % 60);
-
-    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-  }, 1000);
-
-  return () => clearInterval(interval);
-}, []);
-
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen">
 
       {/* HERO SECTION */}
-<div className="relative py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-  <div className="max-w-5xl mx-auto text-center">
+      <div className="relative py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+        <div className="max-w-5xl mx-auto text-center">
 
-    {/* MENU */}
-    <div className="flex justify-center mb-8">
-      <nav className="flex items-center gap-10 px-8 py-4 
-                      bg-white/5 backdrop-blur-md 
-                      border border-white/10 
-                      rounded-2xl shadow-lg">
+          {/* MENU */}
+          <div className="flex justify-center mb-8">
+            <nav className="flex items-center gap-10 px-8 py-4 
+                            bg-white/5 backdrop-blur-md 
+                            border border-white/10 
+                            rounded-2xl shadow-lg">
 
-        <a href="/" className="text-sm tracking-wide text-white/70 hover:text-white transition">
-          Home
-        </a>
+              <a href="/" className="text-sm tracking-wide text-white/70 hover:text-white transition">
+                Home
+              </a>
 
-        <a href="/giveaway.html" className="text-sm tracking-wide text-white/70 hover:text-white transition">
-          Giveaway
-        </a>
+              <a href="/giveaway.html" className="text-sm tracking-wide text-white/70 hover:text-white transition">
+                Giveaway
+              </a>
 
-      </nav>
-    </div>
+            </nav>
+          </div>
 
-    {/* SOCIAL ICONS */}
-    <div className="flex justify-center gap-6 mb-8">
+          {/* SOCIAL ICONS */}
+          <div className="flex justify-center gap-6 mb-8">
 
-      <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/kick/22c55e"
-             className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
-      </a>
+            <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/kick/22c55e"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+            </a>
 
-      <a href="https://discord.gg/YOUR_INVITE" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/discord/5865F2"
-             className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]" />
-      </a>
+            <a href="https://discord.gg/YOUR_INVITE" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/discord/5865F2"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]" />
+            </a>
 
-      <a href="https://twitter.com/YOUR_HANDLE" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/x/ffffff"
-             className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-      </a>
+            <a href="https://twitter.com/YOUR_HANDLE" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/x/ffffff"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            </a>
 
-    </div>
+          </div>
 
-    {/* TITLE */}
-    <h1 className="text-5xl font-bold tracking-tight mt-6">
-      Welcome to NIKSI777!
-    </h1>
+          {/* TITLE */}
+          <h1 className="text-5xl font-bold tracking-tight mt-6">
+            Welcome to NIKSI777!
+          </h1>
 
-    {/* LOGO */}
-    <div className="mt-6">
-      <img src="/assets/niksi.png"
-           className="h-36 mx-auto object-contain opacity-90" />
-    </div>
+          {/* LOGO */}
+          <div className="mt-6">
+            <img 
+              src="/assets/niksi.png"
+              className="h-36 mx-auto object-contain opacity-90"
+            />
+          </div>
 
-  </div>
-</div>
+        </div>
+      </div>
 
-        <h1 className="text-5xl font-bold tracking-tight">
-          Welcome to NIKSI777!
-        </h1>
+      {/* GAMBA CARD SECTION */}
+      <div className="max-w-5xl mx-auto mb-20 px-6">
 
-        <div className="mt-8">
-  <img 
-    src="/assets/niksi.png"
-    className="h-36 mx-auto object-contain opacity-90"
+        <div className="flex justify-center">
 
-  />
+          <a
+            href="/gamba.html"
+            className="group flex flex-col items-center justify-center 
+                       bg-[#111827] border border-white/10 
+                       rounded-3xl px-12 py-10 
+                       shadow-2xl 
+                       hover:bg-white/5 transition-all duration-300"
+          >
+            <img
+              src="/assets/gamba.png"
+              alt="Gamba"
+              className="h-14 object-contain mb-6 
+                         group-hover:scale-105 
+                         transition-transform duration-300"
+            />
 
-  
-</div>
-        
+            <span className="text-xl font-semibold tracking-wide">
+              <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
+                $1,500
+              </span>{" "}
+              LEADERBOARD
+            </span>
+
+            <p className="mt-3 text-sm text-gray-400">
+              Ends in: {timeLeft}
+            </p>
+
+          </a>
+
+        </div>
 
       </div>
-      <p className="mt6 text-gray-400 max-w-2x1 mx-auto text-1g">
-        
-      </p>
 
-
-
-  {/* SIGN UP BUTTON */}
-  <div className="max-w-5xl mx-auto mb-20 px-6">
-
-  <div className="flex justify-center">
-    {/* GAMBA CARD */}
-<a
-  href="/gamba.html"
-  className="group flex flex-col items-center justify-center 
-             bg-[#111827] border border-white/10 
-             rounded-3xl px-12 py-10 
-             shadow-2xl 
-             hover:bg-white/5 transition-all duration-300"
->
-  <img
-    src="/assets/gamba.png"
-    alt="Gamba"
-    className="h-14 object-contain mb-6 
-               group-hover:scale-105 
-               transition-transform duration-300"
-  />
-
-  <span className="text-xl font-semibold tracking-wide">
-    <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-      $1,500
-    </span>{" "}
-    LEADERBOARD
-  </span>
-
-  <p className="mt-3 text-sm text-gray-400">
-    Ends in: {timeLeft}
-  </p>
-</a>
-
-
-  </div>
-
-</div>
-
-  {/* Leaderboard Card */}
-  
-
-</div>
-
-    
+    </div>
   );
 }
 
@@ -181,4 +151,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
-
