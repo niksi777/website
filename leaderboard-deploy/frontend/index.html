@@ -47,17 +47,6 @@ const [timeLeft, setTimeLeft] = React.useState("");
   return () => clearInterval(interval);
 }, []);
 
-  const fetchPlayers = async () => {
-    const res = await fetch("/players");
-    const data = await res.json();
-    setPlayers(data);
-  };
-
-  React.useEffect(() => {
-    fetchPlayers();
-    const interval = setInterval(fetchPlayers, 10000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="min-h-screen">
@@ -127,7 +116,7 @@ const [timeLeft, setTimeLeft] = React.useState("");
       className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"
     />
   </a>
-
+</div>
 
         <h1 className="text-5xl font-bold tracking-tight">
           Welcome to NIKSI777!
