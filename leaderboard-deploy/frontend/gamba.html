@@ -23,12 +23,17 @@ function App() {
 // 🔥 Set race start time to 01:00 local time
 // Race end date
 // Race end time
-const raceEnd = new Date(1773795600000);
+const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
 
 React.useEffect(() => {
 
-  const timer = setInterval(() => {
+  const [timeLeft, setTimeLeft] = React.useState("");
 
+// ✅ March 19 at 01:00 LOCAL TIME (Denmark)
+const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
+
+React.useEffect(() => {
+  const timer = setInterval(() => {
     const now = Date.now();
     const diff = raceEnd - now;
 
@@ -44,11 +49,9 @@ React.useEffect(() => {
     const s = Math.floor((diff / 1000) % 60);
 
     setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-
   }, 1000);
 
   return () => clearInterval(timer);
-
 }, []);
 
   const fetchPlayers = async () => {
