@@ -19,10 +19,8 @@ function App() {
   const [players, setPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
 
-  // ✅ Correct: defined once
   const raceEnd = new Date(2026, 2, 19, 1, 0, 0).getTime();
 
-  // ✅ ONE useEffect only
   React.useEffect(() => {
     const timer = setInterval(() => {
       const now = Date.now();
@@ -60,190 +58,170 @@ function App() {
   return (
     <div className="min-h-screen">
 
-      {/* HERO SECTION */}
-      <div className="relative text-center py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+      {/* HERO */}
+      <div className="relative py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+        <div className="max-w-5xl mx-auto text-center">
 
-        {/* LEFT MENU */}
-<div className="flex justify-center mb-12">
-  <nav className="flex items-center gap-10 px-8 py-4 
-                  bg-white/5 backdrop-blur-md 
-                  border border-white/10 
-                  rounded-2xl shadow-lg">
+          {/* MENU */}
+          <div className="flex justify-center mb-8">
+            <nav className="flex items-center gap-10 px-8 py-4 
+                            bg-white/5 backdrop-blur-md 
+                            border border-white/10 
+                            rounded-2xl shadow-lg">
 
-    <a
-      href="/"
-      className="text-sm tracking-wide text-white/70 hover:text-white transition"
-    >
-      Home
-    </a>
+              <a href="/" className="text-sm tracking-wide text-white/70 hover:text-white transition">
+                Home
+              </a>
 
-    <a
-      href="/giveaway.html"
-      className="text-sm tracking-wide text-white/70 hover:text-white transition"
-    >
-      Giveaway
-    </a>
+              <a href="/giveaway.html" className="text-sm tracking-wide text-white/70 hover:text-white transition">
+                Giveaway
+              </a>
 
-  </nav>
-</div>
+            </nav>
+          </div>
 
-        <div className="flex justify-center gap-6 mb-10">
+          {/* SOCIALS */}
+          <div className="flex justify-center gap-6 mb-8">
 
-  {/* KICK */}
-  <a 
-    href="https://kick.com/niksi777" 
-    target="_blank"
-    className="hover:scale-110 transition duration-300"
-  >
-    <img 
-      src="https://cdn.simpleicons.org/kick/22c55e"
-      className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]"
-    />
-  </a>
+            <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/kick/22c55e"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+            </a>
 
-  {/* DISCORD */}
-  <a 
-    href="https://discord.gg/YOUR_INVITE" 
-    target="_blank"
-    className="hover:scale-110 transition duration-300"
-  >
-    <img 
-      src="https://cdn.simpleicons.org/discord/5865F2"
-      className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]"
-    />
-  </a>
+            <a href="https://discord.gg/YOUR_INVITE" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/discord/5865F2"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]" />
+            </a>
 
-  {/* TWITTER */}
-  <a 
-    href="https://twitter.com/YOUR_HANDLE" 
-    target="_blank"
-    className="hover:scale-110 transition duration-300"
-  >
-    <img 
-      src="https://cdn.simpleicons.org/x/ffffff"
-      className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"
-    />
-  </a>
+            <a href="https://twitter.com/YOUR_HANDLE" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/x/ffffff"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            </a>
 
-</div>
-        <h1 className="text-5xl font-bold tracking-tight">
-          Welcome to NIKSI777!
-        </h1>
+          </div>
 
-        <div className="mt-8">
-  <img 
-    src="/assets/gamba2.png"
-    className="h-12 mx-auto object-contain opacity-90"
-    />
-  
-</div>
+          {/* TITLE */}
+          <h1 className="text-5xl font-bold tracking-tight mt-6">
+            NIKSI777 GAMBA RACE
+          </h1>
 
-      
+          {/* LOGO */}
+          <div className="mt-6">
+            <img 
+              src="/assets/gamba2.png"
+              className="h-12 mx-auto object-contain opacity-90"
+            />
+          </div>
 
-  
-        <div className="mt-4 text-sm text-gray-400">
-  Ends In{" "}
-  <span className="text-green-400 font-semibold">
-    {timeLeft}
-  </span>
-</div>
-
-      </div>
-      <p className="mt6 text-gray-400 max-w-2x1 mx-auto text-1g">
-        
-      </p>
-
-{/* GAMBA SECTION */}
-<div className="max-w-5xl mx-auto px-6 pb-24">
-
-  {/* SIGN UP BUTTON */}
-  <div className="flex justify-center mb-12">
-    <a
-      href="https://gamba.com?c=niksi"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-white text-black px-10 py-4 rounded-2xl font-semibold tracking-wide hover:scale-105 transition-all duration-200 shadow-xl"
-    >
-      Sign Up Here
-    </a>
-  </div>
-
-  {/* Leaderboard Card */}
-  <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
-
-  {/* Small Top-Right Button */}
-  <div className="absolute top-8 right-10">
-    <a
-      href="https://gamba.com/promotions/exclusive-leaderboards/8914"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-white text-black px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-all duration-200 shadow"
-    >
-      View on Gamba
-    </a>
-  </div>
-
-  {/* Centered Prize Section */}
-  <div className="mb-12 text-center">
-    <h2 className="text-2xl font-semibold tracking-wide">
-      Total Prizepool{" "}
-      <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-        $1.500
-      </span>
-    </h2>
-
-    <p className="text-gray-500 text-sm mt-2">
-      All wager counts for this leaderboard
-    </p>
-  
-  </div>
-
-
-    {/* Leaderboard Table */}
-    <div className="space-y-4">
-
-      {/* Header Row */}
-      <div className="grid grid-cols-3 text-gray-400 text-sm uppercase tracking-wider border-b border-white/10 pb-3">
-        <div>USERNAME</div>
-        <div className="text-center">PRIZE</div>
-        <div className="text-right">TOTAL WAGER</div>
-      </div>
-
-      {players.slice(0, 15).map((p, i) => (
-        <div
-          key={p.id}
-          className="grid grid-cols-3 items-center bg-white/5 hover:bg-white/10 transition rounded-xl px-5 py-4 border border-white/5"
-        >
-          <div className="flex items-center gap-3 font-medium">
-            <span className="text-gray-400 w-6">
-              {i + 1}.
+          {/* TIMER */}
+          <div className="mt-4 text-sm text-gray-400">
+            Ends In{" "}
+            <span className="text-green-400 font-semibold">
+              {timeLeft}
             </span>
-            {p.username}
           </div>
 
-          <div className="text-center font-semibold">
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2
-            }).format(p.reward)}
-          </div>
-
-          <div className="text-right font-semibold">
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2
-            }).format(p.wager)}
-          </div>
         </div>
-      ))}
+      </div>
 
-    </div>
+      {/* CONTENT */}
+      <div className="max-w-5xl mx-auto px-6 pb-24">
 
-  </div>
+        {/* SIGN UP */}
+        <div className="flex justify-center mb-12">
+          <a
+            href="https://gamba.com?c=niksi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white text-black px-10 py-4 rounded-2xl font-semibold tracking-wide hover:scale-105 transition-all duration-200 shadow-xl"
+          >
+            Sign Up Here
+          </a>
+        </div>
 
-</div>
+        {/* LEADERBOARD */}
+        <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
+
+          <div className="absolute top-8 right-10">
+            <a
+              href="https://gamba.com/promotions/exclusive-leaderboards/8914"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-black px-4 py-2 rounded-xl text-sm font-medium hover:scale-105 transition-all duration-200 shadow"
+            >
+              View on Gamba
+            </a>
+          </div>
+
+          <div className="mb-12 text-center">
+            <h2 className="text-2xl font-semibold tracking-wide">
+              Total Prizepool{" "}
+              <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
+                $1.500
+              </span>
+            </h2>
+
+            <p className="text-gray-500 text-sm mt-2">
+              All wager counts for this leaderboard
+            </p>
+          </div>
+
+          <div className="space-y-4">
+
+            <div className="grid grid-cols-3 text-gray-400 text-sm uppercase tracking-wider border-b border-white/10 pb-3">
+              <div>USERNAME</div>
+              <div className="text-center">PRIZE</div>
+              <div className="text-right">TOTAL WAGER</div>
+            </div>
+
+            {players.slice(0, 15).map((p, i) => {
+
+  let glowClass = "bg-white/5 border-white/5";
+
+  if (i === 0) {
+    glowClass = "bg-yellow-500/10 border-yellow-400/40 shadow-[0_0_20px_rgba(250,204,21,0.4)]";
+  } else if (i === 1) {
+    glowClass = "bg-gray-400/10 border-gray-300/30 shadow-[0_0_15px_rgba(200,200,200,0.3)]";
+  } else if (i === 2) {
+    glowClass = "bg-orange-500/10 border-orange-400/30 shadow-[0_0_15px_rgba(251,146,60,0.3)]";
+  }
+
+  return (
+    <div
+      key={p.id}
+      className={`grid grid-cols-3 items-center ${glowClass} hover:bg-white/10 transition rounded-xl px-5 py-4 border`}
+    >
+                <div className="flex items-center gap-3 font-medium">
+                  <span className="w-6">
+  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
+</span>
+                  {p.username}
+                </div>
+
+                <div className="text-center font-semibold">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2
+                  }).format(p.reward)}
+                </div>
+
+                <div className="text-right font-semibold">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2
+                  }).format(p.wager)}
+                </div>
+              </div>
+            );
+    })}
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
   );
@@ -254,4 +232,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
-
