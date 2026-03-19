@@ -24,7 +24,7 @@ function App() {
 
   const updateTimer = () => {
     const now = Date.now();
-    const distance = endDate - now;
+    const distance = raceEnd - now;
 
     if (distance <= 0) {
       setTimeLeft("Race Ended");
