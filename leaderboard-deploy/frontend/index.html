@@ -144,27 +144,33 @@ function App() {
                          transition-transform duration-300"
             />
 
-            <div className="text-center">
+           <div className="text-center">
 
-            <div className="flex justify-center">
+              {/* LEADERBOARD TITLE */}
+              <div className="text-base font-semibold tracking-widest text-white/90 mb-1">
+                LEADERBOARD
+              </div>
+            
+              {/* LIVE BADGE */}
+              <div className="flex justify-center mb-3">
+                <div className="px-3 py-1 text-xs font-semibold rounded-full 
+                                bg-red-500/20 text-red-400 
+                                shadow-[0_0_12px_rgba(239,68,68,0.7)] 
+                                animate-pulse">
+                  LIVE
+                </div>
+              </div>
+            
+              {/* AMOUNT */}
+              <div className="flex justify-center">
                 <div className="text-5xl font-bold text-green-400 
                                 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
                                 font-mono min-w-[200px] text-center">
                   ${displayAmount.toLocaleString("en-US")}
                 </div>
               </div>
-            <div className="flex justify-center mb-2">
-  <div className="px-3 py-1 text-xs font-semibold rounded-full 
-                  bg-red-500/20 text-red-400 
-                  shadow-[0_0_12px_rgba(239,68,68,0.7)] 
-                  animate-pulse">
-    LIVE
-  </div>
-</div>
-              <div className="text-sm text-gray-400 tracking-wider mt-1">
-                LEADERBOARD
-              </div>
             
+              {/* TIMER */}
               <p className="mt-3 text-sm text-gray-400">
                 Ends in: {timeLeft}
               </p>
