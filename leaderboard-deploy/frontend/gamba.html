@@ -23,26 +23,47 @@ function App() {
 
   const raceEnd = new Date("2026-04-03T01:00:00");
 
+  // Prize animation
   React.useEffect(() => {
-  const startTime = Date.now();
-  const duration = 1500;
-  const end = 1500;
+    const startTime = Date.now();
+    const duration = 1500;
+    const end = 1500;
 
-  const timer = setInterval(() => {
-    const now = Date.now();
-    const progress = Math.min((now - startTime) / duration, 1);
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
+      setDisplayAmount(Math.floor(progress * end));
 
-    const value = Math.floor(progress * end);
-    setDisplayAmount(value);
+      if (progress === 1) clearInterval(timer);
+    }, 16);
 
-    if (progress === 1) {
-      clearInterval(timer);
-    }
-  }, 16);
+    return () => clearInterval(timer);
+  }, []);
 
-  return () => clearInterval(timer);
-}, []);
+  // Timer
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const diff = raceEnd - now;
 
+      if (diff <= 0) {
+        setTimeLeft("Race Ended");
+        clearInterval(timer);
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+
+      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Fetch players
   const fetchPlayers = async () => {
     const res = await fetch("/players");
     const data = await res.json();
@@ -56,90 +77,40 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  React.useEffect(() => {
-  const timer = setInterval(() => {
-    const now = Date.now();
-    const diff = raceEnd - now;
-
-    if (diff <= 0) {
-      setTimeLeft("Race Ended");
-      clearInterval(timer);
-      return;
-    }
-
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const m = Math.floor((diff / (1000 * 60)) % 60);
-    const s = Math.floor((diff / 1000) % 60);
-
-    setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-  }, 1000);
-
-  return () => clearInterval(timer);
-}, []);
-
   return (
     <div className="min-h-screen">
 
       {/* HERO */}
-      <div className="relative py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+      <div className="py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
         <div className="max-w-5xl mx-auto text-center">
 
           {/* MENU */}
           <div className="flex justify-center mb-8">
-            <nav className="flex items-center gap-10 px-8 py-4 
-                            bg-white/5 backdrop-blur-md 
-                            border border-white/10 
-                            rounded-2xl shadow-lg">
-
-              <a href="/" className="text-sm tracking-wide text-white/70 hover:text-white transition">
-                HOME
-              </a>
-
-              <a href="/giveaway.html" className="text-sm tracking-wide text-white/70 hover:text-white transition">
-                GIVEAWAY
-              </a>
-
+            <nav className="flex gap-10 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl">
+              <a href="/" className="text-sm text-white/70 hover:text-white">HOME</a>
+              <a href="/giveaway.html" className="text-sm text-white/70 hover:text-white">GIVEAWAY</a>
             </nav>
           </div>
 
           {/* SOCIALS */}
           <div className="flex justify-center gap-6 mb-8">
-
-            <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-              <img src="https://cdn.simpleicons.org/kick/22c55e"
-                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+            <a href="https://kick.com/niksi777" target="_blank">
+              <img src="https://cdn.simpleicons.org/kick/22c55e" className="h-8" />
             </a>
-
-            <a href="https://discord.gg/NU9b4xRMqD" target="_blank" className="hover:scale-110 transition duration-300">
-              <img src="https://cdn.simpleicons.org/discord/5865F2"
-                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]" />
+            <a href="https://discord.gg/NU9b4xRMqD" target="_blank">
+              <img src="https://cdn.simpleicons.org/discord/5865F2" className="h-8" />
             </a>
-
-            <a href="https://x.com/code_niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-              <img src="https://cdn.simpleicons.org/x/ffffff"
-                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            <a href="https://x.com/code_niksi777" target="_blank">
+              <img src="https://cdn.simpleicons.org/x/ffffff" className="h-8" />
             </a>
-
           </div>
-
-          {/* TITLE */}
-        
 
           {/* LOGO */}
-          <div className="mt-6">
-            <img 
-              src="/assets/gamba2.png"
-              className="h-12 mx-auto object-contain opacity-90"
-            />
-          </div>
+          <img src="/assets/gamba2.png" className="h-12 mx-auto opacity-90" />
 
           {/* TIMER */}
           <div className="mt-4 text-sm text-gray-400">
-            ENDS IN{" "}
-            <span className="text-green-400 font-semibold">
-              {timeLeft}
-            </span>
+            ENDS IN <span className="text-green-400">{timeLeft}</span>
           </div>
 
         </div>
@@ -148,138 +119,71 @@ function App() {
       {/* CONTENT */}
       <div className="max-w-5xl mx-auto px-6 pb-24">
 
-
-        {/* LEADERBOARD */}
         <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
-{/* Top-Left Button */}
-          <div className="absolute top-8 left-10">
-            <a
-              href="https://gamba.com?c=niksi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-green-400 text-black px-4 py-2 rounded-xl text-sm font-medium 
-           shadow-[0_0_12px_rgba(34,197,94,0.6)] 
-           hover:shadow-[0_0_20px_rgba(34,197,94,1)] 
-           hover:scale-105 transition-all duration-300"
-            >
+
+          {/* BUTTONS */}
+          <div className="absolute top-6 left-6">
+            <a href="https://gamba.com?c=niksi" target="_blank"
+               className="bg-green-400 text-black px-4 py-2 rounded-xl text-sm">
               Sign Up
             </a>
           </div>
-          <div className="absolute top-8 right-10">
-            <a
-              href="https://gamba.com/promotions/exclusive-leaderboards/9674"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-black px-4 py-2 rounded-xl text-sm font-medium 
-           shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-           hover:shadow-[0_0_18px_rgba(255,255,255,0.9)] 
-           hover:scale-105 transition-all duration-300"
-            >
+
+          <div className="absolute top-6 right-6">
+            <a href="https://gamba.com/promotions/exclusive-leaderboards/9674" target="_blank"
+               className="bg-white text-black px-4 py-2 rounded-xl text-sm">
               VIEW ON GAMBA
             </a>
           </div>
 
+          {/* PRIZE */}
           <div className="mb-12 text-center">
-
-            {/* AMOUNT */}
-            <div className="flex justify-center">
-              <div className="text-5xl font-bold text-green-400 
-                              drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
-                              font-mono min-w-[200px] text-center">
-                ${displayAmount.toLocaleString("en-US")}
-              </div>
+            <div className="text-5xl font-bold text-green-400 font-mono min-w-[200px] mx-auto">
+              ${displayAmount.toLocaleString("en-US")}
             </div>
-          
-            {/* TITLE */}
+
             <div className="text-sm text-gray-400 tracking-widest mt-2">
               TOTAL PRIZEPOOL
             </div>
-          
-            {/* SUBTEXT */}
-            <p className="text-gray-500 text-sm mt-2">
-              ALL WAGER COUNTS FOR THIS LEADERBOARD
-            </p>
-          
           </div>
 
+          {/* TABLE */}
           <div className="space-y-4">
 
-            <div className="grid grid-cols-3 text-gray-400 text-sm uppercase tracking-wider border-b border-white/10 pb-3">
-              <div>PLAYER NAME</div>
+            <div className="grid grid-cols-3 text-gray-400 text-sm border-b pb-3">
+              <div>PLAYER</div>
               <div className="text-center">PRIZE</div>
-              <div className="text-right">TOTAL WAGER</div>
+              <div className="text-right">WAGER</div>
             </div>
 
             {players.slice(0, 15).map((p, i) => {
 
-  let glowClass = "bg-white/5 border-white/5";
-  let movement = "";
+              let glowClass = "bg-white/5";
 
-  // 🥇🥈🥉 Glow + Crown
-  if (i === 0) {
-    glowClass = "bg-yellow-500/10 border-yellow-400/40 shadow-[0_0_20px_rgba(250,204,21,0.6)]";
-    crown = "👑";
-  } else if (i === 1) {
-    glowClass = "bg-gray-400/10 border-gray-300/30 shadow-[0_0_15px_rgba(200,200,200,0.4)]";
-  } else if (i === 2) {
-    glowClass = "bg-orange-500/10 border-orange-400/30 shadow-[0_0_15px_rgba(251,146,60,0.4)]";
-  }
+              if (i === 0) glowClass = "bg-yellow-500/10";
+              if (i === 1) glowClass = "bg-gray-400/10";
+              if (i === 2) glowClass = "bg-orange-500/10";
 
-  // 🔼🔽 Rank movement detection
-  const prevIndex = prevPlayers.findIndex(x => x.id === p.id);
+              return (
+                <div key={p.id}
+                  className={`grid grid-cols-3 items-center ${glowClass} rounded-xl px-5 py-4`}>
 
-  if (prevIndex !== -1) {
-    if (prevIndex > i) {
-      movement = "↑";
-    } else if (prevIndex < i) {
-      movement = "↓";
-    }
-  }
+                  <div className="flex gap-2">
+                    {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i+1}.`}
+                    {p.username}
+                  </div>
 
-  return (
-    <div
-      key={p.id}
-      className={`grid grid-cols-3 items-center ${glowClass} 
-                  transition-all duration-500 transform 
-                  ${movement === "↑" ? "-translate-y-1" : ""} 
-                  ${movement === "↓" ? "translate-y-1" : ""} 
-                  hover:bg-white/10 rounded-xl px-5 py-4 border`}
-    >
+                  <div className="text-center">
+                    ${p.reward}
+                  </div>
 
-      {/* USERNAME */}
-      <div className="flex items-center gap-3 font-medium">
-  <span className="w-8 flex items-center justify-center">
-    {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
-  </span>
+                  <div className="text-right">
+                    ${p.wager}
+                  </div>
 
-  <span className="flex items-center gap-1">
-    {p.username}
-    <span className="text-xs text-green-400">{movement}</span>
-  </span>
-</div>
-
-      {/* PRIZE */}
-      <div className="text-center font-semibold">
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-          minimumFractionDigits: 2
-        }).format(p.reward)}
-      </div>
-
-      {/* WAGER */}
-      <div className="text-right font-semibold">
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-          minimumFractionDigits: 2
-        }).format(p.wager)}
-      </div>
-
-    </div>
-  );
-
-})}
+                </div>
+              );
+            })}
 
           </div>
 
