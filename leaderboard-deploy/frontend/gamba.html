@@ -181,12 +181,22 @@ function App() {
                   </div>
 
                   <div className="text-center">
-                    ${p.reward}
-                  </div>
+  {new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(Number(p.reward))}
+</div>
 
-                  <div className="text-right">
-                    ${p.wager}
-                  </div>
+<div className="text-right">
+  {new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(Number(p.wager))}
+</div>
 
                 </div>
               );
