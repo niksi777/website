@@ -42,26 +42,33 @@ function App() {
 
   // Timer
   React.useEffect(() => {
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const diff = raceEnd - now;
 
-      if (diff <= 0) {
-        setTimeLeft("Race Ended");
-        clearInterval(timer);
-        return;
-      }
+  const updateTimer = () => {
+    const now = Date.now();
+    const diff = raceEnd - now;
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
+    if (diff <= 0) {
+      setTimeLeft("Race Ended");
+      return;
+    }
 
-      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-    }, 1000);
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
 
-    return () => clearInterval(timer);
-  }, []);
+    setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
+  };
+
+  // ✅ Run immediately
+  updateTimer();
+
+  // ✅ Then run every second
+  const timer = setInterval(updateTimer, 1000);
+
+  return () => clearInterval(timer);
+
+}, []);
 
   // Fetch players
   const fetchPlayers = async () => {
