@@ -20,7 +20,7 @@ function App() {
   const [timeLeft, setTimeLeft] = React.useState("");
 
   React.useEffect(() => {
-    const endDate = new Date(2026, 2, 19, 1, 0, 0).getTime();
+    const raceEnd = new Date("2026-04-03T01:00:00");
 
     const interval = setInterval(() => {
       const now = Date.now();
