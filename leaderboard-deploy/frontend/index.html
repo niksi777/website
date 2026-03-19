@@ -43,28 +43,23 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-  let start = 0;
+  const startTime = Date.now();
+  const duration = 1500;
   const end = 1500;
-  const duration = 1500; // ms
 
-  const increment = end / (duration / 16);
+  const timer = setInterval(() => {
+    const now = Date.now();
+    const progress = Math.min((now - startTime) / duration, 1);
 
-  const counter = setInterval(() => {
-    start += increment;
+    const value = Math.floor(progress * end);
+    setDisplayAmount(value);
 
-    if (start >= end) {
-      <div className="text-5xl font-bold text-green-400 
-                drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
-                tabular-nums w-[200px] mx-auto text-center">
-        ${displayAmount.toLocaleString()}
-      </div>
-      clearInterval(counter);
-    } else {
-      setDisplayAmount(Math.floor(start));
+    if (progress === 1) {
+      clearInterval(timer);
     }
   }, 16);
 
-  return () => clearInterval(counter);
+  return () => clearInterval(timer);
 }, []);
 
   return (
@@ -151,8 +146,12 @@ function App() {
 
             <div className="text-center">
 
-            <div className="text-5xl font-bold text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-              ${displayAmount.toLocaleString()}
+            <div className="flex justify-center">
+                <div className="text-5xl font-bold text-green-400 
+                                drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
+                                font-mono min-w-[200px] text-center">
+                  ${displayAmount.toLocaleString("en-US")}
+                </div>
               </div>
             <div className="flex justify-center mb-2">
   <div className="px-3 py-1 text-xs font-semibold rounded-full 
