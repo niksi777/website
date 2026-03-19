@@ -19,30 +19,29 @@ function App() {
   const [players, setPlayers] = React.useState([]);
   const [prevPlayers, setPrevPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
+  const [displayAmount, setDisplayAmount] = React.useState(0);
 
   const raceEnd = new Date("2026-04-03T01:00:00");
 
   React.useEffect(() => {
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const diff = raceEnd - now;
+  const startTime = Date.now();
+  const duration = 1500;
+  const end = 1500;
 
-      if (diff <= 0) {
-        setTimeLeft("Race Ended");
-        clearInterval(timer);
-        return;
-      }
+  const timer = setInterval(() => {
+    const now = Date.now();
+    const progress = Math.min((now - startTime) / duration, 1);
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
+    const value = Math.floor(progress * end);
+    setDisplayAmount(value);
 
-      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-    }, 1000);
+    if (progress === 1) {
+      clearInterval(timer);
+    }
+  }, 16);
 
-    return () => clearInterval(timer);
-  }, []);
+  return () => clearInterval(timer);
+}, []);
 
   const fetchPlayers = async () => {
     const res = await fetch("/players");
@@ -159,16 +158,28 @@ function App() {
           </div>
 
           <div className="mb-12 text-center">
-            <h2 className="text-2xl font-semibold tracking-wide">
-              TOTAL PRIZEPOOL{" "}
-              <span className="text-green-400 drop-shadow-[0_0_12px_rgba(34,197,94,0.9)]">
-                $1.500
-              </span>
-            </h2>
 
+            <div className="mb-12 text-center">
+
+            {/* AMOUNT */}
+            <div className="flex justify-center">
+              <div className="text-5xl font-bold text-green-400 
+                              drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
+                              font-mono min-w-[200px] text-center">
+                ${displayAmount.toLocaleString("en-US")}
+              </div>
+            </div>
+          
+            {/* TITLE */}
+            <div className="text-sm text-gray-400 tracking-widest mt-2">
+              TOTAL PRIZEPOOL
+            </div>
+          
+            {/* SUBTEXT */}
             <p className="text-gray-500 text-sm mt-2">
               ALL WAGER COUNTS FOR THIS LEADERBOARD
             </p>
+          
           </div>
 
           <div className="space-y-4">
