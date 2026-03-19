@@ -21,26 +21,33 @@ function App() {
   const raceEnd = new Date("2026-04-03T01:00:00");
 
   React.useEffect(() => {
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const diff = raceEnd - now;
 
-      if (diff <= 0) {
-        setTimeLeft("Race Ended");
-        clearInterval(timer);
-        return;
-      }
+  const updateTimer = () => {
+    const now = Date.now();
+    const distance = endDate - now;
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
+    if (distance <= 0) {
+      setTimeLeft("Race Ended");
+      return;
+    }
 
-      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-    }, 1000);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
 
-    return () => clearInterval(timer);
-  }, []);
+    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+  };
+
+  // ✅ run immediately
+  updateTimer();
+
+  // ✅ then every second
+  const interval = setInterval(updateTimer, 1000);
+
+  return () => clearInterval(interval);
+
+}, []);
 
   React.useEffect(() => {
   const startTime = Date.now();
