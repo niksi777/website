@@ -20,6 +20,9 @@ function App() {
   const [prevPlayers, setPrevPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
   const [displayAmount, setDisplayAmount] = React.useState(0);
+  const totalWager = players.reduce((sum, p) => {
+  return sum + Number(p.wager || 0);
+}, 0);
 
   const raceEnd = new Date("2026-04-03T01:00:00");
 
@@ -151,6 +154,21 @@ function App() {
 
             <div className="text-sm text-gray-400 tracking-widest mt-2">
               TOTAL PRIZEPOOL
+            </div>
+            {/* TOTAL WAGER */}
+            <div className="mb-12 text-center">
+              <div className="text-3xl font-bold text-blue-400 font-mono">
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }).format(totalWager)}
+              </div>
+            
+              <div className="text-sm text-gray-400 tracking-widest mt-2">
+                TOTAL WAGER VOLUME
+              </div>
             </div>
           </div>
 
