@@ -39,7 +39,18 @@ document.addEventListener("mousemove", (e) => {
   mouseY = e.clientY;
 });
 
-
+function animateGlow() {
+  const glow = document.getElementById("mouseGlow");
+  if (glow) {
+    glow.style.background = `radial-gradient(
+      circle at ${mouseX}px ${mouseY}px,
+      rgba(34,197,94,0.12),
+      rgba(59,130,246,0.08),
+      transparent 120px
+    )`;
+  }
+  requestAnimationFrame(animateGlow);
+}
 
 animateGlow();
 </script>
@@ -179,20 +190,24 @@ function App() {
   </div>
 </div>
 
-  {/* LEFT TITLE */}
-  <div>
-    <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-      All Active Leaderboards
-    </h1>
-  </div>
+  <div className="pt-32 pb-10 px-6">
+  <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center text-center md:text-left">
 
-  {/* RIGHT TITLE */}
-  <div className="md:text-right">
-    <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-      All Active Bonuses
-    </h1>
-  </div>
+    {/* LEFT TITLE */}
+    <div>
+      <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+        All Active <span className="text-green-400">Leaderboards</span>
+      </h1>
+    </div>
 
+    {/* RIGHT TITLE */}
+    <div className="md:text-right">
+      <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+        All Active <span className="text-green-400">Bonuses</span>
+      </h1>
+    </div>
+
+  </div>
 </div>
 
       {/* SPLIT SECTION */}
