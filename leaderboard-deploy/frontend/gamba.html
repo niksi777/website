@@ -20,13 +20,13 @@ function App() {
   const [prevPlayers, setPrevPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
   const [displayAmount, setDisplayAmount] = React.useState(0);
+
   const totalWager = players.reduce((sum, p) => {
-  return sum + Number(p.wager || 0);
-}, 0);
+    return sum + Number(p.wager || 0);
+  }, 0);
 
   const raceEnd = new Date("2026-04-03T01:00:00");
 
-  // Prize animation
   React.useEffect(() => {
     const startTime = Date.now();
     const duration = 1500;
@@ -43,37 +43,31 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Timer
   React.useEffect(() => {
 
-  const updateTimer = () => {
-    const now = Date.now();
-    const diff = raceEnd - now;
+    const updateTimer = () => {
+      const now = Date.now();
+      const diff = raceEnd - now;
 
-    if (diff <= 0) {
-      setTimeLeft("Race Ended");
-      return;
-    }
+      if (diff <= 0) {
+        setTimeLeft("Race Ended");
+        return;
+      }
 
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const m = Math.floor((diff / (1000 * 60)) % 60);
-    const s = Math.floor((diff / 1000) % 60);
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
 
-    setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-  };
+      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
+    };
 
-  // ✅ Run immediately
-  updateTimer();
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
+    return () => clearInterval(timer);
 
-  // ✅ Then run every second
-  const timer = setInterval(updateTimer, 1000);
+  }, []);
 
-  return () => clearInterval(timer);
-
-}, []);
-
-  // Fetch players
   const fetchPlayers = async () => {
     const res = await fetch("/players");
     const data = await res.json();
@@ -90,17 +84,32 @@ function App() {
   return (
     <div className="min-h-screen">
 
-      {/* HERO */}
-      <div className="py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-        <div className="max-w-5xl mx-auto text-center">
+      {/* NAVBAR (same as homepage) */}
+      <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
+        <div className="flex items-center gap-10 px-8 py-3 
+                        bg-white/5 backdrop-blur-xl
+                        border border-white/10
+                        rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
 
-          {/* MENU */}
-          <div className="flex justify-center mb-8">
-            <nav className="flex gap-10 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl">
-              <a href="/" className="text-sm text-white/70 hover:text-white">HOME</a>
-              <a href="/giveaway.html" className="text-sm text-white/70 hover:text-white">GIVEAWAY</a>
-            </nav>
-          </div>
+          <img 
+            src="/assets/niksi.png"
+            className="h-8 object-contain opacity-90"
+          />
+
+          <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+            HOME
+          </a>
+
+          <a href="/giveaway.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+            GIVEAWAY
+          </a>
+
+        </div>
+      </div>
+
+      {/* HERO */}
+      <div className="pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+        <div className="max-w-5xl mx-auto text-center">
 
           {/* SOCIALS */}
           <div className="flex justify-center gap-6 mb-8">
@@ -131,7 +140,6 @@ function App() {
 
         <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
 
-          {/* BUTTONS */}
           <div className="absolute top-6 left-6">
             <a href="https://gamba.com?c=niksi" target="_blank"
                className="bg-green-400 text-black px-4 py-2 rounded-xl text-sm">
@@ -146,7 +154,6 @@ function App() {
             </a>
           </div>
 
-          {/* PRIZE */}
           <div className="mb-12 text-center">
             <div className="text-5xl font-bold text-green-400 font-mono min-w-[200px] mx-auto">
               ${displayAmount.toLocaleString("en-US")}
@@ -155,7 +162,7 @@ function App() {
             <div className="text-sm text-gray-400 tracking-widest mt-2">
               TOTAL PRIZEPOOL
             </div>
-            {/* TOTAL WAGER */}
+
             <div className="mb-10 text-center opacity-80">
               <div className="text-xl font-semibold text-blue-300 font-mono">
                 {new Intl.NumberFormat("en-US", {
@@ -163,14 +170,13 @@ function App() {
                   currency: "USD"
                 }).format(totalWager)}
               </div>
-            
+
               <div className="text-xs text-gray-500 tracking-widest mt-1">
                 TOTAL WAGER VOLUME
               </div>
             </div>
           </div>
 
-          {/* TABLE */}
           <div className="space-y-4">
 
             <div className="grid grid-cols-3 text-gray-400 text-sm border-b pb-3">
@@ -197,22 +203,18 @@ function App() {
                   </div>
 
                   <div className="text-center">
-  {new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(Number(p.reward))}
-</div>
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD"
+                    }).format(Number(p.reward))}
+                  </div>
 
-<div className="text-right">
-  {new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(Number(p.wager))}
-</div>
+                  <div className="text-right">
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD"
+                    }).format(Number(p.wager))}
+                  </div>
 
                 </div>
               );
