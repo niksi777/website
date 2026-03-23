@@ -24,32 +24,7 @@
     }
   </style>
 
-  <script>
-    let mouseX = 0;
-    let mouseY = 0;
 
-    document.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-
-    function animateGlow() {
-      const glow = document.getElementById("mouseGlow");
-      if (glow) {
-        glow.style.background = `
-          radial-gradient(
-            circle at ${mouseX}px ${mouseY}px,
-            rgba(34,197,94,0.12),
-            rgba(59,130,246,0.08),
-            transparent 120px
-          )
-        `;
-      }
-      requestAnimationFrame(animateGlow);
-    }
-
-    window.onload = animateGlow;
-  </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -72,8 +47,6 @@
          draggable="false" />
   </div>
 
-  <!-- MOUSE GLOW -->
-  <div id="mouseGlow" class="fixed inset-0 -z-10 pointer-events-none"></div>
 
   <div id="root" class="flex-grow relative z-10"></div>
 
