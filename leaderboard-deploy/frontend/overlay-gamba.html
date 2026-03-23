@@ -17,79 +17,127 @@ function App() {
 
   const [players, setPlayers] = React.useState([]);
 
+  // Fetch with auto refresh
   React.useEffect(() => {
-    fetch("/players")
-      .then(res => res.json())
-      .then(data => setPlayers(data))
-      .catch(err => console.log(err));
+    const fetchData = () => {
+      fetch("/players")
+        .then(res => res.json())
+        .then(data => setPlayers(data))
+        .catch(err => console.log(err));
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const topFive = players.slice(0,5);
+  const topFive = players.slice(0, 5);
+
+  // Totals
+  const totalWager = players.reduce((sum, p) => sum + Number(p.wager || 0), 0);
+  const totalPrize = players.reduce((sum, p) => sum + Number(p.reward || 0), 0);
 
   return (
-    <div className="w-[820px] px-14 py-12">
+    <div className="w-[820px] px-14 py-10">
 
-      <div className="text-center mb-12">
-        <img src="assets/gamba.png" className="h-20 mx-auto mb-6 object-contain" />
-        <div className="text-2xl tracking-wide font-light">
+      {/* HEADER */}
+      <div className="text-center mb-6">
+
+        <img src="assets/gamba.png" className="h-14 mx-auto mb-3 object-contain opacity-90" />
+
+        <div className="text-lg tracking-wide font-light mb-3">
           $500 LEADERBOARD
         </div>
+
+        {/* STATS */}
+        <div className="flex justify-center gap-8 text-xs opacity-80">
+
+          <div>
+            <div className="font-semibold">
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0
+              }).format(totalPrize)}
+            </div>
+            <div className="text-white/40">PRIZE</div>
+          </div>
+
+          <div>
+            <div className="font-semibold">
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0
+              }).format(totalWager)}
+            </div>
+            <div className="text-white/40">WAGER</div>
+          </div>
+
+        </div>
+
       </div>
 
-      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 shadow-[0_0_60px_rgba(255,255,255,0.05)]">
+      {/* LEADERBOARD */}
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
 
-        <div className="grid grid-cols-3 text-xs uppercase tracking-widest opacity-40 mb-6">
+        {/* TABLE HEADER */}
+        <div className="grid grid-cols-3 text-xs uppercase tracking-widest opacity-40 mb-4">
           <div>Name</div>
           <div className="text-center">Reward</div>
           <div className="text-right">Wager</div>
         </div>
 
-        {topFive.map((p,i) => {
+        {topFive.map((p, i) => {
 
-          const isTop = i === 0;
-          const isSecond = i === 1;
-          const isThird = i === 2;
+          let highlight = "";
 
-          let highlight = "bg-white/0";
-
-          if (isTop) highlight = "bg-white/10 shadow-[0_0_30px_rgba(255,255,255,0.1)]";
-          if (isSecond) highlight = "bg-white/7";
-          if (isThird) highlight = "bg-white/5";
+          if (i === 0) highlight = "bg-white/10";
+          else if (i === 1) highlight = "bg-white/5";
+          else if (i === 2) highlight = "bg-white/3";
 
           return (
             <div
               key={p.id}
-              className={`grid grid-cols-3 items-center py-4 px-4 rounded-xl mb-2 transition-all duration-500 ${highlight}`}
+              className={`grid grid-cols-3 items-center py-3 px-3 rounded-xl mb-2 ${highlight}`}
             >
-              <div className="flex items-center gap-4">
-                <div className="text-white/50 w-6">
+              {/* PLAYER */}
+              <div className="flex items-center gap-3">
+                <div className="text-white/50 w-5 text-sm">
                   {p.position}.
                 </div>
+
                 <img
                   src={p.avatar}
-                  className="w-9 h-9 rounded-full object-cover border border-white/10"
+                  className="w-8 h-8 rounded-full object-cover border border-white/10"
                 />
-                <span className="font-medium tracking-wide">
+
+                <span className="text-sm font-medium">
                   {p.username}
                 </span>
               </div>
 
-              <div className="text-center text-xl font-semibold">
+              {/* REWARD */}
+              <div className="text-center text-lg font-semibold">
                 ${Number(p.reward).toFixed(2)}
               </div>
 
-              <div className="text-right text-xl font-semibold">
+              {/* WAGER */}
+              <div className="text-right text-lg font-semibold">
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "USD",
-                  minimumFractionDigits: 0
+                  maximumFractionDigits: 0
                 }).format(p.wager)}
               </div>
+
             </div>
           );
         })}
 
       </div>
+
     </div>
   );
 }
