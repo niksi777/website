@@ -34,9 +34,6 @@ function App() {
 
   const topFive = players.slice(0, 5);
 
-  // Total prize only
-  const totalPrize = players.reduce((sum, p) => sum + Number(p.reward || 0), 0);
-
   return (
     <div className="w-[820px] px-14 py-10">
 
@@ -45,24 +42,8 @@ function App() {
 
         <img src="assets/gamba.png" className="h-14 mx-auto mb-3 object-contain opacity-90" />
 
-        <div className="text-lg tracking-wide font-light mb-3">
-          $1,500 LEADERBOARD
-        </div>
-
-        {/* ONLY PRIZE NOW */}
-        <div className="flex justify-center text-xs opacity-80">
-
-          <div>
-            <div className="font-semibold">
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0
-              }).format(totalPrize)}
-            </div>
-            <div className="text-white/40">PRIZE</div>
-          </div>
-
+        <div className="text-lg tracking-wide font-light">
+          $500 LEADERBOARD
         </div>
 
       </div>
