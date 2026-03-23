@@ -39,18 +39,7 @@ document.addEventListener("mousemove", (e) => {
   mouseY = e.clientY;
 });
 
-function animateGlow() {
-  const glow = document.getElementById("mouseGlow");
-  if (glow) {
-    glow.style.background = `radial-gradient(
-      circle at ${mouseX}px ${mouseY}px,
-      rgba(34,197,94,0.15),
-      rgba(59,130,246,0.10),
-      transparent 20px
-    )`;
-  }
-  requestAnimationFrame(animateGlow);
-}
+
 
 animateGlow();
 </script>
