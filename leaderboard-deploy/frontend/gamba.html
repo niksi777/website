@@ -26,7 +26,6 @@ function App() {
 
   const raceEnd = new Date("2026-04-03T01:00:00");
 
-  // Prize animation
   React.useEffect(() => {
     const startTime = Date.now();
     const duration = 1500;
@@ -42,7 +41,6 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Timer
   React.useEffect(() => {
     const updateTimer = () => {
       const now = Date.now();
@@ -66,7 +64,6 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch players
   const fetchPlayers = async () => {
     const res = await fetch("/players");
     const data = await res.json();
@@ -83,54 +80,60 @@ function App() {
     <div className="min-h-screen">
 
       {/* NAVBAR */}
-<div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
-  <div className="flex items-center gap-8 px-8 py-3 
-                  bg-white/5 backdrop-blur-xl
-                  border border-white/10
-                  rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+      <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
+        <div className="flex items-center gap-8 px-8 py-3 
+                        bg-white/5 backdrop-blur-xl
+                        border border-white/10
+                        rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
 
-    {/* LOGO */}
-    <a href="/" className="flex items-center">
-      <img 
-        src="/assets/niksi.png"
-        className="h-8 object-contain opacity-90 hover:opacity-100 transition"
-      />
-    </a>
+          {/* LOGO */}
+          <a href="/" className="flex items-center">
+            <img 
+              src="/assets/niksi.png"
+              className="h-8 object-contain opacity-90 hover:opacity-100 transition"
+            />
+          </a>
 
-    {/* LINKS */}
-    <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
-      HOME
-    </a>
+          {/* LINKS */}
+          <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+            HOME
+          </a>
 
-    <a href="/giveaway.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
-      GIVEAWAY
-    </a>
+          <a href="/giveaway.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+            GIVEAWAY
+          </a>
 
-    {/* SOCIAL ICONS */}
-    <div className="flex items-center gap-4 ml-2">
+          {/* SOCIAL ICONS */}
+          <div className="flex items-center gap-4 ml-2">
 
-      <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/kick/22c55e"
-             className="h-5 opacity-70 hover:opacity-100" />
-      </a>
+            <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/kick/22c55e"
+                   className="h-5 opacity-70 hover:opacity-100" />
+            </a>
 
-      <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/discord/5865F2"
-             className="h-5 opacity-70 hover:opacity-100" />
-      </a>
+            <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/discord/5865F2"
+                   className="h-5 opacity-70 hover:opacity-100" />
+            </a>
 
-      <a href="https://x.com/code_niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/x/ffffff"
-             className="h-5 opacity-70 hover:opacity-100" />
-      </a>
+            <a href="https://x.com/code_niksi777" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/x/ffffff"
+                   className="h-5 opacity-70 hover:opacity-100" />
+            </a>
 
-    </div>
+          </div>
 
-  </div>
-</div>
+        </div>
+      </div>
 
+      {/* HERO */}
+      <div className="pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+        <div className="max-w-5xl mx-auto text-center">
+
+          {/* LOGO */}
           <img src="/assets/gamba2.png" className="h-12 mx-auto opacity-90" />
 
+          {/* TIMER */}
           <div className="mt-4 text-sm text-gray-400">
             ENDS IN <span className="text-green-400">{timeLeft}</span>
           </div>
