@@ -68,33 +68,35 @@
 
     <!-- GAMBA LEADERBOARD -->
     <a href="/gamba.html"
-       class="group bg-[#111827] border border-white/10 rounded-3xl p-8 
-              hover:bg-white/5 transition-all duration-300">
+   class="group relative flex flex-col items-center text-center
+          bg-[#111827] border border-white/10 rounded-3xl p-8 
+          hover:bg-white/5 transition-all duration-300">
 
-      <div class="flex justify-between items-start mb-4">
-
-        <img src="/assets/gamba.png" class="h-10 opacity-90" />
-
-        <div class="px-3 py-1 text-xs rounded-full 
-                    bg-red-500/20 text-red-400 animate-pulse">
-          LIVE
-        </div>
-
-      </div>
-
-      <div class="text-3xl font-bold text-green-400 font-mono mb-2">
-        $1,500
-      </div>
-
-      <div class="text-sm text-gray-400 tracking-widest">
-        LEADERBOARD
-      </div>
-
-      <div class="mt-4 text-xs text-gray-500">
-        Click to view full leaderboard →
-      </div>
-
-    </a>
+    <!-- LIVE BADGE (floating corner) -->
+    <div class="absolute top-4 right-4 px-3 py-1 text-xs rounded-full 
+                bg-red-500/20 text-red-400 animate-pulse">
+      LIVE
+    </div>
+  
+    <!-- LOGO -->
+    <img src="/assets/gamba.png" class="h-10 opacity-90 mb-6" />
+  
+    <!-- PRIZE -->
+    <div class="text-3xl font-bold text-green-400 font-mono mb-2">
+      $1,500
+    </div>
+  
+    <!-- LABEL -->
+    <div class="text-sm text-gray-400 tracking-widest">
+      LEADERBOARD
+    </div>
+  
+    <!-- CTA -->
+    <div class="mt-4 text-xs text-gray-500">
+      Click to view full leaderboard →
+    </div>
+  
+  </a>
 
     <!-- FUTURE LEADERBOARD SLOT -->
     <div class="bg-[#111827] border border-white/10 rounded-3xl p-8 opacity-50">
