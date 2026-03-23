@@ -39,10 +39,7 @@ function App() {
     setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
   };
 
-  // ✅ run immediately
   updateTimer();
-
-  // ✅ then every second
   const interval = setInterval(updateTimer, 1000);
 
   return () => clearInterval(interval);
@@ -74,24 +71,38 @@ function App() {
 
       {/* HERO SECTION */}
       <div className="relative py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto">
 
-          {/* MENU */}
-          <div className="flex justify-center mb-8">
-            <nav className="flex items-center gap-10 px-8 py-4 
-                            bg-white/5 backdrop-blur-md 
-                            border border-white/10 
-                            rounded-2xl shadow-lg">
+          {/* NEW NAVBAR */}
+          <div className="flex justify-between items-center mb-10">
 
-              <a href="/" className="text-sm tracking-wide text-white/70 hover:text-white transition">
+            <div className="text-lg font-bold tracking-wide text-white">
+              NIKSI<span className="text-cyan-400">777</span>
+            </div>
+
+            <nav className="flex items-center gap-8 px-8 py-3 
+                            bg-white/5 backdrop-blur-xl
+                            border border-white/10
+                            rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+
+              <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
                 HOME
               </a>
 
-             <a href="/giveaway.html" className="text-sm tracking-wide text-white/70 hover:text-white transition">
+              <a href="/giveaway.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
                 GIVEAWAY
-             </a>
+              </a>
 
             </nav>
+
+            <a href="/signup.html"
+               className="px-5 py-2 rounded-xl text-sm font-semibold 
+                          bg-cyan-400 text-black 
+                          hover:bg-cyan-300 transition
+                          shadow-[0_0_12px_rgba(34,211,238,0.8)]">
+              SIGN UP
+            </a>
+
           </div>
 
           {/* SOCIAL ICONS */}
@@ -115,7 +126,7 @@ function App() {
           </div>
 
           {/* TITLE */}
-          <h1 className="text-5xl font-bold tracking-tight mt-6">
+          <h1 className="text-5xl font-bold tracking-tight mt-6 text-center">
             WELCOME TO NIKSI777'S WEBSITE!
           </h1>
 
@@ -143,7 +154,7 @@ function App() {
                shadow-2xl 
                hover:bg-white/5 transition-all duration-300"
           >
-            {/* LIVE BADGE */}
+
 <div className="absolute top-4 left-4">
   <div className="px-3 py-1 text-[11px] font-semibold rounded-full 
                   bg-red-500/20 text-red-400 
@@ -152,6 +163,7 @@ function App() {
     LIVE
   </div>
 </div>
+
             <img
               src="/assets/gamba.png"
               alt="Gamba"
@@ -162,7 +174,6 @@ function App() {
 
            <div className="text-center">
 
-            {/* AMOUNT */}
             <div className="flex justify-center">
               <div className="text-5xl font-bold text-green-400 
                               drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
@@ -171,13 +182,10 @@ function App() {
               </div>
             </div>
           
-            {/* LEADERBOARD TEXT */}
             <div className="text-base font-semibold tracking-widest text-white/90 mt-2">
               LEADERBOARD
             </div>
           
-          
-            {/* TIMER */}
             <p className="mt-3 text-sm text-gray-400">
               ENDS IN: {timeLeft}
             </p>
