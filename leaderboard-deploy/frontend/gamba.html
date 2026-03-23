@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>NIKSI $1,500 LEADERBOARD</title>
+  <title>NIKSI777</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -16,86 +16,79 @@
 <script type="text/babel">
 
 function App() {
-  const [players, setPlayers] = React.useState([]);
-  const [prevPlayers, setPrevPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
   const [displayAmount, setDisplayAmount] = React.useState(0);
-
-  const totalWager = players.reduce((sum, p) => {
-    return sum + Number(p.wager || 0);
-  }, 0);
-
   const raceEnd = new Date("2026-04-03T01:00:00");
 
   React.useEffect(() => {
-    const startTime = Date.now();
-    const duration = 1500;
-    const end = 1500;
 
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime) / duration, 1);
-      setDisplayAmount(Math.floor(progress * end));
+  const updateTimer = () => {
+    const now = Date.now();
+    const distance = raceEnd - now;
 
-      if (progress === 1) clearInterval(timer);
-    }, 16);
+    if (distance <= 0) {
+      setTimeLeft("Race Ended");
+      return;
+    }
 
-    return () => clearInterval(timer);
-  }, []);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
 
-  React.useEffect(() => {
-
-    const updateTimer = () => {
-      const now = Date.now();
-      const diff = raceEnd - now;
-
-      if (diff <= 0) {
-        setTimeLeft("Race Ended");
-        return;
-      }
-
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-
-      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
-    };
-
-    updateTimer();
-    const timer = setInterval(updateTimer, 1000);
-    return () => clearInterval(timer);
-
-  }, []);
-
-  const fetchPlayers = async () => {
-    const res = await fetch("/players");
-    const data = await res.json();
-    setPrevPlayers(players);
-    setPlayers(data);
+    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
   };
 
+  updateTimer();
+  const interval = setInterval(updateTimer, 1000);
+
+  return () => clearInterval(interval);
+
+}, []);
+
   React.useEffect(() => {
-    fetchPlayers();
-    const interval = setInterval(fetchPlayers, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  const startTime = Date.now();
+  const duration = 1500;
+  const end = 1500;
+
+  const timer = setInterval(() => {
+    const now = Date.now();
+    const progress = Math.min((now - startTime) / duration, 1);
+
+    const value = Math.floor(progress * end);
+    setDisplayAmount(value);
+
+    if (progress === 1) {
+      clearInterval(timer);
+    }
+  }, 16);
+
+  return () => clearInterval(timer);
+}, []);
 
   return (
     <div className="min-h-screen">
 
-      {/* NAVBAR (same as homepage) */}
+      {/* HERO SECTION */}
+      <div className="relative pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+        <div className="max-w-6xl mx-auto">
+
+          {/* NAVBAR (fixed at top) */}
       <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
         <div className="flex items-center gap-10 px-8 py-3 
                         bg-white/5 backdrop-blur-xl
                         border border-white/10
                         rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
 
-          <img 
-            src="/assets/niksi.png"
-            className="h-8 object-contain opacity-90"
-          />
+          {/* LOGO (clickable, goes home) */}
+          <a href="/" className="flex items-center">
+            <img 
+              src="/assets/niksi.png"
+              className="h-8 object-contain opacity-90 hover:opacity-100 transition"
+            />
+          </a>
 
+          {/* LINKS */}
           <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
             HOME
           </a>
@@ -107,128 +100,86 @@ function App() {
         </div>
       </div>
 
-      {/* HERO */}
-      <div className="pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-        <div className="max-w-5xl mx-auto text-center">
-
-          {/* SOCIALS */}
+          {/* SOCIAL ICONS */}
           <div className="flex justify-center gap-6 mb-8">
-            <a href="https://kick.com/niksi777" target="_blank">
-              <img src="https://cdn.simpleicons.org/kick/22c55e" className="h-8" />
+
+            <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/kick/22c55e"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
             </a>
-            <a href="https://discord.gg/NU9b4xRMqD" target="_blank">
-              <img src="https://cdn.simpleicons.org/discord/5865F2" className="h-8" />
+
+            <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/discord/5865F2"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]" />
             </a>
-            <a href="https://x.com/code_niksi777" target="_blank">
-              <img src="https://cdn.simpleicons.org/x/ffffff" className="h-8" />
+
+            <a href="https://x.com/code_niksi777" target="_blank" className="hover:scale-110 transition duration-300">
+              <img src="https://cdn.simpleicons.org/x/ffffff"
+                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
             </a>
+
           </div>
 
-          {/* LOGO */}
-          <img src="/assets/gamba2.png" className="h-12 mx-auto opacity-90" />
+          {/* TITLE */}
+          <h1 className="text-5xl font-bold tracking-tight mt-6 text-center">
+            WELCOME TO NIKSI777'S WEBSITE!
+          </h1>
 
-          {/* TIMER */}
-          <div className="mt-4 text-sm text-gray-400">
-            ENDS IN <span className="text-green-400">{timeLeft}</span>
           </div>
-
-        </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="max-w-5xl mx-auto px-6 pb-24">
+      {/* GAMBA CARD SECTION */}
+      <div className="max-w-5xl mx-auto mb-20 px-6">
 
-        <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
+        <div className="flex justify-center">
 
-          <div className="absolute top-6 left-6">
-            <a href="https://gamba.com?c=niksi" target="_blank"
-               className="bg-green-400 text-black px-4 py-2 rounded-xl text-sm">
-              Sign Up
-            </a>
-          </div>
+          <a
+            href="/gamba.html"
+            className="group relative flex flex-col items-center justify-center 
+               bg-[#111827] border border-white/10 
+               rounded-3xl px-12 py-10 
+               shadow-2xl 
+               hover:bg-white/5 transition-all duration-300"
+          >
 
-          <div className="absolute top-6 right-6">
-            <a href="https://gamba.com/promotions/exclusive-leaderboards/9674" target="_blank"
-               className="bg-white text-black px-4 py-2 rounded-xl text-sm">
-              VIEW ON GAMBA
-            </a>
-          </div>
+<div className="absolute top-4 left-4">
+  <div className="px-3 py-1 text-[11px] font-semibold rounded-full 
+                  bg-red-500/20 text-red-400 
+                  shadow-[0_0_12px_rgba(239,68,68,0.7)] 
+                  animate-pulse tracking-wide">
+    LIVE
+  </div>
+</div>
 
-          <div className="mb-12 text-center">
+            <img
+              src="/assets/gamba.png"
+              alt="Gamba"
+              className="h-14 object-contain mb-6 
+                         group-hover:scale-105 
+                         transition-transform duration-300"
+            />
 
-            {/* PRIZEPOOL LABEL ABOVE */}
-            <div className="text-sm text-gray-400 tracking-widest mb-2">
-              TOTAL PRIZEPOOL
-            </div>
-          
-            {/* PRIZE */}
-            <div className="text-5xl font-bold text-green-400 font-mono min-w-[200px] mx-auto">
-              ${displayAmount.toLocaleString("en-US")}
-            </div>
-          
-            {/* WAGER */}
-            <div className="mb-10 text-center opacity-80 mt-6">
-          
-              {/* LABEL ABOVE */}
-              <div className="text-xs text-gray-500 tracking-widest mb-1">
-                TOTAL WAGER VOLUME
+           <div className="text-center">
+
+            <div className="flex justify-center">
+              <div className="text-5xl font-bold text-green-400 
+                              drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
+                              font-mono min-w-[200px] text-center">
+                ${displayAmount.toLocaleString("en-US")}
               </div>
-          
-              <div className="text-xl font-semibold text-blue-300 font-mono">
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD"
-                }).format(totalWager)}
-              </div>
-          
             </div>
+          
+            <div className="text-base font-semibold tracking-widest text-white/90 mt-2">
+              LEADERBOARD
+            </div>
+          
+            <p className="mt-3 text-sm text-gray-400">
+              ENDS IN: {timeLeft}
+            </p>
           
           </div>
 
-          <div className="space-y-4">
-
-            <div className="grid grid-cols-3 text-gray-400 text-sm border-b pb-3">
-              <div>PLAYER</div>
-              <div className="text-center">PRIZE</div>
-              <div className="text-right">WAGER</div>
-            </div>
-
-            {players.slice(0, 15).map((p, i) => {
-
-              let glowClass = "bg-white/5";
-
-              if (i === 0) glowClass = "bg-yellow-500/10";
-              if (i === 1) glowClass = "bg-gray-400/10";
-              if (i === 2) glowClass = "bg-orange-500/10";
-
-              return (
-                <div key={p.id}
-                  className={`grid grid-cols-3 items-center ${glowClass} rounded-xl px-5 py-4`}>
-
-                  <div className="flex gap-2">
-                    {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i+1}.`}
-                    {p.username}
-                  </div>
-
-                  <div className="text-center">
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD"
-                    }).format(Number(p.reward))}
-                  </div>
-
-                  <div className="text-right">
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD"
-                    }).format(Number(p.wager))}
-                  </div>
-
-                </div>
-              );
-            })}
-
-          </div>
+          </a>
 
         </div>
 
