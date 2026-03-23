@@ -36,6 +36,36 @@
 
 function App() {
 
+  const [timeLeft, setTimeLeft] = React.useState("");
+
+const raceEnd = new Date("2026-04-03T01:00:00");
+
+React.useEffect(() => {
+
+  const updateTimer = () => {
+    const now = Date.now();
+    const diff = raceEnd - now;
+
+    if (diff <= 0) {
+      setTimeLeft("ENDED");
+      return;
+    }
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
+  };
+
+  updateTimer();
+  const interval = setInterval(updateTimer, 1000);
+
+  return () => clearInterval(interval);
+
+}, []);
+
   const [players, setPlayers] = React.useState([]);
 
   React.useEffect(() => {
@@ -57,19 +87,29 @@ function App() {
     <div className="w-[820px] px-14 py-10 fade-in">
 
 
-      {/* HEADER */}
-      <div className="flex items-center justify-center gap-4 mb-8">
-      
-        <img 
-          src="assets/gamba.png" 
-          className="h-10 object-contain opacity-95"
-        />
-      
-        <div className="text-2xl tracking-wide font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
-          $1,500 LEADERBOARD
+              {/* HEADER */}
+        <div className="flex flex-col items-center mb-8">
+        
+          {/* LOGO + TITLE */}
+          <div className="flex items-center gap-4">
+        
+            <img 
+              src="assets/gamba.png" 
+              className="h-10 object-contain opacity-95"
+            />
+        
+            <div className="text-2xl tracking-wide font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
+              $1,500 LEADERBOARD
+            </div>
+        
+          </div>
+        
+          {/* TIMER */}
+          <div className="mt-2 text-xs text-white/70 tracking-wider">
+            ENDS IN <span className="text-green-400 font-semibold">{timeLeft}</span>
+          </div>
+        
         </div>
-      
-      </div>
 
       {/* BOARD */}
       <div className="bg-black/50 backdrop-blur-lg border border-white/20 rounded-2xl p-6">
