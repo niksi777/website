@@ -22,65 +22,60 @@ function App() {
 
   React.useEffect(() => {
 
-  const updateTimer = () => {
-    const now = Date.now();
-    const distance = raceEnd - now;
+    const updateTimer = () => {
+      const now = Date.now();
+      const distance = raceEnd - now;
 
-    if (distance <= 0) {
-      setTimeLeft("Race Ended");
-      return;
-    }
+      if (distance <= 0) {
+        setTimeLeft("Race Ended");
+        return;
+      }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((distance / (1000 * 60)) % 60);
-    const seconds = Math.floor((distance / 1000) % 60);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
 
-    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-  };
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    };
 
-  updateTimer();
-  const interval = setInterval(updateTimer, 1000);
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
 
-  return () => clearInterval(interval);
-
-}, []);
+  }, []);
 
   React.useEffect(() => {
-  const startTime = Date.now();
-  const duration = 1500;
-  const end = 1500;
+    const startTime = Date.now();
+    const duration = 1500;
+    const end = 1500;
 
-  const timer = setInterval(() => {
-    const now = Date.now();
-    const progress = Math.min((now - startTime) / duration, 1);
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
 
-    const value = Math.floor(progress * end);
-    setDisplayAmount(value);
+      const value = Math.floor(progress * end);
+      setDisplayAmount(value);
 
-    if (progress === 1) {
-      clearInterval(timer);
-    }
-  }, 16);
+      if (progress === 1) {
+        clearInterval(timer);
+      }
+    }, 16);
 
-  return () => clearInterval(timer);
-}, []);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="min-h-screen">
 
-      {/* HERO SECTION */}
-      <div className="relative pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-        <div className="max-w-6xl mx-auto">
-
-          {/* NAVBAR (fixed at top) */}
+      {/* NAVBAR */}
       <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
-        <div className="flex items-center gap-10 px-8 py-3 
+        <div className="flex items-center gap-8 px-8 py-3 
                         bg-white/5 backdrop-blur-xl
                         border border-white/10
                         rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
 
-          {/* LOGO (clickable, goes home) */}
+          {/* LOGO */}
           <a href="/" className="flex items-center">
             <img 
               src="/assets/niksi.png"
@@ -97,35 +92,39 @@ function App() {
             GIVEAWAY
           </a>
 
-        </div>
-      </div>
-
           {/* SOCIAL ICONS */}
-          <div className="flex justify-center gap-6 mb-8">
+          <div className="flex items-center gap-4 ml-2">
 
             <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
               <img src="https://cdn.simpleicons.org/kick/22c55e"
-                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+                   className="h-5 opacity-70 hover:opacity-100" />
             </a>
 
             <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" className="hover:scale-110 transition duration-300">
               <img src="https://cdn.simpleicons.org/discord/5865F2"
-                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]" />
+                   className="h-5 opacity-70 hover:opacity-100" />
             </a>
 
             <a href="https://x.com/code_niksi777" target="_blank" className="hover:scale-110 transition duration-300">
               <img src="https://cdn.simpleicons.org/x/ffffff"
-                   className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                   className="h-5 opacity-70 hover:opacity-100" />
             </a>
 
           </div>
+
+        </div>
+      </div>
+
+      {/* HERO SECTION */}
+      <div className="relative pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
+        <div className="max-w-6xl mx-auto">
 
           {/* TITLE */}
           <h1 className="text-5xl font-bold tracking-tight mt-6 text-center">
             WELCOME TO NIKSI777'S WEBSITE!
           </h1>
 
-          </div>
+        </div>
       </div>
 
       {/* GAMBA CARD SECTION */}
@@ -142,14 +141,14 @@ function App() {
                hover:bg-white/5 transition-all duration-300"
           >
 
-<div className="absolute top-4 left-4">
-  <div className="px-3 py-1 text-[11px] font-semibold rounded-full 
-                  bg-red-500/20 text-red-400 
-                  shadow-[0_0_12px_rgba(239,68,68,0.7)] 
-                  animate-pulse tracking-wide">
-    LIVE
-  </div>
-</div>
+            <div className="absolute top-4 left-4">
+              <div className="px-3 py-1 text-[11px] font-semibold rounded-full 
+                              bg-red-500/20 text-red-400 
+                              shadow-[0_0_12px_rgba(239,68,68,0.7)] 
+                              animate-pulse tracking-wide">
+                LIVE
+              </div>
+            </div>
 
             <img
               src="/assets/gamba.png"
@@ -159,25 +158,25 @@ function App() {
                          transition-transform duration-300"
             />
 
-           <div className="text-center">
+            <div className="text-center">
 
-            <div className="flex justify-center">
-              <div className="text-5xl font-bold text-green-400 
-                              drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
-                              font-mono min-w-[200px] text-center">
-                ${displayAmount.toLocaleString("en-US")}
+              <div className="flex justify-center">
+                <div className="text-5xl font-bold text-green-400 
+                                drop-shadow-[0_0_12px_rgba(34,197,94,0.9)] 
+                                font-mono min-w-[200px] text-center">
+                  ${displayAmount.toLocaleString("en-US")}
+                </div>
               </div>
+
+              <div className="text-base font-semibold tracking-widest text-white/90 mt-2">
+                LEADERBOARD
+              </div>
+
+              <p className="mt-3 text-sm text-gray-400">
+                ENDS IN: {timeLeft}
+              </p>
+
             </div>
-          
-            <div className="text-base font-semibold tracking-widest text-white/90 mt-2">
-              LEADERBOARD
-            </div>
-          
-            <p className="mt-3 text-sm text-gray-400">
-              ENDS IN: {timeLeft}
-            </p>
-          
-          </div>
 
           </a>
 
