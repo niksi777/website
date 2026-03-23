@@ -6,6 +6,27 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 10px rgba(250,204,21,0.4); }
+  50% { box-shadow: 0 0 25px rgba(250,204,21,0.9); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.pulse-gold {
+  animation: pulseGlow 2s infinite;
+}
+</style>
+
 </head>
 
 <body class="bg-transparent text-white">
@@ -17,7 +38,6 @@ function App() {
 
   const [players, setPlayers] = React.useState([]);
 
-  // Fetch with auto refresh
   React.useEffect(() => {
     const fetchData = () => {
       fetch("/players")
@@ -28,31 +48,33 @@ function App() {
 
     fetchData();
     const interval = setInterval(fetchData, 10000);
-
     return () => clearInterval(interval);
   }, []);
 
   const topFive = players.slice(0, 5);
 
   return (
-    <div className="w-[820px] px-14 py-10">
+    <div className="w-[820px] px-14 py-10 fade-in">
+
+      {/* DARK GRADIENT BACK (helps visibility in OBS) */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/40 to-transparent rounded-3xl blur-xl"></div>
 
       {/* HEADER */}
       <div className="text-center mb-6">
 
-        <img src="assets/gamba.png" className="h-14 mx-auto mb-3 object-contain opacity-90" />
+        <img src="assets/gamba.png" className="h-14 mx-auto mb-3 object-contain opacity-95" />
 
-        <div className="text-lg tracking-wide font-light">
+        <div className="text-xl tracking-wide font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
           $500 LEADERBOARD
         </div>
 
       </div>
 
-      {/* LEADERBOARD */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+      {/* BOARD */}
+      <div className="bg-black/50 backdrop-blur-lg border border-white/20 rounded-2xl p-6">
 
-        {/* TABLE HEADER */}
-        <div className="grid grid-cols-3 text-xs uppercase tracking-widest opacity-40 mb-4">
+        {/* HEADERS */}
+        <div className="grid grid-cols-3 text-xs uppercase tracking-widest text-white/60 mb-4">
           <div>Name</div>
           <div className="text-center">Reward</div>
           <div className="text-right">Wager</div>
@@ -60,40 +82,57 @@ function App() {
 
         {topFive.map((p, i) => {
 
-          let highlight = "";
+          let base = "bg-white/5";
+          let nameStyle = "text-white";
+          let rewardStyle = "text-white";
+          let extra = "";
 
-          if (i === 0) highlight = "bg-white/10";
-          else if (i === 1) highlight = "bg-white/5";
-          else if (i === 2) highlight = "bg-white/3";
+          if (i === 0) {
+            base = "bg-yellow-400/10 border border-yellow-400/40";
+            nameStyle = "text-yellow-300";
+            rewardStyle = "text-yellow-300";
+            extra = "pulse-gold";
+          }
+
+          if (i === 1) {
+            base = "bg-gray-300/10";
+            nameStyle = "text-gray-200";
+          }
+
+          if (i === 2) {
+            base = "bg-orange-400/10";
+            nameStyle = "text-orange-300";
+          }
 
           return (
             <div
               key={p.id}
-              className={`grid grid-cols-3 items-center py-3 px-3 rounded-xl mb-2 ${highlight}`}
+              className={`grid grid-cols-3 items-center py-3 px-3 rounded-xl mb-2 transition-all duration-500 ${base} ${extra}`}
             >
+
               {/* PLAYER */}
               <div className="flex items-center gap-3">
-                <div className="text-white/50 w-5 text-sm">
+                <div className="text-white/60 w-5 text-sm">
                   {p.position}.
                 </div>
 
                 <img
                   src={p.avatar}
-                  className="w-8 h-8 rounded-full object-cover border border-white/10"
+                  className="w-8 h-8 rounded-full object-cover border border-white/20"
                 />
 
-                <span className="text-sm font-medium">
+                <span className={`text-sm font-semibold drop-shadow ${nameStyle}`}>
                   {p.username}
                 </span>
               </div>
 
               {/* REWARD */}
-              <div className="text-center text-lg font-semibold">
+              <div className={`text-center text-lg font-bold drop-shadow ${rewardStyle}`}>
                 ${Number(p.reward).toFixed(2)}
               </div>
 
               {/* WAGER */}
-              <div className="text-right text-lg font-semibold">
+              <div className="text-right text-lg font-semibold text-white/90">
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "USD",
