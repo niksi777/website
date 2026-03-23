@@ -156,17 +156,15 @@ function App() {
               TOTAL PRIZEPOOL
             </div>
             {/* TOTAL WAGER */}
-            <div className="mb-12 text-center">
-              <div className="text-3xl font-bold text-blue-400 font-mono">
+            <div className="mb-10 text-center opacity-80">
+              <div className="text-xl font-semibold text-blue-300 font-mono">
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
+                  currency: "USD"
                 }).format(totalWager)}
               </div>
             
-              <div className="text-sm text-gray-400 tracking-widest mt-2">
+              <div className="text-xs text-gray-500 tracking-widest mt-1">
                 TOTAL WAGER VOLUME
               </div>
             </div>
