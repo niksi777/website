@@ -73,18 +73,21 @@ function App() {
       <div className="relative py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
         <div className="max-w-6xl mx-auto">
 
-          {/* NEW NAVBAR */}
-          <div className="flex justify-between items-center mb-10">
+          {/* NAVBAR */}
+          <div className="flex justify-center mb-10">
 
-            <div className="text-lg font-bold tracking-wide text-white">
-              NIKSI<span className="text-cyan-400">777</span>
-            </div>
-
-            <nav className="flex items-center gap-8 px-8 py-3 
+            <div className="flex items-center gap-10 px-8 py-3 
                             bg-white/5 backdrop-blur-xl
                             border border-white/10
                             rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
 
+              {/* LOGO (inside the bar, left side) */}
+              <img 
+                src="/assets/niksi.png"
+                className="h-8 object-contain opacity-90"
+              />
+
+              {/* LINKS */}
               <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
                 HOME
               </a>
@@ -93,15 +96,7 @@ function App() {
                 GIVEAWAY
               </a>
 
-            </nav>
-
-            <a href="/signup.html"
-               className="px-5 py-2 rounded-xl text-sm font-semibold 
-                          bg-cyan-400 text-black 
-                          hover:bg-cyan-300 transition
-                          shadow-[0_0_12px_rgba(34,211,238,0.8)]">
-              SIGN UP
-            </a>
+            </div>
 
           </div>
 
