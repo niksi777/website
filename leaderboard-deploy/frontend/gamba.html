@@ -250,17 +250,32 @@ function App() {
 
             {players.slice(0, 15).map((p, i) => {
 
-              let rowClass = "bg-white/5";
-              if (i === 0) rowClass = "bg-white/12";
-              if (i === 1) rowClass = "bg-white/10";
-              if (i === 2) rowClass = "bg-white/8";
+              let rowClass = "bg-white/5 border border-white/5";
+              let rankClass = "text-white";
+
+              if (i === 0) {
+                rowClass = "bg-gradient-to-r from-amber-400/18 to-white/5 border border-amber-300/35";
+                rankClass = "text-amber-300";
+              }
+
+              if (i === 1) {
+                rowClass = "bg-gradient-to-r from-slate-300/18 to-white/5 border border-slate-200/35";
+                rankClass = "text-slate-200";
+              }
+
+              if (i === 2) {
+                rowClass = "bg-gradient-to-r from-orange-400/18 to-white/5 border border-orange-300/35";
+                rankClass = "text-orange-300";
+              }
 
               return (
                 <div key={p.id}
                   className={`grid grid-cols-3 items-center ${rowClass} rounded-xl px-5 py-4`}>
 
-                  <div className="flex gap-2">
-                    {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
+                  <div className="flex gap-2 items-center">
+                    <span className={rankClass}>
+                      {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
+                    </span>
                     {p.username}
                   </div>
 
