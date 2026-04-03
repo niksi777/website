@@ -56,7 +56,7 @@ async function updateAcebet() {
 // Fetch Gamba leaderboard
 async function updateLeaderboard() {
   try {
-    const raceId = 9674;
+    const raceId = 10495;
 
 const url =
   "https://gamba.com/_api/@?operationName=getRaceById" +
@@ -67,7 +67,7 @@ const url =
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Referer":
-          "https://gamba.com/promotions/exclusive-leaderboards/9674",
+          "https://gamba.com/promotions/exclusive-leaderboards/10495",
         "Origin": "https://gamba.com",
       },
     });
@@ -119,7 +119,7 @@ competitors.forEach((player) => {
 }
 
 // Update every 30 seconds
-setInterval(updateLeaderboard, 3200000);
+setInterval(updateLeaderboard, 30000);
 updateLeaderboard();
 
 // API endpoint for overlay + website
@@ -183,4 +183,3 @@ app.get("/ip", async (req, res) => {
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
 });
-
