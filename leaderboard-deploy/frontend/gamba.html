@@ -139,32 +139,26 @@ function App() {
   </div>
 </div>
 
-      {/* HERO */}
-      <div className="pt-28 pb-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-        <div className="max-w-5xl mx-auto text-center">
-
-          <img src="/assets/gamba2.png" className="h-12 mx-auto opacity-90" />
-
-          <div className="mt-4 text-sm text-gray-400">
-            ENDS IN <span className="text-green-400">{timeLeft}</span>
-          </div>
-
-        </div>
-      </div>
-
       {/* CONTENT */}
-      <div className="max-w-5xl mx-auto px-6 pb-10">
+      <div className="max-w-5xl mx-auto px-6 pt-28 pb-10">
 
         <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
+          {/* HEADER INSIDE BOX */}
+          <div className="text-center mb-8">
+            <img src="/assets/gamba2.png" className="h-12 mx-auto opacity-90" />
+            <div className="mt-3 text-sm text-gray-400">
+              ENDS IN <span className="text-green-400">{timeLeft}</span>
+            </div>
+          </div>
 
-          <div className="absolute top-6 left-6">
+          <div className="absolute top-5 left-5">
             <a href="https://gamba.com?c=niksi" target="_blank"
                className="bg-green-400 text-black px-4 py-2 rounded-xl text-sm">
               Sign Up
             </a>
           </div>
 
-          <div className="absolute top-6 right-6">
+          <div className="absolute top-5 right-5">
             <a href="https://gamba.com/promotions/exclusive-leaderboards/10495" target="_blank"
                className="bg-white text-black px-4 py-2 rounded-xl text-sm">
               VIEW ON GAMBA
@@ -173,7 +167,7 @@ function App() {
 
           {/* PRIZE */}
           {/* PRIZE + WAGER */}
-<div className="mb-12 text-center">
+<div className="mb-10 text-center">
 
   {/* PRIZE */}
   <div className="text-sm text-gray-400 tracking-widest mb-2">
