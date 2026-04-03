@@ -78,6 +78,13 @@ function App() {
   }, []);
 
   const topThree = players.slice(0, 3);
+  const podiumOrder = [1, 0, 2]
+    .map((index) => {
+      const player = topThree[index];
+      if (!player) return null;
+      return { ...player, rank: index + 1 };
+    })
+    .filter(Boolean);
   const restPlayers = players.slice(3, 15);
 
   return (
@@ -196,34 +203,38 @@ function App() {
 </div>
 
           {/* TOP 3 CARDS */}
-          <div className="grid md:grid-cols-3 gap-5 mb-10">
-            {topThree.map((p, i) => {
-              const rankText = i === 0 ? "1ST" : i === 1 ? "2ND" : "3RD";
-              const glow = i === 0
+          <div className="grid md:grid-cols-3 gap-4 mb-10 items-end">
+            {podiumOrder.map((p) => {
+              const rankText = p.rank === 1 ? "1ST" : p.rank === 2 ? "2ND" : "3RD";
+              const isFirst = p.rank === 1;
+              const glow = p.rank === 1
                 ? "border-yellow-400/60 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
-                : i === 1
+                : p.rank === 2
                 ? "border-green-400/40 shadow-[0_0_24px_rgba(34,197,94,0.20)]"
                 : "border-cyan-400/40 shadow-[0_0_24px_rgba(34,211,238,0.20)]";
 
               return (
-                <div key={p.id} className={`bg-black/25 border rounded-2xl p-5 ${glow}`}>
-                  <div className="text-center text-3xl font-black italic text-green-400 mb-4">
+                <div
+                  key={p.id}
+                  className={`bg-black/25 border rounded-2xl p-4 ${glow} ${isFirst ? "md:scale-[1.06] z-10" : "md:scale-[0.95]"}`}
+                >
+                  <div className={`text-center font-black italic text-green-400 mb-3 ${isFirst ? "text-4xl" : "text-3xl"}`}>
                     {rankText}
                   </div>
 
                   <img
                     src={p.avatar}
                     alt={p.username}
-                    className="w-20 h-20 rounded-2xl mx-auto object-cover border border-white/20 mb-4"
+                    className={`${isFirst ? "w-20 h-20" : "w-16 h-16"} rounded-2xl mx-auto object-cover border border-white/20 mb-3`}
                   />
 
-                  <div className="text-center font-bold tracking-wide truncate mb-4">
+                  <div className={`text-center font-bold tracking-wide truncate mb-3 ${isFirst ? "text-base" : "text-sm"}`}>
                     {p.username}
                   </div>
 
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center mb-3">
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center mb-2">
                     <div className="text-[10px] tracking-[0.2em] text-gray-400 mb-1">WAGERED</div>
-                    <div className="text-lg font-semibold">
+                    <div className={`${isFirst ? "text-lg" : "text-base"} font-semibold`}>
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
                         currency: "USD"
@@ -231,9 +242,9 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl bg-white text-black p-3 text-center">
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
                     <div className="text-[10px] tracking-[0.2em] text-gray-500 mb-1">PRIZE</div>
-                    <div className="text-2xl font-black text-green-500">
+                    <div className={`${isFirst ? "text-2xl" : "text-xl"} font-black text-green-400`}>
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
                         currency: "USD",
