@@ -212,9 +212,20 @@ function App() {
                 <div key={p.id}
                   className={`grid grid-cols-3 items-center ${glowClass} rounded-xl px-5 py-4`}>
 
-                  <div className="flex gap-2">
-                    {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i+1}.`}
-                    {p.username}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="text-white/70 w-6 text-sm shrink-0">
+                      {i === 0 ? "👑" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
+                    </div>
+
+                    <img
+                      src={p.avatar}
+                      alt={p.username}
+                      className="w-8 h-8 rounded-full object-cover border border-white/20 shrink-0"
+                    />
+
+                    <span className="truncate">
+                      {p.username}
+                    </span>
                   </div>
 
                   <div className="text-center">
