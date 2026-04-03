@@ -55,7 +55,7 @@
 function App() {
   const [timeLeft, setTimeLeft] = React.useState("");
   const [displayAmount, setDisplayAmount] = React.useState(0);
-  const raceEnd = new Date("2026-04-03T01:00:00");
+  const raceEnd = new Date("2026-04-16T23:15:00Z");
 
   React.useEffect(() => {
     const updateTimer = () => {
@@ -176,82 +176,80 @@ function App() {
       <div className="max-w-6xl mx-auto px-6 pt-28 pb-16 grid md:grid-cols-2 gap-12">
 
         {/* LEFT */}
-<div className="flex justify-center">
-  <div className="w-full max-w-md">
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
 
-    <h1 className="text-2xl md:text-3xl font-semibold text-center mb-5">
-      LEADERBOARDS
-    </h1>
+            <h1 className="text-2xl md:text-3xl font-semibold text-center mb-5">
+              LEADERBOARDS
+            </h1>
 
-    <a href="/gamba.html"
-      className="group block bg-white/[0.03] border border-white/10
-      rounded-3xl p-6 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.45)]
-      hover:border-white/25 hover:-translate-y-0.5 transition-all duration-300">
+            <a href="/gamba.html"
+              className="group block bg-[#020617] border border-green-400/20 
+              rounded-2xl p-6 shadow-[0_0_25px_rgba(34,197,94,0.15)]">
 
-      <div className="bg-white/[0.06] border border-white/10 rounded-2xl p-5 flex justify-center mb-5 relative">
-        <div className="absolute top-3 left-3 text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded animate-pulse">
-          LIVE
+              <div className="bg-[#1e293b] rounded-xl p-6 flex justify-center mb-6 relative">
+                <div className="absolute top-3 left-3 text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded animate-pulse">
+                  LIVE
+                </div>
+                <img src="/assets/gamba.png" className="h-12" />
+              </div>
+
+              <div className="text-center mb-6">
+                <div className="text-xs text-gray-500 mb-2">PRIZE POOL</div>
+                <div className="text-4xl font-bold text-green-400">
+                  ${displayAmount}
+                </div>
+              </div>
+
+              <div className="text-center text-sm mb-6">
+                ENDS IN: <span className="text-green-400">{timeLeft}</span>
+              </div>
+
+              <div className="text-center bg-green-400 text-black py-3 rounded-xl font-bold">
+                VIEW LEADERBOARD
+              </div>
+
+            </a>
+          </div>
         </div>
-        <img src="/assets/gamba.png" className="h-12" />
-      </div>
 
-      <div className="text-center mb-6">
-        <div className="text-xs text-gray-500 mb-2">PRIZE POOL</div>
-        <div className="text-4xl font-bold text-white">
-          ${displayAmount}
+        {/* RIGHT */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+
+            <h1 className="text-2xl md:text-3xl font-semibold text-center mb-5">
+              All Active Bonuses
+            </h1>
+
+            <div className="bg-[#020617] border border-green-400/20 
+              rounded-2xl p-6 shadow-[0_0_25px_rgba(34,197,94,0.15)]">
+
+              <div className="bg-[#1e293b] rounded-xl p-6 flex justify-center mb-6">
+                <img src="/assets/gamba2.png" className="h-12" />
+              </div>
+
+              <a href="https://gamba.com/?c=niksi" target="_blank"
+                className="block text-center mb-6 text-gray-400 hover:text-white">
+                gamba.com/?c=niksi
+              </a>
+
+              <div className="text-center text-green-400 mb-6">
+                <div>LEADERBOARD ACCESS</div>
+                <div>10-20% LOSSBACK</div>
+              </div>
+
+              <a href="https://gamba.com?c=niksi" target="_blank"
+                className="block text-center bg-green-400 text-black py-3 rounded-xl font-bold mb-4">
+                SIGN UP NOW
+              </a>
+
+              <div className="text-center text-sm">
+                USE CODE <span className="text-green-400 font-bold">NIKSI</span>
+              </div>
+
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="text-center text-sm mb-6">
-        ENDS IN: <span className="text-white">{timeLeft}</span>
-      </div>
-
-      <div className="text-center bg-gradient-to-r from-gray-100 to-white text-black py-3 rounded-xl font-extrabold tracking-wide shadow-[0_8px_20px_rgba(255,255,255,0.2)] hover:scale-[1.01] transition">
-        VIEW LEADERBOARD
-      </div>
-
-    </a>
-  </div>
-</div>
-
-{/* RIGHT */}
-<div className="flex justify-center">
-  <div className="w-full max-w-md">
-
-    <h1 className="text-2xl md:text-3xl font-semibold text-center mb-5">
-      Bonuses
-    </h1>
-
-    <div className="bg-white/[0.03] border border-white/10
-      rounded-3xl p-6 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.45)]
-      hover:border-white/25 hover:-translate-y-0.5 transition-all duration-300">
-
-      <div className="bg-white/[0.06] border border-white/10 rounded-2xl p-5 flex justify-center mb-5">
-        <img src="/assets/gamba2.png" className="h-12" />
-      </div>
-
-      <a href="https://gamba.com/?c=niksi" target="_blank"
-        className="block text-center mb-6 text-gray-400 hover:text-white">
-        gamba.com/?c=niksi
-      </a>
-
-      <div className="text-center text-white mb-6">
-        <div>ACCESS TO $1,500 LEADERBOARD</div>
-        <div>BETWEEN 10-20% LOSSBACK</div>
-      </div>
-
-      <a href="https://gamba.com?c=niksi" target="_blank"
-        className="block text-center bg-gradient-to-r from-gray-100 to-white text-black py-3 rounded-xl font-extrabold tracking-wide shadow-[0_8px_20px_rgba(255,255,255,0.2)] hover:scale-[1.01] transition mb-4">
-        SIGN UP NOW
-      </a>
-
-      <div className="text-center text-sm">
-        USE CODE <span className="text-white font-bold">NIKSI</span>
-      </div>
-
-    </div>
-  </div>
-</div>
 
       </div>
 
