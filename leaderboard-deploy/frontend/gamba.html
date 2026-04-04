@@ -146,9 +146,6 @@ function App() {
           {/* HEADER INSIDE BOX */}
           <div className="text-center mb-8">
             <img src="/assets/gamba2.png" className="h-12 mx-auto opacity-90" />
-            <div className="mt-3 text-sm text-gray-400">
-              ENDS IN <span className="text-green-400">{timeLeft}</span>
-            </div>
           </div>
 
           <div className="absolute top-5 left-5">
@@ -199,7 +196,7 @@ function App() {
           {/* TOP 3 CARDS */}
           <div className="grid md:grid-cols-3 gap-4 mb-10 items-end">
             {podiumOrder.map((p) => {
-              const rankText = p.rank === 1 ? "1ST" : p.rank === 2 ? "2ND" : "3RD";
+              const rankText = p.rank === 1 ? "#1" : p.rank === 2 ? "#2" : "#3";
               const isFirst = p.rank === 1;
               const glow = p.rank === 1
                 ? "border-yellow-400/60 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
@@ -249,6 +246,14 @@ function App() {
                 </div>
               );
             })}
+          </div>
+
+          {/* TIMER BETWEEN PODIUM AND TABLE */}
+          <div className="mb-8 rounded-2xl bg-black/20 border border-white/10 p-4 text-center">
+            <div className="text-xs tracking-[0.2em] text-gray-400 mb-1">ENDS IN</div>
+            <div className="text-3xl font-black text-green-400 font-mono">
+              {timeLeft}
+            </div>
           </div>
 
           {/* REST OF TABLE */}
