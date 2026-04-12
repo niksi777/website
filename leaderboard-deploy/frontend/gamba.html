@@ -57,12 +57,7 @@ function App() {
       const m = Math.floor((diff / (1000 * 60)) % 60);
       const s = Math.floor((diff / 1000) % 60);
 
-      const dd = String(d).padStart(2, "0");
-      const hh = String(h).padStart(2, "0");
-      const mm = String(m).padStart(2, "0");
-      const ss = String(s).padStart(2, "0");
-
-      setTimeLeft(`${dd}:${hh}:${mm}:${ss}`);
+      setTimeLeft(`${d}d ${h}h ${m}m ${s}s`);
     };
 
     updateTimer();
