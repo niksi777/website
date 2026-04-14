@@ -31,7 +31,7 @@ function App() {
   };
 
   const raceEnd = React.useMemo(
-    () => new Date(Date.now() + 20 * 60 * 60 * 1000),
+    () => new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
     []
   );
 
@@ -90,7 +90,25 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const topThree = players.slice(0, 3);
+  const seededPlayers = React.useMemo(() => {
+    const byPosition = {};
+    players.forEach((p) => {
+      byPosition[p.position] = p;
+    });
+
+    return Array.from({ length: 7 }, (_, idx) => {
+      const position = idx + 1;
+      return {
+        id: byPosition[position]?.id || `placeholder-${position}`,
+        username: byPosition[position]?.username || `Player #${position}`,
+        wager: Number(byPosition[position]?.wager || 0),
+        position,
+        avatar: byPosition[position]?.avatar || "/assets/niksi.png",
+      };
+    });
+  }, [players]);
+
+  const topThree = seededPlayers.slice(0, 3);
   const podiumOrder = [1, 0, 2]
     .map((index) => {
       const player = topThree[index];
@@ -98,7 +116,7 @@ function App() {
       return { ...player, rank: index + 1 };
     })
     .filter(Boolean);
-  const restPlayers = players.slice(3, 15);
+  const restPlayers = seededPlayers.slice(3, 7);
 
   return (
     <div>
@@ -158,7 +176,7 @@ function App() {
         <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
           {/* HEADER INSIDE BOX */}
           <div className="text-center mb-8">
-            <div className="text-4xl font-black tracking-widest text-yellow-400">CHANCER</div>
+            <div className="text-3xl md:text-4xl font-black tracking-widest text-yellow-400">$2,000 CHANCER LEADERBOARD</div>
           </div>
 
           <div className="absolute top-5 left-5">
