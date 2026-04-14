@@ -312,11 +312,24 @@
               </div>
 
               <div className="mb-8 rounded-2xl bg-black/20 border border-white/10 p-4 text-center">
-                <div className="text-xs tracking-[0.2em] text-gray-400 mb-1">ENDS IN</div>
-                <div className="text-3xl font-black text-yellow-400 font-mono">
-                  {timeLeft}
-                </div>
-              </div>
+  <div className="text-xs tracking-[0.2em] text-gray-400 mb-1">ENDS IN</div>
+
+  <div className="text-3xl font-black text-yellow-400 font-mono">
+    {timeLeft}
+  </div>
+
+  <div className="mt-3 flex items-center justify-center">
+    <div className="relative group">
+      <div className="w-6 h-6 rounded-full border border-white/20 bg-white/5 text-white/80 text-sm font-bold flex items-center justify-center cursor-default select-none">
+        i
+      </div>
+
+      <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-80 max-w-[90vw] rounded-xl border border-white/10 bg-[#0b1220] px-4 py-3 text-xs text-gray-200 leading-relaxed shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50">
+        Wager abuse is not allowed. Example: playing dice only will get your prize forfeited. Only real wager counts for this leaderboard.
+      </div>
+    </div>
+  </div>
+</div>
 
               <div className="space-y-3">
                 <div className="grid grid-cols-3 text-gray-400 text-sm border-b border-white/10 pb-3">
