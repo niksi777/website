@@ -1,369 +1,398 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NIKSI CHANCER LEADERBOARD</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
 <body class="bg-[#0f172a] text-white min-h-screen flex flex-col">
+  <div id="root" class="flex-grow"></div>
 
-<div id="root" class="flex-grow"></div>
+  <script type="text/babel">
+    function App() {
+      const [players, setPlayers] = React.useState([]);
+      const [timeLeft, setTimeLeft] = React.useState("");
+      const [displayAmount, setDisplayAmount] = React.useState(0);
 
-<script type="text/babel">
-
-function App() {
-  const [players, setPlayers] = React.useState([]);
-  const [timeLeft, setTimeLeft] = React.useState("");
-  const [displayAmount, setDisplayAmount] = React.useState(0);
-  const customPrizes = {
-    1: 1000,
-    2: 400,
-    3: 300,
-    4: 120,
-    5: 80,
-    6: 60,
-    7: 40,
-  };
-
-  const normalizeIncoming = (payload) => {
-    if (Array.isArray(payload)) return payload;
-    if (Array.isArray(payload?.rows)) return payload.rows;
-    if (Array.isArray(payload?.leaderboard)) return payload.leaderboard;
-    if (Array.isArray(payload?.data)) return payload.data;
-    if (Array.isArray(payload?.results)) return payload.results;
-    return [];
-  };
-
-  const raceEnd = React.useMemo(
-    () => new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
-    []
-  );
-
-  React.useEffect(() => {
-    const startTime = Date.now();
-    const duration = 1500;
-    const end = 2000;
-
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime) / duration, 1);
-      setDisplayAmount(Math.floor(progress * end));
-      if (progress === 1) clearInterval(timer);
-    }, 16);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  React.useEffect(() => {
-    const updateTimer = () => {
-      const now = Date.now();
-      const diff = raceEnd - now;
-
-      if (diff <= 0) {
-        setTimeLeft("Race Ended");
-        return;
-      }
-
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-
-      const dd = String(d).padStart(2, "0");
-      const hh = String(h).padStart(2, "0");
-      const mm = String(m).padStart(2, "0");
-      const ss = String(s).padStart(2, "0");
-
-      setTimeLeft(`${dd}:${hh}:${mm}:${ss}`);
-    };
-
-    updateTimer();
-    const timer = setInterval(updateTimer, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const fetchPlayers = async () => {
-    try {
-      // Preferred: dedicated Chancer backend
-      const res = await fetch("http://127.0.0.1:4100/chancer-players");
-      const data = await res.json();
-      setPlayers(normalizeIncoming(data));
-      return;
-    } catch (_err) {
-      // Fallback: same-origin route if dedicated server is unavailable from browser context
-      try {
-        const fallbackRes = await fetch("/chancer-players");
-        const fallbackData = await fallbackRes.json();
-        setPlayers(normalizeIncoming(fallbackData));
-      } catch (__err) {
-        setPlayers([]);
-      }
-    }
-  };
-
-  React.useEffect(() => {
-    fetchPlayers();
-    const interval = setInterval(fetchPlayers, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const seededPlayers = React.useMemo(() => {
-    const byPosition = {};
-    const safePlayers = Array.isArray(players) ? players : [];
-    safePlayers.forEach((p) => {
-      byPosition[p.position] = p;
-    });
-
-    return Array.from({ length: 7 }, (_, idx) => {
-      const position = idx + 1;
-      return {
-        id: byPosition[position]?.id || `placeholder-${position}`,
-        username: byPosition[position]?.username || `Player #${position}`,
-        wager: Number(byPosition[position]?.wager || 0),
-        position,
-        avatar: byPosition[position]?.avatar || "/assets/niksi.png",
+      const customPrizes = {
+        1: 1000,
+        2: 400,
+        3: 300,
+        4: 120,
+        5: 80,
+        6: 60,
+        7: 40,
       };
-    });
-  }, [players]);
 
-  const topThree = seededPlayers.slice(0, 3);
-  const podiumOrder = [1, 0, 2]
-    .map((index) => {
-      const player = topThree[index];
-      if (!player) return null;
-      return { ...player, rank: index + 1 };
-    })
-    .filter(Boolean);
-  const restPlayers = seededPlayers.slice(3, 7);
+      const normalizeIncoming = (payload) => {
+        if (Array.isArray(payload)) return payload;
+        if (payload && Array.isArray(payload.rows)) return payload.rows;
+        if (payload && Array.isArray(payload.leaderboard)) return payload.leaderboard;
+        if (payload && Array.isArray(payload.data)) return payload.data;
+        if (payload && Array.isArray(payload.results)) return payload.results;
+        return [];
+      };
 
-  return (
-    <div>
+      const formatMoney = (value, wholeOnly = false) => {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: wholeOnly ? 0 : 2,
+        }).format(Number(value) || 0);
+      };
 
-      {/* NAVBAR */}
-<div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
-  <div className="flex items-center gap-8 px-8 py-3 
-                  bg-white/5 backdrop-blur-xl
-                  border border-white/10
-                  rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+      const raceEnd = React.useMemo(() => {
+        return new Date(Date.now() + 20 * 24 * 60 * 60 * 1000);
+      }, []);
 
-    {/* LOGO */}
-    <a href="/" className="flex items-center">
-      <img 
-        src="/assets/niksi.png"
-        className="h-8 object-contain opacity-90 hover:opacity-100 transition"
-      />
-    </a>
+      React.useEffect(() => {
+        const startTime = Date.now();
+        const duration = 1500;
+        const endAmount = 2000;
 
-    {/* LINKS */}
-    <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
-      HOME
-    </a>
-    <a 
-      href="/leaderboards.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">LEADERBOARDS
-    </a>
-    <a href="/giveaway.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
-      GIVEAWAY
-    </a>
+        const timer = setInterval(() => {
+          const now = Date.now();
+          const progress = Math.min((now - startTime) / duration, 1);
+          setDisplayAmount(Math.floor(progress * endAmount));
 
-    {/* SOCIAL ICONS */}
-    <div className="flex items-center gap-4 ml-2">
+          if (progress >= 1) {
+            clearInterval(timer);
+          }
+        }, 16);
 
-      <a href="https://kick.com/niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/kick/22c55e"
-             className="h-5 opacity-70 hover:opacity-100" />
-      </a>
+        return () => clearInterval(timer);
+      }, []);
 
-      <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/discord/5865F2"
-             className="h-5 opacity-70 hover:opacity-100" />
-      </a>
+      React.useEffect(() => {
+        const updateTimer = () => {
+          const now = Date.now();
+          const diff = raceEnd.getTime() - now;
 
-      <a href="https://x.com/code_niksi777" target="_blank" className="hover:scale-110 transition duration-300">
-        <img src="https://cdn.simpleicons.org/x/ffffff"
-             className="h-5 opacity-70 hover:opacity-100" />
-      </a>
+          if (diff <= 0) {
+            setTimeLeft("Race Ended");
+            return;
+          }
 
-    </div>
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const m = Math.floor((diff / (1000 * 60)) % 60);
+          const s = Math.floor((diff / 1000) % 60);
 
-  </div>
-</div>
+          const dd = String(d).padStart(2, "0");
+          const hh = String(h).padStart(2, "0");
+          const mm = String(m).padStart(2, "0");
+          const ss = String(s).padStart(2, "0");
 
-      {/* CONTENT */}
-      <div className="max-w-5xl mx-auto px-6 pt-28 pb-10">
+          setTimeLeft(`${dd}:${hh}:${mm}:${ss}`);
+        };
 
-        <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
-          {/* HEADER INSIDE BOX */}
-          <div className="text-center mb-8">
-            <div className="text-3xl md:text-4xl font-black tracking-widest text-yellow-400">$2,000 CHANCER LEADERBOARD</div>
-          </div>
+        updateTimer();
+        const timer = setInterval(updateTimer, 1000);
+        return () => clearInterval(timer);
+      }, [raceEnd]);
 
-          <div className="absolute top-5 left-5">
-            <a href="https://go.chancer.bet/visit/?bta=35694&nci=5370" target="_blank"
-               className="bg-yellow-400 text-black px-4 py-2 rounded-xl text-sm">
-              Sign Up
-            </a>
-          </div>
+      const fetchPlayers = async () => {
+        try {
+          const res = await fetch("http://127.0.0.1:4100/chancer-players");
+          if (!res.ok) throw new Error("Primary fetch failed");
 
-          {/* PRIZE */}
-          {/* PRIZE + WAGER */}
-<div className="mb-10 text-center">
+          const data = await res.json();
+          setPlayers(normalizeIncoming(data));
+          return;
+        } catch (err) {
+          try {
+            const fallbackRes = await fetch("/chancer-players");
+            if (!fallbackRes.ok) throw new Error("Fallback fetch failed");
 
-  {/* PRIZE */}
-  <div className="text-sm text-gray-400 tracking-widest mb-2">
-    TOTAL PRIZE POOL
-  </div>
+            const fallbackData = await fallbackRes.json();
+            setPlayers(normalizeIncoming(fallbackData));
+          } catch (fallbackErr) {
+            setPlayers([]);
+          }
+        }
+      };
 
-  <div className="text-5xl font-bold text-yellow-400 font-mono">
-    ${displayAmount.toLocaleString("en-US")}
-  </div>
+      React.useEffect(() => {
+        fetchPlayers();
+        const interval = setInterval(fetchPlayers, 10000);
+        return () => clearInterval(interval);
+      }, []);
 
-</div>
+      const seededPlayers = React.useMemo(() => {
+        const byPosition = {};
+        const safePlayers = Array.isArray(players) ? players : [];
 
-          {/* TOP 3 CARDS */}
-          <div className="grid md:grid-cols-3 gap-4 mb-10 items-end">
-            {podiumOrder.map((p) => {
-              const rankText = p.rank === 1 ? "#1" : p.rank === 2 ? "#2" : "#3";
-              const isFirst = p.rank === 1;
-              const glow = p.rank === 1
-                ? "border-yellow-400/70 shadow-[0_0_30px_rgba(250,204,21,0.30)]"
-                : p.rank === 2
-                ? "border-amber-300/45 shadow-[0_0_24px_rgba(252,211,77,0.22)]"
-                : "border-yellow-200/35 shadow-[0_0_22px_rgba(254,240,138,0.18)]";
+        safePlayers.forEach((p) => {
+          const position = Number(p.position);
+          if (!isNaN(position)) {
+            byPosition[position] = p;
+          }
+        });
 
-              return (
-                <div
-                  key={p.id}
-                  className={`bg-black/25 border rounded-2xl p-4 ${glow} ${isFirst ? "md:scale-[1.06] z-10" : "md:scale-[0.95]"}`}
+        return Array.from({ length: 7 }, (_, idx) => {
+          const position = idx + 1;
+          const player = byPosition[position] || {};
+
+          return {
+            id: player.id || `placeholder-${position}`,
+            username: player.username || `Player #${position}`,
+            wager: Number(player.wager || 0),
+            position: position,
+            avatar: player.avatar || "/assets/niksi.png",
+          };
+        });
+      }, [players]);
+
+      const topThree = seededPlayers.slice(0, 3);
+
+      const podiumOrder = [
+        { player: topThree[1], rank: 2 },
+        { player: topThree[0], rank: 1 },
+        { player: topThree[2], rank: 3 },
+      ].filter((item) => item.player);
+
+      const restPlayers = seededPlayers.slice(3, 7);
+
+      return (
+        <div>
+          {/* NAVBAR */}
+          <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
+            <div className="flex items-center gap-8 px-8 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <a href="/" className="flex items-center">
+                <img
+                  src="/assets/niksi.png"
+                  alt="Niksi logo"
+                  className="h-8 object-contain opacity-90 hover:opacity-100 transition"
+                />
+              </a>
+
+              <a href="/" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+                HOME
+              </a>
+
+              <a href="/leaderboards.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+                LEADERBOARDS
+              </a>
+
+              <a href="/giveaway.html" className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+                GIVEAWAY
+              </a>
+
+              <div className="flex items-center gap-4 ml-2">
+                <a
+                  href="https://kick.com/niksi777"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:scale-110 transition duration-300"
                 >
-                  <div className={`text-center font-black italic text-yellow-400 mb-3 ${isFirst ? "text-4xl" : "text-3xl"}`}>
-                    {rankText}
-                  </div>
-
                   <img
-                    src={p.avatar}
-                    alt={p.username}
-                    className={`${isFirst ? "w-20 h-20" : "w-16 h-16"} rounded-2xl mx-auto object-cover border border-white/20 mb-3`}
+                    src="https://cdn.simpleicons.org/kick/22c55e"
+                    alt="Kick"
+                    className="h-5 opacity-70 hover:opacity-100"
                   />
+                </a>
 
-                  <div className={`text-center font-bold tracking-wide truncate mb-3 ${isFirst ? "text-base" : "text-sm"}`}>
-                    {p.username}
-                  </div>
+                <a
+                  href="https://discord.com/invite/Gnyv25SHg7"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:scale-110 transition duration-300"
+                >
+                  <img
+                    src="https://cdn.simpleicons.org/discord/5865F2"
+                    alt="Discord"
+                    className="h-5 opacity-70 hover:opacity-100"
+                  />
+                </a>
 
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center mb-2">
-                    <div className="text-[10px] tracking-[0.2em] text-gray-400 mb-1">WAGERED</div>
-                    <div className={`${isFirst ? "text-lg" : "text-base"} font-semibold`}>
-                      {new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: "USD"
-                      }).format(Number(p.wager))}
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
-                    <div className="text-[10px] tracking-[0.2em] text-gray-500 mb-1">PRIZE</div>
-                    <div className={`${isFirst ? "text-2xl" : "text-xl"} font-black text-yellow-400`}>
-                      {new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                        maximumFractionDigits: 0
-                      }).format(customPrizes[p.rank] || 0)}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* TIMER BETWEEN PODIUM AND TABLE */}
-          <div className="mb-8 rounded-2xl bg-black/20 border border-white/10 p-4 text-center">
-            <div className="text-xs tracking-[0.2em] text-gray-400 mb-1">ENDS IN</div>
-            <div className="text-3xl font-black text-yellow-400 font-mono">
-              {timeLeft}
+                <a
+                  href="https://x.com/code_niksi777"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:scale-110 transition duration-300"
+                >
+                  <img
+                    src="https://cdn.simpleicons.org/x/ffffff"
+                    alt="X"
+                    className="h-5 opacity-70 hover:opacity-100"
+                  />
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* REST OF TABLE */}
-          <div className="space-y-3">
-            <div className="grid grid-cols-3 text-gray-400 text-sm border-b border-white/10 pb-3">
-              <div>USER</div>
-              <div className="text-center">WAGERED</div>
-              <div className="text-right">PRIZE</div>
-            </div>
-
-            {restPlayers.map((p, idx) => (
-              <div
-                key={p.id}
-                className="grid grid-cols-3 items-center bg-black/20 border border-white/10 rounded-xl px-5 py-4"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="text-yellow-400 font-bold w-7 shrink-0">
-                    #{idx + 4}
-                  </div>
-
-                  <img
-                    src={p.avatar}
-                    alt={p.username}
-                    className="w-8 h-8 rounded-full object-cover border border-white/20 shrink-0"
-                  />
-
-                  <span className="truncate font-semibold">
-                    {p.username}
-                  </span>
-                </div>
-
-                <div className="text-center text-gray-200">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD"
-                  }).format(Number(p.wager))}
-                </div>
-
-                <div className="text-right text-yellow-400 font-bold">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0
-                  }).format(customPrizes[idx + 4] || 0)}
+          {/* CONTENT */}
+          <div className="max-w-5xl mx-auto px-6 pt-28 pb-10">
+            <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
+              {/* HEADER */}
+              <div className="text-center mb-8">
+                <div className="text-3xl md:text-4xl font-black tracking-widest text-yellow-400">
+                  $2,000 CHANCER LEADERBOARD
                 </div>
               </div>
-            ))}
+
+              <div className="absolute top-5 left-5">
+                <a
+                  href="https://go.chancer.bet/visit/?bta=35694&nci=5370"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-yellow-400 text-black px-4 py-2 rounded-xl text-sm"
+                >
+                  Sign Up
+                </a>
+              </div>
+
+              {/* PRIZE */}
+              <div className="mb-10 text-center">
+                <div className="text-sm text-gray-400 tracking-widest mb-2">
+                  TOTAL PRIZE POOL
+                </div>
+
+                <div className="text-5xl font-bold text-yellow-400 font-mono">
+                  ${displayAmount.toLocaleString("en-US")}
+                </div>
+              </div>
+
+              {/* TOP 3 */}
+              <div className="grid md:grid-cols-3 gap-4 mb-10 items-end">
+                {podiumOrder.map(({ player, rank }) => {
+                  const isFirst = rank === 1;
+
+                  const glow =
+                    rank === 1
+                      ? "border-yellow-400/70 shadow-[0_0_30px_rgba(250,204,21,0.30)]"
+                      : rank === 2
+                      ? "border-amber-300/45 shadow-[0_0_24px_rgba(252,211,77,0.22)]"
+                      : "border-yellow-200/35 shadow-[0_0_22px_rgba(254,240,138,0.18)]";
+
+                  return (
+                    <div
+                      key={player.id}
+                      className={`bg-black/25 border rounded-2xl p-4 ${glow} ${
+                        isFirst ? "md:scale-[1.06] z-10" : "md:scale-[0.95]"
+                      }`}
+                    >
+                      <div
+                        className={`text-center font-black italic text-yellow-400 mb-3 ${
+                          isFirst ? "text-4xl" : "text-3xl"
+                        }`}
+                      >
+                        #{rank}
+                      </div>
+
+                      <img
+                        src={player.avatar}
+                        alt={player.username}
+                        className={`${
+                          isFirst ? "w-20 h-20" : "w-16 h-16"
+                        } rounded-2xl mx-auto object-cover border border-white/20 mb-3`}
+                      />
+
+                      <div
+                        className={`text-center font-bold tracking-wide truncate mb-3 ${
+                          isFirst ? "text-base" : "text-sm"
+                        }`}
+                      >
+                        {player.username}
+                      </div>
+
+                      <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center mb-2">
+                        <div className="text-[10px] tracking-[0.2em] text-gray-400 mb-1">
+                          WAGERED
+                        </div>
+                        <div className={`${isFirst ? "text-lg" : "text-base"} font-semibold`}>
+                          {formatMoney(player.wager)}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+                        <div className="text-[10px] tracking-[0.2em] text-gray-500 mb-1">
+                          PRIZE
+                        </div>
+                        <div className={`${isFirst ? "text-2xl" : "text-xl"} font-black text-yellow-400`}>
+                          {formatMoney(customPrizes[rank] || 0, true)}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* TIMER */}
+              <div className="mb-8 rounded-2xl bg-black/20 border border-white/10 p-4 text-center">
+                <div className="text-xs tracking-[0.2em] text-gray-400 mb-1">ENDS IN</div>
+                <div className="text-3xl font-black text-yellow-400 font-mono">
+                  {timeLeft}
+                </div>
+              </div>
+
+              {/* REST OF TABLE */}
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 text-gray-400 text-sm border-b border-white/10 pb-3">
+                  <div>USER</div>
+                  <div className="text-center">WAGERED</div>
+                  <div className="text-right">PRIZE</div>
+                </div>
+
+                {restPlayers.map((p, idx) => (
+                  <div
+                    key={p.id}
+                    className="grid grid-cols-3 items-center bg-black/20 border border-white/10 rounded-xl px-5 py-4"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="text-yellow-400 font-bold w-7 shrink-0">
+                        #{idx + 4}
+                      </div>
+
+                      <img
+                        src={p.avatar}
+                        alt={p.username}
+                        className="w-8 h-8 rounded-full object-cover border border-white/20 shrink-0"
+                      />
+
+                      <span className="truncate font-semibold">{p.username}</span>
+                    </div>
+
+                    <div className="text-center text-gray-200">
+                      {formatMoney(p.wager)}
+                    </div>
+
+                    <div className="text-right text-yellow-400 font-bold">
+                      {formatMoney(customPrizes[idx + 4] || 0, true)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
+          {/* FOOTER */}
+          <div className="border-t border-white/10 py-6 text-center px-6">
+            <div className="max-w-4xl mx-auto mb-6 bg-[#062f2f]/60 border border-green-400/20 rounded-xl px-6 py-3 text-xs text-gray-300 flex items-center gap-4">
+              <div className="text-green-400 text-lg">18+</div>
+
+              <div className="text-left leading-relaxed">
+                We are not responsible for any losses incurred from gambling on casino or betting
+                platforms that may be linked or promoted on this website. All users participate at
+                their own risk and are solely responsible for their actions and bets.
+              </div>
+            </div>
+
+            <div className="text-gray-400 text-xs">
+              © 2026 NIKSI777. All Rights Reserved.
+            </div>
+          </div>
         </div>
+      );
+    }
 
-      </div>
-
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-
-</script>
-
-<!-- FOOTER -->
-<div class="border-t border-white/10 py-6 text-center px-6">
-
-  <div class="max-w-4xl mx-auto mb-6 bg-[#062f2f]/60 border border-green-400/20 rounded-xl px-6 py-3 text-xs text-gray-300 flex items-center gap-4">
-
-    <div class="text-green-400 text-lg">18+</div>
-
-    <div class="text-left leading-relaxed">
-      We are not responsible for any losses incurred from gambling on casino or betting platforms that may be linked or promoted on this website. All users participate at their own risk and are solely responsible for their actions and bets.
-    </div>
-
-  </div>
-
-  <div class="text-gray-400 text-xs">
-    © 2026 NIKSI777. All Rights Reserved.
-  </div>
-
-</div>
-
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
