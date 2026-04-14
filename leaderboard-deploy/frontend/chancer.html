@@ -20,6 +20,15 @@ function App() {
   const [players, setPlayers] = React.useState([]);
   const [timeLeft, setTimeLeft] = React.useState("");
   const [displayAmount, setDisplayAmount] = React.useState(0);
+  const customPrizes = {
+    1: 1000,
+    2: 400,
+    3: 300,
+    4: 120,
+    5: 80,
+    6: 60,
+    7: 40,
+  };
 
   const raceEnd = React.useMemo(
     () => new Date(Date.now() + 20 * 60 * 60 * 1000),
@@ -29,7 +38,7 @@ function App() {
   React.useEffect(() => {
     const startTime = Date.now();
     const duration = 1500;
-    const end = 1500;
+    const end = 2000;
 
     const timer = setInterval(() => {
       const now = Date.now();
@@ -70,7 +79,7 @@ function App() {
   }, []);
 
   const fetchPlayers = async () => {
-    const res = await fetch("/chancer-players");
+    const res = await fetch("http://127.0.0.1:4100/chancer-players");
     const data = await res.json();
     setPlayers(data);
   };
@@ -221,7 +230,7 @@ function App() {
                         style: "currency",
                         currency: "USD",
                         maximumFractionDigits: 0
-                      }).format(Number(p.reward))}
+                      }).format(customPrizes[p.rank] || 0)}
                     </div>
                   </div>
                 </div>
@@ -278,7 +287,7 @@ function App() {
                     style: "currency",
                     currency: "USD",
                     maximumFractionDigits: 0
-                  }).format(Number(p.reward))}
+                  }).format(customPrizes[idx + 4] || 0)}
                 </div>
               </div>
             ))}
