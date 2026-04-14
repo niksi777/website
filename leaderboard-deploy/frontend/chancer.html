@@ -99,22 +99,14 @@
 
       const fetchPlayers = async () => {
         try {
-          const res = await fetch("http://127.0.0.1:4100/chancer-players");
-          if (!res.ok) throw new Error("Primary fetch failed");
+          const res = await fetch("/chancer-players");
+          if (!res.ok) throw new Error("Failed to fetch players");
 
           const data = await res.json();
           setPlayers(normalizeIncoming(data));
-          return;
         } catch (err) {
-          try {
-            const fallbackRes = await fetch("/chancer-players");
-            if (!fallbackRes.ok) throw new Error("Fallback fetch failed");
-
-            const fallbackData = await fallbackRes.json();
-            setPlayers(normalizeIncoming(fallbackData));
-          } catch (fallbackErr) {
-            setPlayers([]);
-          }
+          console.error("Chancer fetch error:", err);
+          setPlayers([]);
         }
       };
 
@@ -161,7 +153,6 @@
 
       return (
         <div>
-          {/* NAVBAR */}
           <div className="fixed top-0 left-0 w-full z-50 flex justify-center py-4">
             <div className="flex items-center gap-8 px-8 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
               <a href="/" className="flex items-center">
@@ -227,10 +218,8 @@
             </div>
           </div>
 
-          {/* CONTENT */}
           <div className="max-w-5xl mx-auto px-6 pt-28 pb-10">
             <div className="bg-[#111827] border border-white/10 rounded-3xl p-10 shadow-2xl relative">
-              {/* HEADER */}
               <div className="text-center mb-8">
                 <div className="text-3xl md:text-4xl font-black tracking-widest text-yellow-400">
                   $2,000 CHANCER LEADERBOARD
@@ -248,7 +237,6 @@
                 </a>
               </div>
 
-              {/* PRIZE */}
               <div className="mb-10 text-center">
                 <div className="text-sm text-gray-400 tracking-widest mb-2">
                   TOTAL PRIZE POOL
@@ -259,7 +247,6 @@
                 </div>
               </div>
 
-              {/* TOP 3 */}
               <div className="grid md:grid-cols-3 gap-4 mb-10 items-end">
                 {podiumOrder.map(({ player, rank }) => {
                   const isFirst = rank === 1;
@@ -324,7 +311,6 @@
                 })}
               </div>
 
-              {/* TIMER */}
               <div className="mb-8 rounded-2xl bg-black/20 border border-white/10 p-4 text-center">
                 <div className="text-xs tracking-[0.2em] text-gray-400 mb-1">ENDS IN</div>
                 <div className="text-3xl font-black text-yellow-400 font-mono">
@@ -332,7 +318,6 @@
                 </div>
               </div>
 
-              {/* REST OF TABLE */}
               <div className="space-y-3">
                 <div className="grid grid-cols-3 text-gray-400 text-sm border-b border-white/10 pb-3">
                   <div>USER</div>
@@ -372,7 +357,6 @@
             </div>
           </div>
 
-          {/* FOOTER */}
           <div className="border-t border-white/10 py-6 text-center px-6">
             <div className="max-w-4xl mx-auto mb-6 bg-[#062f2f]/60 border border-green-400/20 rounded-xl px-6 py-3 text-xs text-gray-300 flex items-center gap-4">
               <div className="text-green-400 text-lg">18+</div>
