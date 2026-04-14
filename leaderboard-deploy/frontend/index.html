@@ -116,10 +116,25 @@ function App() {
     <div className="relative group" tabIndex="0">
 
   {/* MAIN BUTTON */}
-  <a href="/leaderboards.html"
-     className="text-sm font-medium tracking-wide text-white/70 hover:text-white transition">
+  <div class="relative group">
+  <div class="text-sm font-medium tracking-wide text-white/70 hover:text-white transition cursor-pointer">
     LEADERBOARDS
-  </a>
+  </div>
+
+  <div class="absolute left-1/2 -translate-x-1/2 mt-3 w-48 bg-[#0b1220] border border-white/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50">
+
+    <a href="/leaderboards.html"
+       class="block px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-t-xl transition">
+      Gamba Leaderboard
+    </a>
+
+    <a href="/chancer.html"
+       class="block px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-b-xl transition">
+      Chancer Leaderboard
+    </a>
+
+  </div>
+</div>
 
   {/* DROPDOWN */}
   <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-40
