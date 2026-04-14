@@ -30,6 +30,15 @@ function App() {
     7: 40,
   };
 
+  const normalizeIncoming = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.rows)) return payload.rows;
+    if (Array.isArray(payload?.leaderboard)) return payload.leaderboard;
+    if (Array.isArray(payload?.data)) return payload.data;
+    if (Array.isArray(payload?.results)) return payload.results;
+    return [];
+  };
+
   const raceEnd = React.useMemo(
     () => new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
     []
@@ -79,9 +88,22 @@ function App() {
   }, []);
 
   const fetchPlayers = async () => {
-    const res = await fetch("http://127.0.0.1:4100/chancer-players");
-    const data = await res.json();
-    setPlayers(data);
+    try {
+      // Preferred: dedicated Chancer backend
+      const res = await fetch("http://127.0.0.1:4100/chancer-players");
+      const data = await res.json();
+      setPlayers(normalizeIncoming(data));
+      return;
+    } catch (_err) {
+      // Fallback: same-origin route if dedicated server is unavailable from browser context
+      try {
+        const fallbackRes = await fetch("/chancer-players");
+        const fallbackData = await fallbackRes.json();
+        setPlayers(normalizeIncoming(fallbackData));
+      } catch (__err) {
+        setPlayers([]);
+      }
+    }
   };
 
   React.useEffect(() => {
@@ -92,7 +114,8 @@ function App() {
 
   const seededPlayers = React.useMemo(() => {
     const byPosition = {};
-    players.forEach((p) => {
+    const safePlayers = Array.isArray(players) ? players : [];
+    safePlayers.forEach((p) => {
       byPosition[p.position] = p;
     });
 
