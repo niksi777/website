@@ -103,7 +103,8 @@
           if (!res.ok) throw new Error("Failed to fetch players");
 
           const data = await res.json();
-          setPlayers(normalizeIncoming(data));
+            console.log("CHANCER FRONTEND DATA:", data);
+            setPlayers(Array.isArray(data?.normalized) ? data.normalized : normalizeIncoming(data));
         } catch (err) {
           console.error("Chancer fetch error:", err);
           setPlayers([]);
