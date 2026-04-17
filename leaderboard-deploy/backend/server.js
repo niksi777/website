@@ -166,7 +166,7 @@ app.get("/players", (req, res) => {
 });
 
 app.get("/chancer-players", async (req, res) => {
-  const apiUrl = "https://api-affiliate.fungamess.games/external/activities/leaderboard";
+  const apiUrl = "https://admin.chancer.bet/external/activities/leaderboard";
   const token = "fYDQGOG7YncwMZZnGffJzkozjz5XcxbP";
 
   const today = new Date();
@@ -177,39 +177,29 @@ app.get("/chancer-players", async (req, res) => {
   const dateFrom = dateFromObj.toISOString().slice(0, 10);
 
   try {
-    const response = await fetch(apiUrl, {
-      method: "POST",
+    const response = await axios({
+      url: apiUrl,
+      method: "GET",
       headers: {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json",
-        "Content-Type": "application/json",
         "X-Affiliate-Secret": token,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
       },
-      body: JSON.stringify({
+      data: {
         date_from: dateFrom,
         date_to: dateTo,
         currency: "USD",
-      }),
+      },
+      timeout: 10000,
+      validateStatus: () => true,
     });
 
-    const text = await response.text();
-
     console.log("CHANCER STATUS:", response.status);
-    console.log("CHANCER RAW BODY:", text);
+    console.log("CHANCER RAW BODY:", response.data);
 
-    let json;
-    try {
-      json = JSON.parse(text);
-    } catch (err) {
-      return res.json({
-        ok: false,
-        status: response.status,
-        error: "Non-JSON response",
-        raw: text
-      });
-    }
+    const json = response.data;
 
-    const items = Array.isArray(json.items) ? json.items : [];
+    const items = Array.isArray(json?.items) ? json.items : [];
 
     const rows = items.map((row, index) => ({
       id: row.player_id || `player-${index + 1}`,
@@ -220,16 +210,16 @@ app.get("/chancer-players", async (req, res) => {
     }));
 
     return res.json({
-      ok: true,
+      ok: response.status >= 200 && response.status < 300,
       status: response.status,
       parsed: json,
-      normalized: rows
+      normalized: rows,
     });
   } catch (err) {
-    console.log("Chancer API error:", err);
+    console.log("Chancer API error:", err.message);
     return res.json({
       ok: false,
-      error: err.message
+      error: err.message,
     });
   }
 });
