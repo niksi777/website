@@ -99,7 +99,7 @@
 
       const fetchPlayers = async () => {
         try {
-          const res = await fetch("https://api.niksi777.com/chancer-players");
+          const res = await fetch("/chancer-players");
           if (!res.ok) throw new Error("Failed to fetch players");
       
           const data = await res.json();
