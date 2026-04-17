@@ -165,18 +165,30 @@ app.get("/players", (req, res) => {
 });
 
 app.get("/chancer-players", async (req, res) => {
-  const apiUrl = "https://api-affiliate.fungamess.games/nux/leaderboard/";
+  const apiUrl = "https://api-affiliate.fungamess.games/external/activities/leaderboard";
   const token = "fYDQGOG7YncwMZZnGffJzkozjz5XcxbP";
+
+  const today = new Date();
+  const dateTo = today.toISOString().slice(0, 10);
+
+  const dateFromObj = new Date();
+  dateFromObj.setDate(dateFromObj.getDate() - 30);
+  const dateFrom = dateFromObj.toISOString().slice(0, 10);
 
   try {
     const response = await fetch(apiUrl, {
+      method: "GET",
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Accept": "application/json",
-        "Authorization": `Bearer ${token}`,
-        "X-API-Key": token,
-        "x-api-key": token,
+        "Content-Type": "application/json",
+        "X-Affiliate-Secret": token,
       },
+      body: JSON.stringify({
+        date_from: dateFrom,
+        date_to: dateTo,
+        currency: "USD",
+      }),
     });
 
     const text = await response.text();
@@ -196,9 +208,17 @@ app.get("/chancer-players", async (req, res) => {
       });
     }
 
-    const rows = normalizeChancerRows(json);
+    const items = Array.isArray(json.items) ? json.items : [];
 
-    res.json({
+    const rows = items.map((row, index) => ({
+      id: row.player_id || `player-${index + 1}`,
+      username: row.nickname || `Player #${row.rank || index + 1}`,
+      wager: Number(row.total_wager || 0),
+      position: Number(row.rank || index + 1),
+      avatar: "/assets/niksi.png",
+    }));
+
+    return res.json({
       ok: true,
       status: response.status,
       parsed: json,
@@ -206,7 +226,7 @@ app.get("/chancer-players", async (req, res) => {
     });
   } catch (err) {
     console.log("Chancer API error:", err);
-    res.json({
+    return res.json({
       ok: false,
       error: err.message
     });
