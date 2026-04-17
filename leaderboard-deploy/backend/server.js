@@ -177,7 +177,7 @@ app.get("/chancer-players", async (req, res) => {
 
   try {
     const response = await fetch(apiUrl, {
-      method: "GET",
+      method: "POST",
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Accept": "application/json",
