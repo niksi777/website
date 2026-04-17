@@ -61,10 +61,7 @@
       const showChancer = true;
 
       const gambaRaceEnd = React.useMemo(() => {
-        const now = new Date();
-        now.setHours(now.getHours() + 14);
-        now.setMinutes(now.getMinutes() + 12);
-        return now;
+        return new Date(Date.now() + ((14 * 60 + 12) * 60 * 1000));
       }, []);
 
       const formatCountdown = (targetDate) => {
