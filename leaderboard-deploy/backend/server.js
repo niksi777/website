@@ -166,7 +166,7 @@ app.get("/players", (req, res) => {
 
 app.get("/chancer-players", async (req, res) => {
   const apiUrl = "https://api-affiliate.fungamess.games/nux/leaderboard/";
-  const token = "PUT_YOUR_REAL_CHANCER_TOKEN_HERE";
+  const token = "fYDQGOG7YncwMZZnGffJzkozjz5XcxbP";
 
   try {
     const response = await fetch(apiUrl, {
