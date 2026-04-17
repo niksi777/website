@@ -164,7 +164,6 @@ app.get("/players", (req, res) => {
   );
 });
 
-// New Chancer endpoint
 app.get("/chancer-players", async (req, res) => {
   const apiUrl = "https://api-affiliate.fungamess.games/nux/leaderboard/";
   const token = "PUT_YOUR_REAL_CHANCER_TOKEN_HERE";
@@ -182,19 +181,35 @@ app.get("/chancer-players", async (req, res) => {
 
     const text = await response.text();
 
+    console.log("CHANCER STATUS:", response.status);
+    console.log("CHANCER RAW BODY:", text);
+
     let json;
     try {
       json = JSON.parse(text);
     } catch (err) {
-      console.log("Chancer API returned non-JSON payload:", text);
-      return res.json([]);
+      return res.json({
+        ok: false,
+        status: response.status,
+        error: "Non-JSON response",
+        raw: text
+      });
     }
 
     const rows = normalizeChancerRows(json);
-    res.json(rows);
+
+    res.json({
+      ok: true,
+      status: response.status,
+      parsed: json,
+      normalized: rows
+    });
   } catch (err) {
     console.log("Chancer API error:", err);
-    res.json([]);
+    res.json({
+      ok: false,
+      error: err.message
+    });
   }
 });
 
