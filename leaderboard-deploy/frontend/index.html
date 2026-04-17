@@ -65,17 +65,21 @@
       
       const formatCountdown = (targetDate) => {
         const distance = targetDate.getTime() - Date.now();
-
+      
         if (distance <= 0) {
           return "Race Ended";
         }
-
+      
         const d = Math.floor(distance / (1000 * 60 * 60 * 24));
         const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
         const m = Math.floor((distance / (1000 * 60)) % 60);
         const s = Math.floor((distance / 1000) % 60);
-
-        return `${d}d ${h}h ${m}m ${s}s`;
+      
+        if (d > 0) {
+          return `${d}d ${h}h ${m}m ${s}s`;
+        }
+      
+        return `${h}h ${m}m ${s}s`;
       };
 
       React.useEffect(() => {
