@@ -140,7 +140,7 @@
             username: player.username || `Player #${position}`,
             wager: Number(player.wager || 0),
             position: position,
-            avatar: player.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.id || position}`
+            avatar: player.avatar || `https://api.dicebear.com/7.x/big-ears/svg?seed=${player.id || position}`
           };
         });
       }, [players]);
