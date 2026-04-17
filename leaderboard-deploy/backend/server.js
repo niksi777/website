@@ -199,7 +199,8 @@ app.get("/chancer-players", async (req, res) => {
 
     const json = response.data;
 
-    const items = Array.isArray(json?.items) ? json.items : [];
+    const payload = Array.isArray(json) ? json[0] : json;
+    const items = Array.isArray(payload?.items) ? payload.items : [];
 
     const rows = items.map((row, index) => ({
       id: row.player_id || `player-${index + 1}`,
