@@ -207,7 +207,7 @@ app.get("/chancer-players", async (req, res) => {
       username: row.nickname || `Player #${row.rank || index + 1}`,
       wager: Number(row.total_wager || 0),
       position: Number(row.rank || index + 1),
-      avatar: "/assets/niksi.png",
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${row.player_id}`,
     }));
 
     return res.json({
