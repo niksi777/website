@@ -147,7 +147,7 @@ async function updateLeaderboard() {
 }
 
 // Update every 30 seconds
-setInterval(updateLeaderboard, 30000);
+setInterval(updateLeaderboard, 160000);
 updateLeaderboard();
 
 // Existing Gamba endpoint
