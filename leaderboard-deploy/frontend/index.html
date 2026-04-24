@@ -194,12 +194,12 @@
                 href="/gamba.html"
                 className="group block bg-[#111827] border border-white/10 rounded-3xl p-8 md:p-10 shadow-[0_0_35px_rgba(255,255,255,0.08)] hover:shadow-[0_0_45px_rgba(255,255,255,0.12)] transition"
               >
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                  <div className="bg-[#1e293b] rounded-2xl p-8 flex justify-center relative">
+                <div className="flex flex-col items-center text-center gap-6">
+                  <div className="w-full h-32 bg-[#1e293b] rounded-2xl flex items-center justify-center relative">
                     <div className="absolute top-4 left-4 text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded animate-pulse">
                       LIVE
                     </div>
-                    <img src="/assets/gamba2.png" alt="Gamba logo" className="h-14 md:h-16" />
+                    <img src="/assets/gamba2.png" alt="Gamba logo" className="max-h-16 max-w-[180px] object-contain" />
                   </div>
 
                   <div className="text-center">
@@ -212,7 +212,7 @@
                       ENDS IN: <span className="text-white">{gambaTimeLeft}</span>
                     </div>
 
-                    <div className="inline-block bg-white text-black px-10 py-3 rounded-xl font-bold">
+                    <div className="inline-flex items-center justify-center w-full max-w-[220px] bg-white text-black px-6 py-3 rounded-xl font-bold">
                       VIEW LEADERBOARD
                     </div>
                   </div>
@@ -228,10 +228,12 @@
       className="group block bg-[#111827] border border-yellow-400/20 rounded-3xl p-8 md:p-10 shadow-[0_0_35px_rgba(250,204,21,0.08)] hover:shadow-[0_0_45px_rgba(250,204,21,0.16)] transition"
     >
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <div className="bg-[#1a1a12] rounded-2xl p-8 flex justify-center relative border border-yellow-400/10">
+        <div className="w-full h-32 bg-[#1a1a12] rounded-2xl flex items-center justify-center relative border border-yellow-400/10">
           <div className="absolute top-4 left-4 text-xs bg-yellow-400/20 text-yellow-300 px-2 py-1 rounded animate-pulse">
             LIVE
           </div>
+          <img src="/assets/chancer.png" alt="Chancer logo" className="max-h-20 max-w-[180px] object-contain" />
+        </div>
 
           <img
             src="/assets/chancer.png"
@@ -251,7 +253,7 @@
             ENDS IN: <span className="text-yellow-400">{chancerTimeLeft}</span>
           </div>
 
-          <div className="inline-block bg-yellow-400 text-black px-10 py-3 rounded-xl font-bold">
+          <div className="inline-flex items-center justify-center w-full max-w-[220px] bg-yellow-400 text-black px-6 py-3 rounded-xl font-bold">
             VIEW LEADERBOARD
           </div>
         </div>
@@ -276,14 +278,16 @@
           </div>
         </div>
 
-        <div className="text-center">
-          <div className="text-xs text-purple-200/60 mb-2 tracking-widest">AFFILIATE</div>
-
-          <div className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">
+       <div className="w-full h-32 bg-[#1b1024] rounded-2xl flex items-center justify-center relative border border-purple-400/10">
+          <div className="absolute top-4 left-4 text-xs bg-purple-400/20 text-purple-300 px-2 py-1 rounded animate-pulse">
+            LIVE
+          </div>
+          <div className="text-2xl font-black text-purple-300 tracking-widest">
             RUNNIT.FUN
           </div>
+        </div>
 
-          <div className="inline-block bg-purple-400 text-black px-10 py-3 rounded-xl font-bold">
+          <div className="inline-flex items-center justify-center w-full max-w-[220px] bg-purple-400 text-black px-6 py-3 rounded-xl font-bold">
             SIGN UP
           </div>
         </div>
