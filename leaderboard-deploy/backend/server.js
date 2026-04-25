@@ -91,9 +91,9 @@ async function updateLeaderboard() {
     const raceId = 11287;
 
     const url =
-      "https://gamba.com/_api/@?operationName=getRaceById" +
-      `&variables=%7B%22raceId%22%3A${raceId}%7D` +
-      "&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22f2215aa98152288fd3b357d0a96f1d186e1ce1d9b8764ee6353f6aec0d26beee%22%7D%7D";
+  "https://gamba.com/_api/@?operationName=getRaceById" +
+  `&variables=%7B%22raceId%22%3A${raceId}%7D` +
+  "&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22edad63165a235e578a7ff3bc850e72a2dac211713ca37e80f1496cb59198c305%22%7D%7D";
 
    const response = await fetch(url, {
   headers: {
