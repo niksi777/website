@@ -95,20 +95,26 @@ async function updateLeaderboard() {
       `&variables=%7B%22raceId%22%3A${raceId}%7D` +
       "&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22f2215aa98152288fd3b357d0a96f1d186e1ce1d9b8764ee6353f6aec0d26beee%22%7D%7D";
 
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        "Referer": "https://gamba.com/promotions/exclusive-leaderboards/11287",
-        "Origin": "https://gamba.com",
-      },
-    });
+   const response = await fetch(url, {
+  headers: {
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://gamba.com/promotions/exclusive-leaderboards/11287",
+    "Origin": "https://gamba.com",
+  },
+});
 
-    const json = await response.json();
+const text = await response.text();
 
-    if (!json.data || !json.data.getRaceById) {
-      console.log("Invalid API response");
-      return;
-    }
+console.log("GAMBA STATUS:", response.status);
+console.log("GAMBA RAW RESPONSE:", text);
+
+let json;
+try {
+  json = JSON.parse(text);
+} catch (err) {
+  console.log("Gamba returned non-JSON");
+  return;
+}
 
     const race = json.data.getRaceById;
     const competitors = race.competitors;
