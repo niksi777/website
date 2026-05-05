@@ -47,8 +47,7 @@
         }).format(Number(value) || 0);
       };
 
-      const raceEnd = React.useMemo(() => {
-  return new Date("2026-05-07T00:00:00Z");
+      const chancerRaceEnd = React.useMemo(() => new Date("2026-05-10T00:00:00Z"), []);
 }, []);
 
       React.useEffect(() => {
@@ -330,7 +329,7 @@
 
       <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-80 max-w-[90vw] rounded-xl border border-white/10 bg-[#0b1220] px-4 py-3 text-xs text-gray-200 leading-relaxed shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50">
         Wager abuse is NOT allowed for this leaderboard and your prize will be forfeited!
-        To claim your prize, you will need to wager your receiving prize by 3x
+        To claim your prize, you will need to DEPOSIT your receiving prize by 3x in order to claim it: Example, you're set to win $100, you will need to have a total deposit of $300
       </div>
     </div>
   </div>
