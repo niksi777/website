@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NIKSI777 — Gamba $1,500 Leaderboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Barlow:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--s3:#151820;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.4);--mu2:rgba(221,227,239,.6);--ac:#b8cce8;--rd:#d94f4f}
-    html,body{background:var(--bg);color:var(--tx);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--s3:#151820;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#b8cce8;--rd:#d94f4f}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 900px 600px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -24,18 +24,18 @@
     .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
     .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
     .nlinks{display:flex;align-items:center;flex:1}
-    .nlinks a{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
-    .nlinks a:hover{color:rgba(255,255,255,.75)}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
     .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
     .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
-    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.35;transition:opacity .15s}
-    .nsoc a:hover{opacity:.9;background:rgba(255,255,255,.05)}
+    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
+    .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
     .nsoc svg{width:15px;height:15px}
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
     .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
     .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
     .drawer.open{display:flex}
-    .drawer a{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
+    .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
     .drawer a:last-of-type{border-bottom:none}
     .drawer a.on,.drawer a:hover{color:#fff}
     .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
@@ -47,23 +47,22 @@
     /* PAGE HEADER */
     .phead{padding:44px 0 32px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
     .phead-toprow{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
+    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
     .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
     .pbtns{display:flex;align-items:center;gap:8px;flex-shrink:0}
-    .pbtn{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;border-radius:7px;font-weight:500;text-decoration:none;white-space:nowrap;transition:opacity .15s}
+    .pbtn{display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:9px 16px;border-radius:7px;text-decoration:none;white-space:nowrap;transition:opacity .15s}
     .pbtn:hover{opacity:.82}
     .pbtn-pri{background:#fff;color:#07080c}
     .pbtn-sec{background:transparent;color:var(--mu2);border:1px solid var(--b2)}
     .pbtn-sec:hover{color:#fff;border-color:var(--b3)}
-    /* Gamba logo image — centered */
     .gamba-logo{max-height:60px;max-width:280px;object-fit:contain;display:block;margin:0 auto}
-    .phead-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
+    .phead-sub{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
 
     /* STATS */
     .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
     .stat{padding:20px 24px;border-right:1px solid var(--b1)}
     .stat:last-child{border-right:none}
-    .stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+    .stat-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
     .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:.01em;color:#fff;line-height:1}
 
     /* PODIUM */
@@ -73,37 +72,37 @@
     .pcard.p1{--pline:rgba(212,175,90,.6);border-color:rgba(212,175,90,.2);padding-top:24px;padding-bottom:24px}
     .pcard.p2{--pline:rgba(154,170,184,.4);border-color:rgba(154,170,184,.15)}
     .pcard.p3{--pline:rgba(160,113,74,.4);border-color:rgba(160,113,74,.15)}
-    .prank{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+    .prank{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
     .p1 .prank{color:#d4af5a}.p2 .prank{color:#9aaab8}.p3 .prank{color:#a0714a}
-    .pavatar{border-radius:50%;object-fit:cover;border:2px solid var(--b2);flex-shrink:0;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--mu)}
+    .pavatar{border-radius:50%;object-fit:cover;border:2px solid var(--b2);flex-shrink:0;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--mu)}
     .puname{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .pstat{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:8px 10px;text-align:center}
-    .pstat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
+    .pstat-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
     .pstat-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;letter-spacing:.02em}
     .p1 .pstat-val.rw{color:#d4af5a;font-size:20px}
     .p2 .pstat-val.rw{color:#9aaab8}.p3 .pstat-val.rw{color:#a0714a}
 
     .sdiv{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
     .sdl{flex:1;height:1px;background:var(--b2)}
-    .sdlbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+    .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
 
     .lbtable{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:56px}
     .lbhead{display:grid;grid-template-columns:52px 36px 1fr auto auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
-    .lbh{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+    .lbh{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
     .lbrow{display:grid;grid-template-columns:52px 36px 1fr auto auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
     .lbrow:last-child{border-bottom:none}
     .lbrow:hover{background:var(--s2)}
     .lbrk{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-align:center;color:var(--mu)}
-    .lbav{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--b2);flex-shrink:0;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
+    .lbav{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--b2);flex-shrink:0;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--mu)}
     .lbnm{font-size:13px;font-weight:500;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .lbwg{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);text-align:right;white-space:nowrap}
-    .lbrw{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:#fff;text-align:right;white-space:nowrap;min-width:52px}
+    .lbwg{font-family:'Inter',sans-serif;font-size:12px;font-weight:400;color:var(--mu);text-align:right;white-space:nowrap}
+    .lbrw{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-align:right;white-space:nowrap;min-width:52px}
 
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .ftd{font-size:11px;line-height:1.6;color:var(--mu);max-width:500px}
-    .ftd strong{color:rgba(221,227,239,.6)}
-    .ftc{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
+    .ftd strong{color:rgba(221,227,239,.9)}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
 
     @media(max-width:700px){
       .nlinks,.nsoc{display:none}
@@ -111,7 +110,7 @@
       .nlogo{border-right:none;margin-right:0;padding-right:0}
       .phead{padding:32px 0 24px}
       .pbtns{gap:6px}
-      .pbtn{padding:8px 12px;font-size:9px}
+      .pbtn{padding:8px 12px;font-size:10px}
       .statsbar{grid-template-columns:1fr}
       .stat{border-right:none;border-bottom:1px solid var(--b1)}
       .stat:last-child{border-bottom:none}
@@ -209,7 +208,6 @@
       <Navbar/>
       <div className="wrap">
 
-        {/* PAGE HEADER */}
         <div className="phead f1">
           <div className="phead-toprow">
             <div className="phead-eyebrow"><span className="pdot"/>Gamba.com — Live Race</div>
@@ -221,19 +219,16 @@
               </a>
             </div>
           </div>
-          {/* Gamba logo — image only, no fallback text */}
           <img className="gamba-logo" src="/assets/gamba2.png" alt="Gamba"/>
           <div className="phead-sub">$1,500 Wager Race</div>
         </div>
 
-        {/* STATS */}
         <div className="statsbar f2">
           <div className="stat"><div className="stat-lbl">Prize Pool</div><div className="stat-val">${prizeAnim.toLocaleString("en-US")}</div></div>
           <div className="stat"><div className="stat-lbl">Total Wagered</div><div className="stat-val">{fmtMoney(wagerAnim)}</div></div>
           <div className="stat"><div className="stat-lbl">Ends In</div><div className="stat-val">{timer}</div></div>
         </div>
 
-        {/* PODIUM */}
         {podium.length>0 && (
           <div className="podium f3">
             {podium.map(p=>(
@@ -248,7 +243,6 @@
           </div>
         )}
 
-        {/* TABLE */}
         {rest.length>0 && (<>
           <div className="sdiv f4"><div className="sdl"/><span className="sdlbl">Positions 4–15</span><div className="sdl"/></div>
           <div className="lbtable f4">
@@ -272,7 +266,7 @@
         </>)}
 
         {players.length===0 && (
-          <div className="f3" style={{textAlign:'center',padding:'64px 0',fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
+          <div className="f3" style={{textAlign:'center',padding:'64px 0',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
             Loading leaderboard...
           </div>
         )}
