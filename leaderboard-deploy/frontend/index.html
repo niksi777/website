@@ -33,14 +33,13 @@
     .nsoc svg{width:15px;height:15px}
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
     .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
-    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px;gap:0}
+    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
     .drawer.open{display:flex}
     .drawer a{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
     .drawer a:last-of-type{border-bottom:none}
     .drawer a.on,.drawer a:hover{color:#fff}
     .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
-    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7;transition:opacity .15s}
-    .drawer-soc a:hover{opacity:1}
+    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
     .drawer-soc svg{width:15px;height:15px}
 
     .page{max-width:980px;margin:0 auto;padding:0 28px}
@@ -55,18 +54,21 @@
     .offers{display:flex;justify-content:center;padding-bottom:56px}
     .ocard{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s;width:100%;max-width:520px}
     .ocard:hover{transform:translateY(-3px)}
+
+    /* Banner now shows the logo image */
     .obanner{height:180px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:#0e1018;border:1px solid var(--b2);border-bottom:none;border-radius:14px 14px 0 0}
+    .obanner img{max-height:80px;max-width:260px;object-fit:contain;opacity:.95}
     .obadge{position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;border-radius:100px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
     .olive{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--rd)}
     .olive::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--rd);animation:pu 1.5s ease-in-out infinite}
-    .ologo{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff}
+
     .obody{padding:28px;display:flex;flex-direction:column;gap:20px;border:1px solid var(--b2);border-top:2px solid rgba(255,255,255,.28);border-radius:0 0 14px 14px;background:var(--s1)}
     .oprize-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
     .oprize{font-family:'Barlow Condensed',sans-serif;font-size:72px;font-weight:800;letter-spacing:.01em;line-height:1;color:#fff}
     .oprog-head{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--mu);margin-bottom:6px}
     .otrack{height:2px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
     .ofill{height:100%;border-radius:99px;background:rgba(255,255,255,.45);transition:width .9s ease}
-    .ometa{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .ometa{display:flex;align-items:center;gap:10px}
     .otimer{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--mu)}
     .otimer span{color:var(--tx)}
     .octa{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:14px;border-radius:8px;font-weight:500;background:#fff;color:#07080c;transition:opacity .15s;text-decoration:none}
@@ -93,127 +95,111 @@
 <div id="root"></div>
 <script type="text/babel">
 
-  // ── Config ────────────────────────────────────────────────────────────────
   const RACES = {
     gamba:   { prize:1500, start:new Date("2026-05-02T02:00:00Z"), end:new Date("2026-05-17T02:00:00Z"), visible:true  },
     chancer: { prize:2000, start:new Date("2026-04-23T14:00:00Z"), end:new Date("2026-05-13T14:00:00Z"), visible:false },
   };
-  const VISIBLE = Object.entries(RACES).filter(([,r]) => r.visible).map(([k]) => k);
+  const VISIBLE = Object.entries(RACES).filter(([,r])=>r.visible).map(([k])=>k);
 
-  function fmtCD(target) {
-    const ms = target - Date.now();
-    if (ms <= 0) return "Ended";
+  function fmtCD(target){
+    const ms=target-Date.now(); if(ms<=0)return"Ended";
     const d=Math.floor(ms/86400000),h=Math.floor(ms/3600000%24),m=Math.floor(ms/60000%60),s=Math.floor(ms/1000%60);
-    return d > 0 ? `${d}d ${h}h ${m}m ${s}s` : `${h}h ${m}m ${s}s`;
+    return d>0?`${d}d ${h}h ${m}m ${s}s`:`${h}h ${m}m ${s}s`;
   }
-  function racePct(s,e){ return Math.min(100,Math.max(0,Math.round((Date.now()-s)/(e-s)*100))); }
-  function useCountdown(target) {
-    const [v,setV] = React.useState(()=>fmtCD(target));
-    React.useEffect(()=>{ const id=setInterval(()=>setV(fmtCD(target)),1000); return ()=>clearInterval(id); },[]);
+  function racePct(s,e){return Math.min(100,Math.max(0,Math.round((Date.now()-s)/(e-s)*100)))}
+  function useCountdown(target){
+    const [v,setV]=React.useState(()=>fmtCD(target));
+    React.useEffect(()=>{const id=setInterval(()=>setV(fmtCD(target)),1000);return()=>clearInterval(id);},[]);
     return v;
   }
-  function useAnimNum(target,dur=1400) {
-    const [v,setV] = React.useState(0);
+  function useAnimNum(target,dur=1400){
+    const [v,setV]=React.useState(0);
     React.useEffect(()=>{
       const t0=Date.now();
-      const id=setInterval(()=>{ const p=Math.min((Date.now()-t0)/dur,1); setV(Math.floor((1-Math.pow(1-p,3))*target)); if(p>=1)clearInterval(id); },16);
-      return ()=>clearInterval(id);
+      const id=setInterval(()=>{const p=Math.min((Date.now()-t0)/dur,1);setV(Math.floor((1-Math.pow(1-p,3))*target));if(p>=1)clearInterval(id);},16);
+      return()=>clearInterval(id);
     },[target]);
     return v;
   }
 
-  function Navbar() {
-    const [open,setOpen] = React.useState(false);
-    return (
-      <>
-        <nav>
-          <div className="ni">
-            <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
-            <div className="nlinks">
-              <a href="/" className="on">HOME</a>
-              <a href="/leaderboards.html">LEADERBOARDS</a>
-              <a href="/giveaway.html">GIVEAWAY</a>
-            </div>
-            <div className="nsoc">
-              <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
-              <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
-              <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
-            </div>
-            <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
-              <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
-              <span style={open?{opacity:0}:{}}/>
-              <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
-            </button>
-          </div>
-        </nav>
-        <div className={`drawer${open?' open':''}`}>
-          <a href="/" className="on">HOME</a>
-          <a href="/leaderboards.html">LEADERBOARDS</a>
-          <a href="/giveaway.html">GIVEAWAY</a>
-          <div className="drawer-soc">
-            <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
-            <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
-            <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
-          </div>
+  const SOCIALS = <>
+    <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
+    <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
+    <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
+  </>;
+
+  function Navbar(){
+    const [open,setOpen]=React.useState(false);
+    return (<>
+      <nav>
+        <div className="ni">
+          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+          <div className="nlinks"><a href="/" className="on">HOME</a><a href="/leaderboards.html">LEADERBOARDS</a><a href="/giveaway.html">GIVEAWAY</a></div>
+          <div className="nsoc">{SOCIALS}</div>
+          <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
+            <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
+            <span style={open?{opacity:0}:{}}/>
+            <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
+          </button>
         </div>
-      </>
-    );
+      </nav>
+      <div className={`drawer${open?' open':''}`}>
+        <a href="/" className="on">HOME</a><a href="/leaderboards.html">LEADERBOARDS</a><a href="/giveaway.html">GIVEAWAY</a>
+        <div className="drawer-soc">{SOCIALS}</div>
+      </div>
+    </>);
   }
 
-  function App() {
-    const race   = RACES.gamba;
-    const timer  = useCountdown(race.end);
-    const amount = useAnimNum(race.prize);
-    const pct    = racePct(race.start, race.end);
-
-    return (
-      <>
-        <Navbar />
+  function App(){
+    const race=RACES.gamba;
+    const timer=useCountdown(race.end);
+    const amount=useAnimNum(race.prize);
+    const pct=racePct(race.start,race.end);
+    return (<>
+      <Navbar/>
+      <div className="page">
+        <div className="hero f1">
+          <div className="htag"><span className="pdot"/>{VISIBLE.length} Active Race{VISIBLE.length!==1?'s':''}</div>
+          <h1 className="htitle">Wager. <em>Win.</em><br/>Climb the Board.</h1>
+          <p className="hsub">Use code <strong>NIKSI</strong> on Gamba and climb the leaderboard for your share of the prize pool.</p>
+        </div>
+        <div className="offers f2">
+          <a href="/gamba.html" className="ocard">
+            <div className="obanner">
+              <span className="obadge">Gamba.com</span>
+              <span className="olive">LIVE</span>
+              {/* Gamba logo from /assets */}
+              <img src="/assets/gamba2.png" alt="Gamba" onError={e=>{e.target.style.display='none'}}/>
+            </div>
+            <div className="obody">
+              <div>
+                <div className="oprize-lbl">Prize Pool</div>
+                <div className="oprize">${amount.toLocaleString("en-US")}</div>
+              </div>
+              <div>
+                <div className="oprog-head"><span>Race Progress</span><span>{pct}%</span></div>
+                <div className="otrack"><div className="ofill" style={{width:pct+"%"}}/></div>
+              </div>
+              <div className="ometa">
+                <div className="otimer">ENDS IN <span>{timer}</span></div>
+              </div>
+              <div className="octa">
+                View Leaderboard
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <footer>
         <div className="page">
-          <div className="hero f1">
-            <div className="htag"><span className="pdot"/>{VISIBLE.length} Active Race{VISIBLE.length !== 1 ? 's' : ''}</div>
-            <h1 className="htitle">Wager. <em>Win.</em><br/>Climb the Board.</h1>
-            <p className="hsub">Use code <strong>NIKSI</strong> on Gamba and climb the leaderboard for your share of the prize pool.</p>
-          </div>
-
-          <div className="offers f2">
-            <a href="/gamba.html" className="ocard">
-              <div className="obanner">
-                <span className="obadge">Gamba.com</span>
-                <span className="olive">LIVE</span>
-                <div className="ologo">GAMBA</div>
-              </div>
-              <div className="obody">
-                <div>
-                  <div className="oprize-lbl">Prize Pool</div>
-                  <div className="oprize">${amount.toLocaleString("en-US")}</div>
-                </div>
-                <div>
-                  <div className="oprog-head"><span>Race Progress</span><span>{pct}%</span></div>
-                  <div className="otrack"><div className="ofill" style={{width:pct+"%"}}/></div>
-                </div>
-                <div className="ometa">
-                  <div className="otimer">ENDS IN <span>{timer}</span></div>
-                </div>
-                <div className="octa">
-                  View Leaderboard
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-              </div>
-            </a>
+          <div className="ftw">
+            <p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
+            <span className="ftc">© 2026 NIKSI777</span>
           </div>
         </div>
-
-        <footer>
-          <div className="page">
-            <div className="ftw">
-              <p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
-              <span className="ftc">© 2026 NIKSI777</span>
-            </div>
-          </div>
-        </footer>
-      </>
-    );
+      </footer>
+    </>);
   }
 
   ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
