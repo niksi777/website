@@ -44,30 +44,29 @@
 
     .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
 
-    /* Page header with Gamba logo */
-    .phead{padding:48px 0 32px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
-    .phead-left{display:flex;flex-direction:column;gap:14px}
+    /* PAGE HEADER */
+    .phead{padding:44px 0 32px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .phead-toprow{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
     .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
     .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    /* Gamba logo in header */
-    .phead-logo{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-    .phead-logo img{max-height:44px;max-width:180px;object-fit:contain;opacity:.95}
-    .ptitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,52px);font-weight:800;line-height:.92;text-transform:uppercase;color:#fff}
-    .ptitle em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
-    .pbtns{display:flex;align-items:center;gap:10px;flex-shrink:0}
-    .pbtn{display:inline-flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:10px 18px;border-radius:7px;font-weight:500;text-decoration:none;transition:opacity .15s;white-space:nowrap}
+    .pbtns{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .pbtn{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;border-radius:7px;font-weight:500;text-decoration:none;white-space:nowrap;transition:opacity .15s}
     .pbtn:hover{opacity:.82}
     .pbtn-pri{background:#fff;color:#07080c}
     .pbtn-sec{background:transparent;color:var(--mu2);border:1px solid var(--b2)}
     .pbtn-sec:hover{color:#fff;border-color:var(--b3)}
+    /* Gamba logo image — centered */
+    .gamba-logo{max-height:60px;max-width:280px;object-fit:contain;display:block;margin:0 auto}
+    .phead-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
 
-    /* Stats — all same size */
+    /* STATS */
     .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
     .stat{padding:20px 24px;border-right:1px solid var(--b1)}
     .stat:last-child{border-right:none}
     .stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
     .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:.01em;color:#fff;line-height:1}
 
+    /* PODIUM */
     .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end}
     .pcard{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;position:relative;overflow:hidden}
     .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--pline)}
@@ -82,8 +81,7 @@
     .pstat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
     .pstat-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;letter-spacing:.02em}
     .p1 .pstat-val.rw{color:#d4af5a;font-size:20px}
-    .p2 .pstat-val.rw{color:#9aaab8}
-    .p3 .pstat-val.rw{color:#a0714a}
+    .p2 .pstat-val.rw{color:#9aaab8}.p3 .pstat-val.rw{color:#a0714a}
 
     .sdiv{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
     .sdl{flex:1;height:1px;background:var(--b2)}
@@ -111,9 +109,9 @@
       .nlinks,.nsoc{display:none}
       .hamburger{display:flex}
       .nlogo{border-right:none;margin-right:0;padding-right:0}
-      .phead{padding:32px 0 24px;flex-direction:column;align-items:flex-start}
-      .pbtns{width:100%}
-      .pbtn{flex:1;justify-content:center}
+      .phead{padding:32px 0 24px}
+      .pbtns{gap:6px}
+      .pbtn{padding:8px 12px;font-size:9px}
       .statsbar{grid-template-columns:1fr}
       .stat{border-right:none;border-bottom:1px solid var(--b1)}
       .stat:last-child{border-bottom:none}
@@ -138,7 +136,6 @@
     const d=Math.floor(ms/86400000),h=Math.floor(ms/3600000%24),m=Math.floor(ms/60000%60),s=Math.floor(ms/1000%60);
     return d>0?`${d}d ${h}h ${m}m ${s}s`:`${h}h ${m}m ${s}s`;
   }
-  function racePct(s,e){return Math.min(100,Math.max(0,Math.round((Date.now()-s)/(e-s)*100)))}
   function useCountdown(target){
     const [v,setV]=React.useState(()=>fmtCD(target));
     React.useEffect(()=>{const id=setInterval(()=>setV(fmtCD(target)),1000);return()=>clearInterval(id);},[]);
@@ -198,42 +195,41 @@
   }
 
   function App(){
-    const players   = usePlayers();
-    const timer     = useCountdown(RACE_END);
-    const prizeAnim = useAnimNum(PRIZE);
-    const totalWager= players.reduce((s,p)=>s+Number(p.wager||0),0);
-    const top3      = players.slice(0,3);
-    const rest      = players.slice(3,15);
-    const podium    = [1,0,2].map(i=>top3[i]?{...top3[i],rank:i+1}:null).filter(Boolean);
-    const rankCls   = {1:"p1",2:"p2",3:"p3"};
-    const rankLbls  = ["1st Place","2nd Place","3rd Place"];
+    const players    = usePlayers();
+    const timer      = useCountdown(RACE_END);
+    const prizeAnim  = useAnimNum(PRIZE);
+    const wagerAnim  = useAnimNum(players.reduce((s,p)=>s+Number(p.wager||0),0), 1600);
+    const top3       = players.slice(0,3);
+    const rest       = players.slice(3,15);
+    const podium     = [1,0,2].map(i=>top3[i]?{...top3[i],rank:i+1}:null).filter(Boolean);
+    const rankCls    = {1:"p1",2:"p2",3:"p3"};
+    const rankLbls   = ["1st Place","2nd Place","3rd Place"];
 
     return (<>
       <Navbar/>
       <div className="wrap">
 
-        {/* PAGE HEADER with Gamba logo */}
+        {/* PAGE HEADER */}
         <div className="phead f1">
-          <div className="phead-left">
+          <div className="phead-toprow">
             <div className="phead-eyebrow"><span className="pdot"/>Gamba.com — Live Race</div>
-            <div className="phead-logo">
-              <img src="/assets/gamba2.png" alt="Gamba" onError={e=>{e.target.style.display='none'}}/>
-              <h1 className="ptitle">$1,500 <em>Leaderboard</em></h1>
+            <div className="pbtns">
+              <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="pbtn pbtn-sec">Sign Up</a>
+              <a href="https://gamba.com/promotions/exclusive-leaderboards/11981" target="_blank" rel="noreferrer" className="pbtn pbtn-pri">
+                View on Gamba
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+              </a>
             </div>
           </div>
-          <div className="pbtns">
-            <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="pbtn pbtn-sec">Sign Up</a>
-            <a href="https://gamba.com/promotions/exclusive-leaderboards/11981" target="_blank" rel="noreferrer" className="pbtn pbtn-pri">
-              View on Gamba
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:12,height:12}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-            </a>
-          </div>
+          {/* Gamba logo — image only, no fallback text */}
+          <img className="gamba-logo" src="/assets/gamba2.png" alt="Gamba"/>
+          <div className="phead-sub">$1,500 Wager Race</div>
         </div>
 
-        {/* STATS — all same font size */}
+        {/* STATS */}
         <div className="statsbar f2">
           <div className="stat"><div className="stat-lbl">Prize Pool</div><div className="stat-val">${prizeAnim.toLocaleString("en-US")}</div></div>
-          <div className="stat"><div className="stat-lbl">Total Wagered</div><div className="stat-val">{fmtMoney(totalWager)}</div></div>
+          <div className="stat"><div className="stat-lbl">Total Wagered</div><div className="stat-val">{fmtMoney(wagerAnim)}</div></div>
           <div className="stat"><div className="stat-lbl">Ends In</div><div className="stat-val">{timer}</div></div>
         </div>
 
@@ -246,7 +242,7 @@
                 <Avatar src={p.avatar} name={p.username} size={p.rank===1?64:48}/>
                 <div className="puname">{p.username}</div>
                 <div className="pstat"><div className="pstat-lbl">Wagered</div><div className="pstat-val">{fmtMoney(p.wager)}</div></div>
-                <div className="pstat"><div className="pstat-lbl">Prize</div><div className={`pstat-val rw`}>{fmtMoney(p.reward)}</div></div>
+                <div className="pstat"><div className="pstat-lbl">Prize</div><div className="pstat-val rw">{fmtMoney(p.reward)}</div></div>
               </div>
             ))}
           </div>
