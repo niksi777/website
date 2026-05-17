@@ -88,7 +88,7 @@ async function updateAcebet() {
 // Fetch Gamba leaderboard
 async function updateLeaderboard() {
   try {
-    const raceId = 11981;
+    const raceId = 12640;
 
     const url =
   "https://gamba.com/_api/@?operationName=getRaceById" +
@@ -98,7 +98,7 @@ async function updateLeaderboard() {
    const response = await fetch(url, {
   headers: {
     "User-Agent": "Mozilla/5.0",
-    "Referer": "https://gamba.com/promotions/exclusive-leaderboards/11981",
+    "Referer": "https://gamba.com/promotions/exclusive-leaderboards/12640",
     "Origin": "https://gamba.com",
   },
 });
