@@ -52,11 +52,9 @@
     .hsub{font-size:14px;line-height:1.7;color:var(--mu);max-width:440px;margin:0 auto}
     .hsub strong{color:rgba(221,227,239,.9);font-weight:600}
 
-    /* Two cards side by side */
     .offers{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:56px}
 
-    /* Base card */
-    .ocard{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s;width:100%}
+    .ocard{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;color:inherit;transition:transform .2s;width:100%;text-decoration:none}
     .ocard:hover{transform:translateY(-3px)}
 
     .obanner{height:160px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:#0e1018;border:1px solid var(--b2);border-bottom:none;border-radius:14px 14px 0 0}
@@ -67,7 +65,6 @@
 
     .obody{padding:24px;display:flex;flex-direction:column;gap:18px;border:1px solid var(--b2);border-top:2px solid rgba(255,255,255,.28);border-radius:0 0 14px 14px;background:var(--s1);flex:1}
 
-    /* Gamba card specifics */
     .oprize-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
     .oprize{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,6vw,64px);font-weight:800;letter-spacing:.01em;line-height:1;color:#fff}
     .oprog-head{display:flex;justify-content:space-between;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.06em;color:var(--mu);margin-bottom:6px}
@@ -76,11 +73,17 @@
     .ometa{display:flex;align-items:center;gap:10px}
     .otimer{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.06em;color:var(--mu)}
     .otimer span{color:var(--tx)}
+
+    /* Two-button row for Gamba */
+    .obtn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .octa{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:8px;background:#fff;color:#07080c;transition:opacity .15s;text-decoration:none}
     .octa:hover{opacity:.82}
     .octa svg{width:13px;height:13px;flex-shrink:0}
+    .octa-sec{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:8px;background:transparent;color:var(--mu);border:1px solid var(--b2);transition:all .15s;text-decoration:none}
+    .octa-sec:hover{color:#fff;border-color:var(--b3)}
+    .octa-sec svg{width:13px;height:13px;flex-shrink:0}
 
-    /* Qzino card specifics — green accent */
+    /* Qzino */
     .qzino-banner{border-color:rgba(130,200,60,.2) !important}
     .qzino-body{border-color:rgba(130,200,60,.2) !important;border-top-color:rgba(130,200,60,.5) !important}
     .qzino-badge{color:rgba(150,220,80,.9) !important;background:rgba(130,200,60,.08) !important;border-color:rgba(130,200,60,.2) !important}
@@ -176,7 +179,7 @@
     const amount = useAnimNum(race.prize);
     const pct    = racePct(race.start, race.end);
     return (
-      <a href="/gamba.html" className="ocard">
+      <div className="ocard">
         <div className="obanner">
           <span className="obadge">Gamba.com</span>
           <span className="olive">LIVE</span>
@@ -194,12 +197,18 @@
           <div className="ometa">
             <div className="otimer">ENDS IN <span>{timer}</span></div>
           </div>
-          <div className="octa">
-            View Leaderboard
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div className="obtn-row">
+            <a href="/gamba.html" className="octa">
+              Leaderboard
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="octa-sec">
+              Sign Up
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
           </div>
         </div>
-      </a>
+      </div>
     );
   }
 
@@ -230,7 +239,7 @@
   }
 
   function App(){
-    const activeCount = VISIBLE.length + 1; // +1 for Qzino
+    const activeCount = VISIBLE.length + 1;
     return (<>
       <Navbar/>
       <div className="page">
