@@ -1,0 +1,8 @@
+[
+  {
+    "id": "deploy",
+    "execute-command": "/root/website/deploy.sh",
+    "command-working-directory": "/root/website"
+  }
+]
+

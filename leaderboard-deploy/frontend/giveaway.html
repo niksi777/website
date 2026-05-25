@@ -1,141 +1,388 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Giveaway</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIKSI777 — Giveaway</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--rd:#d94f4f}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
+    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes winner-pop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+    @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,255,255,.15)}50%{box-shadow:0 0 40px rgba(255,255,255,.35)}}
+    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .2s ease both}
+    nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
+    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
+    .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
+    .nsoc svg{width:15px;height:15px}
+    .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
+    .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
+    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
+    .drawer.open{display:flex}
+    .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
+    .drawer a.on,.drawer a:hover{color:#fff}
+    .page{max-width:1020px;margin:0 auto;padding:0 28px}
+    .login-wrap{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center}
+    .login-box{background:var(--s1);border:1px solid var(--b2);border-radius:16px;padding:40px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:20px}
+    .login-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.04em}
+    .inp{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:12px 14px;font-size:13px;color:#fff;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+    .inp:focus{border-color:var(--b3)}
+    .btn{width:100%;padding:13px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;transition:opacity .15s}
+    .btn:hover{opacity:.82}
+    .btn-pri{background:#fff;color:#07080c}
+    .btn-sec{background:transparent;color:var(--mu);border:1px solid var(--b2)}
+    .btn-sec:hover{color:#fff;border-color:var(--b3)}
+    .btn-green{background:#22c55e;color:#fff}
+    .err{font-size:12px;color:var(--rd)}
+    .dash{padding:44px 0 64px;display:flex;flex-direction:column;gap:28px}
+    .dash-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;line-height:1;text-align:center}
+    .htag{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 14px;border-radius:100px;margin-bottom:10px}
+    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
+    .pdot-green{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:pu 1.5s ease-in-out infinite;flex-shrink:0}
+    .card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:18px}
+    .card-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group.full{grid-column:1/-1}
+    .lbl{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+    .inp-sm{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:11px 14px;font-size:13px;color:#fff;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s;width:100%}
+    .inp-sm:focus{border-color:var(--b3)}
+    .divider-line{height:1px;background:var(--b1)}
+    .timer-setup{display:flex;flex-direction:column;gap:12px}
+    .timer-setup-row{display:flex;align-items:center;gap:12px}
+    .timer-preview{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1;min-width:72px}
+    .timer-preview.urgent{color:var(--rd)}
+    .bar-track{height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;flex:1}
+    .bar-fill{height:100%;border-radius:99px;background:rgba(255,255,255,.4);transition:width .5s linear}
+    .bar-fill.urgent{background:var(--rd)}
+    .timer-btns{display:flex;gap:8px}
+    .statusbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr)}
+    .stat{padding:18px 22px;border-right:1px solid var(--b1);text-align:center}
+    .stat:last-child{border-right:none}
+    .stat-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+    .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:#fff;line-height:1}
+    .stat-val.green{color:#22c55e}
+    .stat-val.active{color:var(--ac)}
+    .keyword-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--b2);border-radius:8px;padding:10px 16px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.06em;color:#fff}
+    .keyword-badge span{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .entries-grid{display:flex;flex-wrap:wrap;gap:10px}
+    .entry-chip{display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--b2);border-radius:8px;padding:10px 16px;transition:background .15s}
+    .entry-chip:hover{background:var(--s2)}
+    .entry-num{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--mu)}
+    .entry-name{font-size:13px;font-weight:500;color:var(--tx)}
+    .empty{text-align:center;padding:48px 0;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+    .roller-wrap{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:20px}
+    .roller-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+    .roller-stage{position:relative;height:100px;overflow:hidden;border-radius:10px;background:var(--s2);border:1px solid var(--b1)}
+    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(to right,var(--s2),transparent);z-index:2;pointer-events:none}
+    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(to left,var(--s2),transparent);z-index:2;pointer-events:none}
+    .roller-center-line{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.2);transform:translateX(-50%);z-index:3;pointer-events:none}
+    .roller-track{display:flex;align-items:center;gap:12px;position:absolute;top:50%;transform:translateY(-50%);will-change:transform;white-space:nowrap}
+    .roller-card{flex-shrink:0;width:160px;height:72px;border-radius:10px;background:var(--s1);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:.04em;color:#fff;text-transform:uppercase;user-select:none}
+    .roller-card.winner-card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5);animation:glow 1.5s ease-in-out infinite}
+    .roll-btn{width:100%;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s}
+    .roll-btn:hover{opacity:.85}
+    .roll-btn:disabled{opacity:.4;cursor:not-allowed}
+    .winner-box{background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:32px;text-align:center;animation:winner-pop .5s ease both;display:flex;flex-direction:column;align-items:center;gap:14px}
+    .winner-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
+    .winner-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:1}
+    .winner-prize{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--ac)}
+    .confetti{font-size:32px;letter-spacing:8px}
+    footer{border-top:1px solid var(--b1);padding:22px 0}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
+    .ftd strong{color:rgba(221,227,239,.9)}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+    @media(max-width:680px){
+      .nlinks,.nsoc{display:none}
+      .hamburger{display:flex}
+      .form-grid{grid-template-columns:1fr}
+      .statusbar{grid-template-columns:1fr}
+      .stat{border-right:none;border-bottom:1px solid var(--b1)}
+      .stat:last-child{border-bottom:none}
+    }
+  </style>
 </head>
-
-<body class="text-white" style="background-color: #0f1729;">
+<body>
 <div id="root"></div>
-
 <script type="text/babel">
-
-    
-
-function Giveaway() {
-  return (
-    <div className="min-h-screen">
-
-      {/* HERO SECTION */}
-      {/* HERO SECTION */}
-<div className="relative text-center py-20 px-6 bg-gradient-to-b from-[#111827] to-[#0f172a]">
-
-  {/* NAVIGATION */}
-  <div className="flex justify-center mb-12">
-    <nav className="flex items-center gap-10 px-8 py-4 
-                    bg-white/5 backdrop-blur-md 
-                    border border-white/10 
-                    rounded-2xl shadow-lg">
-
-      <a
-        href="/"
-        className="text-sm tracking-wide text-white/70 hover:text-white transition"
-      >
-        Home
-      </a>
-
-      <a
-        href="/giveaway.html"
-        className="text-sm tracking-wide text-white hover:text-white transition"
-      >
-        Giveaway
-      </a>
-
-    </nav>
-  </div>
-    {/* SOCIAL ICONS */}
-<div className="flex justify-center gap-6 mb-8">
-
-  {/* KICK */}
-  <a 
-    href="https://kick.com/niksi777" 
-    target="_blank"
-    className="hover:scale-110 transition duration-300"
-  >
-    <img 
-      src="https://cdn.simpleicons.org/kick/22c55e"
-      className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]"
-    />
-  </a>
-
-  {/* DISCORD */}
-  <a 
-    href="https://discord.gg/NU9b4xRMqD" 
-    target="_blank"
-    className="hover:scale-110 transition duration-300"
-  >
-    <img 
-      src="https://cdn.simpleicons.org/discord/5865F2"
-      className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(88,101,242,0.8)]"
-    />
-  </a>
-
-  {/* TWITTER */}
-  <a 
-    href="https://x.com/code_niksi777" 
-    target="_blank"
-    className="hover:scale-110 transition duration-300"
-  >
-    <img 
-      src="https://cdn.simpleicons.org/x/ffffff"
-      className="h-8 opacity-80 hover:opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"
-    />
-  </a>
-
-</div>
-
-  <h1 className="text-5xl font-bold tracking-tight">
-    WEEKLY $100 FRIDAY GIVEAWAY
-  </h1>
-
- 
-
-  <div className="mt-10">
-    <a
-      href="https://gamba.com?c=niksi"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-white text-black px-10 py-4 rounded-2xl font-semibold tracking-wide hover:scale-105 transition-all duration-200 shadow-xl"
-    >
-      SIGN UP
-    </a>
-  </div>
-
-</div>
-      <div className="max-w-3xl mx-auto space-y-10">
-
-        <div className="border border-white/10 p-8 rounded-xl shadow-lg shadow-black/40">
-          <h2 className="text-2xl mb-4 font-semibold">
-            Every Friday 2 x $50 will be given out to two lucky winners!
-          </h2>
-          <p>NOTE: For every $1.000 wagered you get one ticket(s) 
-              example: You wager $2.000 = 2 ticket(s)</p>
-        </div>
-
-        <div className="border border-white/10 p-8 rounded-xl shadow-lg shadow-black/40">
-          <h2 className="text-2xl mb-4 font-semibold">
-            Rules
-          </h2>
-          <ul className="space-y-2 opacity-80">
-            <li>• Play using my link</li>
-            <li>• Minimum wager required $$1.000</li>
-          </ul>
-        </div>
-
+  const CORRECT_PASSWORD='niksi';
+  const CARD_W=160;
+  const CARD_GAP=12;
+  const SOCIALS=<>
+    <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
+    <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
+    <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
+  </>;
+  function Navbar(){
+    const [open,setOpen]=React.useState(false);
+    return (<>
+      <nav><div className="ni">
+        <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+        <div className="nlinks"><a href="/">HOME</a><a href="/leaderboards.html">LEADERBOARDS</a><a href="/giveaway.html" className="on">GIVEAWAY</a></div>
+        <div className="nsoc">{SOCIALS}</div>
+        <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
+          <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
+          <span style={open?{opacity:0}:{}}/>
+          <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
+        </button>
+      </div></nav>
+      <div className={'drawer'+(open?' open':'')}>
+        <a href="/">HOME</a><a href="/leaderboards.html">LEADERBOARDS</a><a href="/giveaway.html" className="on">GIVEAWAY</a>
       </div>
+    </>);
+  }
+  function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
+  function CardRoller({entries,onWinner}){
+    const trackRef=React.useRef(null);
+    const stageRef=React.useRef(null);
+    const [cards,setCards]=React.useState([]);
+    const [rolling,setRolling]=React.useState(false);
+    const [winnerIdx,setWinnerIdx]=React.useState(null);
+    function buildCards(names,winner){
+      const repeated=[];
+      for(let i=0;i<10;i++) repeated.push(...[...names].sort(()=>Math.random()-.5));
+      const winPos=repeated.length-10-Math.floor(Math.random()*5);
+      repeated[winPos]=winner;
+      return repeated.map((name,i)=>({name,i,isWinner:i===winPos}));
+    }
+    function roll(){
+      if(rolling||entries.length===0) return;
+      const names=entries.map(e=>e.username);
+      const winnerName=names[Math.floor(Math.random()*names.length)];
+      const cardList=buildCards(names,winnerName);
+      setCards(cardList);setWinnerIdx(null);setRolling(true);
+      setTimeout(()=>{
+        const track=trackRef.current;const stage=stageRef.current;
+        if(!track||!stage) return;
+        const stageW=stage.offsetWidth;
+        const cardStep=CARD_W+CARD_GAP;
+        const winnerCardIdx=cardList.findIndex(c=>c.isWinner);
+        const startX=stageW+200;
+        const endX=stageW/2-winnerCardIdx*cardStep-CARD_W/2;
+        track.style.transition='none';
+        track.style.transform='translateX('+startX+'px)';
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          track.style.transition='transform 4s cubic-bezier(0.12,0.8,0.25,1)';
+          track.style.transform='translateX('+endX+'px)';
+        }));
+        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);onWinner(winnerName);},4300);
+      },50);
+    }
+    return (
+      <div className="roller-wrap f2">
+        <div className="roller-title">Roll Winner</div>
+        <div className="roller-stage" ref={stageRef}>
+          <div className="roller-center-line"/>
+          <div className="roller-track" ref={trackRef} style={{left:0}}>
+            {cards.map((c,i)=>(
+              <div key={i} className={'roller-card'+(winnerIdx===i?' winner-card':'')}>{c.name}</div>
+            ))}
+          </div>
+          {cards.length===0&&(
+            <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)'}}>
+              {entries.length===0?'No entries yet':'Click Roll to spin'}
+            </div>
+          )}
+        </div>
+        <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0}>
+          {rolling?'Rolling...':'Roll Winner'}
+        </button>
+      </div>
+    );
+  }
+  function App(){
+    const [authed,setAuthed]=React.useState(false);
+    const [pw,setPw]=React.useState('');
+    const [pwErr,setPwErr]=React.useState('');
+    const [giveaway,setGiveaway]=React.useState(null);
+    const [entries,setEntries]=React.useState([]);
+    const [winner,setWinner]=React.useState(null);
+    const [keyword,setKeyword]=React.useState('');
+    const [prize,setPrize]=React.useState('');
+    const [starting,setStarting]=React.useState(false);
+    const [timerMins,setTimerMins]=React.useState(1);
+    const [timerSecs,setTimerSecs]=React.useState(0);
+    const [timerRunning,setTimerRunning]=React.useState(false);
+    const [secondsLeft,setSecondsLeft]=React.useState(60);
+    const [duration,setDuration]=React.useState(60);
+    const timerRef=React.useRef(null);
+    function login(){if(pw===CORRECT_PASSWORD){setAuthed(true);setPwErr('');}else setPwErr('Incorrect password.');}
+    async function fetchState(){
+      try{
+        const r=await fetch('/giveaway/state');const d=await r.json();
+        setGiveaway(d.giveaway);setEntries(d.entries||[]);
+        if(d.giveaway?.winner) setWinner(d.giveaway.winner);
+      }catch(e){}
+    }
+    React.useEffect(()=>{if(!authed)return;fetchState();const id=setInterval(fetchState,3000);return()=>clearInterval(id);},[authed]);
+    React.useEffect(()=>{
+      const total=timerMins*60+timerSecs;
+      setDuration(total);setSecondsLeft(total);
+    },[timerMins,timerSecs]);
+    function startTimer(dur){
+      clearInterval(timerRef.current);
+      const d=dur||duration;
+      setSecondsLeft(d);setTimerRunning(true);
+      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'start'})});
+      let s=d;
+      timerRef.current=setInterval(()=>{s=Math.max(0,s-1);setSecondsLeft(s);if(s===0){clearInterval(timerRef.current);setTimerRunning(false);}},1000);
+    }
+    function stopTimer(){
+      clearInterval(timerRef.current);setTimerRunning(false);setSecondsLeft(duration);
+      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'stop'})});
+    }
+    async function startGiveaway(){
+      if(!keyword.trim()||!prize.trim())return;
+      setStarting(true);
+      try{
+        await fetch('/giveaway/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keyword:keyword.trim().toLowerCase(),prize:prize.trim()})});
+        setKeyword('');setPrize('');fetchState();
+      }catch(e){}
+      setStarting(false);
+    }
+    async function confirmWinner(name){
+      try{await fetch('/giveaway/roll',{method:'POST'});setWinner(name);fetchState();}catch(e){}
+    }
+    async function resetGiveaway(){
+      if(!confirm('Reset and clear all entries?'))return;
+      stopTimer();
+      await fetch('/giveaway/reset',{method:'POST'});
+      setWinner(null);fetchState();
+    }
+    if(!authed) return (<>
+      <Navbar/>
+      <div className="login-wrap">
+        <div className="login-box f1">
+          <div><div className="login-title">Giveaway Panel</div><div style={{fontSize:13,color:'var(--mu)',marginTop:6}}>Admin access only.</div></div>
+          <input className="inp" type="password" placeholder="Password" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==='Enter'&&login()}/>
+          {pwErr&&<div className="err">{pwErr}</div>}
+          <button className="btn btn-pri" onClick={login}>Enter</button>
+        </div>
+      </div>
+    </>);
+    const isActive=giveaway&&!giveaway.winner&&!winner;
+    const pct=(secondsLeft/Math.max(duration,1))*100;
+    const urgent=secondsLeft<=10&&timerRunning;
+    return (<>
+      <Navbar/>
+      <div className="page">
+        <div className="dash">
+          <div className="f1" style={{display:'flex',flexDirection:'column',alignItems:'center',textAlign:'center',gap:8}}>
+            <div className="htag"><span className={isActive?'pdot-green':'pdot'}/>{isActive?'Giveaway Active':'Giveaway Panel'}</div>
+            <div className="dash-title">Giveaway</div>
+            {giveaway&&<button className="btn btn-sec" style={{width:'auto',padding:'10px 20px',marginTop:4}} onClick={resetGiveaway}>Reset Giveaway</button>}
+          </div>
 
-    </div>
-  );
-}
+          <div className="statusbar f2">
+            <div className="stat"><div className="stat-lbl">Status</div><div className={'stat-val '+(isActive?'green':'')}>{isActive?'LIVE':giveaway?.winner||winner?'ENDED':'IDLE'}</div></div>
+            <div className="stat"><div className="stat-lbl">Entries</div><div className="stat-val">{entries.length}</div></div>
+            <div className="stat"><div className="stat-lbl">Prize</div><div className="stat-val active">{giveaway?.prize||'—'}</div></div>
+          </div>
 
-ReactDOM.createRoot(document.getElementById("root")).render(<Giveaway/>);
+          {!giveaway?(
+            <div className="card f2">
+              <div className="card-title">Start a New Giveaway</div>
+              <div className="form-grid">
+                <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" value={keyword} onChange={e=>setKeyword(e.target.value)}/></div>
+                <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" value={prize} onChange={e=>setPrize(e.target.value)}/></div>
+              </div>
+              <div className="divider-line"/>
+              <div className="timer-setup">
+                <div className="lbl">Timer</div>
+                <div className="timer-setup-row">
+                  <div className="timer-preview">{fmt(timerMins*60+timerSecs)}</div>
+                  <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                    <div className="form-group" style={{gap:4}}>
+                      <label className="lbl" style={{fontSize:10}}>Min</label>
+                      <input className="inp-sm" type="number" min="0" max="59" style={{width:70}} value={timerMins} onChange={e=>setTimerMins(Math.max(0,parseInt(e.target.value)||0))}/>
+                    </div>
+                    <div style={{color:'var(--mu)',fontSize:20,fontWeight:700,marginTop:16}}>:</div>
+                    <div className="form-group" style={{gap:4}}>
+                      <label className="lbl" style={{fontSize:10}}>Sec</label>
+                      <input className="inp-sm" type="number" min="0" max="59" style={{width:70}} value={timerSecs} onChange={e=>setTimerSecs(Math.min(59,Math.max(0,parseInt(e.target.value)||0)))}/>
+                    </div>
+                  </div>
+                  <div className="timer-btns" style={{marginLeft:'auto'}}>
+                    <button className="btn btn-green" style={{width:100,padding:'10px'}} onClick={()=>startTimer(timerMins*60+timerSecs)} disabled={timerRunning||timerMins*60+timerSecs===0}>{timerRunning?'Running':'Start'}</button>
+                    <button className="btn btn-sec" style={{width:80,padding:'10px'}} onClick={stopTimer} disabled={!timerRunning}>Reset</button>
+                  </div>
+                </div>
+                <div className="bar-track"><div className={'bar-fill'+(urgent?' urgent':'')} style={{width:pct+'%'}}/></div>
+              </div>
+              <div className="divider-line"/>
+              <button className="btn btn-pri" onClick={startGiveaway} disabled={starting||!keyword.trim()||!prize.trim()}>{starting?'Starting...':'Start Giveaway'}</button>
+            </div>
+          ):(
+            <div className="card f2">
+              <div className="card-title">Active Giveaway</div>
+              <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
+                <div><div className="lbl" style={{marginBottom:6}}>Keyword</div><div className="keyword-badge"><span>Keyword</span>{giveaway.keyword}</div></div>
+                <div style={{flex:1,minWidth:160}}><div className="lbl" style={{marginBottom:6}}>Prize</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:700,color:'#fff'}}>{giveaway.prize}</div></div>
+              </div>
+              <div className="divider-line"/>
+              <div className="timer-setup">
+                <div className="lbl">Timer</div>
+                <div className="timer-setup-row">
+                  <div className={'timer-preview'+(urgent?' urgent':'')}>{fmt(secondsLeft)}</div>
+                  <div className="timer-btns" style={{marginLeft:'auto'}}>
+                    <button className="btn btn-green" style={{width:100,padding:'10px'}} onClick={()=>startTimer()} disabled={timerRunning}>{timerRunning?'Running':'Start'}</button>
+                    <button className="btn btn-sec" style={{width:80,padding:'10px'}} onClick={stopTimer} disabled={!timerRunning}>Reset</button>
+                  </div>
+                </div>
+                <div className="bar-track"><div className={'bar-fill'+(urgent?' urgent':'')} style={{width:pct+'%'}}/></div>
+              </div>
+            </div>
+          )}
 
+          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner}/>}
+
+          {(winner||(giveaway?.winner))&&(
+            <div className="winner-box f2">
+              <div className="confetti">🎉 🏆 🎉</div>
+              <div className="winner-label">Winner</div>
+              <div className="winner-name">{winner||giveaway?.winner}</div>
+              {giveaway?.prize&&<div className="winner-prize">{giveaway.prize}</div>}
+            </div>
+          )}
+
+          <div className="f3">
+            <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginBottom:16}}>Entries — {entries.length}</div>
+            {entries.length===0?(
+              <div className="empty">No entries yet — waiting for Kick chat</div>
+            ):(
+              <div className="entries-grid">
+                {entries.map((e,i)=>(
+                  <div key={e.id||i} className="entry-chip">
+                    <div className="entry-num">#{i+1}</div>
+                    <div className="entry-name">{e.username}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <footer><div className="page"><div className="ftw"><p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site.</p><span className="ftc">© 2026 NIKSI777</span></div></div></footer>
+    </>);
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
-
-

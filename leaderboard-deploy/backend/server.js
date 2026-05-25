@@ -271,3 +271,63 @@ app.get("/ip", async (req, res) => {
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
 });
+
+// ─── GIVEAWAY ROUTES ────────────────────────────────────────────────────────
+let giveawayState = { giveaway: null, entries: [] };
+
+app.get('/giveaway/state', (req, res) => {
+  res.json(giveawayState);
+});
+
+app.post('/giveaway/start', (req, res) => {
+  const { keyword, prize } = req.body;
+  if (!keyword || !prize) return res.status(400).json({ error: 'keyword and prize required' });
+  giveawayState = {
+    giveaway: { keyword: keyword.toLowerCase().trim(), prize, winner: null, started_at: Date.now() },
+    entries: []
+  };
+  console.log('Giveaway started — keyword: ' + keyword + ' prize: ' + prize);
+  res.json({ ok: true });
+});
+
+app.post('/giveaway/enter', (req, res) => {
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ error: 'username required' });
+  if (!giveawayState.giveaway || giveawayState.giveaway.winner) {
+    return res.status(400).json({ error: 'No active giveaway' });
+  }
+  const already = giveawayState.entries.find(e => e.username.toLowerCase() === username.toLowerCase());
+  if (already) return res.json({ ok: true, duplicate: true });
+  giveawayState.entries.push({ id: Date.now(), username, entered_at: Date.now() });
+  console.log('Entry: ' + username + ' (total: ' + giveawayState.entries.length + ')');
+  res.json({ ok: true });
+});
+
+app.post('/giveaway/roll', (req, res) => {
+  if (!giveawayState.giveaway || giveawayState.entries.length === 0) {
+    return res.status(400).json({ error: 'No entries to roll' });
+  }
+  const idx = Math.floor(Math.random() * giveawayState.entries.length);
+  const winner = giveawayState.entries[idx].username;
+  giveawayState.giveaway.winner = winner;
+  console.log('Winner: ' + winner);
+  res.json({ winner });
+});
+
+app.post('/giveaway/reset', (req, res) => {
+  giveawayState = { giveaway: null, entries: [] };
+  console.log('Giveaway reset');
+  res.json({ ok: true });
+});
+
+// Timer signal endpoint
+let timerSignal = null;
+app.post('/giveaway/timer', (req, res) => {
+  const { action } = req.body;
+  timerSignal = action;
+  res.json({ ok: true });
+});
+app.get('/giveaway/timer', (req, res) => {
+  res.json({ signal: timerSignal });
+  timerSignal = null;
+});
