@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIKSI777 — Points Leaderboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--s3:#151820;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#b8cce8;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 900px 600px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
+    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}.f4{animation:fu .5s .34s ease both}
+
+    nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
+    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
+    .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
+    .nsoc svg{width:15px;height:15px}
+    .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
+    .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
+    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
+    .drawer.open{display:flex}
+    .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
+    .drawer a:last-of-type{border-bottom:none}
+    .drawer a.on,.drawer a:hover{color:#fff}
+    .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
+    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
+    .drawer-soc svg{width:15px;height:15px}
+
+    .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+
+    .phead{padding:44px 0 32px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
+    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
+    .phead h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:#fff;line-height:.92}
+    .phead h1 em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
+    .phead p{font-size:13px;color:var(--mu);max-width:400px;line-height:1.7}
+
+    .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
+    .stat{padding:20px 24px;border-right:1px solid var(--b1);text-align:center}
+    .stat:last-child{border-right:none}
+    .stat-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+    .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:.01em;color:#fff;line-height:1}
+
+    .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end}
+    .pcard{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;position:relative;overflow:hidden}
+    .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--pline)}
+    .pcard.p1{--pline:rgba(212,175,90,.6);border-color:rgba(212,175,90,.2);padding-top:24px;padding-bottom:24px}
+    .pcard.p2{--pline:rgba(154,170,184,.4);border-color:rgba(154,170,184,.15)}
+    .pcard.p3{--pline:rgba(160,113,74,.4);border-color:rgba(160,113,74,.15)}
+    .prank{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+    .p1 .prank{color:var(--gold)}.p2 .prank{color:var(--silver)}.p3 .prank{color:var(--bronze)}
+    .pavatar{width:48px;height:48px;border-radius:50%;background:var(--s3);border:2px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--mu);text-transform:uppercase}
+    .p1 .pavatar{width:64px;height:64px;font-size:16px}
+    .puname{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ppts{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;line-height:1}
+    .p1 .ppts{color:var(--gold);font-size:24px}.p2 .ppts{color:var(--silver)}.p3 .ppts{color:var(--bronze)}
+    .ppts-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+
+    .sdiv{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
+    .sdl{flex:1;height:1px;background:var(--b2)}
+    .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    .lbtable{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:56px}
+    .lbhead{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
+    .lbh{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .lbrow{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
+    .lbrow:last-child{border-bottom:none}
+    .lbrow:hover{background:var(--s2)}
+    .lbrk{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-align:center;color:var(--mu)}
+    .lbnm{font-size:13px;font-weight:500;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lbpts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold);text-align:right;white-space:nowrap}
+
+    .check-section{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .check-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);flex-shrink:0}
+    .check-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+    .check-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;flex:1;transition:border-color .15s}
+    .check-input:focus{border-color:var(--b3)}
+    .check-input::placeholder{color:var(--mu)}
+    .check-btn{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+    .check-btn:hover{opacity:.82}
+    .check-result{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+    footer{border-top:1px solid var(--b1);padding:22px 0}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
+    .ftd strong{color:rgba(221,227,239,.9)}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    @media(max-width:700px){
+      .nlinks,.nsoc{display:none}
+      .hamburger{display:flex}
+      .nlogo{border-right:none;margin-right:0;padding-right:0}
+      .statsbar{grid-template-columns:1fr}
+      .stat{border-right:none;border-bottom:1px solid var(--b1)}
+      .stat:last-child{border-bottom:none}
+      .podium{gap:8px}
+      .ftw{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+  const SOCIALS = <>
+    <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
+    <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
+    <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
+  </>;
+
+  function Navbar(){
+    const [open,setOpen]=React.useState(false);
+    return (<>
+      <nav>
+        <div className="ni">
+          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+          <div className="nlinks">
+            <a href="/">HOME</a>
+            <a href="/leaderboards.html">LEADERBOARDS</a>
+            <a href="/points.html" className="on">POINTS</a>
+            <a href="/store.html">STORE</a>
+          </div>
+          <div className="nsoc">{SOCIALS}</div>
+          <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
+            <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
+            <span style={open?{opacity:0}:{}}/>
+            <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
+          </button>
+        </div>
+      </nav>
+      <div className={`drawer${open?' open':''}`}>
+        <a href="/">HOME</a>
+        <a href="/leaderboards.html">LEADERBOARDS</a>
+        <a href="/points.html" className="on">POINTS</a>
+        <a href="/store.html">STORE</a>
+        <div className="drawer-soc">{SOCIALS}</div>
+      </div>
+    </>);
+  }
+
+  function useLeaderboard(){
+    const [lb,setLb]=React.useState([]);
+    React.useEffect(()=>{
+      const go=async()=>{try{const r=await fetch('/leaderboard?limit=20');const d=await r.json();setLb(d.leaderboard||[]);}catch{}};
+      go(); const id=setInterval(go,30000); return()=>clearInterval(id);
+    },[]);
+    return lb;
+  }
+
+  function App(){
+    const lb = useLeaderboard();
+    const top3 = lb.slice(0,3);
+    const rest = lb.slice(3);
+    const podiumOrder = [1,0,2].map(i=>top3[i]?{...top3[i]}:null).filter(Boolean);
+    const rankCls = {1:'p1',2:'p2',3:'p3'};
+    const rankLbls = ['1st Place','2nd Place','3rd Place'];
+    const totalPts = lb.reduce((s,p)=>s+p.points,0);
+
+    const [username,setUsername]=React.useState('');
+    const [pts,setPts]=React.useState(null);
+    const [loading,setLoading]=React.useState(false);
+
+    async function check(){
+      if (!username.trim()) return;
+      setLoading(true);
+      try{const r=await fetch(`/points/${username.trim().toLowerCase()}`);const d=await r.json();setPts(d.points??0);}catch{setPts(0);}
+      setLoading(false);
+    }
+
+    return (<>
+      <Navbar/>
+      <div className="wrap">
+        <div className="phead f1">
+          <div className="phead-eyebrow"><span className="pdot"/>Chat Points — Live</div>
+          <h1>Points<br/><em>Leaderboard</em></h1>
+          <p>Win raffles in Kick chat to earn points. Spend them in the store for real rewards.</p>
+        </div>
+
+        <div className="statsbar f2">
+          <div className="stat"><div className="stat-lbl">Total Players</div><div className="stat-val">{lb.length}</div></div>
+          <div className="stat"><div className="stat-lbl">Points Given</div><div className="stat-val">{totalPts.toLocaleString()}</div></div>
+          <div className="stat"><div className="stat-lbl">Top Balance</div><div className="stat-val">{top3[0]?.points?.toLocaleString()??'—'}</div></div>
+        </div>
+
+        <div className="check-section f2">
+          <span className="check-label">Check Balance</span>
+          <div className="check-row">
+            <input className="check-input" placeholder="Your Kick username" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={e=>e.key==='Enter'&&check()}/>
+            <button className="check-btn" onClick={check}>{loading?'...':'Check'}</button>
+          </div>
+          {pts !== null && <div className="check-result">{pts.toLocaleString()} pts</div>}
+        </div>
+
+        {podiumOrder.length > 0 && (
+          <div className="podium f3">
+            {podiumOrder.map(p=>(
+              <div key={p.username} className={`pcard ${rankCls[p.rank]}`}>
+                <div className="prank">{rankLbls[p.rank-1]}</div>
+                <div className="pavatar">{(p.username||'?').slice(0,2).toUpperCase()}</div>
+                <div className="puname">{p.username}</div>
+                <div className="ppts-lbl">Points</div>
+                <div className="ppts">{p.points.toLocaleString()}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {rest.length > 0 && (<>
+          <div className="sdiv f4"><div className="sdl"/><span className="sdlbl">Positions 4–20</span><div className="sdl"/></div>
+          <div className="lbtable f4">
+            <div className="lbhead">
+              <div className="lbh" style={{textAlign:'center'}}>#</div>
+              <div className="lbh">Player</div>
+              <div className="lbh" style={{textAlign:'right'}}>Points</div>
+            </div>
+            {rest.map(p=>(
+              <div key={p.username} className="lbrow">
+                <div className="lbrk">#{p.rank}</div>
+                <div className="lbnm">{p.username}</div>
+                <div className="lbpts">{p.points.toLocaleString()}</div>
+              </div>
+            ))}
+          </div>
+        </>)}
+
+        {lb.length === 0 && (
+          <div className="f3" style={{textAlign:'center',padding:'64px 0',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
+            No points data yet — win a raffle to get started!
+          </div>
+        )}
+      </div>
+
+      <footer>
+        <div className="wrap">
+          <div className="ftw">
+            <p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
+            <span className="ftc">© 2026 NIKSI777</span>
+          </div>
+        </div>
+      </footer>
+    </>);
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

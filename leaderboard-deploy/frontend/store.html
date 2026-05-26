@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIKSI777 — Points Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--s3:#151820;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#b8cce8;--rd:#d94f4f;--gold:#d4af5a}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 900px 600px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
+    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}.f4{animation:fu .5s .34s ease both}
+
+    nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
+    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
+    .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
+    .nsoc svg{width:15px;height:15px}
+    .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
+    .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
+    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
+    .drawer.open{display:flex}
+    .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
+    .drawer a:last-of-type{border-bottom:none}
+    .drawer a.on,.drawer a:hover{color:#fff}
+    .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
+    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
+    .drawer-soc svg{width:15px;height:15px}
+
+    .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+
+    .phead{padding:44px 0 32px;text-align:center}
+    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px;margin-bottom:16px}
+    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
+    .phead h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:#fff;line-height:.92;margin-bottom:12px}
+    .phead h1 em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
+    .phead p{font-size:13px;color:var(--mu);max-width:420px;margin:0 auto;line-height:1.7}
+
+    .points-check{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px 24px;margin-bottom:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .points-check-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);flex-shrink:0}
+    .points-input-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+    .points-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;flex:1;transition:border-color .15s}
+    .points-input:focus{border-color:var(--b3)}
+    .points-input::placeholder{color:var(--mu)}
+    .points-btn{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+    .points-btn:hover{opacity:.82}
+    .points-result{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+    .store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:56px}
+
+    .scard{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+    .scard:hover{transform:translateY(-3px);border-color:var(--b3)}
+    .scard-top{padding:24px 22px 16px;flex:1}
+    .scard-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;flex-shrink:0}
+    .scard-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+    .scard-desc{font-size:12px;line-height:1.7;color:var(--mu)}
+    .scard-bottom{padding:16px 22px 20px;border-top:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .scard-cost{display:flex;flex-direction:column;gap:2px}
+    .scard-cost-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .scard-cost-val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1}
+    .scard-redeem{background:transparent;border:1px solid var(--b2);color:var(--mu2);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border-radius:8px;cursor:pointer;transition:all .15s;white-space:nowrap}
+    .scard-redeem:hover{background:#fff;color:#07080c;border-color:#fff}
+
+    .how-section{margin-bottom:56px}
+    .sdiv{display:flex;align-items:center;gap:14px;margin:0 0 24px}
+    .sdl{flex:1;height:1px;background:var(--b2)}
+    .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+    .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .how-card{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:20px;text-align:center}
+    .how-num{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;color:rgba(255,255,255,.08);line-height:1;margin-bottom:8px}
+    .how-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+    .how-desc{font-size:12px;line-height:1.6;color:var(--mu)}
+
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+    .modal{background:var(--s1);border:1px solid var(--b2);border-radius:16px;padding:32px;max-width:440px;width:100%;position:relative}
+    .modal h2{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:8px}
+    .modal p{font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:20px}
+    .modal-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;width:100%;margin-bottom:12px;transition:border-color .15s}
+    .modal-input:focus{border-color:var(--b3)}
+    .modal-input::placeholder{color:var(--mu)}
+    .modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .modal-confirm{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:8px;border:none;cursor:pointer;transition:opacity .15s}
+    .modal-confirm:hover{opacity:.82}
+    .modal-cancel{background:transparent;color:var(--mu);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:8px;border:1px solid var(--b2);cursor:pointer;transition:all .15s}
+    .modal-cancel:hover{color:#fff;border-color:var(--b3)}
+    .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:20px;line-height:1;padding:4px}
+
+    footer{border-top:1px solid var(--b1);padding:22px 0}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
+    .ftd strong{color:rgba(221,227,239,.9)}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    @media(max-width:700px){
+      .nlinks,.nsoc{display:none}
+      .hamburger{display:flex}
+      .nlogo{border-right:none;margin-right:0;padding-right:0}
+      .how-grid{grid-template-columns:1fr}
+      .store-grid{grid-template-columns:1fr}
+      .ftw{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+  const STORE_ITEMS = [
+    { id:1, icon:"🎰", iconBg:"rgba(212,175,90,.12)", title:"$20 Bonus Buy", desc:"Niksi buys a $20 bonus on a slot of your choice on stream. You keep 100% of the winnings.", cost:500 },
+    { id:2, icon:"💰", iconBg:"rgba(100,200,100,.08)", title:"$100 Bonus Buy", desc:"Niksi buys a $100 bonus on a slot of your choice. Profit is split 50/50 between you and Niksi.", cost:2000 },
+    { id:3, icon:"💸", iconBg:"rgba(184,204,232,.08)", title:"$20 Tip", desc:"Receive a $20 tip directly. Paid out via the method of your choice.", cost:400 },
+    { id:4, icon:"🎯", iconBg:"rgba(217,79,79,.08)", title:"$50 Tip", desc:"Receive a $50 tip directly. Paid out via the method of your choice.", cost:900 },
+    { id:5, icon:"📢", iconBg:"rgba(184,204,232,.08)", title:"Shoutout on Stream", desc:"Get a personal shoutout on stream during Niksi's next live session.", cost:150 },
+    { id:6, icon:"🎵", iconBg:"rgba(140,100,220,.08)", title:"Song Request", desc:"Request any song to be played on stream during the next live session.", cost:100 },
+  ];
+
+  const SOCIALS = <>
+    <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
+    <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
+    <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
+  </>;
+
+  function Navbar(){
+    const [open,setOpen]=React.useState(false);
+    return (<>
+      <nav>
+        <div className="ni">
+          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+          <div className="nlinks">
+            <a href="/">HOME</a>
+            <a href="/leaderboards.html">LEADERBOARDS</a>
+            <a href="/points.html">POINTS</a>
+            <a href="/store.html" className="on">STORE</a>
+          </div>
+          <div className="nsoc">{SOCIALS}</div>
+          <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
+            <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
+            <span style={open?{opacity:0}:{}}/>
+            <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
+          </button>
+        </div>
+      </nav>
+      <div className={`drawer${open?' open':''}`}>
+        <a href="/">HOME</a>
+        <a href="/leaderboards.html">LEADERBOARDS</a>
+        <a href="/points.html">POINTS</a>
+        <a href="/store.html" className="on">STORE</a>
+        <div className="drawer-soc">{SOCIALS}</div>
+      </div>
+    </>);
+  }
+
+  function Modal({item, onClose}){
+    const [username, setUsername] = React.useState('');
+    const [note, setNote] = React.useState('');
+    const [done, setDone] = React.useState(false);
+
+    function handleSubmit(){
+      if (!username.trim()) return;
+      // In production this would call the points API
+      setDone(true);
+    }
+
+    return (
+      <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+        <div className="modal">
+          <button className="modal-close" onClick={onClose}>✕</button>
+          {done ? (<>
+            <h2>Request Sent!</h2>
+            <p>Your redemption request for <strong style={{color:'#fff'}}>{item.title}</strong> has been submitted. Niksi will fulfill it on the next stream. Check Discord for updates.</p>
+            <button className="modal-confirm" style={{width:'100%'}} onClick={onClose}>Close</button>
+          </>) : (<>
+            <h2>Redeem {item.title}</h2>
+            <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Enter your Kick username to confirm.</p>
+            <input className="modal-input" placeholder="Your Kick username" value={username} onChange={e=>setUsername(e.target.value)}/>
+            <input className="modal-input" placeholder="Extra note (optional)" value={note} onChange={e=>setNote(e.target.value)}/>
+            <div className="modal-btns">
+              <button className="modal-cancel" onClick={onClose}>Cancel</button>
+              <button className="modal-confirm" onClick={handleSubmit}>Confirm Redemption</button>
+            </div>
+          </>)}
+        </div>
+      </div>
+    );
+  }
+
+  function App(){
+    const [username, setUsername] = React.useState('');
+    const [points, setPoints] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [selected, setSelected] = React.useState(null);
+
+    async function checkPoints(){
+      if (!username.trim()) return;
+      setLoading(true);
+      try {
+        const r = await fetch(`/points/${username.trim().toLowerCase()}`);
+        const d = await r.json();
+        setPoints(d.points ?? 0);
+      } catch {
+        setPoints(0);
+      }
+      setLoading(false);
+    }
+
+    return (<>
+      <Navbar/>
+      <div className="wrap">
+        <div className="phead f1">
+          <div className="phead-eyebrow"><span className="pdot"/>Points Store</div>
+          <h1>Spend Your<br/><em>Points</em></h1>
+          <p>Earn points by winning raffles in chat. Redeem them here for real rewards on stream.</p>
+        </div>
+
+        <div className="points-check f2">
+          <span className="points-check-label">Check Balance</span>
+          <div className="points-input-row">
+            <input
+              className="points-input"
+              placeholder="Your Kick username"
+              value={username}
+              onChange={e=>setUsername(e.target.value)}
+              onKeyDown={e=>e.key==='Enter'&&checkPoints()}
+            />
+            <button className="points-btn" onClick={checkPoints}>{loading?'...':'Check'}</button>
+          </div>
+          {points !== null && (
+            <div className="points-result">{points.toLocaleString()} pts</div>
+          )}
+        </div>
+
+        <div className="store-grid f3">
+          {STORE_ITEMS.map(item=>(
+            <div key={item.id} className="scard">
+              <div className="scard-top">
+                <div className="scard-icon" style={{background:item.iconBg}}>{item.icon}</div>
+                <div className="scard-title">{item.title}</div>
+                <div className="scard-desc">{item.desc}</div>
+              </div>
+              <div className="scard-bottom">
+                <div className="scard-cost">
+                  <div className="scard-cost-lbl">Cost</div>
+                  <div className="scard-cost-val">{item.cost.toLocaleString()} pts</div>
+                </div>
+                <button className="scard-redeem" onClick={()=>setSelected(item)}>Redeem</button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="how-section f4">
+          <div className="sdiv"><div className="sdl"/><span className="sdlbl">How It Works</span><div className="sdl"/></div>
+          <div className="how-grid">
+            <div className="how-card">
+              <div className="how-num">01</div>
+              <div className="how-title">Earn Points</div>
+              <div className="how-desc">Watch streams and win raffles in Kick chat by typing !join when a raffle starts.</div>
+            </div>
+            <div className="how-card">
+              <div className="how-num">02</div>
+              <div className="how-title">Choose a Reward</div>
+              <div className="how-desc">Browse the store and pick a reward that matches your points balance.</div>
+            </div>
+            <div className="how-card">
+              <div className="how-num">03</div>
+              <div className="how-title">Submit Request</div>
+              <div className="how-desc">Enter your Kick username and confirm. Niksi fulfills it on the next stream.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {selected && <Modal item={selected} onClose={()=>setSelected(null)}/>}
+
+      <footer>
+        <div className="wrap">
+          <div className="ftw">
+            <p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
+            <span className="ftc">© 2026 NIKSI777</span>
+          </div>
+        </div>
+      </footer>
+    </>);
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
