@@ -93,7 +93,7 @@
     .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:100px;background:linear-gradient(to right,var(--s2),transparent);z-index:2;pointer-events:none}
     .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:100px;background:linear-gradient(to left,var(--s2),transparent);z-index:2;pointer-events:none}
     .roller-center-line{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.2);transform:translateX(-50%);z-index:3;pointer-events:none}
-    .roller-track{display:flex;align-items:center;gap:12px;position:absolute;top:50%;transform:translateY(-50%);will-change:transform;white-space:nowrap}
+    .roller-track{display:flex;align-items:center;gap:12px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap}
     .roller-card{flex-shrink:0;width:160px;height:84px;border-radius:12px;background:#161922;border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;letter-spacing:.04em;color:#fff;text-transform:uppercase;user-select:none;box-shadow:0 6px 16px rgba(0,0,0,.4)}
     .roller-card.winner-card{background:rgba(255,255,255,.12);border-color:#fff;box-shadow:0 0 30px rgba(255,255,255,.3);animation:glow 1.5s ease-in-out infinite}
     .roll-btn{width:100%;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s}
@@ -123,7 +123,7 @@
 <div id="root"></div>
 <script type="text/babel">
   const CORRECT_PASSWORD='niksi';
-  const CARD_W=180;
+  const CARD_W=160;
   const CARD_GAP=12;
   const SOCIALS=<>
     <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
@@ -155,36 +155,35 @@
     const [cards,setCards]=React.useState([]);
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
-    function buildCards(names,winner){
-      const repeated=[];
-      for(let i=0;i<20;i++) repeated.push(...[...names].sort(()=>Math.random()-.5));
-      const winPos=Math.floor(repeated.length*0.75)+Math.floor(Math.random()*10);
-      repeated[winPos]=winner;
-      return repeated.map((name,i)=>({name,i,isWinner:i===winPos}));
-    }
-
     function roll(){
       if(rolling||entries.length===0) return;
       const names=entries.map(e=>e.username);
       const winnerName=names[Math.floor(Math.random()*names.length)];
-      const cardList=buildCards(names,winnerName);
+      const deck=[];
+      for(let i=0;i<25;i++) deck.push(...[...names].sort(()=>Math.random()-.5));
+      const winnerCardIdx=Math.floor(deck.length*0.78)+Math.floor(Math.random()*8);
+      deck[winnerCardIdx]=winnerName;
+      const cardList=deck.map((name,i)=>({name,i,isWinner:i===winnerCardIdx}));
       setCards(cardList);setWinnerIdx(null);setRolling(true);
-      setTimeout(()=>{
+      requestAnimationFrame(()=>{
         const track=trackRef.current;const stage=stageRef.current;
-        if(!track||!stage) return;
+        if(!track||!stage){setRolling(false);return;}
         const stageW=stage.offsetWidth;
         const cardStep=CARD_W+CARD_GAP;
-        const winnerCardIdx=cardList.findIndex(c=>c.isWinner);
-        const startX=stageW/2;
-        const endX=stageW/2-winnerCardIdx*cardStep-CARD_W/2;
+        // Winner card's left edge within track = winnerCardIdx*cardStep
+        // Its center = winnerCardIdx*cardStep + CARD_W/2
+        // To put that center at stageW/2: translateX = stageW/2 - (winnerCardIdx*cardStep + CARD_W/2)
+        const endX=(stageW/2)-(winnerCardIdx*cardStep)-(CARD_W/2);
+        const startX=stageW;
         track.style.transition='none';
         track.style.transform='translateX('+startX+'px)';
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        void track.offsetWidth;
+        requestAnimationFrame(()=>{
           track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
           track.style.transform='translateX('+endX+'px)';
-        }));
+        });
         setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);onWinner(winnerName);},5300);
-      },50);
+      });
     }
     const hasRolled = cards.length>0;
     return (
@@ -300,28 +299,30 @@
                 <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" value={prize} onChange={e=>setPrize(e.target.value)}/></div>
               </div>
               <div className="divider-line"/>
-              <div className="timer-setup">
-                <div className="lbl">Timer</div>
-                <div className="timer-setup-row">
-                  <div className="timer-preview">{fmt(timerMins*60+timerSecs)}</div>
-                  <div style={{display:'flex',gap:8,alignItems:'center'}}>
-                    <div className="form-group" style={{gap:4}}>
-                      <label className="lbl" style={{fontSize:10}}>Min</label>
-                      <input className="inp-sm" type="number" min="0" max="59" style={{width:70}} value={timerMins} onChange={e=>setTimerMins(Math.max(0,parseInt(e.target.value)||0))}/>
-                    </div>
-                    <div style={{color:'var(--mu)',fontSize:20,fontWeight:700,marginTop:16}}>:</div>
-                    <div className="form-group" style={{gap:4}}>
-                      <label className="lbl" style={{fontSize:10}}>Sec</label>
-                      <input className="inp-sm" type="number" min="0" max="59" style={{width:70}} value={timerSecs} onChange={e=>setTimerSecs(Math.min(59,Math.max(0,parseInt(e.target.value)||0)))}/>
-                    </div>
+              {!useTimer?(
+                <button className="btn btn-sec" style={{width:'auto',alignSelf:'flex-start',padding:'10px 20px'}} onClick={()=>setUseTimer(true)}>Add Timer</button>
+              ):(
+                <div className="timer-setup">
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                    <div className="lbl">Timer</div>
+                    <button className="btn btn-sec" style={{width:'auto',padding:'6px 14px',fontSize:10}} onClick={()=>setUseTimer(false)}>Remove Timer</button>
                   </div>
-                  <div className="timer-btns" style={{marginLeft:'auto'}}>
-
-                    
+                  <div className="timer-setup-row">
+                    <div className="timer-preview">{fmt(timerMins*60+timerSecs)}</div>
+                    <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                      <div className="form-group" style={{gap:4}}>
+                        <label className="lbl" style={{fontSize:10}}>Min</label>
+                        <input className="inp-sm" type="number" min="0" max="59" style={{width:70}} value={timerMins} onChange={e=>setTimerMins(Math.max(0,parseInt(e.target.value)||0))}/>
+                      </div>
+                      <div style={{color:'var(--mu)',fontSize:20,fontWeight:700,marginTop:16}}>:</div>
+                      <div className="form-group" style={{gap:4}}>
+                        <label className="lbl" style={{fontSize:10}}>Sec</label>
+                        <input className="inp-sm" type="number" min="0" max="59" style={{width:70}} value={timerSecs} onChange={e=>setTimerSecs(Math.min(59,Math.max(0,parseInt(e.target.value)||0)))}/>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="bar-track"><div className={'bar-fill'+(urgent?' urgent':'')} style={{width:pct+'%'}}/></div>
-              </div>
+              )}
               <div className="divider-line"/>
               <button className="btn btn-pri" onClick={startGiveaway} disabled={starting||!keyword.trim()||!prize.trim()}>{starting?'Starting...':'Start Giveaway'}</button>
             </div>
@@ -332,18 +333,17 @@
                 <div><div className="lbl" style={{marginBottom:6}}>Keyword</div><div className="keyword-badge"><span>Keyword</span>{giveaway.keyword}</div></div>
                 <div style={{flex:1,minWidth:160}}><div className="lbl" style={{marginBottom:6}}>Prize</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:700,color:'#fff'}}>{giveaway.prize}</div></div>
               </div>
+              {timerRunning&&(<>
               <div className="divider-line"/>
               <div className="timer-setup">
                 <div className="lbl">Timer</div>
                 <div className="timer-setup-row">
                   <div className={'timer-preview'+(urgent?' urgent':'')}>{fmt(secondsLeft)}</div>
-                  <div className="timer-btns" style={{marginLeft:'auto'}}>
-                    
-                    
-                  </div>
+                  <button className="btn btn-sec" style={{width:'auto',padding:'8px 16px',marginLeft:'auto'}} onClick={stopTimer}>Stop</button>
                 </div>
                 <div className="bar-track"><div className={'bar-fill'+(urgent?' urgent':'')} style={{width:pct+'%'}}/></div>
               </div>
+              </>)}
             </div>
           )}
 
