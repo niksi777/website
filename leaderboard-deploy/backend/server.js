@@ -335,3 +335,10 @@ app.get('/giveaway/timer', (req, res) => {
   timerSignal = null;
   res.json({ signal: sig ? sig.action : null, duration: sig ? sig.duration : 60 });
 });
+
+// Clean URLs
+app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/leaderboards.html')));
+app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/points.html')));
+app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/store.html')));
+app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba.html')));
+app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/giveaway.html')));
