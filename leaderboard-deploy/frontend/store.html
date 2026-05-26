@@ -167,11 +167,24 @@
     const [username, setUsername] = React.useState('');
     const [note, setNote] = React.useState('');
     const [done, setDone] = React.useState(false);
+    const [error, setError] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
-    function handleSubmit(){
-      if (!username.trim()) return;
-      // In production this would call the points API
-      setDone(true);
+    async function handleSubmit(){
+      if (!username.trim()) { setError('Please enter your Kick username.'); return; }
+      setLoading(true);
+      setError('');
+      try {
+        const r = await fetch('/redeem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: username.trim().toLowerCase(), itemId: item.id, note: note.trim() })
+        });
+        const d = await r.json();
+        if (!r.ok) { setError(d.error || 'Something went wrong.'); setLoading(false); return; }
+        setDone(true);
+      } catch { setError('Could not connect. Try again.'); }
+      setLoading(false);
     }
 
     return (
@@ -180,16 +193,17 @@
           <button className="modal-close" onClick={onClose}>✕</button>
           {done ? (<>
             <h2>Request Sent!</h2>
-            <p>Your redemption request for <strong style={{color:'#fff'}}>{item.title}</strong> has been submitted. Niksi will fulfill it on the next stream. Check Discord for updates.</p>
+            <p>Your redemption for <strong style={{color:'#fff'}}>{item.title}</strong> has been submitted and your points have been deducted. A ticket has been created in Discord — Niksi will fulfill it shortly.</p>
             <button className="modal-confirm" style={{width:'100%'}} onClick={onClose}>Close</button>
           </>) : (<>
             <h2>Redeem {item.title}</h2>
             <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Enter your Kick username to confirm.</p>
             <input className="modal-input" placeholder="Your Kick username" value={username} onChange={e=>setUsername(e.target.value)}/>
             <input className="modal-input" placeholder="Extra note (optional)" value={note} onChange={e=>setNote(e.target.value)}/>
+            {error && <div style={{color:'var(--rd)',fontSize:12,marginBottom:8}}>{error}</div>}
             <div className="modal-btns">
               <button className="modal-cancel" onClick={onClose}>Cancel</button>
-              <button className="modal-confirm" onClick={handleSubmit}>Confirm Redemption</button>
+              <button className="modal-confirm" onClick={handleSubmit} disabled={loading}>{loading ? 'Processing...' : 'Confirm Redemption'}</button>
             </div>
           </>)}
         </div>
