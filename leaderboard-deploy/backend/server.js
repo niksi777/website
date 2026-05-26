@@ -342,3 +342,73 @@ app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/
 app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/store.html')));
 app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba.html')));
 app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/giveaway.html')));
+
+// Points API
+app.get('/points/:username', (req, res) => {
+  try {
+    const data = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
+    res.json({ username: req.params.username, points: data[req.params.username.toLowerCase()] || 0 });
+  } catch { res.json({ username: req.params.username, points: 0 }); }
+});
+app.get('/leaderboard', (req, res) => {
+  try {
+    const data = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
+    const limit = parseInt(req.query.limit) || 10;
+    const leaderboard = Object.entries(data).sort(([,a],[,b]) => b-a).slice(0,limit).map(([username,points],i) => ({ rank:i+1, username, points }));
+    res.json({ leaderboard });
+  } catch { res.json({ leaderboard: [] }); }
+});
+
+// Store Redemption
+const REDEMPTION_ITEMS = [
+  { id:1, title:'$10 Tip', cost:300 },
+  { id:2, title:'$15 Tip', cost:425 },
+  { id:3, title:'$20 Bonus Buy', cost:500 },
+  { id:4, title:'$40 Bonus Buy', cost:1000 },
+  { id:5, title:'$100 Bonus Buy', cost:2500 },
+];
+app.post('/redeem', async (req, res) => {
+  const { username, itemId, note } = req.body;
+  if (!username || !itemId) return res.status(400).json({ error: 'Missing username or item.' });
+  const item = REDEMPTION_ITEMS.find(i => i.id === parseInt(itemId));
+  if (!item) return res.status(400).json({ error: 'Item not found.' });
+  const ptsPath = require('path').join(__dirname, '../../points.json');
+  let ptsData = {};
+  try { ptsData = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
+  const current = ptsData[username.toLowerCase()] || 0;
+  if (current < item.cost) return res.status(400).json({ error: `Not enough points. You have ${current}, need ${item.cost}.` });
+  ptsData[username.toLowerCase()] = current - item.cost;
+  require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
+  console.log(`[redeem] ${username} redeemed ${item.title} for ${item.cost} pts. Balance: ${ptsData[username.toLowerCase()]}`);
+  try {
+    const { ChannelType, PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+    const guild = discordClient.guilds.cache.get('799081942623977492');
+    if (guild) {
+      const category = guild.channels.cache.get('1507472617584460087');
+      const supportRole = guild.roles.cache.get('1507472301627670700');
+      const channel = await guild.channels.create({
+        name: `store-${username.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,20)}`,
+        type: ChannelType.GuildText,
+        parent: category || null,
+        topic: `Store redemption by ${username} | ${item.title}`,
+        permissionOverwrites: [
+          { id: guild.id, deny: [PermissionsBitField.Flags.ViewChannel] },
+          ...(supportRole ? [{ id: supportRole.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] }] : []),
+        ],
+      });
+      const embed = new EmbedBuilder()
+        .setTitle('Store Redemption')
+        .setColor(0xd4af5a)
+        .addFields(
+          { name: 'Kick Username', value: username, inline: true },
+          { name: 'Item', value: item.title, inline: true },
+          { name: 'Points Spent', value: item.cost.toLocaleString(), inline: true },
+          { name: 'Note', value: note || 'None' },
+        )
+        .setFooter({ text: 'Points deducted. Close ticket once fulfilled.' })
+        .setTimestamp();
+      await channel.send({ embeds: [embed], components: [new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId('confirm_close').setLabel('Mark Fulfilled & Close').setEmoji('✅').setStyle(ButtonStyle.Success))] });
+    }
+  } catch (err) { console.error('[redeem] Discord error:', err.message); }
+  res.json({ ok: true, points: ptsData[username.toLowerCase()] });
+});
