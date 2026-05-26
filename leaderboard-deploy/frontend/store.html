@@ -64,10 +64,10 @@
 
     .scard{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
     .scard:hover{transform:translateY(-3px);border-color:var(--b3)}
-    .scard-top{padding:24px 22px 16px;flex:1}
+    .scard-top{padding:24px 22px 16px;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center}
     .scard-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;flex-shrink:0}
     .scard-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-bottom:6px}
-    .scard-desc{font-size:12px;line-height:1.7;color:var(--mu)}
+    .scard-desc{font-size:12px;line-height:1.7;color:var(--mu);text-align:center}
     .scard-bottom{padding:16px 22px 20px;border-top:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:12px}
     .scard-cost{display:flex;flex-direction:column;gap:2px}
     .scard-cost-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
@@ -120,12 +120,11 @@
 <script type="text/babel">
 
   const STORE_ITEMS = [
-    { id:1, icon:"🎰", iconBg:"rgba(212,175,90,.12)", title:"$20 Bonus Buy", desc:"Niksi buys a $20 bonus on a slot of your choice on stream. You keep 100% of the winnings.", cost:500 },
-    { id:2, icon:"💰", iconBg:"rgba(100,200,100,.08)", title:"$100 Bonus Buy", desc:"Niksi buys a $100 bonus on a slot of your choice. Profit is split 50/50 between you and Niksi.", cost:2000 },
-    { id:3, icon:"💸", iconBg:"rgba(184,204,232,.08)", title:"$20 Tip", desc:"Receive a $20 tip directly. Paid out via the method of your choice.", cost:400 },
-    { id:4, icon:"🎯", iconBg:"rgba(217,79,79,.08)", title:"$50 Tip", desc:"Receive a $50 tip directly. Paid out via the method of your choice.", cost:900 },
-    { id:5, icon:"📢", iconBg:"rgba(184,204,232,.08)", title:"Shoutout on Stream", desc:"Get a personal shoutout on stream during Niksi's next live session.", cost:150 },
-    { id:6, icon:"🎵", iconBg:"rgba(140,100,220,.08)", title:"Song Request", desc:"Request any song to be played on stream during the next live session.", cost:100 },
+    { id:1, icon:"💸", iconBg:"rgba(184,204,232,.08)", title:"$10 Tip", desc:"Receive a $10 tip directly. Paid out via the method of your choice.", cost:300 },
+    { id:2, icon:"💰", iconBg:"rgba(100,200,100,.08)", title:"$15 Tip", desc:"Receive a $15 tip directly. Paid out via the method of your choice.", cost:425 },
+    { id:3, icon:"🎰", iconBg:"rgba(212,175,90,.12)", title:"$20 Bonus Buy", desc:"Niksi buys a $20 bonus on a slot of your choice. Profits are split 50/50.", cost:500 },
+    { id:4, icon:"🎯", iconBg:"rgba(217,79,79,.08)", title:"$40 Bonus Buy", desc:"Niksi buys a $40 bonus on a slot of your choice on stream. You keep 100% of the winnings.", cost:1000 },
+    { id:5, icon:"👑", iconBg:"rgba(212,175,90,.08)", title:"$100 Bonus Buy", desc:"Niksi buys a $100 bonus on a slot of your choice. Profits are split 50/50.", cost:2500 },
   ];
 
   const SOCIALS = <>
