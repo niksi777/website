@@ -57,7 +57,7 @@
   </div>
 </div>
 <script>
-  const DURATION=60;
+  let DURATION=60;
   let timerInterval=null,secondsLeft=DURATION,lastKeyword=null,lastSignal=null;
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
 
@@ -87,6 +87,8 @@
       const r=await fetch('/giveaway/timer');
       const d=await r.json();
       if(d.signal && d.signal!==lastSignal){
+        if(d.duration) DURATION=d.duration;
+        if(d.duration) DURATION=d.duration;
         lastSignal=d.signal;
         if(d.signal==='start') startTimer();
         else if(d.signal==='stop') stopTimer();

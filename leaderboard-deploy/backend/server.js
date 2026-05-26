@@ -307,8 +307,11 @@ app.post('/giveaway/roll', (req, res) => {
   if (!giveawayState.giveaway || giveawayState.entries.length === 0) {
     return res.status(400).json({ error: 'No entries to roll' });
   }
-  const idx = Math.floor(Math.random() * giveawayState.entries.length);
-  const winner = giveawayState.entries[idx].username;
+  let winner = req.body && req.body.winner;
+  if (!winner) {
+    const idx = Math.floor(Math.random() * giveawayState.entries.length);
+    winner = giveawayState.entries[idx].username;
+  }
   giveawayState.giveaway.winner = winner;
   console.log('Winner: ' + winner);
   res.json({ winner });
@@ -323,11 +326,12 @@ app.post('/giveaway/reset', (req, res) => {
 // Timer signal endpoint
 let timerSignal = null;
 app.post('/giveaway/timer', (req, res) => {
-  const { action } = req.body;
-  timerSignal = action;
+  const { action, duration } = req.body;
+  timerSignal = { action, duration: duration || 60 };
   res.json({ ok: true });
 });
 app.get('/giveaway/timer', (req, res) => {
-  res.json({ signal: timerSignal });
+  const sig = timerSignal;
   timerSignal = null;
+  res.json({ signal: sig ? sig.action : null, duration: sig ? sig.duration : 60 });
 });

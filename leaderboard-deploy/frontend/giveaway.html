@@ -87,15 +87,15 @@
     .entry-num{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--mu)}
     .entry-name{font-size:13px;font-weight:500;color:var(--tx)}
     .empty{text-align:center;padding:48px 0;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-    .roller-wrap{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:20px}
+    .roller-wrap{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:32px}
     .roller-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-    .roller-stage{position:relative;height:100px;overflow:hidden;border-radius:10px;background:var(--s2);border:1px solid var(--b1)}
-    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(to right,var(--s2),transparent);z-index:2;pointer-events:none}
-    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(to left,var(--s2),transparent);z-index:2;pointer-events:none}
+    .roller-stage{position:relative;height:120px;overflow:hidden;border-radius:12px;background:var(--s2);border:1px solid var(--b1)}
+    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:100px;background:linear-gradient(to right,var(--s2),transparent);z-index:2;pointer-events:none}
+    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:100px;background:linear-gradient(to left,var(--s2),transparent);z-index:2;pointer-events:none}
     .roller-center-line{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.2);transform:translateX(-50%);z-index:3;pointer-events:none}
     .roller-track{display:flex;align-items:center;gap:12px;position:absolute;top:50%;transform:translateY(-50%);will-change:transform;white-space:nowrap}
-    .roller-card{flex-shrink:0;width:160px;height:72px;border-radius:10px;background:var(--s1);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:.04em;color:#fff;text-transform:uppercase;user-select:none}
-    .roller-card.winner-card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5);animation:glow 1.5s ease-in-out infinite}
+    .roller-card{flex-shrink:0;width:160px;height:84px;border-radius:12px;background:#161922;border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;letter-spacing:.04em;color:#fff;text-transform:uppercase;user-select:none;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+    .roller-card.winner-card{background:rgba(255,255,255,.12);border-color:#fff;box-shadow:0 0 30px rgba(255,255,255,.3);animation:glow 1.5s ease-in-out infinite}
     .roll-btn{width:100%;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s}
     .roll-btn:hover{opacity:.85}
     .roll-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -123,7 +123,7 @@
 <div id="root"></div>
 <script type="text/babel">
   const CORRECT_PASSWORD='niksi';
-  const CARD_W=160;
+  const CARD_W=180;
   const CARD_GAP=12;
   const SOCIALS=<>
     <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
@@ -157,11 +157,12 @@
     const [winnerIdx,setWinnerIdx]=React.useState(null);
     function buildCards(names,winner){
       const repeated=[];
-      for(let i=0;i<10;i++) repeated.push(...[...names].sort(()=>Math.random()-.5));
-      const winPos=repeated.length-10-Math.floor(Math.random()*5);
+      for(let i=0;i<20;i++) repeated.push(...[...names].sort(()=>Math.random()-.5));
+      const winPos=Math.floor(repeated.length*0.75)+Math.floor(Math.random()*10);
       repeated[winPos]=winner;
       return repeated.map((name,i)=>({name,i,isWinner:i===winPos}));
     }
+
     function roll(){
       if(rolling||entries.length===0) return;
       const names=entries.map(e=>e.username);
@@ -174,35 +175,33 @@
         const stageW=stage.offsetWidth;
         const cardStep=CARD_W+CARD_GAP;
         const winnerCardIdx=cardList.findIndex(c=>c.isWinner);
-        const startX=stageW+200;
+        const startX=stageW/2;
         const endX=stageW/2-winnerCardIdx*cardStep-CARD_W/2;
         track.style.transition='none';
         track.style.transform='translateX('+startX+'px)';
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          track.style.transition='transform 4s cubic-bezier(0.12,0.8,0.25,1)';
+          track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
           track.style.transform='translateX('+endX+'px)';
         }));
-        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);onWinner(winnerName);},4300);
+        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);onWinner(winnerName);},5300);
       },50);
     }
+    const hasRolled = cards.length>0;
     return (
       <div className="roller-wrap f2">
         <div className="roller-title">Roll Winner</div>
-        <div className="roller-stage" ref={stageRef}>
-          <div className="roller-center-line"/>
-          <div className="roller-track" ref={trackRef} style={{left:0}}>
-            {cards.map((c,i)=>(
-              <div key={i} className={'roller-card'+(winnerIdx===i?' winner-card':'')}>{c.name}</div>
-            ))}
-          </div>
-          {cards.length===0&&(
-            <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)'}}>
-              {entries.length===0?'No entries yet':'Click Roll to spin'}
+        {hasRolled&&(
+          <div className="roller-stage" ref={stageRef}>
+            <div className="roller-center-line"/>
+            <div className="roller-track" ref={trackRef} style={{left:0}}>
+              {cards.map((c,i)=>(
+                <div key={i} className={'roller-card'+(winnerIdx===i?' winner-card':'')}>{c.name}</div>
+              ))}
             </div>
-          )}
-        </div>
-        <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0}>
-          {rolling?'Rolling...':'Roll Winner'}
+          </div>
+        )}
+        <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0} style={{opacity:entries.length===0?0.4:1}}>
+          {rolling?'Rolling...':(winnerIdx!==null?'Reroll':'Roll Winner')}
         </button>
       </div>
     );
@@ -219,6 +218,7 @@
     const [starting,setStarting]=React.useState(false);
     const [timerMins,setTimerMins]=React.useState(1);
     const [timerSecs,setTimerSecs]=React.useState(0);
+    const [useTimer,setUseTimer]=React.useState(false);
     const [timerRunning,setTimerRunning]=React.useState(false);
     const [secondsLeft,setSecondsLeft]=React.useState(60);
     const [duration,setDuration]=React.useState(60);
@@ -240,7 +240,7 @@
       clearInterval(timerRef.current);
       const d=dur||duration;
       setSecondsLeft(d);setTimerRunning(true);
-      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'start'})});
+      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'start', duration:dur||duration})});
       let s=d;
       timerRef.current=setInterval(()=>{s=Math.max(0,s-1);setSecondsLeft(s);if(s===0){clearInterval(timerRef.current);setTimerRunning(false);}},1000);
     }
@@ -253,12 +253,12 @@
       setStarting(true);
       try{
         await fetch('/giveaway/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keyword:keyword.trim().toLowerCase(),prize:prize.trim()})});
-        setKeyword('');setPrize('');fetchState();
+        setKeyword('');setPrize('');if(useTimer&&timerMins*60+timerSecs>0) startTimer(timerMins*60+timerSecs);fetchState();
       }catch(e){}
       setStarting(false);
     }
     async function confirmWinner(name){
-      try{await fetch('/giveaway/roll',{method:'POST'});setWinner(name);fetchState();}catch(e){}
+      try{await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({winner:name})});setWinner(name);}catch(e){}
     }
     async function resetGiveaway(){
       if(!confirm('Reset and clear all entries?'))return;
@@ -284,11 +284,7 @@
       <Navbar/>
       <div className="page">
         <div className="dash">
-          <div className="f1" style={{display:'flex',flexDirection:'column',alignItems:'center',textAlign:'center',gap:8}}>
-            <div className="htag"><span className={isActive?'pdot-green':'pdot'}/>{isActive?'Giveaway Active':'Giveaway Panel'}</div>
-            <div className="dash-title">Giveaway</div>
-            {giveaway&&<button className="btn btn-sec" style={{width:'auto',padding:'10px 20px',marginTop:4}} onClick={resetGiveaway}>Reset Giveaway</button>}
-          </div>
+          {giveaway&&<button className="btn btn-sec f1" style={{width:'auto',padding:'10px 20px',alignSelf:'flex-end'}} onClick={resetGiveaway}>Reset Giveaway</button>}
 
           <div className="statusbar f2">
             <div className="stat"><div className="stat-lbl">Status</div><div className={'stat-val '+(isActive?'green':'')}>{isActive?'LIVE':giveaway?.winner||winner?'ENDED':'IDLE'}</div></div>
@@ -320,8 +316,8 @@
                     </div>
                   </div>
                   <div className="timer-btns" style={{marginLeft:'auto'}}>
-                    <button className="btn btn-green" style={{width:100,padding:'10px'}} onClick={()=>startTimer(timerMins*60+timerSecs)} disabled={timerRunning||timerMins*60+timerSecs===0}>{timerRunning?'Running':'Start'}</button>
-                    <button className="btn btn-sec" style={{width:80,padding:'10px'}} onClick={stopTimer} disabled={!timerRunning}>Reset</button>
+
+                    
                   </div>
                 </div>
                 <div className="bar-track"><div className={'bar-fill'+(urgent?' urgent':'')} style={{width:pct+'%'}}/></div>
@@ -342,8 +338,8 @@
                 <div className="timer-setup-row">
                   <div className={'timer-preview'+(urgent?' urgent':'')}>{fmt(secondsLeft)}</div>
                   <div className="timer-btns" style={{marginLeft:'auto'}}>
-                    <button className="btn btn-green" style={{width:100,padding:'10px'}} onClick={()=>startTimer()} disabled={timerRunning}>{timerRunning?'Running':'Start'}</button>
-                    <button className="btn btn-sec" style={{width:80,padding:'10px'}} onClick={stopTimer} disabled={!timerRunning}>Reset</button>
+                    
+                    
                   </div>
                 </div>
                 <div className="bar-track"><div className={'bar-fill'+(urgent?' urgent':'')} style={{width:pct+'%'}}/></div>
