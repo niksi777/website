@@ -149,7 +149,7 @@
     </>);
   }
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-  function CardRoller({entries,onWinner,forceWinner,onForceConsumed}){
+  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const [cards,setCards]=React.useState([]);
@@ -169,7 +169,7 @@
       const winnerCardIdx=Math.floor(deck.length*0.78)+Math.floor(Math.random()*8);
       deck[winnerCardIdx]=winnerName;
       const cardList=deck.map((name,i)=>({name,i,isWinner:i===winnerCardIdx}));
-      setCards(cardList);setWinnerIdx(null);setRolling(true);
+      setCards(cardList);setWinnerIdx(null);setRolling(true);if(onRollingChange)onRollingChange(true);
       requestAnimationFrame(()=>{
         const track=trackRef.current;const stage=stageRef.current;
         if(!track||!stage){setRolling(false);return;}
@@ -185,7 +185,7 @@
           track.style.transform='translateX('+endX+'px)';
         });
         setTimeout(()=>{
-          setRolling(false);
+          setRolling(false);if(onRollingChange)onRollingChange(false);
           setWinnerIdx(winnerCardIdx);
           setTimeout(()=>{
             onWinner(winnerName);
@@ -253,6 +253,7 @@
     const [winner,setWinner]=React.useState(null);
     const [rerollTarget,setRerollTarget]=React.useState(null);
     const [isRerolling,setIsRerolling]=React.useState(false);
+    const [rollerRolling,setRollerRolling]=React.useState(false);
     const [keyword,setKeyword]=React.useState('');
     const [prize,setPrize]=React.useState('');
     const [starting,setStarting]=React.useState(false);
@@ -395,9 +396,9 @@
             </div>
           )}
 
-          {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)}/>}
+          {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling}/>}
 
-          {(winner||(giveaway?.winner))&&(
+          {(winner||(giveaway?.winner))&&!rollerRolling&&(
             <div className="winner-box f2">
               <div className="confetti">🎉 🏆 🎉</div>
               <div className="winner-label">Winner</div>
