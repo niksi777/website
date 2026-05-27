@@ -1,3 +1,4 @@
+const { addPoints } = require("./pointsManager");
 let raffleOpen = false;
 let entrants = new Set();
 let winners = [];
@@ -25,6 +26,7 @@ function drawWinners() {
   const shuffled = pool.sort(() => Math.random() - 0.5);
   winners = shuffled.slice(0, count);
 
+  winners.forEach(w => addPoints(w, 25));
   const mention = winners.map(w => `@${w}`).join(', ');
   if (sendMessageFn) sendMessageFn(`🎉 Raffle over! Congratulations to the ${count} winner(s): ${mention}!`);
 
