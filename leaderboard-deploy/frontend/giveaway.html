@@ -87,18 +87,37 @@
     .entry-num{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--mu)}
     .entry-name{font-size:13px;font-weight:500;color:var(--tx)}
     .empty{text-align:center;padding:48px 0;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-    .roller-wrap{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:32px}
-    .roller-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-    .roller-stage{position:relative;height:120px;overflow:hidden;border-radius:12px;background:var(--s2);border:1px solid var(--b1)}
-    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:100px;background:linear-gradient(to right,var(--s2),transparent);z-index:2;pointer-events:none}
-    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:100px;background:linear-gradient(to left,var(--s2),transparent);z-index:2;pointer-events:none}
-    .roller-center-line{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.2);transform:translateX(-50%);z-index:3;pointer-events:none}
-    .roller-track{display:flex;align-items:center;gap:12px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap}
-    .roller-card{flex-shrink:0;width:160px;height:84px;border-radius:12px;background:#161922;border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;letter-spacing:.04em;color:#fff;text-transform:uppercase;user-select:none;box-shadow:0 6px 16px rgba(0,0,0,.4)}
-    .roller-card.winner-card{background:rgba(255,255,255,.12);border-color:#fff;box-shadow:0 0 30px rgba(255,255,255,.3);animation:glow 1.5s ease-in-out infinite}
-    .roll-btn{width:100%;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s}
-    .roll-btn:hover{opacity:.85}
-    .roll-btn:disabled{opacity:.4;cursor:not-allowed}
+    .roller-wrap{background:var(--s1);border:1px solid var(--b2);border-radius:16px;padding:28px 28px 24px;display:flex;flex-direction:column;gap:24px}
+    .roller-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
+    .roller-stage-wrap{position:relative}
+    .roller-pointer-top{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid #e8a427;z-index:10;filter:drop-shadow(0 0 6px #e8a42788)}
+    .roller-pointer-bot{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid #e8a427;z-index:10;filter:drop-shadow(0 0 6px #e8a42788)}
+    .roller-stage{position:relative;height:110px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
+    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:140px;background:linear-gradient(to right,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
+    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:140px;background:linear-gradient(to left,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
+    .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:176px;transform:translateX(-50%);border-left:2px solid #e8a42766;border-right:2px solid #e8a42766;background:linear-gradient(to bottom,transparent,rgba(232,164,39,.06),transparent);z-index:3;pointer-events:none}
+    .roller-track{display:flex;align-items:center;gap:10px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap;padding:0 6px}
+    .roller-card{flex-shrink:0;width:158px;height:80px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;user-select:none;transition:border-color .3s}
+    .roller-card-bar{width:40px;height:3px;border-radius:2px;background:#2a2f3d}
+    .roller-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c8cdd8}
+    .roller-card.rarity-blue .roller-card-bar{background:#4a90d9}
+    .roller-card.rarity-blue .roller-card-name{color:#9bbde0}
+    .roller-card.rarity-blue{border-color:#4a90d933}
+    .roller-card.rarity-purple .roller-card-bar{background:#9b59d9}
+    .roller-card.rarity-purple .roller-card-name{color:#c4a0e8}
+    .roller-card.rarity-purple{border-color:#9b59d933}
+    .roller-card.rarity-gold .roller-card-bar{background:#e8a427}
+    .roller-card.rarity-gold .roller-card-name{color:#f0c060}
+    .roller-card.rarity-gold{border-color:#e8a42744}
+    @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 28px 4px rgba(232,164,39,.35),inset 0 0 16px 2px rgba(232,164,39,.12)}}
+    @keyframes winnerShine{0%{background-position:200% center}100%{background-position:-200% center}}
+    .roller-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite}
+    .roller-card.winner-card .roller-card-bar{background:linear-gradient(90deg,#e8a427,#f5d080,#e8a427);background-size:200% auto;animation:winnerShine 2s linear infinite}
+    .roller-card.winner-card .roller-card-name{background:linear-gradient(90deg,#e8a427,#fff,#e8a427);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:winnerShine 2.5s linear infinite}
+    .roll-btn{width:100%;padding:15px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:linear-gradient(135deg,#e8a427,#c47f10);color:#07080c;transition:opacity .15s,transform .1s}
+    .roll-btn:hover{opacity:.9;transform:translateY(-1px)}
+    .roll-btn:active{transform:translateY(0)}
+    .roll-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
     .winner-box{background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:32px;text-align:center;animation:winner-pop .5s ease both;display:flex;flex-direction:column;align-items:center;gap:14px}
     .winner-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
     .winner-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:1}
@@ -152,91 +171,95 @@
   function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
-    const [cards,setCards]=React.useState([]);
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
+    const CARD_W=158,GAP=10,TILE=168,TOTAL=60;
+    const RARITIES=['blue','blue','blue','purple','purple','gold'];
+    function getRarity(i){return RARITIES[i%RARITIES.length]}
 
     React.useEffect(()=>{
       if(forceWinner&&entries.length>0) doRoll(forceWinner);
     },[forceWinner]);
 
+    function buildDeck(winnerName){
+      const pool=entries.length>0?entries:[{username:'???'}];
+      const cards=[];
+      for(let i=0;i<TOTAL;i++){
+        cards.push({name:pool[Math.floor(Math.random()*pool.length)].username,r:getRarity(i)});
+      }
+      const landIdx=Math.floor(TOTAL*0.75);
+      cards[landIdx]={name:winnerName,r:'gold'};
+      return{cards,landIdx};
+    }
+
+    function animate(winner,forced,landIdx){
+      const track=trackRef.current;const stage=stageRef.current;
+      if(!track||!stage){setRolling(false);return;}
+      const stageW=stage.offsetWidth;
+      const centerOffset=stageW/2-CARD_W/2;
+      const finalX=-(landIdx*TILE-centerOffset);
+      track.style.transition='none';
+      track.style.transform='translateX(0px)';
+      void track.offsetWidth;
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          track.style.transition='transform 6200ms cubic-bezier(0.12,0,0.1,1)';
+          track.style.transform='translateX('+finalX+'px)';
+        });
+      });
+      setTimeout(()=>{
+        setWinnerIdx(landIdx);
+        setRolling(false);
+        if(onRollingChange)onRollingChange(false);
+        onWinner(winner);
+        if(forced&&onForceConsumed)onForceConsumed();
+      },6300);
+    }
+
     function doRoll(forcedName){
-      if(rolling) return;
-      const names=entries.map(e=>e.username);
-      const winnerName=forcedName||names[Math.floor(Math.random()*names.length)];
-      const deck=[];
-      for(let i=0;i<25;i++) deck.push(...[...names].sort(()=>Math.random()-.5));
-      const winnerCardIdx=Math.floor(deck.length*0.78)+Math.floor(Math.random()*8);
-      deck[winnerCardIdx]=winnerName;
-      const cardList=deck.map((name,i)=>({name,i,isWinner:i===winnerCardIdx}));
-      setCards(cardList);setWinnerIdx(null);setRolling(true);if(onRollingChange)onRollingChange(true);
-      requestAnimationFrame(()=>{
-        const track=trackRef.current;const stage=stageRef.current;
-        if(!track||!stage){setRolling(false);return;}
-        const stageW=stage.offsetWidth;
-        const cardStep=CARD_W+CARD_GAP;
-        const endX=(stageW/2)-(winnerCardIdx*cardStep)-(CARD_W/2);
-        const startX=stageW;
-        track.style.transition='none';
-        track.style.transform='translateX('+startX+'px)';
-        void track.offsetWidth;
-        requestAnimationFrame(()=>{
-          track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
-          track.style.transform='translateX('+endX+'px)';
+      if(rolling)return;
+      const winner=forcedName||entries[Math.floor(Math.random()*entries.length)].username;
+      const{cards,landIdx}=buildDeck(winner);
+      setWinnerIdx(null);setRolling(true);
+      if(onRollingChange)onRollingChange(true);
+      const track=trackRef.current;
+      if(track){
+        track.innerHTML='';
+        cards.forEach((c,i)=>{
+          const d=document.createElement('div');
+          d.className='roller-card rarity-'+c.r;
+          d.innerHTML='<div class="roller-card-bar"></div><div class="roller-card-name">'+c.name+'</div>';
+          track.appendChild(d);
         });
-        setTimeout(()=>{
-          setRolling(false);if(onRollingChange)onRollingChange(false);
-          setWinnerIdx(winnerCardIdx);
-          onWinner(winnerName);
-          if(forcedName&&onForceConsumed) onForceConsumed();
-        },5300);
-      });
+      }
+      requestAnimationFrame(()=>animate(winner,forcedName,landIdx));
     }
+
     function roll(){
-      if(rolling||entries.length===0) return;
-      const names=entries.map(e=>e.username);
-      const winnerName=names[Math.floor(Math.random()*names.length)];
-      const deck=[];
-      for(let i=0;i<25;i++) deck.push(...[...names].sort(()=>Math.random()-.5));
-      const winnerCardIdx=Math.floor(deck.length*0.78)+Math.floor(Math.random()*8);
-      deck[winnerCardIdx]=winnerName;
-      const cardList=deck.map((name,i)=>({name,i,isWinner:i===winnerCardIdx}));
-      setCards(cardList);setWinnerIdx(null);setRolling(true);
-      requestAnimationFrame(()=>{
-        const track=trackRef.current;const stage=stageRef.current;
-        if(!track||!stage){setRolling(false);return;}
-        const stageW=stage.offsetWidth;
-        const cardStep=CARD_W+CARD_GAP;
-        // Winner card's left edge within track = winnerCardIdx*cardStep
-        // Its center = winnerCardIdx*cardStep + CARD_W/2
-        // To put that center at stageW/2: translateX = stageW/2 - (winnerCardIdx*cardStep + CARD_W/2)
-        const endX=(stageW/2)-(winnerCardIdx*cardStep)-(CARD_W/2);
-        const startX=stageW;
-        track.style.transition='none';
-        track.style.transform='translateX('+startX+'px)';
-        void track.offsetWidth;
-        requestAnimationFrame(()=>{
-          track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
-          track.style.transform='translateX('+endX+'px)';
-        });
-        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);onWinner(winnerName);},5300);
-      });
+      if(rolling||entries.length===0)return;
+      doRoll(null);
     }
-    const hasRolled = cards.length>0;
-    return (
+
+    function onTransitionEnd(){
+      if(winnerIdx===null)return;
+      const track=trackRef.current;
+      if(!track)return;
+      const card=track.children[winnerIdx];
+      if(card){card.classList.add('winner-card');card.classList.remove('rarity-gold');}
+    }
+
+    return(
       <div className="roller-wrap f2">
         <div className="roller-title">Roll Winner</div>
-        {hasRolled&&(
+        <div className="roller-stage-wrap">
+          <div className="roller-pointer-top"/>
+          <div className="roller-pointer-bot"/>
           <div className="roller-stage" ref={stageRef}>
-            <div className="roller-center-line"/>
-            <div className="roller-track" ref={trackRef} style={{left:0}}>
-              {cards.map((c,i)=>(
-                <div key={i} className={'roller-card'+(winnerIdx===i?' winner-card':'')}>{c.name}</div>
-              ))}
-            </div>
+            <div className="roller-win-zone"/>
+            <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)'}} onTransitionEnd={onTransitionEnd}/>
           </div>
-        )}
-        <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0} style={{opacity:entries.length===0?0.4:1}}>
+        </div>
+        <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0}>
           {rolling?'Rolling...':(winnerIdx!==null?'Reroll':'Roll Winner')}
         </button>
       </div>
