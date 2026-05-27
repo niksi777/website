@@ -149,12 +149,40 @@
     </>);
   }
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-  function CardRoller({entries,onWinner}){
+  function CardRoller({entries,onWinner,forceWinner,onForceConsumed}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const [cards,setCards]=React.useState([]);
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
+    React.useEffect(()=>{
+      if(forceWinner&&entries.length>0) rollWithWinner(forceWinner);
+    },[forceWinner]);
+    function rollWithWinner(forcedName){
+      if(rolling||entries.length===0) return;
+      const names=entries.map(e=>e.username);
+      const deck=[];
+      for(let i=0;i<25;i++) deck.push(...[...names].sort(()=>Math.random()-.5));
+      const winnerCardIdx=Math.floor(deck.length*0.78)+Math.floor(Math.random()*8);
+      deck[winnerCardIdx]=forcedName;
+      const cardList=deck.map((name,i)=>({name,i,isWinner:i===winnerCardIdx}));
+      setCards(cardList);setWinnerIdx(null);setRolling(true);
+      requestAnimationFrame(()=>{
+        const track=trackRef.current;const stage=stageRef.current;
+        const stageW=stage.offsetWidth;
+        const cardStep=CARD_W+CARD_GAP;
+        const endX=(stageW/2)-(winnerCardIdx*cardStep)-(CARD_W/2);
+        const startX=stageW;
+        track.style.transition='none';
+        track.style.transform='translateX('+startX+'px)';
+        void track.offsetWidth;
+        requestAnimationFrame(()=>{
+          track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
+          track.style.transform='translateX('+endX+'px)';
+        });
+        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);onWinner(forcedName);if(onForceConsumed)onForceConsumed();},5300);
+      });
+    }
     function roll(){
       if(rolling||entries.length===0) return;
       const names=entries.map(e=>e.username);
@@ -212,6 +240,7 @@
     const [giveaway,setGiveaway]=React.useState(null);
     const [entries,setEntries]=React.useState([]);
     const [winner,setWinner]=React.useState(null);
+    const [rerollTarget,setRerollTarget]=React.useState(null);
     const [keyword,setKeyword]=React.useState('');
     const [prize,setPrize]=React.useState('');
     const [starting,setStarting]=React.useState(false);
@@ -263,7 +292,7 @@
       try{
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
-        if(d.winner){setWinner(d.winner);}
+        if(d.winner){setWinner(null);setRerollTarget(d.winner);}
       }catch(e){}
     }
     async function resetGiveaway(){
@@ -354,7 +383,7 @@
             </div>
           )}
 
-          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner}/>}
+          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)}/>}
 
           {(winner||(giveaway?.winner))&&(
             <div className="winner-box f2">
