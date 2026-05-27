@@ -1,3 +1,4 @@
+require("dotenv").config({path:"/root/website/.env"});
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
@@ -386,35 +387,7 @@ app.post('/redeem', async (req, res) => {
   require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
   console.log(`[redeem] ${username} redeemed ${item.title} for ${item.cost} pts. Balance: ${ptsData[username.toLowerCase()]}`);
   try {
-    const { ChannelType, PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-    const guild = discordClient.guilds.cache.get('799081942623977492');
-    if (guild) {
-      const category = guild.channels.cache.get('1507472617584460087');
-      const supportRole = guild.roles.cache.get('1507472301627670700');
-      const channel = await guild.channels.create({
-        name: 'store-' + username.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15) + '-' + (guild.channels.cache.filter(ch => ch.name.startsWith('store-' + username.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15))).size + 1),
-        type: ChannelType.GuildText,
-        parent: category || null,
-        topic: `Store redemption by ${username} | ${item.title}`,
-        permissionOverwrites: [
-          { id: guild.id, deny: [PermissionsBitField.Flags.ViewChannel] },
-          ...(supportRole ? [{ id: supportRole.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] }] : []),
-          { id: '800884003014967317', allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] },
-        ],
-      });
-      const embed = new EmbedBuilder()
-        .setTitle('Store Redemption')
-        .setColor(0xd4af5a)
-        .addFields(
-          { name: 'Kick Username', value: username, inline: true },
-          { name: 'Item', value: item.title, inline: true },
-          { name: 'Points Spent', value: item.cost.toLocaleString(), inline: true },
-          { name: 'Note', value: note || 'None' },
-        )
-        .setFooter({ text: 'Points deducted. Close ticket once fulfilled.' })
-        .setTimestamp();
-      await channel.send({ embeds: [embed], components: [new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId('confirm_close').setLabel('Mark Fulfilled & Close').setEmoji('✅').setStyle(ButtonStyle.Success))] });
-    }
+    await require('axios').post('http://localhost:3002/create-ticket', { username, item: item.title, cost: item.cost, note: note || '' });
   } catch (err) { console.error('[redeem] Discord error:', err.message); }
   res.json({ ok: true, points: ptsData[username.toLowerCase()] });
 });
