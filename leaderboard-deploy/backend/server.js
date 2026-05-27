@@ -319,6 +319,7 @@ app.post('/giveaway/roll', (req, res) => {
 });
 
 app.post('/giveaway/reroll', (req, res) => {
+  if (!giveawayState.giveaway || giveawayState.entries.length === 0) {
     return res.status(400).json({ error: 'No entries to reroll' });
   }
   const previous = giveawayState.giveaway.winner;
