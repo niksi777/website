@@ -362,7 +362,7 @@ app.get('/leaderboard', (req, res) => {
 // Store Redemption
 const { Client: DClient2, GatewayIntentBits: GI2 } = require("discord.js");
 const discordClient = new DClient2({ intents: [GI2.Guilds] });
-discordClient.login("MTUwNzQ2MDgwNTUxODY5MjU1Mg.G-5Xf0.oFnqJtDpyrRuKGNEHigGPh8sVZKmJmPpYXB938");
+discordClient.login(process.env.DISCORD_BOT_TOKEN);
 
 const REDEMPTION_ITEMS = [
   { id:1, title:'$10 Tip', cost:300 },
