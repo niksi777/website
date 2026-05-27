@@ -155,20 +155,24 @@
     const [cards,setCards]=React.useState([]);
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
+
     React.useEffect(()=>{
-      if(forceWinner&&entries.length>0) rollWithWinner(forceWinner);
+      if(forceWinner&&entries.length>0) doRoll(forceWinner);
     },[forceWinner]);
-    function rollWithWinner(forcedName){
-      if(rolling||entries.length===0) return;
+
+    function doRoll(forcedName){
+      if(rolling) return;
       const names=entries.map(e=>e.username);
+      const winnerName=forcedName||names[Math.floor(Math.random()*names.length)];
       const deck=[];
       for(let i=0;i<25;i++) deck.push(...[...names].sort(()=>Math.random()-.5));
       const winnerCardIdx=Math.floor(deck.length*0.78)+Math.floor(Math.random()*8);
-      deck[winnerCardIdx]=forcedName;
+      deck[winnerCardIdx]=winnerName;
       const cardList=deck.map((name,i)=>({name,i,isWinner:i===winnerCardIdx}));
       setCards(cardList);setWinnerIdx(null);setRolling(true);
       requestAnimationFrame(()=>{
         const track=trackRef.current;const stage=stageRef.current;
+        if(!track||!stage){setRolling(false);return;}
         const stageW=stage.offsetWidth;
         const cardStep=CARD_W+CARD_GAP;
         const endX=(stageW/2)-(winnerCardIdx*cardStep)-(CARD_W/2);
@@ -180,7 +184,14 @@
           track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
           track.style.transform='translateX('+endX+'px)';
         });
-        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);setTimeout(()=>{onWinner(forcedName);setTimeout(()=>{if(onForceConsumed)onForceConsumed();setIsRerolling(false);},200);},1000);},5300);
+        setTimeout(()=>{
+          setRolling(false);
+          setWinnerIdx(winnerCardIdx);
+          setTimeout(()=>{
+            onWinner(winnerName);
+            if(forcedName&&onForceConsumed) onForceConsumed();
+          },1000);
+        },5300);
       });
     }
     function roll(){
@@ -386,7 +397,7 @@
 
           {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)}/>}
 
-          {(winner||(giveaway?.winner))&&!isRerolling&&(
+          {(winner||(giveaway?.winner))&&(
             <div className="winner-box f2">
               <div className="confetti">🎉 🏆 🎉</div>
               <div className="winner-label">Winner</div>
