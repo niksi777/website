@@ -362,7 +362,8 @@ app.get('/leaderboard', (req, res) => {
 // Store Redemption
 const { Client: DClient2, GatewayIntentBits: GI2 } = require("discord.js");
 const discordClient = new DClient2({ intents: [GI2.Guilds] });
-discordClient.login(process.env.DISCORD_BOT_TOKEN);
+discordClient.login('MTUwNzQ2MDgwNTUxODY5MjU1Mg.GG0MLQ.u9vybc8e0PnVGm8rWZiiBPEVNEoQO1PChKzkiA');
+discordClient.on("ready", () => console.log("[discord] Bot ready:", discordClient.user.tag));
 
 const REDEMPTION_ITEMS = [
   { id:1, title:'$10 Tip', cost:300 },
@@ -391,7 +392,7 @@ app.post('/redeem', async (req, res) => {
       const category = guild.channels.cache.get('1507472617584460087');
       const supportRole = guild.roles.cache.get('1507472301627670700');
       const channel = await guild.channels.create({
-        name: `store-${username.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,20)}`,
+        name: 'store-' + username.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15) + '-' + (guild.channels.cache.filter(ch => ch.name.startsWith('store-' + username.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15))).size + 1),
         type: ChannelType.GuildText,
         parent: category || null,
         topic: `Store redemption by ${username} | ${item.title}`,
