@@ -18,7 +18,7 @@
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}.f4{animation:fu .5s .34s ease both}
 
     nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
-    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px;gap:0}
     .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
     .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
     .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
@@ -26,10 +26,18 @@
     .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
     .nlinks a:hover{color:rgba(255,255,255,.9)}
     .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
-    .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
+    .nsoc{display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
     .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
     .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
     .nsoc svg{width:15px;height:15px}
+    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;margin-left:auto}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap}
+    .nlogin-btn:hover{opacity:.85}
+    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
+    .nuser:hover{border-color:var(--b3)}
+    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
     .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
     .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
@@ -42,7 +50,6 @@
     .drawer-soc svg{width:15px;height:15px}
 
     .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
-
     .phead{padding:44px 0 32px;text-align:center}
     .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px;margin-bottom:16px}
     .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
@@ -50,18 +57,21 @@
     .phead h1 em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
     .phead p{font-size:13px;color:var(--mu);max-width:420px;margin:0 auto;line-height:1.7}
 
-    .points-check{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px 24px;margin-bottom:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-    .points-check-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);flex-shrink:0}
-    .points-input-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
-    .points-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;flex:1;transition:border-color .15s}
-    .points-input:focus{border-color:var(--b3)}
-    .points-input::placeholder{color:var(--mu)}
-    .points-btn{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
-    .points-btn:hover{opacity:.82}
-    .points-result{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);flex-shrink:0}
+    .login-banner{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:24px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .login-banner-text h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:4px}
+    .login-banner-text p{font-size:12px;color:var(--mu);line-height:1.6}
+    .kick-login-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:11px 20px;border-radius:8px;background:#22c55e;color:#fff;text-decoration:none;transition:opacity .15s;white-space:nowrap;flex-shrink:0}
+    .kick-login-btn:hover{opacity:.85}
+    .user-banner{background:var(--s1);border:1px solid rgba(212,175,90,.2);border-radius:12px;padding:20px 24px;margin-bottom:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .user-banner-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--s2);flex-shrink:0}
+    .user-banner-info{flex:1}
+    .user-banner-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:2px}
+    .user-banner-pts{font-size:12px;color:var(--mu)}
+    .user-banner-pts span{color:var(--gold);font-weight:600}
+    .user-logout{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--mu);background:none;border:1px solid var(--b2);padding:7px 14px;border-radius:7px;cursor:pointer;transition:all .15s}
+    .user-logout:hover{color:#fff;border-color:var(--b3)}
 
     .store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:56px}
-
     .scard{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
     .scard:hover{transform:translateY(-3px);border-color:var(--b3)}
     .scard-top{padding:24px 22px 16px;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -74,6 +84,7 @@
     .scard-cost-val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1}
     .scard-redeem{background:transparent;border:1px solid var(--b2);color:var(--mu2);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border-radius:8px;cursor:pointer;transition:all .15s;white-space:nowrap}
     .scard-redeem:hover{background:#fff;color:#07080c;border-color:#fff}
+    .scard-redeem:disabled{opacity:.4;cursor:not-allowed}
 
     .how-section{margin-bottom:56px}
     .sdiv{display:flex;align-items:center;gap:14px;margin:0 0 24px}
@@ -95,6 +106,7 @@
     .modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .modal-confirm{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:8px;border:none;cursor:pointer;transition:opacity .15s}
     .modal-confirm:hover{opacity:.82}
+    .modal-confirm:disabled{opacity:.5;cursor:not-allowed}
     .modal-cancel{background:transparent;color:var(--mu);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:8px;border:1px solid var(--b2);cursor:pointer;transition:all .15s}
     .modal-cancel:hover{color:#fff;border-color:var(--b3)}
     .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:20px;line-height:1;padding:4px}
@@ -112,6 +124,7 @@
       .how-grid{grid-template-columns:1fr}
       .store-grid{grid-template-columns:1fr}
       .ftw{flex-direction:column;align-items:flex-start}
+      .login-banner{flex-direction:column;align-items:flex-start}
     }
   </style>
 </head>
@@ -133,7 +146,41 @@
     <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
   </>;
 
-  function Navbar(){
+  function useSession() {
+    const [user, setUser] = React.useState(null);
+    const [sessionId, setSessionId] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+      // Check URL for session param
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get('session') || localStorage.getItem('kick_session');
+      if (sid) {
+        localStorage.setItem('kick_session', sid);
+        setSessionId(sid);
+        fetch(`/auth/me?session=${sid}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
+          .finally(() => setLoading(false));
+        // Clean URL
+        if (params.get('session')) window.history.replaceState({}, '', '/store');
+      } else {
+        setLoading(false);
+      }
+    }, []);
+
+    function logout() {
+      const sid = localStorage.getItem('kick_session');
+      if (sid) fetch(`/auth/logout?session=${sid}`);
+      localStorage.removeItem('kick_session');
+      setUser(null);
+      setSessionId(null);
+    }
+
+    return { user, sessionId, loading, logout };
+  }
+
+  function Navbar({ user, sessionId, logout }) {
     const [open,setOpen]=React.useState(false);
     return (<>
       <nav>
@@ -141,11 +188,25 @@
           <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
           <div className="nlinks">
             <a href="/">HOME</a>
-            <a href="/leaderboards.html">LEADERBOARDS</a>
-            <a href="/points.html">POINTS</a>
-            <a href="/store.html" className="on">STORE</a>
+            <a href="/leaderboards">LEADERBOARDS</a>
+            <a href="/points">POINTS</a>
+            <a href="/store" className="on">STORE</a>
           </div>
-          <div className="nsoc">{SOCIALS}</div>
+          <div className="nauth">
+            {user ? (
+              <div className="nuser" onClick={logout} title="Click to logout">
+                {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
+                <span className="nuser-name">{user.displayName}</span>
+                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+              </div>
+            ) : (
+              <a href="/auth/login" className="nlogin-btn">
+                <svg viewBox="0 0 24 24" fill="none" style={{width:13,height:13}}><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#fff"/></svg>
+                Login with Kick
+              </a>
+            )}
+          </div>
+          <div className="nsoc" style={{marginLeft:12}}>{SOCIALS}</div>
           <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
             <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
             <span style={open?{opacity:0}:{}}/>
@@ -155,37 +216,39 @@
       </nav>
       <div className={`drawer${open?' open':''}`}>
         <a href="/">HOME</a>
-        <a href="/leaderboards.html">LEADERBOARDS</a>
-        <a href="/points.html">POINTS</a>
-        <a href="/store.html" className="on">STORE</a>
+        <a href="/leaderboards">LEADERBOARDS</a>
+        <a href="/points">POINTS</a>
+        <a href="/store" className="on">STORE</a>
+        {user ? <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a> : <a href="/auth/login">Login with Kick</a>}
         <div className="drawer-soc">{SOCIALS}</div>
       </div>
     </>);
   }
 
-  function Modal({item, onClose}){
-    const [username, setUsername] = React.useState('');
+  function Modal({item, user, sessionId, onClose, onSuccess}){
     const [note, setNote] = React.useState('');
     const [done, setDone] = React.useState(false);
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
     async function handleSubmit(){
-      if (!username.trim()) { setError('Please enter your Kick username.'); return; }
       setLoading(true);
       setError('');
       try {
         const r = await fetch('/redeem', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: username.trim().toLowerCase(), itemId: item.id, note: note.trim() })
+          headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId || '' },
+          body: JSON.stringify({ username: user.username, itemId: item.id, note: note.trim(), session: sessionId })
         });
         const d = await r.json();
         if (!r.ok) { setError(d.error || 'Something went wrong.'); setLoading(false); return; }
         setDone(true);
+        if (onSuccess) onSuccess(d.points);
       } catch { setError('Could not connect. Try again.'); }
       setLoading(false);
     }
+
+    const canAfford = user && user.points >= item.cost;
 
     return (
       <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
@@ -197,13 +260,13 @@
             <button className="modal-confirm" style={{width:'100%'}} onClick={onClose}>Close</button>
           </>) : (<>
             <h2>Redeem {item.title}</h2>
-            <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Enter your Kick username to confirm.</p>
-            <input className="modal-input" placeholder="Your Kick username" value={username} onChange={e=>setUsername(e.target.value)}/>
+            <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Redeeming as <strong style={{color:'#fff'}}>{user.displayName}</strong> ({(user.points||0).toLocaleString()} pts).</p>
+            {!canAfford && <p style={{color:'var(--rd)',fontSize:12,marginBottom:12}}>You don't have enough points for this item.</p>}
             <input className="modal-input" placeholder="Extra note (optional)" value={note} onChange={e=>setNote(e.target.value)}/>
             {error && <div style={{color:'var(--rd)',fontSize:12,marginBottom:8}}>{error}</div>}
             <div className="modal-btns">
               <button className="modal-cancel" onClick={onClose}>Cancel</button>
-              <button className="modal-confirm" onClick={handleSubmit} disabled={loading}>{loading ? 'Processing...' : 'Confirm Redemption'}</button>
+              <button className="modal-confirm" onClick={handleSubmit} disabled={loading || !canAfford}>{loading ? 'Processing...' : 'Confirm Redemption'}</button>
             </div>
           </>)}
         </div>
@@ -212,26 +275,19 @@
   }
 
   function App(){
-    const [username, setUsername] = React.useState('');
-    const [points, setPoints] = React.useState(null);
-    const [loading, setLoading] = React.useState(false);
+    const { user, sessionId, loading, logout } = useSession();
     const [selected, setSelected] = React.useState(null);
+    const [currentPts, setCurrentPts] = React.useState(null);
 
-    async function checkPoints(){
-      if (!username.trim()) return;
-      setLoading(true);
-      try {
-        const r = await fetch(`/api/points/${username.trim().toLowerCase()}`);
-        const d = await r.json();
-        setPoints(d.points ?? 0);
-      } catch {
-        setPoints(0);
-      }
-      setLoading(false);
+    const displayUser = currentPts !== null ? {...user, points: currentPts} : user;
+
+    function handleSuccess(newPts) {
+      setCurrentPts(newPts);
+      setSelected(null);
     }
 
     return (<>
-      <Navbar/>
+      <Navbar user={displayUser} sessionId={sessionId} logout={logout}/>
       <div className="wrap">
         <div className="phead f1">
           <div className="phead-eyebrow"><span className="pdot"/>Points Store</div>
@@ -239,22 +295,29 @@
           <p>Earn points by winning raffles in chat. Redeem them here for real rewards on stream.</p>
         </div>
 
-        <div className="points-check f2">
-          <span className="points-check-label">Check Balance</span>
-          <div className="points-input-row">
-            <input
-              className="points-input"
-              placeholder="Your Kick username"
-              value={username}
-              onChange={e=>setUsername(e.target.value)}
-              onKeyDown={e=>e.key==='Enter'&&checkPoints()}
-            />
-            <button className="points-btn" onClick={checkPoints}>{loading?'...':'Check'}</button>
+        {!loading && !user && (
+          <div className="login-banner f2">
+            <div className="login-banner-text">
+              <h3>Login to Redeem</h3>
+              <p>Connect your Kick account to check your balance and redeem rewards securely.</p>
+            </div>
+            <a href="/auth/login" className="kick-login-btn">
+              <svg viewBox="0 0 24 24" fill="none" style={{width:14,height:14}}><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#fff"/></svg>
+              Login with Kick
+            </a>
           </div>
-          {points !== null && (
-            <div className="points-result">{points.toLocaleString()} pts</div>
-          )}
-        </div>
+        )}
+
+        {displayUser && (
+          <div className="user-banner f2">
+            {displayUser.avatar && <img className="user-banner-avatar" src={displayUser.avatar} alt={displayUser.displayName}/>}
+            <div className="user-banner-info">
+              <div className="user-banner-name">{displayUser.displayName}</div>
+              <div className="user-banner-pts">Balance: <span>{(displayUser.points||0).toLocaleString()} points</span></div>
+            </div>
+            <button className="user-logout" onClick={logout}>Logout</button>
+          </div>
+        )}
 
         <div className="store-grid f3">
           {STORE_ITEMS.map(item=>(
@@ -269,7 +332,14 @@
                   <div className="scard-cost-lbl">Cost</div>
                   <div className="scard-cost-val">{item.cost.toLocaleString()} pts</div>
                 </div>
-                <button className="scard-redeem" onClick={()=>setSelected(item)}>Redeem</button>
+                <button
+                  className="scard-redeem"
+                  disabled={!user}
+                  onClick={()=>user&&setSelected(item)}
+                  title={!user ? 'Login with Kick to redeem' : ''}
+                >
+                  {user ? 'Redeem' : 'Login to Redeem'}
+                </button>
               </div>
             </div>
           ))}
@@ -285,19 +355,19 @@
             </div>
             <div className="how-card">
               <div className="how-num">02</div>
-              <div className="how-title">Choose a Reward</div>
-              <div className="how-desc">Browse the store and pick a reward that matches your points balance.</div>
+              <div className="how-title">Login with Kick</div>
+              <div className="how-desc">Connect your Kick account to verify your identity and check your balance.</div>
             </div>
             <div className="how-card">
               <div className="how-num">03</div>
-              <div className="how-title">Submit Request</div>
-              <div className="how-desc">Enter your Kick username and confirm. Niksi fulfills it on the next stream.</div>
+              <div className="how-title">Redeem & Enjoy</div>
+              <div className="how-desc">Pick a reward, confirm, and a ticket is created in Discord. Niksi fulfills it on stream.</div>
             </div>
           </div>
         </div>
       </div>
 
-      {selected && <Modal item={selected} onClose={()=>setSelected(null)}/>}
+      {selected && displayUser && <Modal item={selected} user={displayUser} sessionId={sessionId} onClose={()=>setSelected(null)} onSuccess={handleSuccess}/>}
 
       <footer>
         <div className="wrap">
