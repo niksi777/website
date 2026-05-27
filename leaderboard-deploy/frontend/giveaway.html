@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NIKSI777 — Giveaway</title>
+  <title>NIKSI777 - Giveaway</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -82,7 +82,7 @@
     .keyword-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--b2);border-radius:8px;padding:10px 16px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.06em;color:#fff}
     .keyword-badge span{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
     .entries-grid{display:flex;flex-wrap:wrap;gap:10px}
-    .entry-chip{display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--b2);border-radius:8px;padding:10px 16px;transition:background .15s}
+    .entry-chip{display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--b2);border-radius:8px;padding:10px 16px;transition:background .15s,border-color .3s}@keyframes chipIn{0%{opacity:0;transform:scale(.85) translateY(6px)}60%{transform:scale(1.04) translateY(-2px)}100%{opacity:1;transform:scale(1) translateY(0)}}.entry-chip.new-entry{border-color:#e8a427;animation:chipIn .35s cubic-bezier(.34,1.56,.64,1) both}
     .entry-chip:hover{background:var(--s2)}
     .entry-num{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--mu)}
     .entry-name{font-size:13px;font-weight:500;color:var(--tx)}
@@ -270,7 +270,7 @@
     const [pw,setPw]=React.useState('');
     const [pwErr,setPwErr]=React.useState('');
     const [giveaway,setGiveaway]=React.useState(null);
-    const [entries,setEntries]=React.useState([]);
+    const [entries,setEntries]=React.useState([]);const prevEntryIds=React.useRef(new Set());
     const [winner,setWinner]=React.useState(null);
     const [rerollTarget,setRerollTarget]=React.useState(null);
     const [isRerolling,setIsRerolling]=React.useState(false);
@@ -289,7 +289,7 @@
     async function fetchState(){
       try{
         const r=await fetch('/giveaway/state');const d=await r.json();
-        setGiveaway(d.giveaway);setEntries(d.entries||[]);
+        setGiveaway(d.giveaway);const newList=d.entries||[];setEntries(prev=>{newList.forEach(e=>{if(!prevEntryIds.current.has(e.id||e.username)){prevEntryIds.current.add(e.id||e.username);}});return newList;});setEntries(newList);
         if(d.giveaway?.winner) setWinner(d.giveaway.winner);
       }catch(e){}
     }
@@ -358,8 +358,8 @@
           <div className="statusbar f2">
             
             <div className="stat"><div className="stat-lbl">Entries</div><div className="stat-val">{entries.length}</div></div>
-            <div className="stat"><div className="stat-lbl">Keyword</div><div className="stat-val">{giveaway?.keyword||'—'}</div></div>
-            <div className="stat"><div className="stat-lbl">Prize</div><div className="stat-val active">{giveaway?.prize||'—'}</div></div>
+            <div className="stat"><div className="stat-lbl">Keyword</div><div className="stat-val">{giveaway?.keyword||'-'}</div></div>
+            <div className="stat"><div className="stat-lbl">Prize</div><div className="stat-val active">{giveaway?.prize||'-'}</div></div>
           </div>
 
           {!giveaway?(
@@ -421,13 +421,13 @@
           )}
 
           <div className="f3">
-            <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginBottom:16}}>Entries — {entries.length}</div>
+            <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginBottom:16}}>Entries - {entries.length}</div>
             {entries.length===0?(
-              <div className="empty">No entries yet — waiting for Kick chat</div>
+              <div className="empty">No entries yet - waiting for Kick chat</div>
             ):(
               <div className="entries-grid">
                 {entries.map((e,i)=>(
-                  <div key={e.id||i} className="entry-chip">
+                  <div key={e.id||i} className={'entry-chip'+(prevEntryIds.current.has(e.id||e.username)?'':' new-entry')} onAnimationEnd={el=>{if(el.target)el.target.classList.remove('new-entry');prevEntryIds.current.add(e.id||e.username)}}>
                     <div className="entry-num">#{i+1}</div>
                     <div className="entry-name">{e.username}</div>
                   </div>
@@ -437,7 +437,7 @@
           </div>
         </div>
       </div>
-      <footer><div className="page"><div className="ftw"><p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site.</p><span className="ftc">© 2026 NIKSI777</span></div></div></footer>
+      <footer><div className="page"><div className="ftw"><p className="ftd"><strong>18+</strong> - We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site.</p><span className="ftc">© 2026 NIKSI777</span></div></div></footer>
     </>);
   }
   ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
