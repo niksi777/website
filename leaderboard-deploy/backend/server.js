@@ -428,3 +428,58 @@ app.get('/api/leaderboard', (req, res) => {
     res.json({ leaderboard });
   } catch { res.json({ leaderboard: [] }); }
 });
+const cryptoM = require('crypto');
+const sessions = {};
+const pkceStore = {};
+const KICK_CLIENT_ID_AUTH = '01KSMGZDPR13CZRMZS6QV6ZFZC';
+const KICK_CLIENT_SECRET_AUTH = '866339aa78f7dd05cff1d25a0ca567dab3f1505cd6eb4d49ff277cde010a4a42';
+const AUTH_REDIRECT = 'https://niksi777.com/auth/callback';
+app.get('/auth/login', (req, res) => {
+  const codeVerifier = cryptoM.randomBytes(64).toString('base64url');
+  const codeChallenge = cryptoM.createHash('sha256').update(codeVerifier).digest('base64url');
+  const state = cryptoM.randomBytes(16).toString('hex');
+  pkceStore[state] = { codeVerifier, createdAt: Date.now() };
+  setTimeout(() => delete pkceStore[state], 600000);
+  res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
+});
+app.get('/auth/callback', async (req, res) => {
+  const { code, state } = req.query;
+  const pkce = pkceStore[state];
+  if (!pkce) return res.redirect('/store?auth=error');
+  delete pkceStore[state];
+  try {
+    const axiosA = require('axios');
+    const params = new URLSearchParams();
+    params.append('grant_type', 'authorization_code');
+    params.append('client_id', KICK_CLIENT_ID_AUTH);
+    params.append('client_secret', KICK_CLIENT_SECRET_AUTH);
+    params.append('redirect_uri', AUTH_REDIRECT);
+    params.append('code_verifier', pkce.codeVerifier);
+    params.append('code', code);
+    const { data: tokenData } = await axiosA.post('https://id.kick.com/oauth/token', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+    const { data: userData } = await axiosA.get('https://api.kick.com/public/v1/users', { headers: { Authorization: `Bearer ${tokenData.access_token}` } });
+    const user = userData.data[0];
+    const sessionId = cryptoM.randomBytes(32).toString('hex');
+    sessions[sessionId] = { username: user.name.toLowerCase(), displayName: user.name, avatar: user.profile_picture, createdAt: Date.now() };
+    res.redirect(`/store?session=${sessionId}`);
+  } catch (err) {
+    console.error('[auth]', err?.response?.data || err.message);
+    res.redirect('/store?auth=error');
+  }
+});
+app.get('/auth/me', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session) return res.status(401).json({ error: 'Not logged in' });
+  if (Date.now() - session.createdAt > 24 * 60 * 60 * 1000) { delete sessions[sessionId]; return res.status(401).json({ error: 'Session expired' }); }
+  try {
+    const ptsData = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
+    session.points = ptsData[session.username] || 0;
+  } catch { session.points = 0; }
+  res.json({ username: session.username, displayName: session.displayName, avatar: session.avatar, points: session.points });
+});
+app.get('/auth/logout', (req, res) => {
+  const sessionId = req.query.session;
+  if (sessionId) delete sessions[sessionId];
+  res.json({ ok: true });
+});
