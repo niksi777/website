@@ -187,10 +187,8 @@
         setTimeout(()=>{
           setRolling(false);if(onRollingChange)onRollingChange(false);
           setWinnerIdx(winnerCardIdx);
-          setTimeout(()=>{
-            onWinner(winnerName);
-            if(forcedName&&onForceConsumed) onForceConsumed();
-          },1000);
+          onWinner(winnerName);
+          if(forcedName&&onForceConsumed) onForceConsumed();
         },5300);
       });
     }
