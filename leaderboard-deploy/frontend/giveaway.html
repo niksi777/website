@@ -259,6 +259,13 @@
     async function confirmWinner(name){
       try{await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({winner:name})});setWinner(name);}catch(e){}
     }
+    async function rerollWinner(){
+      try{
+        const r=await fetch('/giveaway/reroll',{method:'POST'});
+        const d=await r.json();
+        if(d.winner){setWinner(d.winner);}
+      }catch(e){}
+    }
     async function resetGiveaway(){
       if(!confirm('Reset and clear all entries?'))return;
       stopTimer();
@@ -355,6 +362,7 @@
               <div className="winner-label">Winner</div>
               <div className="winner-name">{winner||giveaway?.winner}</div>
               {giveaway?.prize&&<div className="winner-prize">{giveaway.prize}</div>}
+              <button className="btn btn-sec" style={{marginTop:8,padding:"10px 24px",width:"auto"}} onClick={rerollWinner}>Reroll</button>
             </div>
           )}
 

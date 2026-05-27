@@ -318,6 +318,18 @@ app.post('/giveaway/roll', (req, res) => {
   res.json({ winner });
 });
 
+app.post('/giveaway/reroll', (req, res) => {
+    return res.status(400).json({ error: 'No entries to reroll' });
+  }
+  const previous = giveawayState.giveaway.winner;
+  const pool = giveawayState.entries.filter(e => e.username !== previous);
+  if (pool.length === 0) return res.status(400).json({ error: 'No other entries to reroll from' });
+  const winner = pool[Math.floor(Math.random() * pool.length)].username;
+  giveawayState.giveaway.winner = winner;
+  console.log('Reroll winner: ' + winner);
+  res.json({ winner });
+});
+
 app.post('/giveaway/reset', (req, res) => {
   giveawayState = { giveaway: null, entries: [] };
   console.log('Giveaway reset');
