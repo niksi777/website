@@ -6,9 +6,8 @@ let raffleTimer = null;
 let sendMessageFn = null; // injected from kickBot.js
 
 function getWinnerCount(entrantCount) {
-  if (entrantCount >= 10) return 4;
   if (entrantCount >= 6) return 3;
-  return 2;
+  return 1;
 }
 
 function drawWinners() {
@@ -16,7 +15,7 @@ function drawWinners() {
   const pool = Array.from(entrants);
 
   if (pool.length === 0) {
-    if (sendMessageFn) sendMessageFn('The raffle ended but nobody joined. SadChamp');
+    if (sendMessageFn) sendMessageFn('The raffle ended but nobody joined. 😢');
     entrants.clear();
     winners = [];
     return;
@@ -28,7 +27,7 @@ function drawWinners() {
 
   winners.forEach(w => addPoints(w, 25));
   const mention = winners.map(w => `@${w}`).join(', ');
-  if (sendMessageFn) sendMessageFn(`🎉 Raffle over! Congratulations to the ${count} winner(s): ${mention}!`);
+  if (sendMessageFn) sendMessageFn(`Winner(s) of 25 points are: ${mention}! Congratulations!`);
 
   entrants.clear();
 }
