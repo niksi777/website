@@ -412,3 +412,19 @@ app.post('/redeem', async (req, res) => {
   } catch (err) { console.error('[redeem] Discord error:', err.message); }
   res.json({ ok: true, points: ptsData[username.toLowerCase()] });
 });
+
+// Points API routes
+app.get('/api/points/:username', (req, res) => {
+  try {
+    const data = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
+    res.json({ username: req.params.username, points: data[req.params.username.toLowerCase()] || 0 });
+  } catch { res.json({ username: req.params.username, points: 0 }); }
+});
+app.get('/api/leaderboard', (req, res) => {
+  try {
+    const data = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
+    const limit = parseInt(req.query.limit) || 10;
+    const leaderboard = Object.entries(data).sort(([,a],[,b]) => b-a).slice(0,limit).map(([username,points],i) => ({ rank:i+1, username, points }));
+    res.json({ leaderboard });
+  } catch { res.json({ leaderboard: [] }); }
+});
