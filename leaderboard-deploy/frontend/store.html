@@ -227,18 +227,20 @@
 
   function Modal({item, user, sessionId, onClose, onSuccess}){
     const [note, setNote] = React.useState('');
+    const [discordUser, setDiscordUser] = React.useState('');
     const [done, setDone] = React.useState(false);
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
     async function handleSubmit(){
+      if (!discordUser.trim()) { setError('Please enter your Discord username.'); return; }
       setLoading(true);
       setError('');
       try {
         const r = await fetch('/redeem', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId || '' },
-          body: JSON.stringify({ username: user.username, itemId: item.id, note: note.trim(), session: sessionId })
+          body: JSON.stringify({ username: user.username, itemId: item.id, note: note.trim(), discordUser: discordUser.trim(), session: sessionId })
         });
         const d = await r.json();
         if (!r.ok) { setError(d.error || 'Something went wrong.'); setLoading(false); return; }
@@ -262,6 +264,7 @@
             <h2>Redeem {item.title}</h2>
             <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Redeeming as <strong style={{color:'#fff'}}>{user.displayName}</strong> ({(user.points||0).toLocaleString()} pts).</p>
             {!canAfford && <p style={{color:'var(--rd)',fontSize:12,marginBottom:12}}>You don't have enough points for this item.</p>}
+            <input className="modal-input" placeholder="Your Discord username (e.g. niksi777)" value={discordUser} onChange={e=>setDiscordUser(e.target.value)}/>
             <input className="modal-input" placeholder="Extra note (optional)" value={note} onChange={e=>setNote(e.target.value)}/>
             {error && <div style={{color:'var(--rd)',fontSize:12,marginBottom:8}}>{error}</div>}
             <div className="modal-btns">
