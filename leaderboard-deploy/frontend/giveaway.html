@@ -193,17 +193,19 @@
       track.classList.remove('idle');
       void track.offsetWidth;
       const pool=entries.length>0?entries:[{username:'???'}];
+      const minTiles=40;
       const repeated=[];
-      while(repeated.length<40) repeated.push(...pool);
-      repeated.slice(0,40).forEach(e=>{
+      while(repeated.length<minTiles) repeated.push(...pool);
+      const half=repeated.slice(0,minTiles);
+      const full=[...half,...half];
+      full.forEach(e=>{
         const d=document.createElement('div');
         d.className='roller-card rarity-'+getRarity(e.username);
         d.innerHTML='<div class="roller-card-bar"></div><div class="roller-card-name">'+e.username+'</div>';
         track.appendChild(d);
       });
-      const totalW=40*TILE;
-      const halfW=totalW/2;
-      const dur=Math.max(8,entries.length*1.2);
+      const halfW=minTiles*TILE;
+      const dur=Math.max(28,entries.length*3);
       track.style.setProperty('--idle-shift','-'+halfW+'px');
       track.style.setProperty('--idle-dur',dur+'s');
       track.style.transform='translateX(0px)';
