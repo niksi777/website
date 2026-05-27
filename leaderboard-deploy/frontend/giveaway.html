@@ -180,7 +180,7 @@
           track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
           track.style.transform='translateX('+endX+'px)';
         });
-        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);setTimeout(()=>{onWinner(forcedName);if(onForceConsumed)onForceConsumed();},1000);},5300);
+        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);setTimeout(()=>{onWinner(forcedName);if(onForceConsumed)onForceConsumed();setIsRerolling(false);},1000);},5300);
       });
     }
     function roll(){
@@ -241,6 +241,7 @@
     const [entries,setEntries]=React.useState([]);
     const [winner,setWinner]=React.useState(null);
     const [rerollTarget,setRerollTarget]=React.useState(null);
+    const [isRerolling,setIsRerolling]=React.useState(false);
     const [keyword,setKeyword]=React.useState('');
     const [prize,setPrize]=React.useState('');
     const [starting,setStarting]=React.useState(false);
@@ -292,7 +293,7 @@
       try{
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
-        if(d.winner){setWinner(null);setRerollTarget(d.winner);}
+        if(d.winner){setWinner(null);setIsRerolling(true);setRerollTarget(d.winner);}
       }catch(e){}
     }
     async function resetGiveaway(){
@@ -385,7 +386,7 @@
 
           {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)}/>}
 
-          {(winner||(giveaway?.winner))&&(
+          {(winner||(giveaway?.winner))&&!isRerolling&&(
             <div className="winner-box f2">
               <div className="confetti">🎉 🏆 🎉</div>
               <div className="winner-label">Winner</div>
