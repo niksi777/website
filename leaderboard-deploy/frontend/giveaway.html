@@ -305,7 +305,7 @@
       try{
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
-        if(d.winner){setWinner(null);setIsRerolling(true);setRerollTarget(d.winner);}
+        if(d.winner){setWinner(null);setRerollTarget(d.winner);}
       }catch(e){}
     }
     async function resetGiveaway(){
@@ -398,7 +398,7 @@
 
           {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling}/>}
 
-          {(winner||(giveaway?.winner))&&!rollerRolling&&(
+          {(winner||(giveaway?.winner))&&!rerollTarget&&(
             <div className="winner-box f2">
               <div className="confetti">🎉 🏆 🎉</div>
               <div className="winner-label">Winner</div>
