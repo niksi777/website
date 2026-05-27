@@ -156,7 +156,7 @@
   function useLeaderboard(){
     const [lb,setLb]=React.useState([]);
     React.useEffect(()=>{
-      const go=async()=>{try{const r=await fetch('/leaderboard?limit=20');const d=await r.json();setLb(d.leaderboard||[]);}catch{}};
+      const go=async()=>{try{const r=await fetch('/api/leaderboard?limit=20');const d=await r.json();setLb(d.leaderboard||[]);}catch{}};
       go(); const id=setInterval(go,30000); return()=>clearInterval(id);
     },[]);
     return lb;
@@ -178,7 +178,7 @@
     async function check(){
       if (!username.trim()) return;
       setLoading(true);
-      try{const r=await fetch(`/points/${username.trim().toLowerCase()}`);const d=await r.json();setPts(d.points??0);}catch{setPts(0);}
+      try{const r=await fetch(`/api/points/${username.trim().toLowerCase()}`);const d=await r.json();setPts(d.points??0);}catch{setPts(0);}
       setLoading(false);
     }
 
