@@ -11,7 +11,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--rd:#d94f4f}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--rd:#d94f4f;--gold:#d4af5a}
     html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
@@ -101,6 +101,15 @@
       .oprize{font-size:52px}
       .ftw{flex-direction:column;align-items:flex-start}
     }
+
+    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;flex-shrink:0}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap;flex-shrink:0}
+    .nlogin-btn:hover{opacity:.85}
+    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
+    .nuser:hover{border-color:var(--b3)}
+    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
   </style>
 </head>
 <body>
@@ -134,6 +143,32 @@
     return v;
   }
 
+
+  function useSession() {
+    const [user, setUser] = React.useState(null);
+    const [sessionId, setSessionId] = React.useState(null);
+    React.useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get('session') || localStorage.getItem('kick_session');
+      if (sid) {
+        localStorage.setItem('kick_session', sid);
+        setSessionId(sid);
+        fetch('/auth/me?session=' + sid)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
+          .catch(() => {});
+        if (params.get('session')) window.history.replaceState({}, '', window.location.pathname);
+      }
+    }, []);
+    function logout() {
+      const sid = localStorage.getItem('kick_session');
+      if (sid) fetch('/auth/logout?session=' + sid);
+      localStorage.removeItem('kick_session');
+      setUser(null);
+    }
+    return { user, sessionId, logout };
+  }
+
   const SOCIALS = <>
     <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
     <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
@@ -141,6 +176,7 @@
   </>;
 
   function Navbar(){
+    const { user, logout } = useSession();
     const [open,setOpen]=React.useState(false);
     return (<>
       <nav>
@@ -151,6 +187,19 @@
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store">STORE</a>
+          </div>
+          <div className="nauth">
+            {user ? (
+              <div className="nuser" onClick={logout} title="Click to logout">
+                {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
+                <span className="nuser-name">{user.displayName}</span>
+                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+              </div>
+            ) : (
+              <a href="/auth/login" className="nlogin-btn">
+                Login with Kick
+              </a>
+            )}
           </div>
           <div className="nsoc">{SOCIALS}</div>
           <button className="hamburger" onClick={()=>setOpen(o=>!o)}>

@@ -111,11 +111,46 @@
       .podium{gap:8px}
       .ftw{flex-direction:column;align-items:flex-start}
     }
+
+    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;flex-shrink:0}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap;flex-shrink:0}
+    .nlogin-btn:hover{opacity:.85}
+    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
+    .nuser:hover{border-color:var(--b3)}
+    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
   </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
+
+
+  function useSession() {
+    const [user, setUser] = React.useState(null);
+    const [sessionId, setSessionId] = React.useState(null);
+    React.useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get('session') || localStorage.getItem('kick_session');
+      if (sid) {
+        localStorage.setItem('kick_session', sid);
+        setSessionId(sid);
+        fetch('/auth/me?session=' + sid)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
+          .catch(() => {});
+        if (params.get('session')) window.history.replaceState({}, '', window.location.pathname);
+      }
+    }, []);
+    function logout() {
+      const sid = localStorage.getItem('kick_session');
+      if (sid) fetch('/auth/logout?session=' + sid);
+      localStorage.removeItem('kick_session');
+      setUser(null);
+    }
+    return { user, sessionId, logout };
+  }
 
   const SOCIALS = <>
     <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
@@ -124,6 +159,7 @@
   </>;
 
   function Navbar(){
+    const { user, logout } = useSession();
     const [open,setOpen]=React.useState(false);
     return (<>
       <nav>
@@ -134,6 +170,19 @@
             <a href="/leaderboards.html">LEADERBOARDS</a>
             <a href="/points.html" className="on">POINTS</a>
             <a href="/store.html">STORE</a>
+          </div>
+          <div className="nauth">
+            {user ? (
+              <div className="nuser" onClick={logout} title="Click to logout">
+                {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
+                <span className="nuser-name">{user.displayName}</span>
+                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+              </div>
+            ) : (
+              <a href="/auth/login" className="nlogin-btn">
+                Login with Kick
+              </a>
+            )}
           </div>
           <div className="nsoc">{SOCIALS}</div>
           <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
