@@ -383,7 +383,7 @@
             </div>
           )}
 
-          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)}/>}
+          {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)}/>}
 
           {(winner||(giveaway?.winner))&&(
             <div className="winner-box f2">
