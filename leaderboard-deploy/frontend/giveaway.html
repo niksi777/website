@@ -180,7 +180,7 @@
           track.style.transition='transform 5s cubic-bezier(0.08,0.82,0.17,1)';
           track.style.transform='translateX('+endX+'px)';
         });
-        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);setTimeout(()=>{onWinner(forcedName);if(onForceConsumed)onForceConsumed();setIsRerolling(false);},1000);},5300);
+        setTimeout(()=>{setRolling(false);setWinnerIdx(winnerCardIdx);setTimeout(()=>{onWinner(forcedName);setTimeout(()=>{if(onForceConsumed)onForceConsumed();setIsRerolling(false);},200);},5300);
       });
     }
     function roll(){
