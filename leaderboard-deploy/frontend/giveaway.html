@@ -114,6 +114,8 @@
     .roller-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite}
     .roller-card.winner-card .roller-card-bar{background:linear-gradient(90deg,#e8a427,#f5d080,#e8a427);background-size:200% auto;animation:winnerShine 2s linear infinite}
     .roller-card.winner-card .roller-card-name{background:linear-gradient(90deg,#e8a427,#fff,#e8a427);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:winnerShine 2.5s linear infinite}
+    @keyframes idleScroll{0%{transform:translateX(0)}100%{transform:translateX(var(--idle-shift))}}
+    .roller-track.idle{animation:idleScroll var(--idle-dur,20s) linear infinite}
     .roll-btn{width:100%;padding:15px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:linear-gradient(135deg,#e8a427,#c47f10);color:#07080c;transition:opacity .15s,transform .1s}
     .roll-btn:hover{opacity:.9;transform:translateY(-1px)}
     .roll-btn:active{transform:translateY(0)}
@@ -173,6 +175,8 @@
     const stageRef=React.useRef(null);
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
+    const idleRef=React.useRef(null);
+    const [idleReady,setIdleReady]=React.useState(false);
     const CARD_W=158,GAP=10,TILE=168,TOTAL=60;
     const RARITIES=['blue','blue','blue','purple','purple','gold'];
     function getRarity(i){return RARITIES[i%RARITIES.length]}
@@ -180,6 +184,32 @@
     React.useEffect(()=>{
       if(forceWinner&&entries.length>0) doRoll(forceWinner);
     },[forceWinner]);
+
+    React.useEffect(()=>{
+      if(rolling||entries.length===0) return;
+      const track=trackRef.current;
+      if(!track) return;
+      track.innerHTML='';
+      track.classList.remove('idle');
+      void track.offsetWidth;
+      const pool=entries.length>0?entries:[{username:'???'}];
+      const repeated=[];
+      while(repeated.length<40) repeated.push(...pool);
+      repeated.slice(0,40).forEach(e=>{
+        const d=document.createElement('div');
+        d.className='roller-card rarity-'+getRarity(e.username);
+        d.innerHTML='<div class="roller-card-bar"></div><div class="roller-card-name">'+e.username+'</div>';
+        track.appendChild(d);
+      });
+      const totalW=40*TILE;
+      const halfW=totalW/2;
+      const dur=Math.max(8,entries.length*1.2);
+      track.style.setProperty('--idle-shift','-'+halfW+'px');
+      track.style.setProperty('--idle-dur',dur+'s');
+      track.style.transform='translateX(0px)';
+      track.classList.add('idle');
+      setIdleReady(true);
+    },[entries,rolling]);
 
     function buildDeck(winnerName){
       const pool=entries.length>0?entries:[{username:'???'}];
@@ -224,6 +254,7 @@
       if(onRollingChange)onRollingChange(true);
       const track=trackRef.current;
       if(track){
+        track.classList.remove('idle');
         track.innerHTML='';
         cards.forEach((c,i)=>{
           const d=document.createElement('div');
