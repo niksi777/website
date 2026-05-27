@@ -374,14 +374,14 @@
               <button className="btn btn-pri" onClick={startGiveaway} disabled={starting||!keyword.trim()||!prize.trim()}>{starting?'Starting...':'Start Giveaway'}</button>
             </div>
           ):(
-            <div className="card f2">
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-                <div className="card-title" style={{marginBottom:0}}>Active Giveaway</div>
-                <button className="btn btn-sec" style={{width:'auto',padding:'8px 16px'}} onClick={resetGiveaway}>Reset</button>
-              </div>
-              <div style={{display:'flex',alignItems:'center',gap:24,flexWrap:'wrap'}}>
-                <div style={{display:'flex',flexDirection:'column',gap:4}}><div className="lbl">Keyword</div><div className="keyword-badge">{giveaway.keyword}</div></div>
-                <div style={{display:'flex',flexDirection:'column',gap:4}}><div className="lbl">Prize</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:700,color:'#fff'}}>{giveaway.prize}</div></div>
+            <div className="card f2" style={{padding:'16px 20px'}}>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap'}}>
+                <div style={{display:'flex',alignItems:'center',gap:24,flexWrap:'wrap'}}>
+                  <div><div className="lbl" style={{marginBottom:4}}>Keyword</div><div className="keyword-badge">{giveaway.keyword}</div></div>
+                  <div><div className="lbl" style={{marginBottom:4}}>Prize</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:26,fontWeight:700,color:'#fff',lineHeight:1}}>{giveaway.prize}</div></div>
+                  <div><div className="lbl" style={{marginBottom:4}}>Entries</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:26,fontWeight:700,color:'#fff',lineHeight:1}}>{entries.length}</div></div>
+                </div>
+                <button className="btn btn-sec" style={{width:'auto',padding:'8px 20px',flexShrink:0}} onClick={resetGiveaway}>Reset</button>
               </div>
               {timerRunning&&(<>
               <div className="divider-line"/>
