@@ -333,7 +333,7 @@
           
 
           <div className="statusbar f2">
-            <div className="stat"><div className="stat-lbl">Status</div><div className={'stat-val '+(isActive?'green':'')}>{isActive?'LIVE':giveaway?.winner||winner?'ENDED':'IDLE'}</div></div>
+            
             <div className="stat"><div className="stat-lbl">Entries</div><div className="stat-val">{entries.length}</div></div>
             <div className="stat"><div className="stat-lbl">Prize</div><div className="stat-val active">{giveaway?.prize||'—'}</div></div>
           </div>
@@ -379,9 +379,9 @@
                 <div className="card-title" style={{marginBottom:0}}>Active Giveaway</div>
                 <button className="btn btn-sec" style={{width:'auto',padding:'8px 16px'}} onClick={resetGiveaway}>Reset</button>
               </div>
-              <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
-                <div><div className="lbl" style={{marginBottom:6}}>Keyword</div><div className="keyword-badge">{giveaway.keyword}</div></div>
-                <div style={{flex:1,minWidth:160}}><div className="lbl" style={{marginBottom:6}}>Prize</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:700,color:'#fff'}}>{giveaway.prize}</div></div>
+              <div style={{display:'flex',alignItems:'center',gap:24,flexWrap:'wrap'}}>
+                <div style={{display:'flex',flexDirection:'column',gap:4}}><div className="lbl">Keyword</div><div className="keyword-badge">{giveaway.keyword}</div></div>
+                <div style={{display:'flex',flexDirection:'column',gap:4}}><div className="lbl">Prize</div><div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:700,color:'#fff'}}>{giveaway.prize}</div></div>
               </div>
               {timerRunning&&(<>
               <div className="divider-line"/>
@@ -401,8 +401,7 @@
 
           {(winner||(giveaway?.winner))&&!rerollTarget&&(
             <div className="winner-box f2">
-              <div className="confetti">🎉 🏆 🎉</div>
-              <div className="winner-label">Winner</div>
+                            <div className="winner-label">Winner</div>
               <div className="winner-name">{winner||giveaway?.winner}</div>
               {giveaway?.prize&&<div className="winner-prize">{giveaway.prize}</div>}
               <button className="btn btn-sec" style={{marginTop:8,padding:"10px 24px",width:"auto"}} onClick={rerollWinner}>Reroll</button>
