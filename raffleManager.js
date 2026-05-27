@@ -27,7 +27,7 @@ function drawWinners() {
 
   winners.forEach(w => addPoints(w, 25));
   const mention = winners.map(w => `@${w}`).join(', ');
-  if (sendMessageFn) sendMessageFn(`Winner(s) of 25 points are: ${mention}! Congratulations!`);
+  if (sendMessageFn) sendMessageFn(`${mention} just won 25 points!`);
 
   entrants.clear();
 }
