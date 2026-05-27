@@ -292,7 +292,7 @@
       try{
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
-        if(d.winner){setWinner(null);setRerollTarget(d.winner);}
+        if(d.winner){setRerollTarget(d.winner);}
       }catch(e){}
     }
     async function resetGiveaway(){
