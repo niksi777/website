@@ -417,7 +417,7 @@
       fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'stop'})});
     }
     async function startGiveaway(){
-      if(!keyword.trim()||!prize.trim())return;
+      if(!keyword.trim())return;
       setStarting(true);
       try{
         await fetch('/giveaway/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keyword:keyword.trim().toLowerCase(),prize:prize.trim()})});
@@ -482,7 +482,6 @@
             <div className="card f2">
               <div className="form-grid">
                 <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" value={keyword} onChange={e=>setKeyword(e.target.value)}/></div>
-                <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" value={prize} onChange={e=>setPrize(e.target.value)}/></div>
               </div>
               <div className="divider-line"/>
               {!useTimer?(
@@ -510,7 +509,7 @@
                 </div>
               )}
               <div className="divider-line"/>
-              <button className="btn btn-pri" onClick={startGiveaway} disabled={starting||!keyword.trim()||!prize.trim()}>{starting?'Starting...':'Start Giveaway'}</button>
+              <button className="btn btn-pri" onClick={startGiveaway} disabled={starting||!keyword.trim()}>{starting?'Starting...':'Start Giveaway'}</button>
             </div>
           ):(
             timerRunning&&(

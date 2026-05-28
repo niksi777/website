@@ -282,9 +282,9 @@ app.get('/giveaway/state', (req, res) => {
 
 app.post('/giveaway/start', (req, res) => {
   const { keyword, prize } = req.body;
-  if (!keyword || !prize) return res.status(400).json({ error: 'keyword and prize required' });
+  if (!keyword) return res.status(400).json({ error: 'keyword required' });
   giveawayState = {
-    giveaway: { keyword: keyword.toLowerCase().trim(), prize, winner: null, started_at: Date.now() },
+    giveaway: { keyword: keyword.toLowerCase().trim(), prize: prize||'', winner: null, started_at: Date.now() },
     entries: []
   };
   console.log('Giveaway started — keyword: ' + keyword + ' prize: ' + prize);
