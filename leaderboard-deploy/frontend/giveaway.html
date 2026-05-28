@@ -198,7 +198,7 @@
     }
     function makeCard(name){
       const seed=encodeURIComponent(name);
-      return '<img class="roller-avatar" src="https://api.dicebear.com/9.x/adventurer/svg?seed='+seed+'&backgroundColor=transparent" width="38" height="38"/><div class="roller-card-name">'+name+'</div>';
+      return '<img class="roller-avatar" src="https://api.dicebear.com/7.x/big-ears/svg?seed='+seed+'" width="38" height="38"/><div class="roller-card-name">'+name+'</div>';
     }
 
     function startIdle(pool){
@@ -233,10 +233,15 @@
       idleRaf.current=requestAnimationFrame(step);
     }
 
+    const idleKeyRef=React.useRef('');
     React.useEffect(()=>{
       if(entries.length===0) return;
-      if(!rolling) startIdle(entries);
-    },[entries]);
+      if(rolling) return;
+      const key=entries.map(e=>e.username).join(',');
+      if(key===idleKeyRef.current) return;
+      idleKeyRef.current=key;
+      startIdle(entries);
+    },[entries,rolling]);
 
     React.useEffect(()=>{
       if(forceWinner&&entries.length>0) doRoll(forceWinner);
