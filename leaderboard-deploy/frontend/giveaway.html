@@ -313,7 +313,7 @@
           <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0} style={{flex:1}}>
             {rolling?'Rolling...':'Roll Winner'}
           </button>
-          {hasWinner&&!rolling&&<button className="roll-btn" onClick={onReroll} style={{flex:'0 0 auto',padding:'15px 24px',background:'transparent',border:'1px solid var(--b2)',color:'var(--mu)'}}>Reroll</button>}
+          {winnerIdx!==null&&!rolling&&<button className="roll-btn" onClick={onReroll} style={{flex:'0 0 auto',padding:'15px 24px',background:'transparent',border:'1px solid var(--b2)',color:'var(--mu)'}}>Reroll</button>}
         </div>
       </div>
     );
@@ -342,7 +342,12 @@
     async function fetchState(){
       try{
         const r=await fetch('/giveaway/state');const d=await r.json();
-        setGiveaway(d.giveaway);const newList=d.entries||[];setEntries(newList);
+        setGiveaway(d.giveaway);const newList=d.entries||[];
+        setEntries(prev=>{
+          const prevIds=new Set(prev.map(e=>e.id||e.username));
+          newList.forEach(e=>{if(prevIds.has(e.id||e.username))prevEntryIds.current.add(e.id||e.username);});
+          return newList;
+        });
         if(d.giveaway?.winner) setWinner(d.giveaway.winner);
       }catch(e){}
     }
