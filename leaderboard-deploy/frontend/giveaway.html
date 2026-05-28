@@ -497,6 +497,8 @@
     const [winnerChat,setWinnerChat]=React.useState([]);
     const chatPollRef=React.useRef(null);
     const chatFeedRef=React.useRef(null);
+    const winnerPanelRef=React.useRef(null);
+    const [winnerAvatarUrl,setWinnerAvatarUrl]=React.useState(null);
     function login(){if(pw===CORRECT_PASSWORD){setAuthed(true);setPwErr('');}else setPwErr('Incorrect password.');}
     async function fetchState(){
       try{
@@ -557,7 +559,7 @@
       respTimerRef.current=setInterval(()=>{s=Math.max(0,s-1);setRespTimer(s);if(s===0)clearInterval(respTimerRef.current);},1000);
       clearInterval(chatPollRef.current);
       const poll=()=>{
-        fetch('/giveaway/winner-chat?username='+encodeURIComponent(name))
+        fetch('/giveaway/winner-chat?username='+encodeURIComponent(name.toLowerCase()))
           .then(r=>r.json()).then(msgs=>{setWinnerChat(msgs);setTimeout(()=>{if(chatFeedRef.current)chatFeedRef.current.scrollTop=chatFeedRef.current.scrollHeight;},50);}).catch(()=>{});
       };
       poll();chatPollRef.current=setInterval(poll,2000);
@@ -565,7 +567,13 @@
     function handleWinner(name){
       confirmWinner(name);
       setPfLoading(false);
+      setWinnerAvatarUrl(null);
       startRespTimer(name);
+      // Fetch Discord avatar for this winner
+      fetch('/giveaway/winner-info?username='+encodeURIComponent(name))
+        .then(r=>r.json()).then(d=>{if(d.discordAvatar)setWinnerAvatarUrl(d.discordAvatar);}).catch(()=>{});
+      // Scroll to winner panel after render
+      setTimeout(()=>{if(winnerPanelRef.current)winnerPanelRef.current.scrollIntoView({behavior:'smooth',block:'start'});},120);
     }
     async function confirmWinner(name){
       try{
@@ -586,7 +594,7 @@
       if(!confirm('Reset and clear all entries?'))return;
       stopTimer();
       clearInterval(respTimerRef.current);clearInterval(chatPollRef.current);
-      setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);setShowProof(false);
+      setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);setShowProof(false);setWinnerAvatarUrl(null);
       await fetch('/giveaway/reset',{method:'POST'});
       setWinner(null);fetchState();
     }
@@ -707,15 +715,19 @@
 
           {/* Winner Response Panel */}
           {winner&&(
-            <div className="winner-panel f3">
-              <div className="winner-panel-header">
-                <div className="winner-avatar" style={{display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,color:'#e8a427'}}>
-                  {winner.slice(0,2).toUpperCase()}
-                </div>
+            <div className="winner-panel f3" ref={winnerPanelRef}>
+              <div className="winner-panel-header" style={{flexDirection:'column',alignItems:'center',textAlign:'center',gap:12}}>
+                {winnerAvatarUrl ? (
+                  <img src={winnerAvatarUrl} className="winner-avatar" alt={winner}/>
+                ) : (
+                  <div className="winner-avatar" style={{display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,color:'#e8a427'}}>
+                    {winner.slice(0,2).toUpperCase()}
+                  </div>
+                )}
                 <div>
                   <div className="winner-panel-name">{winner}</div>
                   {respTimer!==null&&(
-                    <div className="winner-resp-timer">
+                    <div className="winner-resp-timer" style={{justifyContent:'center'}}>
                       <span className={'winner-resp-t'+(respTimer<=10?' urgent':'')}>
                         {respTimer}s
                       </span>

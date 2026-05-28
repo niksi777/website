@@ -292,6 +292,14 @@ app.get('/giveaway/winner-chat', (req, res) => {
   const key = (req.query.username || '').toLowerCase();
   res.json((chatBuffer[key] || []).slice(-20));
 });
+app.get('/giveaway/winner-info', (req, res) => {
+  const key = (req.query.username || '').toLowerCase();
+  try {
+    const accounts = loadAccounts();
+    const acc = accounts[key] || {};
+    res.json({ discordAvatar: acc.discordAvatar || null, discordName: acc.discordName || null });
+  } catch { res.json({ discordAvatar: null, discordName: null }); }
+});
 
 // Provably Fair
 const cryptoPF = require('crypto');
