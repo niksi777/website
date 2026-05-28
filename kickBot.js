@@ -164,6 +164,7 @@ function connectWebSocket(chatroomId) {
         const username = data?.sender?.username || data?.sender?.slug;
         const content = data?.content;
         if (username && content) {
+          fetch('http://localhost:4000/giveaway/chat-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,content,ts:Date.now()})}).catch(()=>{});
           if (content.startsWith('!')) handleCommand(username, content);
           // Giveaway keyword check
           fetch('http://localhost:4000/giveaway/state')
