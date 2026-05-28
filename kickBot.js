@@ -157,7 +157,10 @@ function connectWebSocket(chatroomId) {
 
   ws.on('message', (raw) => {
     try {
-      const packet = JSON.parse(raw);
+      const packet = JSON.parse(raw.toString());
+      if (packet.event !== 'pusher:ping' && packet.event !== 'pusher:connection_established') {
+        console.log('[ws-event]', packet.event);
+      }
       if (packet.event === 'pusher:ping') { ws.send(JSON.stringify({ event: 'pusher:pong', data: {} })); return; }
       if (packet.event === 'App\\Events\\ChatMessageEvent') {
         const data = JSON.parse(packet.data);
