@@ -489,6 +489,8 @@
     const [pfProof,setPfProof]=React.useState(null);
     const [pfLoading,setPfLoading]=React.useState(false);
     const [pfForce,setPfForce]=React.useState(null);
+    const [showProof,setShowProof]=React.useState(false);
+    const proofRef=React.useRef(null);
     // Winner response
     const [respTimer,setRespTimer]=React.useState(null);
     const respTimerRef=React.useRef(null);
@@ -530,7 +532,13 @@
       setStarting(false);
     }
     async function prepareSeed(){
-      try{const r=await fetch('/giveaway/pf/prepare');const d=await r.json();setPfHash(d.hash);setPfProof(null);}catch(e){}
+      try{const r=await fetch('/giveaway/pf/prepare');const d=await r.json();setPfHash(d.hash);setPfProof(null);setShowProof(false);}catch(e){}
+    }
+    function toggleProof(){
+      setShowProof(p=>{
+        if(!p) setTimeout(()=>{if(proofRef.current)proofRef.current.scrollIntoView({behavior:'smooth',block:'start'});},80);
+        return !p;
+      });
     }
     async function pfRoll(){
       if(pfLoading||!pfHash)return;
@@ -578,7 +586,7 @@
       if(!confirm('Reset and clear all entries?'))return;
       stopTimer();
       clearInterval(respTimerRef.current);clearInterval(chatPollRef.current);
-      setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);
+      setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);setShowProof(false);
       await fetch('/giveaway/reset',{method:'POST'});
       setWinner(null);fetchState();
     }
@@ -661,36 +669,39 @@
 
           {isActive&&<CardRoller entries={entries} onWinner={handleWinner} forceWinner={pfForce||rerollTarget} onForceConsumed={()=>{setPfForce(null);setRerollTarget(null);}} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
 
-          {/* Provably Fair Section */}
+          {/* Provably Fair - inline controls only */}
           {isActive&&(
-            <div className="pf-section f3">
-              <div className="pf-head">
-                <div>
-                  <div className="pf-label">Provably Fair</div>
-                  {pfHash&&<div className="pf-hash-val">Committed: {pfHash.slice(0,24)}...{pfHash.slice(-8)}</div>}
-                  {!pfHash&&<div style={{fontSize:11,color:'var(--mu)',marginTop:4}}>Generate a seed before rolling to enable provably fair verification.</div>}
-                </div>
-                <div className="pf-btns">
-                  <button className="pf-btn" onClick={prepareSeed} disabled={pfLoading}>
-                    {pfHash?'New Seed':'Generate Seed'}
-                  </button>
-                  {pfHash&&!pfProof&&(
-                    <button className="pf-btn pf-btn-roll" onClick={pfRoll} disabled={pfLoading||entries.length===0}>
-                      {pfLoading?'Rolling...':'PF Roll'}
-                    </button>
-                  )}
-                </div>
+            <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap',paddingTop:4}}>
+              <div style={{display:'flex',alignItems:'center',gap:8}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:pfProof?'#22c55e':'rgba(184,204,232,.5)',display:'inline-block',flexShrink:0}}/>
+                <span style={{fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:pfProof?'rgba(221,227,239,.9)':'var(--mu)'}}>
+                  Provably Fair{pfProof?' ✓':''}
+                </span>
               </div>
-              {pfProof&&(
-                <div className="pf-proof">
-                  <div><strong>Winner:</strong> {pfProof.winner}</div>
-                  <div><strong>Server Seed:</strong> {pfProof.serverSeed}</div>
-                  <div><strong>Seed Hash:</strong> {pfProof.serverSeedHash}</div>
-                  <div><strong>Result Hash:</strong> {pfProof.resultHash}</div>
-                  <div><strong>Index:</strong> {pfProof.index} of {pfProof.total} entries</div>
-                  <div style={{marginTop:6,fontSize:10,color:'rgba(221,227,239,.4)'}}>SHA256(serverSeed + ":" + entries) = resultHash, winner = entries[resultHash mod {pfProof.total}]</div>
-                </div>
+              {!pfHash&&<button className="pf-btn" onClick={prepareSeed} disabled={pfLoading}>Generate Seed</button>}
+              {pfHash&&!pfProof&&<button className="pf-btn" onClick={prepareSeed} disabled={pfLoading}>New Seed</button>}
+              {pfHash&&!pfProof&&(
+                <button className="pf-btn pf-btn-roll" onClick={pfRoll} disabled={pfLoading||entries.length===0}>
+                  {pfLoading?'Rolling...':'PF Roll'}
+                </button>
               )}
+              {pfProof&&(
+                <button className="pf-btn" onClick={toggleProof}>
+                  {showProof?'Hide Proof':'View Proof'}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Proof details - only visible when toggled */}
+          {pfProof&&showProof&&(
+            <div ref={proofRef} className="pf-proof" style={{animation:'fu .3s ease both'}}>
+              <div><strong>Winner:</strong> {pfProof.winner}</div>
+              <div><strong>Server Seed:</strong> {pfProof.serverSeed}</div>
+              <div><strong>Seed Hash:</strong> {pfProof.serverSeedHash}</div>
+              <div><strong>Result Hash:</strong> {pfProof.resultHash}</div>
+              <div><strong>Index:</strong> {pfProof.index} of {pfProof.total} entries</div>
+              <div style={{marginTop:6,fontSize:10,color:'rgba(221,227,239,.3)'}}>SHA256(serverSeed + ":" + entries) - winner = entries[hash mod {pfProof.total}]</div>
             </div>
           )}
 
@@ -739,13 +750,16 @@
             </div>
           )}
 
-          {/* Bottom Status Bar */}
-          <div className="status-bar f3">
-            <div className="status-chip"><span className="sdot-green"/>{entries.length} Entered</div>
-            <div className="status-chip" style={{cursor:'pointer'}} onClick={()=>pfProof&&alert('Server Seed: '+pfProof.serverSeed+'\nHash: '+pfProof.serverSeedHash+'\nResult: '+pfProof.resultHash+'\nIndex: '+pfProof.index+' / '+pfProof.total)}>
-              <span className="sdot-blue"/>Provably Fair {pfProof?'✓':''}
-            </div>
-            <div className="status-chip"><span className="sdot-green"/>System Online</div>
+          {/* Bottom info line */}
+          <div style={{display:'flex',alignItems:'center',gap:20,paddingTop:4,flexWrap:'wrap'}}>
+            <span style={{display:'flex',alignItems:'center',gap:6,fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--mu)'}}>
+              <span style={{width:5,height:5,borderRadius:'50%',background:'#22c55e',display:'inline-block'}}/>
+              {entries.length} Entered
+            </span>
+            <span style={{display:'flex',alignItems:'center',gap:6,fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:pfProof?'rgba(221,227,239,.7)':'var(--mu)'}}>
+              <span style={{width:5,height:5,borderRadius:'50%',background:pfProof?'#22c55e':'rgba(184,204,232,.4)',display:'inline-block'}}/>
+              Provably Fair{pfProof?' ✓':''}
+            </span>
           </div>
 
         </div>
