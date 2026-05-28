@@ -306,12 +306,15 @@
           <div className="roller-pointer-bot"/>
           <div className="roller-stage" ref={stageRef}>
             <div className="roller-win-zone"/>
-            <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)'}} onTransitionEnd={onTransitionEnd}/>
+            <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)',left:0,top:0}} onTransitionEnd={onTransitionEnd}/>
           </div>
         </div>
-        <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0}>
-          {rolling?'Rolling...':(winnerIdx!==null?'Reroll':'Roll Winner')}
-        </button>
+        <div style={{display:'flex',gap:10}}>
+          <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0} style={{flex:1}}>
+            {rolling?'Rolling...':'Roll Winner'}
+          </button>
+          {hasWinner&&!rolling&&<button className="roll-btn" onClick={onReroll} style={{flex:'0 0 auto',padding:'15px 24px',background:'transparent',border:'1px solid var(--b2)',color:'var(--mu)'}}>Reroll</button>}
+        </div>
       </div>
     );
   }
@@ -339,7 +342,7 @@
     async function fetchState(){
       try{
         const r=await fetch('/giveaway/state');const d=await r.json();
-        setGiveaway(d.giveaway);const newList=d.entries||[];setEntries(prev=>{newList.forEach(e=>{if(!prevEntryIds.current.has(e.id||e.username)){prevEntryIds.current.add(e.id||e.username);}});return newList;});setEntries(newList);
+        setGiveaway(d.giveaway);const newList=d.entries||[];setEntries(newList);
         if(d.giveaway?.winner) setWinner(d.giveaway.winner);
       }catch(e){}
     }
@@ -460,16 +463,9 @@
             )
           )}
 
-          {(isActive||rerollTarget)&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling}/>}
+          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)}/>}
 
-          {(winner||(giveaway?.winner))&&!rerollTarget&&(
-            <div className="winner-box f2">
-                            <div className="winner-label">Winner</div>
-              <div className="winner-name">{winner||giveaway?.winner}</div>
-              {giveaway?.prize&&<div className="winner-prize">{giveaway.prize}</div>}
-              <button className="btn btn-sec" style={{marginTop:8,padding:"10px 24px",width:"auto"}} onClick={rerollWinner}>Reroll</button>
-            </div>
-          )}
+
 
           <div className="f3">
             <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginBottom:16}}>Entries - {entries.length}</div>
