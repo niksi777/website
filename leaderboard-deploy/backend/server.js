@@ -289,12 +289,15 @@ app.post('/giveaway/start', (req, res) => {
   };
   console.log('Giveaway started — keyword: ' + keyword + ' prize: ' + prize);
   try {
-    const axios = require('axios');
-    const token = require('fs').readFileSync('/root/website/.bot_token','utf8').trim();
-    const broadcasterId = require('fs').readFileSync('/root/website/.broadcaster_id','utf8').trim();
-    axios.post('https://api.kick.com/public/v1/chat', {
-      type:'user', content:'🎉 Giveaway started! Type "'+keyword+'" in chat to enter! Prize: '+prize, broadcaster_user_id: broadcasterId
-    }, { headers:{ Authorization:'Bearer '+token,'Content-Type':'application/json' } }).catch(()=>{});
+    const _env = require('fs').readFileSync('/root/website/.env','utf8');
+    const _token = (_env.match(/KICK_BOT_TOKEN=(.+)/)||[])[1]?.trim();
+    const _bid = (_env.match(/BROADCASTER_ID=(.+)/)||[])[1]?.trim();
+    if(_token && _bid){
+      require('axios').post('https://api.kick.com/public/v1/chat',
+        {type:'user',content:'Giveaway started! Type "'+keyword+'" in chat to enter! Prize: '+prize,broadcaster_user_id:_bid},
+        {headers:{Authorization:'Bearer '+_token,'Content-Type':'application/json'}}
+      ).catch(()=>{});
+    }
   } catch(e){}
   res.json({ ok: true });
 });
