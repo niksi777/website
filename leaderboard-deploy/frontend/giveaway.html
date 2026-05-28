@@ -238,7 +238,7 @@
         const n=pool[Math.floor(Math.random()*pool.length)].username;cards.push({name:n,r:getRarity(n)});
       }
       const landIdx=Math.floor(TOTAL*0.75);
-      cards[landIdx]={name:winnerName,r:'gold'};
+      cards[landIdx]={name:winnerName,r:getRarity(winnerName)};
       return{cards,landIdx};
     }
 
@@ -374,6 +374,7 @@
     }
     async function rerollWinner(){
       try{
+        await fetchState();
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
         if(d.winner){setWinner(null);setRerollTarget(d.winner);}
