@@ -192,6 +192,24 @@ function connectWebSocket(chatroomId) {
 }
 
 // ─── START ────────────────────────────────────────────────────────────────────
+// ─── GIVEAWAY ANNOUNCER ───────────────────────────────────────────────────────
+let lastAnnouncedKeyword = null;
+setInterval(async () => {
+  try {
+    const r = await fetch('http://localhost:4000/giveaway/state');
+    const state = await r.json();
+    if (state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
+      if (state.giveaway.keyword !== lastAnnouncedKeyword) {
+        lastAnnouncedKeyword = state.giveaway.keyword;
+        const prize = state.giveaway.prize ? ` Prize: ${state.giveaway.prize}` : '';
+        await sendMessage(`🎉 Giveaway started! Type "${state.giveaway.keyword}" in chat to enter!${prize}`);
+      }
+    } else if (!state.giveaway) {
+      lastAnnouncedKeyword = null;
+    }
+  } catch {}
+}, 4000);
+
 async function start() {
   console.log(`[bot] Starting for channel: ${CHANNEL}`);
   console.log(`[bot] Mods: ${MODS.join(', ') || '(none set)'}`);

@@ -279,6 +279,13 @@ let giveawayState = { giveaway: null, entries: [] };
 // Chat message buffer: { username -> [{ username, content, ts }] }
 const chatBuffer = {};
 const CHAT_MAX = 150;
+const CHAT_BUFFER_PATH = require('path').join(__dirname, '../../chat-buffer.json');
+try { Object.assign(chatBuffer, JSON.parse(require('fs').readFileSync(CHAT_BUFFER_PATH, 'utf8'))); console.log('[chat] Buffer loaded from disk'); } catch {}
+let chatSaveTimer = null;
+function scheduleChatSave() {
+  clearTimeout(chatSaveTimer);
+  chatSaveTimer = setTimeout(() => { try { require('fs').writeFileSync(CHAT_BUFFER_PATH, JSON.stringify(chatBuffer)); } catch {} }, 2000);
+}
 app.post('/giveaway/chat-message', (req, res) => {
   const { username, content, ts } = req.body;
   if (!username || !content) return res.json({ ok: false });
@@ -286,6 +293,7 @@ app.post('/giveaway/chat-message', (req, res) => {
   if (!chatBuffer[key]) chatBuffer[key] = [];
   chatBuffer[key].push({ username, content, ts: ts || Date.now() });
   if (chatBuffer[key].length > CHAT_MAX) chatBuffer[key].shift();
+  scheduleChatSave();
   res.json({ ok: true });
 });
 app.get('/giveaway/winner-chat', (req, res) => {

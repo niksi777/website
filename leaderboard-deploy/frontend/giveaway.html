@@ -151,7 +151,7 @@
     .winner-resp-t{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#e8a427;line-height:1}
     .winner-resp-t.urgent{color:var(--rd)}
     .chat-section{background:var(--s2);border:1px solid var(--b1);border-radius:10px;overflow:hidden}
-    .chat-header{padding:11px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .chat-header{padding:11px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
     .chat-header .cdot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pu 1.5s ease-in-out infinite;flex-shrink:0}
     .chat-feed{height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:1px;padding:8px 10px}
     .chat-feed::-webkit-scrollbar{width:3px}.chat-feed::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
@@ -675,11 +675,9 @@
             )
           )}
 
-          {isActive&&<CardRoller entries={entries} onWinner={handleWinner} forceWinner={pfForce||rerollTarget} onForceConsumed={()=>{setPfForce(null);setRerollTarget(null);}} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
-
-          {/* Provably Fair - inline controls only */}
+          {/* Provably Fair - inline controls above roller */}
           {isActive&&(
-            <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap',paddingTop:4}}>
+            <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
               <div style={{display:'flex',alignItems:'center',gap:8}}>
                 <span style={{width:6,height:6,borderRadius:'50%',background:pfProof?'#22c55e':'rgba(184,204,232,.5)',display:'inline-block',flexShrink:0}}/>
                 <span style={{fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:pfProof?'rgba(221,227,239,.9)':'var(--mu)'}}>
@@ -700,6 +698,8 @@
               )}
             </div>
           )}
+
+          {isActive&&<CardRoller entries={entries} onWinner={handleWinner} forceWinner={pfForce||rerollTarget} onForceConsumed={()=>{setPfForce(null);setRerollTarget(null);}} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
 
           {/* Proof details - only visible when toggled */}
           {pfProof&&showProof&&(
