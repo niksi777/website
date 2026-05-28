@@ -157,18 +157,14 @@ function connectWebSocket(chatroomId) {
 
   ws.on('message', (raw) => {
     try {
-      const str = raw.toString();
-      console.log('[ws-raw]', str.slice(0,120));
-      const packet = JSON.parse(str);
-      console.log('[ws-event]', packet.event);
+      const packet = JSON.parse(raw.toString());
       if (packet.event === 'pusher:ping') { ws.send(JSON.stringify({ event: 'pusher:pong', data: {} })); return; }
       if (packet.event === 'App\\Events\\ChatMessageEvent') {
         const data = JSON.parse(packet.data);
         const username = data?.sender?.username || data?.sender?.slug;
         const content = data?.content;
         if (username && content) {
-          console.log(`[chat] ${username}: ${content.slice(0,50)}`);
-          fetch('http://localhost:4000/giveaway/chat-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,content,ts:Date.now()})}).then(r=>r.json()).then(d=>console.log('[chat-stored]',username,d.ok)).catch(e=>console.log('[chat-err]',e.message));
+          fetch('http://localhost:4000/giveaway/chat-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,content,ts:Date.now()})}).catch(()=>{});
           if (content.startsWith('!')) handleCommand(username, content);
           // Giveaway keyword check
           fetch('http://localhost:4000/giveaway/state')
