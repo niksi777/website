@@ -555,13 +555,22 @@
       }catch(e){setPfLoading(false);}
     }
     function startRespTimer(name){
+      const winTs=Date.now();
       clearInterval(respTimerRef.current);
       let s=30;setRespTimer(s);
       respTimerRef.current=setInterval(()=>{s=Math.max(0,s-1);setRespTimer(s);if(s===0)clearInterval(respTimerRef.current);},1000);
       clearInterval(chatPollRef.current);
       const poll=()=>{
         fetch('/giveaway/winner-chat?username='+encodeURIComponent(name.toLowerCase()))
-          .then(r=>r.json()).then(msgs=>{setWinnerChat(msgs);setTimeout(()=>{if(chatFeedRef.current)chatFeedRef.current.scrollTop=chatFeedRef.current.scrollHeight;},50);}).catch(()=>{});
+          .then(r=>r.json()).then(msgs=>{
+            setWinnerChat(msgs);
+            // Stop timer as soon as winner sends any message after being rolled
+            if(msgs.some(m=>m.ts>winTs)){
+              clearInterval(respTimerRef.current);
+              setRespTimer(null);
+            }
+            setTimeout(()=>{if(chatFeedRef.current)chatFeedRef.current.scrollTop=chatFeedRef.current.scrollHeight;},50);
+          }).catch(()=>{});
       };
       poll();chatPollRef.current=setInterval(poll,2000);
     }
