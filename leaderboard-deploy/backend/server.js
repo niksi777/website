@@ -419,7 +419,7 @@ app.get('/giveaway/timer', (req, res) => {
 app.get('/admin/accounts', (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'];
   const session = sessions[sessionId];
-  if (!session || session.username !== ADMIN_USERNAME) return res.status(403).json({ error: 'Forbidden' });
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   const accounts = loadAccounts();
   let points = {};
   try { points = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8')); } catch {}
@@ -526,7 +526,8 @@ const sessions = {};
 const pkceStore = {};
 const discordStateStore = {};
 
-const ADMIN_USERNAME = 'niksi777';
+const ADMIN_USERNAMES = ['niksi777', 'niksibot'];
+const isAdminUser = (username) => ADMIN_USERNAMES.includes((username || '').toLowerCase());
 const ACCOUNTS_PATH = require('path').join(__dirname, '../../accounts.json');
 const SESSIONS_PATH = require('path').join(__dirname, '../../sessions.json');
 const SESSION_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -608,7 +609,7 @@ app.get('/auth/me', (req, res) => {
     discordId: session.discordId || null,
     discordName: session.discordName || null,
     discordAvatar: session.discordAvatar || null,
-    isAdmin: session.username === ADMIN_USERNAME
+    isAdmin: isAdminUser(session.username)
   });
 });
 app.get('/auth/logout', (req, res) => {
