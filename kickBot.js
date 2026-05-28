@@ -163,7 +163,25 @@ function connectWebSocket(chatroomId) {
         const data = JSON.parse(packet.data);
         const username = data?.sender?.username || data?.sender?.slug;
         const content = data?.content;
-        if (username && content && content.startsWith('!')) handleCommand(username, content);
+        if (username && content) {
+          if (content.startsWith('!')) handleCommand(username, content);
+          // Giveaway keyword check
+          fetch('http://localhost:4000/giveaway/state')
+            .then(r=>r.json())
+            .then(state=>{
+              if(state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
+                const kw = state.giveaway.keyword.toLowerCase().trim();
+                const msg = content.toLowerCase().trim();
+                if(msg === kw) {
+                  fetch('http://localhost:4000/giveaway/enter', {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({username})
+                  }).catch(()=>{});
+                }
+              }
+            }).catch(()=>{});
+        }
       }
     } catch {}
   });
