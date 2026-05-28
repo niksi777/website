@@ -519,7 +519,7 @@ app.get('/auth/discord', (req, res) => {
   const params = new URLSearchParams({
     response_type: 'code',
     client_id: '1507460805518692552',
-    redirect_uri: 'https://niksi777.com/auth/discord/callback',
+    redirect_uri: 'http://niksi777.com/auth/discord/callback',
     scope: 'identify',
     state
   });
@@ -537,7 +537,7 @@ app.get('/auth/discord/callback', async (req, res) => {
       client_secret: 'n3Ossxz3GiImDvWE3XUEDiyvjGxb63ot',
       grant_type: 'authorization_code',
       code,
-      redirect_uri: 'https://niksi777.com/auth/discord/callback'
+      redirect_uri: 'http://niksi777.com/auth/discord/callback'
     });
     const { data: tokenData } = await axios.post('https://discord.com/api/oauth2/token', params, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
