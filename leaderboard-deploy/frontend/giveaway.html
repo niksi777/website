@@ -195,18 +195,11 @@
       if(forceWinner&&entries.length>0) doRoll(forceWinner);
     },[forceWinner]);
 
-    React.useEffect(()=>{
-      if(rolling) return;
-      const key=entries.map(e=>e.username).join(',');
-      if(key===idlePrevEntries.current) return;
-      idlePrevEntries.current=key;
-      if(entries.length===0) return;
+    function startIdle(pool){
       const track=trackRef.current;
       if(!track) return;
       cancelAnimationFrame(idleRaf.current);
-      track.classList.remove('idle');
       track.innerHTML='';
-      const pool=entries;
       const minTiles=40;
       const repeated=[];
       while(repeated.length<minTiles) repeated.push(...pool);
@@ -220,19 +213,26 @@
       });
       const halfW=minTiles*TILE;
       idleHalfW.current=halfW;
-      idleX.current=0;
+      idleX.current=-halfW/2;
       const speed=0.4;
       let last=null;
       function step(ts){
         if(!last) last=ts;
-        const dt=ts-last;last=ts;
-        if(!idlePaused.current){
-          idleX.current+=speed*(dt/16.67);
-          if(idleX.current>=0) idleX.current=-halfW;
-          track.style.transform='translateX('+idleX.current+'px)';
-        }
+        const dt=Math.min(ts-last,50);last=ts;
+        idleX.current-=speed*(dt/16.67);
+        if(idleX.current<=-halfW) idleX.current+=halfW;
+        track.style.transform='translateX('+idleX.current+'px)';
         idleRaf.current=requestAnimationFrame(step);
       }
+      idleRaf.current=requestAnimationFrame(step);
+    }
+    React.useEffect(()=>{
+      if(rolling) return;
+      const key=entries.map(e=>e.username).join(',');
+      if(key===idlePrevEntries.current) return;
+      idlePrevEntries.current=key;
+      if(entries.length===0) return;
+      startIdle(entries);
       idleX.current=-halfW;
       idleRaf.current=requestAnimationFrame(step);
     },[entries,rolling]);
@@ -274,9 +274,9 @@
         onWinner(winner);
         if(forced&&onForceConsumed)onForceConsumed();
         setTimeout(()=>{
-          setRolling(false);
           idlePaused.current=false;
           idlePrevEntries.current='';
+          setRolling(false);
         },2500);
       },6300);
     }
