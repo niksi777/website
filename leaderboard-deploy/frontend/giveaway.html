@@ -396,7 +396,7 @@
         </div>
       </div>
     </>);
-    const isActive=giveaway&&!giveaway.winner&&!winner;
+    const isActive=!!giveaway;
     const pct=(secondsLeft/Math.max(duration,1))*100;
     const urgent=secondsLeft<=10&&timerRunning;
     return (<>
