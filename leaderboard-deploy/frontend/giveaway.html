@@ -199,6 +199,7 @@
       if(rolling) return;
       const key=entries.map(e=>e.username).join(',');
       if(key===idlePrevEntries.current) return;
+      if(idlePaused.current) return;
       idlePrevEntries.current=key;
       if(entries.length===0) return;
       const track=trackRef.current;
@@ -274,7 +275,10 @@
         onWinner(winner);
         if(forced&&onForceConsumed)onForceConsumed();
         idlePaused.current=true;
-        setTimeout(()=>{ idlePaused.current=false; },2000);
+        setTimeout(()=>{
+          idlePaused.current=false;
+          idlePrevEntries.current='';
+        },2500);
       },6300);
     }
 
@@ -312,7 +316,20 @@
 
     return(
       <div className="roller-wrap f2">
-        <div className="roller-title">Roll Winner</div>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <div className="roller-title">Roll Winner</div>
+          {recentWinners&&recentWinners.length>0&&(
+            <div style={{display:'flex',gap:16,alignItems:'center'}}>
+              <div style={{fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--mu)'}}>Recent:</div>
+              {recentWinners.slice(0,3).map((w,i)=>(
+                <div key={i} style={{display:'flex',gap:6,alignItems:'center'}}>
+                  <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:700,textTransform:'uppercase',color:'var(--tx)'}}>{w.name}</span>
+                  <span style={{fontSize:11,color:'var(--ac)'}}>{w.prize}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="roller-stage-wrap">
           <div className="roller-pointer-top"/>
           <div className="roller-pointer-bot"/>
@@ -477,19 +494,7 @@
             )
           )}
 
-          {recentWinners.length>0&&(
-            <div className="recent-winners f2">
-              <div className="recent-winners-title">Recent Winners</div>
-              {recentWinners.map((w,i)=>(
-                <div key={i} className="recent-winner-row">
-                  <div className="recent-winner-name">{w.name}</div>
-                  <div className="recent-winner-prize">{w.prize}</div>
-                  <div className="recent-winner-time">{new Date(w.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
-                </div>
-              ))}
-            </div>
-          )}
-          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)}/>}
+          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners}/>}
 
 
 
