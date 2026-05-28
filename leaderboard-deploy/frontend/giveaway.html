@@ -416,11 +416,12 @@
 
     return(
       <div className="roller-wrap f2">
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{display:'grid',gridTemplateColumns:'1fr auto 1fr',alignItems:'center'}}>
           <div className="roller-title">Roll Winner</div>
-          {recentWinners&&recentWinners.length>0&&(
-            <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
-              <div style={{fontSize:10,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginRight:4}}>Recent</div>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',textAlign:'center'}}>{entries.length} ENTERED</div>
+          <div style={{display:'flex',gap:10,alignItems:'center',justifyContent:'flex-end',flexWrap:'wrap'}}>
+            {recentWinners&&recentWinners.length>0&&<>
+              <div style={{fontSize:10,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>Recent</div>
               {recentWinners.slice(0,3).map((w,i)=>(
                 <div key={i} style={{display:'flex',alignItems:'center',gap:6,background:'var(--s2)',border:'1px solid var(--b2)',borderRadius:8,padding:'5px 10px'}}>
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,textTransform:'uppercase',color:'var(--tx)',letterSpacing:'.04em'}}>{w.name}</span>
@@ -428,8 +429,8 @@
                   <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'var(--ac)',letterSpacing:'.02em'}}>{w.prize}</span>
                 </div>
               ))}
-            </div>
-          )}
+            </>}
+          </div>
         </div>
         <div className="roller-stage-wrap">
           <div className="roller-pointer-top"/>
@@ -762,17 +763,6 @@
             </div>
           )}
 
-          {/* Bottom info line */}
-          <div style={{display:'flex',alignItems:'center',gap:20,paddingTop:4,flexWrap:'wrap'}}>
-            <span style={{display:'flex',alignItems:'center',gap:6,fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--mu)'}}>
-              <span style={{width:5,height:5,borderRadius:'50%',background:'#22c55e',display:'inline-block'}}/>
-              {entries.length} Entered
-            </span>
-            <span style={{display:'flex',alignItems:'center',gap:6,fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:pfProof?'rgba(221,227,239,.7)':'var(--mu)'}}>
-              <span style={{width:5,height:5,borderRadius:'50%',background:pfProof?'#22c55e':'rgba(184,204,232,.4)',display:'inline-block'}}/>
-              Provably Fair{pfProof?' ✓':''}
-            </span>
-          </div>
 
         </div>
       </div>
