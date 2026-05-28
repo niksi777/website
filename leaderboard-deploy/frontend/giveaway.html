@@ -311,12 +311,13 @@
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div className="roller-title">Roll Winner</div>
           {recentWinners&&recentWinners.length>0&&(
-            <div style={{display:'flex',gap:16,alignItems:'center'}}>
-              <div style={{fontSize:11,fontWeight:500,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--mu)'}}>Recent:</div>
+            <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+              <div style={{fontSize:10,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginRight:4}}>Recent</div>
               {recentWinners.slice(0,3).map((w,i)=>(
-                <div key={i} style={{display:'flex',gap:6,alignItems:'center'}}>
-                  <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:15,fontWeight:700,textTransform:'uppercase',color:'var(--tx)'}}>{w.name}</span>
-                  <span style={{fontSize:11,color:'var(--ac)'}}>{w.prize}</span>
+                <div key={i} style={{display:'flex',alignItems:'center',gap:6,background:'var(--s2)',border:'1px solid var(--b2)',borderRadius:8,padding:'5px 10px'}}>
+                  <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,textTransform:'uppercase',color:'var(--tx)',letterSpacing:'.04em'}}>{w.name}</span>
+                  <span style={{width:1,height:12,background:'var(--b2)',display:'inline-block'}}/>
+                  <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'var(--ac)',letterSpacing:'.02em'}}>{w.prize}</span>
                 </div>
               ))}
             </div>
