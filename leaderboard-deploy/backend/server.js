@@ -367,9 +367,15 @@ app.get('/admin/accounts', (req, res) => {
   const accounts = loadAccounts();
   let points = {};
   try { points = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8')); } catch {}
-  const result = Object.values(accounts)
-    .map(a => ({ ...a, points: points[a.kickUsername] || 0 }))
-    .sort((a, b) => (b.points || 0) - (a.points || 0));
+  // Start with every user who has points, overlay account data for those who have logged in
+  const merged = {};
+  Object.entries(points).forEach(([username, pts]) => {
+    merged[username] = { kickUsername: username, kickDisplayName: username, points: pts };
+  });
+  Object.entries(accounts).forEach(([username, account]) => {
+    merged[username] = { ...merged[username], ...account, points: points[username] || account.points || 0 };
+  });
+  const result = Object.values(merged).sort((a, b) => (b.points || 0) - (a.points || 0));
   res.json(result);
 });
 
@@ -466,6 +472,8 @@ const discordStateStore = {};
 
 const ADMIN_USERNAME = 'niksi777';
 const ACCOUNTS_PATH = require('path').join(__dirname, '../../accounts.json');
+const SESSIONS_PATH = require('path').join(__dirname, '../../sessions.json');
+const SESSION_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function loadAccounts() {
   try { return JSON.parse(require('fs').readFileSync(ACCOUNTS_PATH, 'utf8')); } catch { return {}; }
@@ -476,6 +484,18 @@ function upsertAccount(update) {
   accounts[key] = Object.assign(accounts[key] || { firstSeen: new Date().toISOString() }, update, { lastSeen: new Date().toISOString() });
   require('fs').writeFileSync(ACCOUNTS_PATH, JSON.stringify(accounts, null, 2));
 }
+function saveSessions() {
+  require('fs').writeFileSync(SESSIONS_PATH, JSON.stringify(sessions, null, 2));
+}
+// Load persisted sessions on startup, purge expired ones
+try {
+  const stored = JSON.parse(require('fs').readFileSync(SESSIONS_PATH, 'utf8'));
+  const now = Date.now();
+  Object.entries(stored).forEach(([id, sess]) => {
+    if (now - sess.createdAt < SESSION_TTL) sessions[id] = sess;
+  });
+  console.log(`[sessions] Loaded ${Object.keys(sessions).length} active sessions`);
+} catch { /* no sessions file yet */ }
 const KICK_CLIENT_ID_AUTH = '01KSMGZDPR13CZRMZS6QV6ZFZC';
 const KICK_CLIENT_SECRET_AUTH = '866339aa78f7dd05cff1d25a0ca567dab3f1505cd6eb4d49ff277cde010a4a42';
 const AUTH_REDIRECT = 'https://niksi777.com/auth/callback';
@@ -507,6 +527,7 @@ app.get('/auth/callback', async (req, res) => {
     const sessionId = cryptoM.randomBytes(32).toString('hex');
     sessions[sessionId] = { username: user.name.toLowerCase(), displayName: user.name, avatar: user.profile_picture, createdAt: Date.now() };
     upsertAccount({ kickUsername: user.name.toLowerCase(), kickDisplayName: user.name, kickAvatar: user.profile_picture });
+    saveSessions();
     res.redirect(`/store?session=${sessionId}`);
   } catch (err) {
     console.error('[auth]', err?.response?.data || err.message);
@@ -517,7 +538,7 @@ app.get('/auth/me', (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'];
   const session = sessions[sessionId];
   if (!session) return res.status(401).json({ error: 'Not logged in' });
-  if (Date.now() - session.createdAt > 24 * 60 * 60 * 1000) { delete sessions[sessionId]; return res.status(401).json({ error: 'Session expired' }); }
+  if (Date.now() - session.createdAt > SESSION_TTL) { delete sessions[sessionId]; saveSessions(); return res.status(401).json({ error: 'Session expired' }); }
   try {
     const ptsData = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
     session.points = ptsData[session.username] || 0;
@@ -536,7 +557,7 @@ app.get('/auth/me', (req, res) => {
 });
 app.get('/auth/logout', (req, res) => {
   const sessionId = req.query.session;
-  if (sessionId) delete sessions[sessionId];
+  if (sessionId) { delete sessions[sessionId]; saveSessions(); }
   res.json({ ok: true });
 });
 
@@ -584,6 +605,7 @@ app.get('/auth/discord/callback', async (req, res) => {
       sessions[stored.sessionId].discordAvatar = avatarUrl;
       console.log(`[discord] Linked ${discordUser.username} to Kick session ${stored.sessionId}`);
       upsertAccount({ kickUsername: sessions[stored.sessionId].username, discordId: discordUser.id, discordName: discordUser.username, discordAvatar: avatarUrl });
+      saveSessions();
     }
     res.redirect(`/store?session=${stored.sessionId}&discord=linked`);
   } catch (err) {
