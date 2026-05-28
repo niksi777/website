@@ -399,6 +399,13 @@ const REDEMPTION_ITEMS = [
 app.post('/redeem', async (req, res) => {
   const { username, itemId, note } = req.body;
   if (!username || !itemId) return res.status(400).json({ error: 'Missing username or item.' });
+
+  const redeemSessionId = req.headers['x-session-id'] || req.body.session;
+  const redeemSession = sessions[redeemSessionId];
+  if (!redeemSession || !redeemSession.discordId) {
+    return res.status(400).json({ error: 'Please link your Discord account before redeeming.' });
+  }
+
   const item = REDEMPTION_ITEMS.find(i => i.id === parseInt(itemId));
   if (!item) return res.status(400).json({ error: 'Item not found.' });
   const ptsPath = require('path').join(__dirname, '../../points.json');
@@ -408,10 +415,17 @@ app.post('/redeem', async (req, res) => {
   if (current < item.cost) return res.status(400).json({ error: `Not enough points. You have ${current}, need ${item.cost}.` });
   ptsData[username.toLowerCase()] = current - item.cost;
   require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
-  console.log(`[redeem] ${username} redeemed ${item.title} for ${item.cost} pts. Balance: ${ptsData[username.toLowerCase()]}`);
+  console.log(`[redeem] ${username} (Discord: ${redeemSession.discordName}) redeemed ${item.title} for ${item.cost} pts. Balance: ${ptsData[username.toLowerCase()]}`);
   try {
-    await require('axios').post('http://localhost:3002/create-ticket', { username, item: item.title, cost: item.cost, note: note || '' });
-  } catch (err) { console.error('[redeem] Discord error:', err.message); }
+    await require('axios').post('http://localhost:3002/create-ticket', {
+      username,
+      item: item.title,
+      cost: item.cost,
+      note: note || '',
+      discordId: redeemSession.discordId,
+      discordName: redeemSession.discordName
+    });
+  } catch (err) { console.error('[redeem] ticket error:', err.message); }
   res.json({ ok: true, points: ptsData[username.toLowerCase()] });
 });
 
@@ -433,6 +447,7 @@ app.get('/api/leaderboard', (req, res) => {
 const cryptoM = require('crypto');
 const sessions = {};
 const pkceStore = {};
+const discordStateStore = {};
 const KICK_CLIENT_ID_AUTH = '01KSMGZDPR13CZRMZS6QV6ZFZC';
 const KICK_CLIENT_SECRET_AUTH = '866339aa78f7dd05cff1d25a0ca567dab3f1505cd6eb4d49ff277cde010a4a42';
 const AUTH_REDIRECT = 'https://niksi777.com/auth/callback';
@@ -478,10 +493,70 @@ app.get('/auth/me', (req, res) => {
     const ptsData = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
     session.points = ptsData[session.username] || 0;
   } catch { session.points = 0; }
-  res.json({ username: session.username, displayName: session.displayName, avatar: session.avatar, points: session.points });
+  res.json({
+    username: session.username,
+    displayName: session.displayName,
+    avatar: session.discordAvatar || session.avatar,
+    points: session.points,
+    discordLinked: !!session.discordId,
+    discordId: session.discordId || null,
+    discordName: session.discordName || null,
+    discordAvatar: session.discordAvatar || null
+  });
 });
 app.get('/auth/logout', (req, res) => {
   const sessionId = req.query.session;
   if (sessionId) delete sessions[sessionId];
   res.json({ ok: true });
+});
+
+app.get('/auth/discord', (req, res) => {
+  const sessionId = req.query.session;
+  if (!sessionId || !sessions[sessionId]) return res.redirect('/store?discord=error&reason=no-session');
+  const state = cryptoM.randomBytes(16).toString('hex');
+  discordStateStore[state] = { sessionId, createdAt: Date.now() };
+  setTimeout(() => delete discordStateStore[state], 600000);
+  const params = new URLSearchParams({
+    response_type: 'code',
+    client_id: '1507460805518692552',
+    redirect_uri: 'https://niksi777.com/auth/discord/callback',
+    scope: 'identify',
+    state
+  });
+  res.redirect(`https://discord.com/oauth2/authorize?${params}`);
+});
+
+app.get('/auth/discord/callback', async (req, res) => {
+  const { code, state } = req.query;
+  const stored = discordStateStore[state];
+  if (!stored) return res.redirect('/store?discord=error');
+  delete discordStateStore[state];
+  try {
+    const params = new URLSearchParams({
+      client_id: '1507460805518692552',
+      client_secret: 'n3Ossxz3GiImDvWE3XUEDiyvjGxb63ot',
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: 'https://niksi777.com/auth/discord/callback'
+    });
+    const { data: tokenData } = await axios.post('https://discord.com/api/oauth2/token', params, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+    const { data: discordUser } = await axios.get('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
+    });
+    const avatarUrl = discordUser.avatar
+      ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+      : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(discordUser.id) % 5n)}.png`;
+    if (stored.sessionId && sessions[stored.sessionId]) {
+      sessions[stored.sessionId].discordId = discordUser.id;
+      sessions[stored.sessionId].discordName = discordUser.username;
+      sessions[stored.sessionId].discordAvatar = avatarUrl;
+      console.log(`[discord] Linked ${discordUser.username} to Kick session ${stored.sessionId}`);
+    }
+    res.redirect(`/store?session=${stored.sessionId}&discord=linked`);
+  } catch (err) {
+    console.error('[discord auth]', err?.response?.data || err.message);
+    res.redirect('/store?discord=error');
+  }
 });
