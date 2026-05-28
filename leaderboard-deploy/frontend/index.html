@@ -178,6 +178,7 @@
   function Navbar(){
     const { user, logout } = useSession();
     const [open,setOpen]=React.useState(false);
+    const [dropOpen,setDropOpen]=React.useState(false);
     return (<>
       <nav>
         <div className="ni">
@@ -192,21 +193,25 @@
           </div>
           <div className="nauth">
             {user ? (
-              <>
-                <div className="nuser">
+              <div style={{position:'relative'}} onMouseEnter={()=>setDropOpen(true)} onMouseLeave={()=>setDropOpen(false)}>
+                <div className="nuser" style={{cursor:'default'}}>
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
                   <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
                 </div>
-                <button onClick={logout} style={{background:'none',border:'none',color:'rgba(221,227,239,.35)',cursor:'pointer',fontSize:11,fontFamily:"'Inter',sans-serif",letterSpacing:'.08em',textTransform:'uppercase',padding:'0 4px',marginLeft:4}} onMouseOver={e=>e.currentTarget.style.color='rgba(221,227,239,.8)'} onMouseOut={e=>e.currentTarget.style.color='rgba(221,227,239,.35)'}>Logout</button>
-              </>
+                {dropOpen && (
+                  <div style={{position:'absolute',top:'calc(100% + 8px)',right:0,background:'rgba(7,8,12,.97)',border:'1px solid rgba(255,255,255,.12)',borderRadius:10,padding:6,minWidth:150,zIndex:200,boxShadow:'0 8px 24px rgba(0,0,0,.5)'}}>
+                    <a href="/settings" style={{display:'block',padding:'9px 14px',fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'rgba(221,227,239,.75)',textDecoration:'none',borderRadius:6}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.06)'} onMouseLeave={e=>e.currentTarget.style.background='none'}>Settings</a>
+                    <button onClick={logout} style={{display:'block',width:'100%',textAlign:'left',padding:'9px 14px',fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'rgba(217,79,79,.8)',background:'none',border:'none',cursor:'pointer',borderRadius:6}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.06)'} onMouseLeave={e=>e.currentTarget.style.background='none'}>Logout</button>
+                  </div>
+                )}
+              </div>
             ) : (
               <a href="/auth/login" className="nlogin-btn">
                 Login with Kick
               </a>
             )}
           </div>
-          <div className="nsoc">{SOCIALS}</div>
           <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
             <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
             <span style={open?{opacity:0}:{}}/>
@@ -221,7 +226,7 @@
         <a href="/store">STORE</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
-        <div className="drawer-soc">{SOCIALS}</div>
+        {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>);
   }
@@ -310,7 +315,10 @@
         <div className="page">
           <div className="ftw">
             <p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
-            <span className="ftc">© 2026 NIKSI777</span>
+            <div style={{display:'flex',alignItems:'center',gap:4}}>
+              <div className="nsoc" style={{border:'none',padding:0}}>{SOCIALS}</div>
+              <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
+            </div>
           </div>
         </div>
       </footer>
