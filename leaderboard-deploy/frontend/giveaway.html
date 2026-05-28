@@ -174,31 +174,29 @@
     </>);
   }
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner}){
+  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner,recentWinners}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
     const idleRaf=React.useRef(null);
-    const idleX=React.useRef(-0);
-    const idleHalfW=React.useRef(0);
-    const idlePrevEntries=React.useRef('');
-    const idlePaused=React.useRef(false);
-    const CARD_W=158,GAP=10,TILE=168,TOTAL=60;
+    const idleX=React.useRef(0);
+    const entriesRef=React.useRef(entries);
+    const CARD_W=158,TILE=168,TOTAL=60;
     const RARITIES=['blue','blue','blue','purple','purple','gold'];
+
+    React.useEffect(()=>{ entriesRef.current=entries; },[entries]);
+
     function getRarity(name){
       let h=0;for(let i=0;i<name.length;i++){h=((h<<5)-h)+name.charCodeAt(i);h|=0;}
       return RARITIES[Math.abs(h)%RARITIES.length];
     }
 
-    React.useEffect(()=>{
-      if(forceWinner&&entries.length>0) doRoll(forceWinner);
-    },[forceWinner]);
-
     function startIdle(pool){
       const track=trackRef.current;
-      if(!track) return;
+      if(!track||!pool||pool.length===0) return;
       cancelAnimationFrame(idleRaf.current);
+      track.style.transition='none';
       track.innerHTML='';
       const minTiles=40;
       const repeated=[];
@@ -212,8 +210,7 @@
         track.appendChild(d);
       });
       const halfW=minTiles*TILE;
-      idleHalfW.current=halfW;
-      idleX.current=-halfW/2;
+      idleX.current=-(halfW/2);
       const speed=0.4;
       let last=null;
       function step(ts){
@@ -226,26 +223,22 @@
       }
       idleRaf.current=requestAnimationFrame(step);
     }
-    React.useEffect(()=>{
-      if(rolling) return;
-      const key=entries.map(e=>e.username).join(',');
-      if(key===idlePrevEntries.current) return;
-      idlePrevEntries.current=key;
-      if(entries.length===0) return;
-      startIdle(entries);
-      idleX.current=-halfW;
-      idleRaf.current=requestAnimationFrame(step);
-    },[entries,rolling]);
 
     React.useEffect(()=>{
-      if(rolling) cancelAnimationFrame(idleRaf.current);
-    },[rolling]);
+      if(entries.length===0) return;
+      if(!rolling) startIdle(entries);
+    },[entries]);
+
+    React.useEffect(()=>{
+      if(forceWinner&&entries.length>0) doRoll(forceWinner);
+    },[forceWinner]);
 
     function buildDeck(winnerName){
       const pool=entries.length>0?entries:[{username:'???'}];
       const cards=[];
       for(let i=0;i<TOTAL;i++){
-        const n=pool[Math.floor(Math.random()*pool.length)].username;cards.push({name:n,r:getRarity(n)});
+        const n=pool[Math.floor(Math.random()*pool.length)].username;
+        cards.push({name:n,r:getRarity(n)});
       }
       const landIdx=Math.floor(TOTAL*0.75);
       cards[landIdx]={name:winnerName,r:getRarity(winnerName)};
@@ -269,26 +262,26 @@
       });
       setTimeout(()=>{
         setWinnerIdx(landIdx);
-        idlePaused.current=true;
         if(onRollingChange)onRollingChange(false);
         onWinner(winner);
         if(forced&&onForceConsumed)onForceConsumed();
         setTimeout(()=>{
-          idlePaused.current=false;
-          idlePrevEntries.current='';
           setRolling(false);
+          startIdle(entriesRef.current);
         },2500);
       },6300);
     }
 
     function doRoll(forcedName){
       if(rolling)return;
+      cancelAnimationFrame(idleRaf.current);
       const winner=forcedName||entries[Math.floor(Math.random()*entries.length)].username;
       const{cards,landIdx}=buildDeck(winner);
       setWinnerIdx(null);setRolling(true);
       if(onRollingChange)onRollingChange(true);
       const track=trackRef.current;
       if(track){
+        track.style.transition='none';
         track.innerHTML='';
         cards.forEach((c,i)=>{
           const d=document.createElement('div');
@@ -310,7 +303,7 @@
       const track=trackRef.current;
       if(!track)return;
       const card=track.children[winnerIdx];
-      if(card){card.classList.add('winner-card');card.classList.remove('rarity-gold');}
+      if(card){card.classList.add('winner-card');}
     }
 
     return(
