@@ -179,7 +179,10 @@
     const idlePrevEntries=React.useRef('');
     const CARD_W=158,GAP=10,TILE=168,TOTAL=60;
     const RARITIES=['blue','blue','blue','purple','purple','gold'];
-    function getRarity(i){return RARITIES[i%RARITIES.length]}
+    function getRarity(name){
+      let h=0;for(let i=0;i<name.length;i++){h=((h<<5)-h)+name.charCodeAt(i);h|=0;}
+      return RARITIES[Math.abs(h)%RARITIES.length];
+    }
 
     React.useEffect(()=>{
       if(forceWinner&&entries.length>0) doRoll(forceWinner);
@@ -232,7 +235,7 @@
       const pool=entries.length>0?entries:[{username:'???'}];
       const cards=[];
       for(let i=0;i<TOTAL;i++){
-        cards.push({name:pool[Math.floor(Math.random()*pool.length)].username,r:getRarity(i)});
+        const n=pool[Math.floor(Math.random()*pool.length)].username;cards.push({name:n,r:getRarity(n)});
       }
       const landIdx=Math.floor(TOTAL*0.75);
       cards[landIdx]={name:winnerName,r:'gold'};
