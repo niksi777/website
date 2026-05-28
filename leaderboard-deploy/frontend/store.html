@@ -227,20 +227,20 @@
 
   function Modal({item, user, sessionId, onClose, onSuccess}){
     const [note, setNote] = React.useState('');
-    const [discordUser, setDiscordUser] = React.useState('');
+
     const [done, setDone] = React.useState(false);
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
     async function handleSubmit(){
-      if (!discordUser.trim()) { setError('Please enter your Discord username.'); return; }
+      if (!user?.discordLinked) { setError('Please link your Discord account first.'); return; }
       setLoading(true);
       setError('');
       try {
         const r = await fetch('/redeem', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId || '' },
-          body: JSON.stringify({ username: user.username, itemId: item.id, note: note.trim(), discordUser: discordUser.trim(), session: sessionId })
+          body: JSON.stringify({ username: user.username, itemId: item.id, note: note.trim(), discordUser: user.discordName||user.displayName, session: sessionId })
         });
         const d = await r.json();
         if (!r.ok) { setError(d.error || 'Something went wrong.'); setLoading(false); return; }
@@ -264,7 +264,7 @@
             <h2>Redeem {item.title}</h2>
             <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Redeeming as <strong style={{color:'#fff'}}>{user.displayName}</strong> ({(user.points||0).toLocaleString()} pts).</p>
             {!canAfford && <p style={{color:'var(--rd)',fontSize:12,marginBottom:12}}>You don't have enough points for this item.</p>}
-            <input className="modal-input" placeholder="Your Discord username (e.g. niksi777)" value={discordUser} onChange={e=>setDiscordUser(e.target.value)}/>
+            {!user?.discordLinked&&<div style={{fontSize:12,color:'var(--rd)',padding:'8px 12px',background:'rgba(217,79,79,.08)',borderRadius:6}}>You need to link your Discord account before redeeming. Close this and click "Link Discord".</div>}
             <input className="modal-input" placeholder="Extra note (optional)" value={note} onChange={e=>setNote(e.target.value)}/>
             {error && <div style={{color:'var(--rd)',fontSize:12,marginBottom:8}}>{error}</div>}
             <div className="modal-btns">
@@ -318,7 +318,21 @@
               <div className="user-banner-name">{displayUser.displayName}</div>
               <div className="user-banner-pts">Balance: <span>{(displayUser.points||0).toLocaleString()} points</span></div>
             </div>
-            <button className="user-logout" onClick={logout}>Logout</button>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginLeft:'auto'}}>
+              {displayUser.discordLinked ? (
+                <div style={{display:'flex',alignItems:'center',gap:6,background:'rgba(88,101,242,.15)',border:'1px solid rgba(88,101,242,.3)',borderRadius:8,padding:'6px 12px'}}>
+                  {displayUser.discordAvatar&&<img src={displayUser.discordAvatar} style={{width:20,height:20,borderRadius:'50%'}}/>}
+                  <span style={{fontSize:12,color:'#8891f2',fontWeight:500}}>{displayUser.discordName}</span>
+                  <span style={{fontSize:10,color:'#5865F2',letterSpacing:'.08em',textTransform:'uppercase',fontWeight:600}}>✓ Linked</span>
+                </div>
+              ):(
+                <a href={'/auth/discord?session='+sessionId} style={{display:'flex',alignItems:'center',gap:6,background:'#5865F2',border:'none',borderRadius:8,padding:'8px 14px',color:'#fff',fontSize:12,fontWeight:600,textDecoration:'none',cursor:'pointer'}}>
+                  <svg viewBox="0 0 24 24" fill="#fff" style={{width:14,height:14}}><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+                  Link Discord
+                </a>
+              )}
+              <button className="user-logout" onClick={logout}>Logout</button>
+            </div>
           </div>
         )}
 
