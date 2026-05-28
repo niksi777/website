@@ -288,6 +288,14 @@ app.post('/giveaway/start', (req, res) => {
     entries: []
   };
   console.log('Giveaway started — keyword: ' + keyword + ' prize: ' + prize);
+  try {
+    const axios = require('axios');
+    const token = require('fs').readFileSync('/root/website/.bot_token','utf8').trim();
+    const broadcasterId = require('fs').readFileSync('/root/website/.broadcaster_id','utf8').trim();
+    axios.post('https://api.kick.com/public/v1/chat', {
+      type:'user', content:'🎉 Giveaway started! Type "'+keyword+'" in chat to enter! Prize: '+prize, broadcaster_user_id: broadcasterId
+    }, { headers:{ Authorization:'Bearer '+token,'Content-Type':'application/json' } }).catch(()=>{});
+  } catch(e){}
   res.json({ ok: true });
 });
 

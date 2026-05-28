@@ -174,7 +174,7 @@
     </>);
   }
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner,recentWinners}){
+  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner,recentWinners,onReset}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const [rolling,setRolling]=React.useState(false);
@@ -349,6 +349,24 @@
         <button className="roll-btn" onClick={winnerIdx!==null&&!rolling?onReroll:roll} disabled={rolling||entries.length===0}>
           {rolling?'Rolling...':(winnerIdx!==null?'Reroll':'Roll Winner')}
         </button>
+        <div style={{borderTop:'1px solid var(--b1)',paddingTop:16,marginTop:4}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+            <div style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>Entries - {entries.length}</div>
+            {onReset&&<button className="btn btn-sec" style={{width:'auto',padding:'4px 12px',fontSize:11}} onClick={onReset}>Reset</button>}
+          </div>
+          {entries.length===0?(
+            <div className="empty">No entries yet - waiting for Kick chat</div>
+          ):(
+            <div className="entries-grid">
+              {entries.map((e,i)=>(
+                <div key={e.id||i} className="entry-chip">
+                  <div className="entry-num">#{i+1}</div>
+                  <div className="entry-name">{e.username}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -501,28 +519,11 @@
             )
           )}
 
-          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners}/>}
+          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
 
 
 
-          <div className="f3">
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-              <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>Entries - {entries.length}</div>
-              {giveaway&&<button className="btn btn-sec" style={{width:'auto',padding:'6px 16px',fontSize:11}} onClick={resetGiveaway}>Reset</button>}
-            </div>
-            {entries.length===0?(
-              <div className="empty">No entries yet - waiting for Kick chat</div>
-            ):(
-              <div className="entries-grid">
-                {entries.map((e,i)=>(
-                  <div key={e.id||i} className="entry-chip">
-                    <div className="entry-num">#{i+1}</div>
-                    <div className="entry-name">{e.username}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+
         </div>
       </div>
       <footer><div className="page"><div className="ftw"><p className="ftd"><strong>18+</strong> - We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site.</p><span className="ftc">© 2026 NIKSI777</span></div></div></footer>
