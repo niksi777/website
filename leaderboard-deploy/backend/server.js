@@ -473,7 +473,7 @@ const discordStateStore = {};
 const ADMIN_USERNAME = 'niksi777';
 const ACCOUNTS_PATH = require('path').join(__dirname, '../../accounts.json');
 const SESSIONS_PATH = require('path').join(__dirname, '../../sessions.json');
-const SESSION_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 function loadAccounts() {
   try { return JSON.parse(require('fs').readFileSync(ACCOUNTS_PATH, 'utf8')); } catch { return {}; }

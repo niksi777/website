@@ -196,11 +196,12 @@
           </div>
           <div className="nauth">
             {user ? (
-              <div className="nuser" onClick={logout} title="Click to logout">
+              <div className="nuser">
                 {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                 <span className="nuser-name">{user.displayName}</span>
                 <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
               </div>
+              <button onClick={logout} style={{background:'none',border:'none',color:'rgba(221,227,239,.35)',cursor:'pointer',fontSize:11,fontFamily:"'Inter',sans-serif",letterSpacing:'.08em',textTransform:'uppercase',padding:'0 4px',marginLeft:4}} onMouseOver={e=>e.currentTarget.style.color='rgba(221,227,239,.8)'} onMouseOut={e=>e.currentTarget.style.color='rgba(221,227,239,.35)'}>Logout</button>
             ) : (
               <a href="/auth/login" className="nlogin-btn">
                 <svg viewBox="0 0 24 24" fill="none" style={{width:13,height:13}}><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#fff"/></svg>
