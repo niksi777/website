@@ -168,7 +168,7 @@
     </>);
   }
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange}){
+  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const [rolling,setRolling]=React.useState(false);
