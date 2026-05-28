@@ -143,6 +143,40 @@
     .recent-winner-time{font-size:11px;color:var(--mu)}
     .winner-prize{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--ac)}
     .confetti{font-size:32px;letter-spacing:8px}
+    .winner-panel{background:var(--s1);border:1px solid rgba(232,164,39,.3);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:20px;animation:fu .4s ease both}
+    .winner-panel-header{display:flex;align-items:center;gap:16px}
+    .winner-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(232,164,39,.5);flex-shrink:0;background:var(--s2)}
+    .winner-panel-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:800;text-transform:uppercase;color:#fff;line-height:1}
+    .winner-resp-timer{font-size:13px;color:var(--mu);margin-top:6px;display:flex;align-items:center;gap:6px}
+    .winner-resp-t{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#e8a427;line-height:1}
+    .winner-resp-t.urgent{color:var(--rd)}
+    .chat-section{background:var(--s2);border:1px solid var(--b1);border-radius:10px;overflow:hidden}
+    .chat-header{padding:11px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .chat-header .cdot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pu 1.5s ease-in-out infinite;flex-shrink:0}
+    .chat-feed{height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:1px;padding:8px 10px}
+    .chat-feed::-webkit-scrollbar{width:3px}.chat-feed::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+    .chat-msg{display:flex;gap:10px;padding:5px 6px;border-radius:5px}
+    .chat-msg:hover{background:rgba(255,255,255,.03)}
+    .chat-ts{font-size:10px;color:rgba(221,227,239,.25);white-space:nowrap;padding-top:2px;min-width:44px}
+    .chat-user{font-size:12px;font-weight:600;color:#e8a427;white-space:nowrap}
+    .chat-content{font-size:12px;color:var(--tx);line-height:1.5;word-break:break-word}
+    .pf-section{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+    .pf-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .pf-label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+    .pf-hash-val{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--ac);word-break:break-all;letter-spacing:.06em;margin-top:4px}
+    .pf-btns{display:flex;gap:8px;flex-wrap:wrap}
+    .pf-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1px solid var(--b2);background:rgba(255,255,255,.05);color:var(--mu);transition:all .15s;white-space:nowrap}
+    .pf-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:var(--b3)}
+    .pf-btn:disabled{opacity:.4;cursor:not-allowed}
+    .pf-btn-roll{background:#fff;color:#07080c;border-color:#fff}
+    .pf-btn-roll:hover{opacity:.85;background:#fff;color:#07080c}
+    .pf-proof{background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:14px;font-size:11px;font-family:'Inter',sans-serif;color:var(--mu);line-height:2;word-break:break-all}
+    .pf-proof strong{color:var(--tx)}
+    .status-bar{display:flex;align-items:center;border:1px solid var(--b2);border-radius:10px;overflow:hidden;background:var(--s1)}
+    .status-chip{display:flex;align-items:center;gap:7px;padding:10px 18px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);border-right:1px solid var(--b2)}
+    .status-chip:last-child{border-right:none}
+    .sdot-green{width:5px;height:5px;border-radius:50%;background:#22c55e;flex-shrink:0}
+    .sdot-blue{width:5px;height:5px;border-radius:50%;background:var(--ac);flex-shrink:0}
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
@@ -201,12 +235,12 @@
                 <span className="nuser-name">{user.displayName}</span>
                 <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
               </div>
-              {dropOpen && (
-                <div style={{position:'absolute',top:'calc(100% + 8px)',right:0,background:'rgba(7,8,12,.97)',border:'1px solid rgba(255,255,255,.12)',borderRadius:10,padding:6,minWidth:150,zIndex:200,boxShadow:'0 8px 24px rgba(0,0,0,.5)'}}>
-                  <a href="/settings" style={{display:'block',padding:'9px 14px',fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'rgba(221,227,239,.75)',textDecoration:'none',borderRadius:6}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.06)'} onMouseLeave={e=>e.currentTarget.style.background='none'}>Settings</a>
-                  <button onClick={logout} style={{display:'block',width:'100%',textAlign:'left',padding:'9px 14px',fontSize:12,fontFamily:"'Inter',sans-serif",fontWeight:500,letterSpacing:'.08em',textTransform:'uppercase',color:'rgba(217,79,79,.8)',background:'none',border:'none',cursor:'pointer',borderRadius:6}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.06)'} onMouseLeave={e=>e.currentTarget.style.background='none'}>Logout</button>
+                        <div className="ndrop-menu">
+                <div className="ndrop-box">
+                  <a href="/settings" className="ndrop-item">Settings</a>
+                  <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
                 </div>
-              )}
+              </div>
             </div>
           ) : (
             <a href="/auth/login" className="nlogin-btn">
@@ -450,6 +484,17 @@
     const [secondsLeft,setSecondsLeft]=React.useState(60);
     const [duration,setDuration]=React.useState(60);
     const timerRef=React.useRef(null);
+    // Provably Fair
+    const [pfHash,setPfHash]=React.useState(null);
+    const [pfProof,setPfProof]=React.useState(null);
+    const [pfLoading,setPfLoading]=React.useState(false);
+    const [pfForce,setPfForce]=React.useState(null);
+    // Winner response
+    const [respTimer,setRespTimer]=React.useState(null);
+    const respTimerRef=React.useRef(null);
+    const [winnerChat,setWinnerChat]=React.useState([]);
+    const chatPollRef=React.useRef(null);
+    const chatFeedRef=React.useRef(null);
     function login(){if(pw===CORRECT_PASSWORD){setAuthed(true);setPwErr('');}else setPwErr('Incorrect password.');}
     async function fetchState(){
       try{
@@ -484,6 +529,36 @@
       }catch(e){}
       setStarting(false);
     }
+    async function prepareSeed(){
+      try{const r=await fetch('/giveaway/pf/prepare');const d=await r.json();setPfHash(d.hash);setPfProof(null);}catch(e){}
+    }
+    async function pfRoll(){
+      if(pfLoading||!pfHash)return;
+      setPfLoading(true);
+      try{
+        const r=await fetch('/giveaway/pf/roll',{method:'POST'});
+        const d=await r.json();
+        if(d.error){alert(d.error);setPfLoading(false);return;}
+        setPfProof(d);
+        setPfForce(d.winner);
+      }catch(e){setPfLoading(false);}
+    }
+    function startRespTimer(name){
+      clearInterval(respTimerRef.current);
+      let s=30;setRespTimer(s);
+      respTimerRef.current=setInterval(()=>{s=Math.max(0,s-1);setRespTimer(s);if(s===0)clearInterval(respTimerRef.current);},1000);
+      clearInterval(chatPollRef.current);
+      const poll=()=>{
+        fetch('/giveaway/winner-chat?username='+encodeURIComponent(name))
+          .then(r=>r.json()).then(msgs=>{setWinnerChat(msgs);setTimeout(()=>{if(chatFeedRef.current)chatFeedRef.current.scrollTop=chatFeedRef.current.scrollHeight;},50);}).catch(()=>{});
+      };
+      poll();chatPollRef.current=setInterval(poll,2000);
+    }
+    function handleWinner(name){
+      confirmWinner(name);
+      setPfLoading(false);
+      startRespTimer(name);
+    }
     async function confirmWinner(name){
       try{
         await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({winner:name})});
@@ -502,6 +577,8 @@
     async function resetGiveaway(){
       if(!confirm('Reset and clear all entries?'))return;
       stopTimer();
+      clearInterval(respTimerRef.current);clearInterval(chatPollRef.current);
+      setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);
       await fetch('/giveaway/reset',{method:'POST'});
       setWinner(null);fetchState();
     }
@@ -582,10 +659,94 @@
             )
           )}
 
-          {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
+          {isActive&&<CardRoller entries={entries} onWinner={handleWinner} forceWinner={pfForce||rerollTarget} onForceConsumed={()=>{setPfForce(null);setRerollTarget(null);}} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
 
+          {/* Provably Fair Section */}
+          {isActive&&(
+            <div className="pf-section f3">
+              <div className="pf-head">
+                <div>
+                  <div className="pf-label">Provably Fair</div>
+                  {pfHash&&<div className="pf-hash-val">Committed: {pfHash.slice(0,24)}...{pfHash.slice(-8)}</div>}
+                  {!pfHash&&<div style={{fontSize:11,color:'var(--mu)',marginTop:4}}>Generate a seed before rolling to enable provably fair verification.</div>}
+                </div>
+                <div className="pf-btns">
+                  <button className="pf-btn" onClick={prepareSeed} disabled={pfLoading}>
+                    {pfHash?'New Seed':'Generate Seed'}
+                  </button>
+                  {pfHash&&!pfProof&&(
+                    <button className="pf-btn pf-btn-roll" onClick={pfRoll} disabled={pfLoading||entries.length===0}>
+                      {pfLoading?'Rolling...':'PF Roll'}
+                    </button>
+                  )}
+                </div>
+              </div>
+              {pfProof&&(
+                <div className="pf-proof">
+                  <div><strong>Winner:</strong> {pfProof.winner}</div>
+                  <div><strong>Server Seed:</strong> {pfProof.serverSeed}</div>
+                  <div><strong>Seed Hash:</strong> {pfProof.serverSeedHash}</div>
+                  <div><strong>Result Hash:</strong> {pfProof.resultHash}</div>
+                  <div><strong>Index:</strong> {pfProof.index} of {pfProof.total} entries</div>
+                  <div style={{marginTop:6,fontSize:10,color:'rgba(221,227,239,.4)'}}>SHA256(serverSeed + ":" + entries) = resultHash, winner = entries[resultHash mod {pfProof.total}]</div>
+                </div>
+              )}
+            </div>
+          )}
 
+          {/* Winner Response Panel */}
+          {winner&&(
+            <div className="winner-panel f3">
+              <div className="winner-panel-header">
+                <div className="winner-avatar" style={{display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,color:'#e8a427'}}>
+                  {winner.slice(0,2).toUpperCase()}
+                </div>
+                <div>
+                  <div className="winner-panel-name">{winner}</div>
+                  {respTimer!==null&&(
+                    <div className="winner-resp-timer">
+                      <span className={'winner-resp-t'+(respTimer<=10?' urgent':'')}>
+                        {respTimer}s
+                      </span>
+                      <span>{respTimer>0?'to respond':'- time up'}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="chat-section">
+                <div className="chat-header">
+                  <span className="cdot"/>
+                  Winner Chat - {winner}
+                </div>
+                <div className="chat-feed" ref={chatFeedRef}>
+                  {winnerChat.length===0?(
+                    <div style={{textAlign:'center',padding:'32px 0',fontSize:11,letterSpacing:'.12em',textTransform:'uppercase',color:'rgba(221,227,239,.25)'}}>No messages from {winner} yet</div>
+                  ):(
+                    winnerChat.map((m,i)=>{
+                      const d=new Date(m.ts);
+                      const t=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+                      return(
+                        <div key={i} className="chat-msg">
+                          <span className="chat-ts">{t}</span>
+                          <span className="chat-user">{m.username}:</span>
+                          <span className="chat-content">{m.content}</span>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
+          {/* Bottom Status Bar */}
+          <div className="status-bar f3">
+            <div className="status-chip"><span className="sdot-green"/>{entries.length} Entered</div>
+            <div className="status-chip" style={{cursor:'pointer'}} onClick={()=>pfProof&&alert('Server Seed: '+pfProof.serverSeed+'\nHash: '+pfProof.serverSeedHash+'\nResult: '+pfProof.resultHash+'\nIndex: '+pfProof.index+' / '+pfProof.total)}>
+              <span className="sdot-blue"/>Provably Fair {pfProof?'✓':''}
+            </div>
+            <div className="status-chip"><span className="sdot-green"/>System Online</div>
+          </div>
 
         </div>
       </div>

@@ -276,6 +276,46 @@ app.listen(4000, () => {
 // ─── GIVEAWAY ROUTES ────────────────────────────────────────────────────────
 let giveawayState = { giveaway: null, entries: [] };
 
+// Chat message buffer: { username -> [{ username, content, ts }] }
+const chatBuffer = {};
+const CHAT_MAX = 150;
+app.post('/giveaway/chat-message', (req, res) => {
+  const { username, content, ts } = req.body;
+  if (!username || !content) return res.json({ ok: false });
+  const key = username.toLowerCase();
+  if (!chatBuffer[key]) chatBuffer[key] = [];
+  chatBuffer[key].push({ username, content, ts: ts || Date.now() });
+  if (chatBuffer[key].length > CHAT_MAX) chatBuffer[key].shift();
+  res.json({ ok: true });
+});
+app.get('/giveaway/winner-chat', (req, res) => {
+  const key = (req.query.username || '').toLowerCase();
+  res.json((chatBuffer[key] || []).slice(-20));
+});
+
+// Provably Fair
+const cryptoPF = require('crypto');
+let pfState = { seed: null, hash: null };
+app.get('/giveaway/pf/prepare', (req, res) => {
+  const seed = cryptoPF.randomBytes(32).toString('hex');
+  const hash = cryptoPF.createHash('sha256').update(seed).digest('hex');
+  pfState = { seed, hash };
+  res.json({ hash });
+});
+app.post('/giveaway/pf/roll', (req, res) => {
+  if (!pfState.seed) return res.status(400).json({ error: 'No seed prepared. Click Generate Seed first.' });
+  const entries = giveawayState.entries;
+  if (!entries || entries.length === 0) return res.status(400).json({ error: 'No entries to roll from.' });
+  const entriesStr = entries.map(e => e.username).join(',');
+  const combined = pfState.seed + ':' + entriesStr;
+  const resultHash = cryptoPF.createHash('sha256').update(combined).digest('hex');
+  const idx = Number(BigInt('0x' + resultHash.slice(0, 16)) % BigInt(entries.length));
+  const winner = entries[idx].username;
+  const proof = { winner, serverSeed: pfState.seed, serverSeedHash: pfState.hash, entries: entries.map(e => e.username), resultHash, index: idx, total: entries.length };
+  pfState = { seed: null, hash: null };
+  res.json(proof);
+});
+
 app.get('/giveaway/state', (req, res) => {
   res.json(giveawayState);
 });
