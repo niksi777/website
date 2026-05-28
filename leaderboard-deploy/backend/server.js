@@ -291,14 +291,13 @@ app.post('/giveaway/start', (req, res) => {
   try {
     const _env = require('fs').readFileSync('/root/website/.env','utf8');
     const _token = (_env.match(/KICK_BOT_TOKEN=(.+)/)||[])[1]?.trim();
-    const _bid = (_env.match(/BROADCASTER_ID=(.+)/)||[])[1]?.trim();
-    if(_token && _bid){
+    if(_token){
       require('axios').post('https://api.kick.com/public/v1/chat',
-        {type:'user',content:'Giveaway started! Type "'+keyword+'" in chat to enter! Prize: '+prize,broadcaster_user_id:_bid},
+        {type:'user',content:'Giveaway started! Type "'+keyword+'" in chat to enter! Prize: '+prize,broadcaster_user_id:37840728},
         {headers:{Authorization:'Bearer '+_token,'Content-Type':'application/json'}}
-      ).catch(()=>{});
+      ).then(r=>console.log('[announce] sent',r.status)).catch(e=>console.log('[announce] failed',e?.response?.data||e.message));
     }
-  } catch(e){}
+  } catch(e){console.log('[announce error]',e.message);}
   res.json({ ok: true });
 });
 
