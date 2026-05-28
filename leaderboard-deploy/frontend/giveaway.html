@@ -309,12 +309,9 @@
             <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)',left:0,top:0}} onTransitionEnd={onTransitionEnd}/>
           </div>
         </div>
-        <div style={{display:'flex',gap:10}}>
-          <button className="roll-btn" onClick={roll} disabled={rolling||entries.length===0} style={{flex:1}}>
-            {rolling?'Rolling...':'Roll Winner'}
-          </button>
-          {winnerIdx!==null&&!rolling&&<button className="roll-btn" onClick={onReroll} style={{flex:'0 0 auto',padding:'15px 24px',background:'transparent',border:'1px solid var(--b2)',color:'var(--mu)'}}>Reroll</button>}
-        </div>
+        <button className="roll-btn" onClick={winnerIdx!==null&&!rolling?onReroll:roll} disabled={rolling||entries.length===0}>
+          {rolling?'Rolling...':(winnerIdx!==null?'Reroll':'Roll Winner')}
+        </button>
       </div>
     );
   }
@@ -342,12 +339,7 @@
     async function fetchState(){
       try{
         const r=await fetch('/giveaway/state');const d=await r.json();
-        setGiveaway(d.giveaway);const newList=d.entries||[];
-        setEntries(prev=>{
-          const prevIds=new Set(prev.map(e=>e.id||e.username));
-          newList.forEach(e=>{if(prevIds.has(e.id||e.username))prevEntryIds.current.add(e.id||e.username);});
-          return newList;
-        });
+        setGiveaway(d.giveaway);setEntries(d.entries||[]);
         if(d.giveaway?.winner) setWinner(d.giveaway.winner);
       }catch(e){}
     }
@@ -479,7 +471,7 @@
             ):(
               <div className="entries-grid">
                 {entries.map((e,i)=>(
-                  <div key={e.id||i} className={'entry-chip'+(prevEntryIds.current.has(e.id||e.username)?'':' new-entry')} onAnimationEnd={el=>{if(el.target)el.target.classList.remove('new-entry');prevEntryIds.current.add(e.id||e.username)}}>
+                  <div key={e.id||i} className="entry-chip">
                     <div className="entry-num">#{i+1}</div>
                     <div className="entry-name">{e.username}</div>
                   </div>
