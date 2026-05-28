@@ -294,7 +294,7 @@ app.post('/giveaway/start', (req, res) => {
 app.post('/giveaway/enter', (req, res) => {
   const { username } = req.body;
   if (!username) return res.status(400).json({ error: 'username required' });
-  if (!giveawayState.giveaway || giveawayState.giveaway.winner) {
+  if (!giveawayState.giveaway) {
     return res.status(400).json({ error: 'No active giveaway' });
   }
   const already = giveawayState.entries.find(e => e.username.toLowerCase() === username.toLowerCase());
