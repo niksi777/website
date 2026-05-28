@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIKSI777 — Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--rd:#d94f4f;--gold:#d4af5a}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
+    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}
+    nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;margin-left:auto}
+    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
+    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .wrap{max-width:600px;margin:0 auto;padding:40px 28px 80px}
+    .page-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;margin-bottom:32px}
+    .card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:24px;margin-bottom:16px}
+    .card-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
+    .profile-row{display:flex;align-items:center;gap:16px}
+    .profile-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--s2);flex-shrink:0}
+    .profile-info-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:.04em}
+    .profile-info-sub{font-size:12px;color:var(--mu);margin-top:3px}
+    .pts-val{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:var(--gold);line-height:1}
+    .pts-lbl{font-size:12px;color:var(--mu);margin-top:4px;letter-spacing:.06em}
+    .discord-linked{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(88,101,242,.08);border:1px solid rgba(88,101,242,.25);border-radius:10px}
+    .discord-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .discord-info-name{font-size:13px;font-weight:600;color:#fff}
+    .discord-info-tag{font-size:11px;color:rgba(136,145,242,.9);margin-top:2px}
+    .discord-badge{margin-left:auto;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5865F2;background:rgba(88,101,242,.15);padding:4px 10px;border-radius:100px}
+    .btn{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:11px 20px;border-radius:8px;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none}
+    .btn:hover{opacity:.82}
+    .btn-discord{background:#5865F2;color:#fff}
+    .btn-logout{background:transparent;color:var(--mu);border:1px solid var(--b2)}
+    .btn-logout:hover{color:#fff;border-color:var(--b3)}
+    footer{border-top:1px solid var(--b1);padding:22px 0;margin-top:auto}
+    .ftw{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;color:var(--mu)}
+    .ftc{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .not-logged{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center}
+    .not-logged-box{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:40px;text-align:center;max-width:360px}
+    .not-logged-box h2{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;text-transform:uppercase;color:#fff;margin-bottom:10px}
+    .not-logged-box p{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.6}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+  function useSession() {
+    const [user, setUser] = React.useState(null);
+    const [sessionId, setSessionId] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+    React.useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get('session') || localStorage.getItem('kick_session');
+      if (sid) {
+        localStorage.setItem('kick_session', sid);
+        setSessionId(sid);
+        fetch(`/auth/me?session=${sid}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
+          .finally(() => setLoading(false));
+        if (params.get('session')) window.history.replaceState({}, '', '/settings');
+      } else { setLoading(false); }
+    }, []);
+    function logout() {
+      const sid = localStorage.getItem('kick_session');
+      if (sid) fetch(`/auth/logout?session=${sid}`);
+      localStorage.removeItem('kick_session');
+      window.location.href = '/';
+    }
+    return { user, sessionId, loading, logout };
+  }
+
+  const DISCORD_SVG = <svg viewBox="0 0 24 24" fill="currentColor" style={{width:14,height:14}}><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>;
+
+  function Navbar({ user, sessionId, logout }) {
+    return (
+      <nav>
+        <div className="ni">
+          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+          <div className="nlinks">
+            <a href="/">HOME</a>
+            <a href="/leaderboards">LEADERBOARDS</a>
+            <a href="/points">POINTS</a>
+            <a href="/store">STORE</a>
+            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+            <a href="/settings" className="on">SETTINGS</a>
+          </div>
+          <div className="nauth">
+            {user && (
+              <div className="nuser">
+                {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
+                <span className="nuser-name">{user.displayName}</span>
+                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
+  function App() {
+    const { user, sessionId, loading, logout } = useSession();
+
+    if (loading) return <Navbar user={null} sessionId={null} logout={logout}/>;
+
+    if (!user) return (
+      <>
+        <Navbar user={null} sessionId={null} logout={logout}/>
+        <div className="not-logged">
+          <div className="not-logged-box">
+            <h2>Not Logged In</h2>
+            <p>Login with your Kick account to view your settings.</p>
+            <a href="/auth/login" className="btn btn-discord" style={{background:'#22c55e',justifyContent:'center',width:'100%'}}>Login with Kick</a>
+          </div>
+        </div>
+      </>
+    );
+
+    return (
+      <>
+        <Navbar user={user} sessionId={sessionId} logout={logout}/>
+        <div className="wrap">
+          <div className="page-title f1">Settings</div>
+
+          {/* Kick Profile */}
+          <div className="card f1">
+            <div className="card-label">Kick Account</div>
+            <div className="profile-row">
+              {user.avatar && !user.discordLinked && <img className="profile-avatar" src={user.avatar} alt={user.displayName}/>}
+              {user.discordAvatar && <img className="profile-avatar" src={user.discordAvatar} alt={user.displayName}/>}
+              <div>
+                <div className="profile-info-name">{user.displayName}</div>
+                <div className="profile-info-sub">@{user.username} on Kick</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Points */}
+          <div className="card f1">
+            <div className="card-label">Points Balance</div>
+            <div className="pts-val">{(user.points||0).toLocaleString()}</div>
+            <div className="pts-lbl">points</div>
+          </div>
+
+          {/* Discord */}
+          <div className="card f2">
+            <div className="card-label">Discord Account</div>
+            {user.discordLinked ? (
+              <div className="discord-linked">
+                {user.discordAvatar && <img className="discord-avatar" src={user.discordAvatar} alt={user.discordName}/>}
+                <div>
+                  <div className="discord-info-name">{user.discordName}</div>
+                  <div className="discord-info-tag">Discord linked</div>
+                </div>
+                <div className="discord-badge">✓ Linked</div>
+              </div>
+            ) : (
+              <div style={{display:'flex',flexDirection:'column',gap:12}}>
+                <p style={{fontSize:13,color:'var(--mu)',lineHeight:1.6}}>Link your Discord account to redeem store rewards automatically.</p>
+                <a href={`/auth/discord?session=${sessionId}`} className="btn btn-discord" style={{alignSelf:'flex-start'}}>
+                  {DISCORD_SVG} Link Discord
+                </a>
+              </div>
+            )}
+            {user.discordLinked && (
+              <div style={{marginTop:14}}>
+                <a href={`/auth/discord?session=${sessionId}`} className="btn" style={{background:'transparent',color:'var(--mu)',border:'1px solid var(--b2)',fontSize:11}}>
+                  Re-link Discord
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Logout */}
+          <div style={{marginTop:8}}>
+            <button className="btn btn-logout" onClick={logout}>Logout</button>
+          </div>
+        </div>
+
+        <footer>
+          <div className="ftw">
+            <span className="ftd"><strong>18+</strong> — Gamble responsibly.</span>
+            <span className="ftc">© 2026 NIKSI777</span>
+          </div>
+        </footer>
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

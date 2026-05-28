@@ -187,6 +187,8 @@
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store">STORE</a>
+            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
           <div className="nauth">
             {user ? (
@@ -214,6 +216,8 @@
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
         <a href="/store">STORE</a>
+        {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         <div className="drawer-soc">{SOCIALS}</div>
       </div>
     </>);

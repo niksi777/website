@@ -360,12 +360,27 @@ app.get('/giveaway/timer', (req, res) => {
   res.json({ signal: sig ? sig.action : null, duration: sig ? sig.duration : 60 });
 });
 
+app.get('/admin/accounts', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || session.username !== ADMIN_USERNAME) return res.status(403).json({ error: 'Forbidden' });
+  const accounts = loadAccounts();
+  let points = {};
+  try { points = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8')); } catch {}
+  const result = Object.values(accounts)
+    .map(a => ({ ...a, points: points[a.kickUsername] || 0 }))
+    .sort((a, b) => (b.points || 0) - (a.points || 0));
+  res.json(result);
+});
+
 // Clean URLs
 app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/leaderboards.html')));
 app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/points.html')));
 app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/store.html')));
 app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba.html')));
 app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/giveaway.html')));
+app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, '../frontend/settings.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../frontend/admin.html')));
 
 // Points API
 app.get('/points/:username', (req, res) => {
@@ -448,6 +463,19 @@ const cryptoM = require('crypto');
 const sessions = {};
 const pkceStore = {};
 const discordStateStore = {};
+
+const ADMIN_USERNAME = 'niksi777';
+const ACCOUNTS_PATH = require('path').join(__dirname, '../../accounts.json');
+
+function loadAccounts() {
+  try { return JSON.parse(require('fs').readFileSync(ACCOUNTS_PATH, 'utf8')); } catch { return {}; }
+}
+function upsertAccount(update) {
+  const accounts = loadAccounts();
+  const key = update.kickUsername;
+  accounts[key] = Object.assign(accounts[key] || { firstSeen: new Date().toISOString() }, update, { lastSeen: new Date().toISOString() });
+  require('fs').writeFileSync(ACCOUNTS_PATH, JSON.stringify(accounts, null, 2));
+}
 const KICK_CLIENT_ID_AUTH = '01KSMGZDPR13CZRMZS6QV6ZFZC';
 const KICK_CLIENT_SECRET_AUTH = '866339aa78f7dd05cff1d25a0ca567dab3f1505cd6eb4d49ff277cde010a4a42';
 const AUTH_REDIRECT = 'https://niksi777.com/auth/callback';
@@ -478,6 +506,7 @@ app.get('/auth/callback', async (req, res) => {
     const user = userData.data[0];
     const sessionId = cryptoM.randomBytes(32).toString('hex');
     sessions[sessionId] = { username: user.name.toLowerCase(), displayName: user.name, avatar: user.profile_picture, createdAt: Date.now() };
+    upsertAccount({ kickUsername: user.name.toLowerCase(), kickDisplayName: user.name, kickAvatar: user.profile_picture });
     res.redirect(`/store?session=${sessionId}`);
   } catch (err) {
     console.error('[auth]', err?.response?.data || err.message);
@@ -501,7 +530,8 @@ app.get('/auth/me', (req, res) => {
     discordLinked: !!session.discordId,
     discordId: session.discordId || null,
     discordName: session.discordName || null,
-    discordAvatar: session.discordAvatar || null
+    discordAvatar: session.discordAvatar || null,
+    isAdmin: session.username === ADMIN_USERNAME
   });
 });
 app.get('/auth/logout', (req, res) => {
@@ -553,6 +583,7 @@ app.get('/auth/discord/callback', async (req, res) => {
       sessions[stored.sessionId].discordName = discordUser.username;
       sessions[stored.sessionId].discordAvatar = avatarUrl;
       console.log(`[discord] Linked ${discordUser.username} to Kick session ${stored.sessionId}`);
+      upsertAccount({ kickUsername: sessions[stored.sessionId].username, discordId: discordUser.id, discordName: discordUser.username, discordAvatar: avatarUrl });
     }
     res.redirect(`/store?session=${stored.sessionId}&discord=linked`);
   } catch (err) {

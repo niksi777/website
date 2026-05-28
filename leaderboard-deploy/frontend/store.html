@@ -191,6 +191,8 @@
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store" className="on">STORE</a>
+            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
           <div className="nauth">
             {user ? (
@@ -219,6 +221,8 @@
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
         <a href="/store" className="on">STORE</a>
+        {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {user ? <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a> : <a href="/auth/login">Login with Kick</a>}
 
       </div>
