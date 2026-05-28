@@ -465,7 +465,10 @@
 
 
           <div className="f3">
-            <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginBottom:16}}>Entries - {entries.length}</div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+              <div style={{fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>Entries - {entries.length}</div>
+              {giveaway&&<button className="btn btn-sec" style={{width:'auto',padding:'6px 16px',fontSize:11}} onClick={resetGiveaway}>Reset</button>}
+            </div>
             {entries.length===0?(
               <div className="empty">No entries yet - waiting for Kick chat</div>
             ):(
