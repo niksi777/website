@@ -121,6 +121,12 @@
     .winner-box{background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:32px;text-align:center;animation:winner-pop .5s ease both;display:flex;flex-direction:column;align-items:center;gap:14px}
     .winner-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
     .winner-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:1}
+    .recent-winners{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+    .recent-winners-title{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+    .recent-winner-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .recent-winner-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--tx);letter-spacing:.04em}
+    .recent-winner-prize{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--ac)}
+    .recent-winner-time{font-size:11px;color:var(--mu)}
     .winner-prize{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--ac)}
     .confetti{font-size:32px;letter-spacing:8px}
     footer{border-top:1px solid var(--b1);padding:22px 0}
@@ -174,9 +180,10 @@
     const [rolling,setRolling]=React.useState(false);
     const [winnerIdx,setWinnerIdx]=React.useState(null);
     const idleRaf=React.useRef(null);
-    const idleX=React.useRef(0);
+    const idleX=React.useRef(-0);
     const idleHalfW=React.useRef(0);
     const idlePrevEntries=React.useRef('');
+    const idlePaused=React.useRef(false);
     const CARD_W=158,GAP=10,TILE=168,TOTAL=60;
     const RARITIES=['blue','blue','blue','purple','purple','gold'];
     function getRarity(name){
@@ -219,11 +226,14 @@
       function step(ts){
         if(!last) last=ts;
         const dt=ts-last;last=ts;
-        idleX.current-=speed*(dt/16.67);
-        if(idleX.current<=-halfW) idleX.current+=halfW;
-        track.style.transform='translateX('+idleX.current+'px)';
+        if(!idlePaused.current){
+          idleX.current+=speed*(dt/16.67);
+          if(idleX.current>=0) idleX.current=-halfW;
+          track.style.transform='translateX('+idleX.current+'px)';
+        }
         idleRaf.current=requestAnimationFrame(step);
       }
+      idleX.current=-halfW;
       idleRaf.current=requestAnimationFrame(step);
     },[entries,rolling]);
 
@@ -263,6 +273,8 @@
         if(onRollingChange)onRollingChange(false);
         onWinner(winner);
         if(forced&&onForceConsumed)onForceConsumed();
+        idlePaused.current=true;
+        setTimeout(()=>{ idlePaused.current=false; },2000);
       },6300);
     }
 
@@ -322,6 +334,7 @@
     const [giveaway,setGiveaway]=React.useState(null);
     const [entries,setEntries]=React.useState([]);const prevEntryIds=React.useRef(new Set());
     const [winner,setWinner]=React.useState(null);
+    const [recentWinners,setRecentWinners]=React.useState([]);
     const [rerollTarget,setRerollTarget]=React.useState(null);
     const [isRerolling,setIsRerolling]=React.useState(false);
     const [rollerRolling,setRollerRolling]=React.useState(false);
@@ -370,7 +383,11 @@
       setStarting(false);
     }
     async function confirmWinner(name){
-      try{await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({winner:name})});setWinner(name);}catch(e){}
+      try{
+        await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({winner:name})});
+        setWinner(name);
+        setRecentWinners(prev=>[{name,prize:giveaway?.prize,ts:Date.now()},...prev].slice(0,5));
+      }catch(e){}
     }
     async function rerollWinner(){
       try{
@@ -460,6 +477,18 @@
             )
           )}
 
+          {recentWinners.length>0&&(
+            <div className="recent-winners f2">
+              <div className="recent-winners-title">Recent Winners</div>
+              {recentWinners.map((w,i)=>(
+                <div key={i} className="recent-winner-row">
+                  <div className="recent-winner-name">{w.name}</div>
+                  <div className="recent-winner-prize">{w.prize}</div>
+                  <div className="recent-winner-time">{new Date(w.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+                </div>
+              ))}
+            </div>
+          )}
           {isActive&&<CardRoller entries={entries} onWinner={confirmWinner} forceWinner={rerollTarget} onForceConsumed={()=>setRerollTarget(null)} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)}/>}
 
 
