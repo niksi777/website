@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -38,6 +38,13 @@
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
     .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .ndrop{position:relative}
+    .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
+    .ndrop:hover .ndrop-menu{display:block}
+    .ndrop-box{background:rgba(7,8,12,.97);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+    .ndrop-item{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(221,227,239,.75);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:6px;transition:background .1s;box-sizing:border-box}
+    .ndrop-item:hover{background:rgba(255,255,255,.06)}
+    .ndrop-logout{color:rgba(217,79,79,.8)}
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
     .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
     .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
@@ -182,8 +189,7 @@
 
   function Navbar({ user, sessionId, logout }) {
     const [open,setOpen]=React.useState(false);
-    const [dropOpen,setDropOpen]=React.useState(false);
-    return (<>
+        return (<>
       <nav>
         <div className="ni">
           <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
@@ -197,7 +203,7 @@
           </div>
           <div className="nauth">
             {user ? (
-              <div style={{position:'relative'}} onMouseEnter={()=>setDropOpen(true)} onMouseLeave={()=>setDropOpen(false)}>
+              <div className="ndrop">
                 <div className="nuser" style={{cursor:'default'}}>
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
@@ -435,3 +441,4 @@
 </script>
 </body>
 </html>
+
