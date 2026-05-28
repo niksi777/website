@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NIKSI777 — Points Leaderboard</title>
+  <title>NIKSI777 - Points Leaderboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -253,7 +253,7 @@
       <Navbar/>
       <div className="wrap">
         <div className="phead f1">
-          <div className="phead-eyebrow"><span className="pdot"/>Chat Points — Live</div>
+          <div className="phead-eyebrow"><span className="pdot"/>Chat Points - Live</div>
           <h1>Points<br/><em>Leaderboard</em></h1>
           <p>Win raffles in Kick chat to earn points. Spend them in the store for real rewards.</p>
         </div>
@@ -261,7 +261,7 @@
         <div className="statsbar f2">
           <div className="stat"><div className="stat-lbl">Total Players</div><div className="stat-val">{lb.length}</div></div>
           <div className="stat"><div className="stat-lbl">Points Given</div><div className="stat-val">{totalPts.toLocaleString()}</div></div>
-          <div className="stat"><div className="stat-lbl">Top Balance</div><div className="stat-val">{top3[0]?.points?.toLocaleString()??'—'}</div></div>
+          <div className="stat"><div className="stat-lbl">Top Balance</div><div className="stat-val">{top3[0]?.points?.toLocaleString()??'-'}</div></div>
         </div>
 
         <div className="check-section f2">
@@ -307,7 +307,7 @@
 
         {lb.length === 0 && (
           <div className="f3" style={{textAlign:'center',padding:'64px 0',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
-            No points data yet — win a raffle to get started!
+            No points data yet - win a raffle to get started!
           </div>
         )}
       </div>
@@ -315,7 +315,7 @@
       <footer>
         <div className="wrap">
           <div className="ftw">
-            <p className="ftd"><strong>18+</strong> — We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
+            <p className="ftd"><strong>18+</strong> - We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
             <div style={{display:'flex',alignItems:'center',gap:4}}>
               <div className="nsoc" style={{border:'none',padding:0}}>{SOCIALS}</div>
               <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
@@ -330,4 +330,5 @@
 </script>
 </body>
 </html>
+
 
