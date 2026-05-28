@@ -277,7 +277,36 @@
         idlePaused.current=true;
         setTimeout(()=>{
           idlePaused.current=false;
-          idlePrevEntries.current='';
+          const track=trackRef.current;
+          if(!track) return;
+          cancelAnimationFrame(idleRaf.current);
+          const pool=entries.length>0?entries:[{username:'???'}];
+          const minTiles=40;
+          const repeated=[];
+          while(repeated.length<minTiles) repeated.push(...pool);
+          const half=repeated.slice(0,minTiles);
+          const full=[...half,...half];
+          track.innerHTML='';
+          full.forEach(e=>{
+            const d=document.createElement('div');
+            d.className='roller-card rarity-'+getRarity(e.username);
+            d.innerHTML='<div class="roller-card-bar"></div><div class="roller-card-name">'+e.username+'</div>';
+            track.appendChild(d);
+          });
+          const halfW=minTiles*TILE;
+          idleHalfW.current=halfW;
+          idleX.current=-halfW;
+          const speed=0.4;
+          let last=null;
+          function step(ts){
+            if(!last) last=ts;
+            const dt=ts-last;last=ts;
+            idleX.current+=speed*(dt/16.67);
+            if(idleX.current>=0) idleX.current=-halfW;
+            track.style.transform='translateX('+idleX.current+'px)';
+            idleRaf.current=requestAnimationFrame(step);
+          }
+          idleRaf.current=requestAnimationFrame(step);
         },2500);
       },6300);
     }
