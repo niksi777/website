@@ -109,7 +109,7 @@
     .roller-stage{position:relative;height:120px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
     .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:140px;background:linear-gradient(to right,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
     .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:140px;background:linear-gradient(to left,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
-    .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:176px;transform:translateX(-50%);border-left:2px solid rgba(184,204,232,.25);border-right:2px solid rgba(184,204,232,.25);background:linear-gradient(to bottom,transparent,rgba(184,204,232,.04),transparent);z-index:3;pointer-events:none}
+    .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:176px;transform:translateX(-50%);background:linear-gradient(to bottom,transparent,rgba(184,204,232,.04),transparent);z-index:3;pointer-events:none}
     .roller-track{display:flex;align-items:center;gap:10px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap;padding:0 6px}
     .roller-card{flex-shrink:0;width:158px;height:90px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;user-select:none;transition:border-color .3s}
     .roller-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;object-fit:cover}
@@ -359,7 +359,8 @@
       if(!track||!stage){setRolling(false);return;}
       const stageW=stage.offsetWidth;
       const trackPad=6;
-      const centerOffset=stageW/2-CARD_W/2-trackPad;
+      const randomNudge=(Math.random()-0.5)*60; // ±30px off-center
+      const centerOffset=stageW/2-CARD_W/2-trackPad+randomNudge;
       const finalX=-(landIdx*TILE-centerOffset);
       track.style.transition='none';
       track.style.transform='translateX(0px)';
