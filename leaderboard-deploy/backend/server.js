@@ -522,8 +522,27 @@ app.get('/giveaway/winner-info', (req, res) => {
 
 // ─── WATCH TIME REWARDS ──────────────────────────────────────────────────────
 const WATCH_INTERVAL_MS = 20 * 60 * 1000; // 20 minutes
-setInterval(() => {
+
+async function isStreamLive() {
   try {
+    const r = await fetch('https://kick.com/api/v2/channels/niksi777', { headers: { 'Accept': 'application/json' } });
+    const data = await r.json();
+    return !!(data.livestream);
+  } catch { return false; }
+}
+
+function wasActiveAntiAbuse(messages, cutoff) {
+  const recent = messages.filter(m => m.ts > cutoff);
+  if (recent.length < 2) return false; // Need at least 2 messages
+  // Messages must span at least 2 different minutes (prevents single-burst bots)
+  const uniqueMinutes = new Set(recent.map(m => Math.floor(m.ts / 60000)));
+  return uniqueMinutes.size >= 2;
+}
+
+setInterval(async () => {
+  try {
+    const live = await isStreamLive();
+    if (!live) { console.log('[watchtime] Stream offline, skipping.'); return; }
     const accounts = loadAccounts();
     const cutoff = Date.now() - WATCH_INTERVAL_MS;
     const ptsPath = require('path').join(__dirname, '../../points.json');
@@ -531,8 +550,7 @@ setInterval(() => {
     try { ptsData = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
     let rewarded = 0;
     Object.entries(chatBuffer).forEach(([username, messages]) => {
-      const wasActive = messages.some(m => m.ts > cutoff);
-      if (!wasActive) return;
+      if (!wasActiveAntiAbuse(messages, cutoff)) return;
       const acc = accounts[username.toLowerCase()];
       if (acc && acc.discordId) {
         ptsData[username.toLowerCase()] = (ptsData[username.toLowerCase()] || 0) + 1;
@@ -541,7 +559,7 @@ setInterval(() => {
     });
     if (rewarded > 0) {
       require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
-      console.log(`[watchtime] +1 pt to ${rewarded} linked viewers`);
+      console.log(`[watchtime] Stream live - +1 pt to ${rewarded} linked viewers`);
     }
   } catch (err) { console.error('[watchtime]', err.message); }
 }, WATCH_INTERVAL_MS);
