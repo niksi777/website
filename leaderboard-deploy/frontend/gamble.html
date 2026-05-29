@@ -348,20 +348,26 @@
         const d=await r.json();
         if(!r.ok){setErr(d.error||'Error');setPhase('idle');return;}
         setResult(d);
-        if(setUser&&d.newPoints!=null)setUser(u=>({...u,points:d.newPoints}));
+        // Balance updates after spin completes, not here
       }catch{setErr('Connection error');setPhase('idle');}
     }
 
     function onRegularDone(){
       if(!result||result.isDemo)return;
       if(result.goldenItem){setPhase('golden-ready');}
-      else setPhase('done');
+      else{
+        setPhase('done');
+        if(setUser&&result.newPoints!=null)setUser(u=>({...u,points:result.newPoints}));
+      }
     }
     function triggerGoldenSpin(){
       setPhase('golden-announce');
       setTimeout(()=>setPhase('golden-spinning'),2200);
     }
-    function onGoldenDone(){setPhase('done');}
+    function onGoldenDone(){
+      setPhase('done');
+      if(setUser&&result.newPoints!=null)setUser(u=>({...u,points:result.newPoints}));
+    }
 
     const finalItem=result?.goldenItem||result?.regularItem;
     const canOpen=user&&(user.points||0)>=caseData.cost;

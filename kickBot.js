@@ -119,10 +119,12 @@ async function handleCommand(username, message) {
   if (!isModOrBroadcaster(username)) return;
 
   if (cmd === '!addpoints') {
-    const target = parts[1]?.replace('@', '');
-    const amount = parseInt(parts[2]);
-    if (!target || isNaN(amount) || amount <= 0) { await sendMessage('Usage: !addpoints <user> <amount>'); return; }
-    await sendMessage(`Added ${amount.toLocaleString()} pts to @${target}. Balance: ${addPoints(target, amount).toLocaleString()}`);
+    const target = parts[1]?.replace('@', '').trim().toLowerCase();
+    const amount = parseInt(parts[2]?.replace(/,/g, ''));
+    console.log(`[addpoints] user=${username} target=${target} amount=${amount} parts=${JSON.stringify(parts)}`);
+    if (!target || isNaN(amount) || amount <= 0) { await sendMessage(`Usage: !addpoints <user> <amount> — received: "${parts.slice(1).join(' ')}"`); return; }
+    const newBal = addPoints(target, amount);
+    await sendMessage(`Added ${amount.toLocaleString()} pts to @${target}. New balance: ${newBal.toLocaleString()}`);
     return;
   }
 
