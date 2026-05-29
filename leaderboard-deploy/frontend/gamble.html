@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -221,7 +221,7 @@
     ultra:         {bg:'linear-gradient(135deg,#2e1e00,#502e00)',border:'rgba(255,200,50,.7)',color:'#ffe080',icon:'👑'},
   };
 
-  const TILE=116; // 110px card + 6px gap — shows ~7-8 cards on a full-width stage
+  const TILE=116; // 110px card + 6px gap - shows ~7-8 cards on a full-width stage
 
   function buildDeck(items,winnerItem){
     const totalW=items.reduce((s,i)=>s+i.weight,0);
@@ -381,7 +381,7 @@
           {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} pts</strong></div>}
         </div>
 
-        {/* Golden ready — user must click to spin */}
+        {/* Golden ready - user must click to spin */}
         {phase==='golden-ready'&&(
           <div className="g-announce" style={{marginBottom:8}}>
             <img src="/assets/niksi.png" style={{width:64,height:64,borderRadius:'50%',objectFit:'cover',border:'3px solid #e8a427',boxShadow:'0 0 24px rgba(232,164,39,.8)',filter:'sepia(.4) saturate(2) hue-rotate(5deg) brightness(1.15)',marginBottom:8,animation:'goldenFlash 1.5s ease-in-out infinite'}}/>
@@ -402,7 +402,7 @@
           </div>
         )}
 
-        {/* Rollers — full width */}
+        {/* Rollers - full width */}
         {!result?.isDemo&&(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
           <Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone}/>
         )}
@@ -463,7 +463,7 @@
 
         {err&&<div style={{color:'rgba(217,79,79,.9)',fontSize:13,marginBottom:12}}>{err}</div>}
 
-        {/* Items grid — full width below everything */}
+        {/* Items grid - full width below everything */}
         <div className="items-section">
           <div className="items-section-title">What you can win</div>
           <div className="items-grid" style={{gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))'}}>
@@ -475,7 +475,7 @@
         </div>
         {caseData.goldenItems&&(
           <div className="items-section">
-            <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes — triggers at 1%</div>
+            <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes - triggers at 4.5%</div>
             <div className="items-grid" style={{gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))'}}>
               {caseData.goldenItems.map((item,i)=>{
                 const overall=((item.weight/golTW)*0.01*100).toFixed(4);
@@ -557,3 +557,4 @@
 </script>
 </body>
 </html>
+
