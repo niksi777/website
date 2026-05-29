@@ -258,6 +258,46 @@ app.get("/acebet", async (req, res) => {
   }
 });
 
+// ─── NIKSIBOT TOKEN REFRESH ──────────────────────────────────────────────────
+const NIKSIBOT_CLIENT_ID = '01KSJ0GNJ0CERH1HPH4GQEPVDC';
+const NIKSIBOT_CLIENT_SECRET = 'af5a2596218d09ac63a65038ed7a8688689c8cb55c7d31903876fa372c88282c';
+const TOKEN_REDIRECT = 'http://niksi777.com/token-callback';
+let tokenPkce = null;
+
+app.get('/token-refresh', (req, res) => {
+  const codeVerifier = cryptoM.randomBytes(64).toString('base64url');
+  const codeChallenge = cryptoM.createHash('sha256').update(codeVerifier).digest('base64url');
+  const state = cryptoM.randomBytes(16).toString('hex');
+  tokenPkce = { codeVerifier, state };
+  const authUrl = `https://id.kick.com/oauth/authorize?response_type=code&client_id=${NIKSIBOT_CLIENT_ID}&redirect_uri=${encodeURIComponent(TOKEN_REDIRECT)}&scope=chat%3Awrite&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`;
+  res.redirect(authUrl);
+});
+
+app.get('/token-callback', async (req, res) => {
+  const { code, state } = req.query;
+  if (!tokenPkce || tokenPkce.state !== state) return res.send('<h1 style="font-family:sans-serif;color:red;padding:40px">Error: invalid state. Visit /token-refresh again.</h1>');
+  try {
+    const params = new URLSearchParams();
+    params.append('grant_type', 'authorization_code');
+    params.append('client_id', NIKSIBOT_CLIENT_ID);
+    params.append('client_secret', NIKSIBOT_CLIENT_SECRET);
+    params.append('redirect_uri', TOKEN_REDIRECT);
+    params.append('code_verifier', tokenPkce.codeVerifier);
+    params.append('code', code);
+    const { data } = await axios.post('https://id.kick.com/oauth/token', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+    const envPath = '/root/website/.env';
+    let env = require('fs').readFileSync(envPath, 'utf8');
+    env = env.replace(/KICK_BOT_TOKEN=.*/, `KICK_BOT_TOKEN=${data.access_token}`);
+    if (data.refresh_token) env = env.replace(/KICK_BOT_REFRESH_TOKEN=.*/, `KICK_BOT_REFRESH_TOKEN=${data.refresh_token}`);
+    require('fs').writeFileSync(envPath, env);
+    tokenPkce = null;
+    require('child_process').exec('pm2 restart niksibot');
+    res.send('<h1 style="font-family:sans-serif;color:#22c55e;background:#07080c;margin:0;padding:60px;min-height:100vh">✅ Token saved! NiksiBot is restarting with the new token.</h1>');
+  } catch (err) {
+    res.send(`<h1 style="font-family:sans-serif;color:red;padding:40px">Error: ${JSON.stringify(err?.response?.data || err.message)}</h1>`);
+  }
+});
+
 app.get("/ip", async (req, res) => {
   try {
     const response = await fetch("https://api.ipify.org?format=json");
