@@ -243,10 +243,13 @@
     return{deck,landIdx};
   }
 
+  const GOLD_LOGO=`<img src="/assets/niksi.png" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #e8a427;box-shadow:0 0 10px rgba(232,164,39,.7);filter:sepia(.4) saturate(2) hue-rotate(5deg) brightness(1.15)"/>`;
   function makeCard(item){
-    const pts=item.isGolden?'✨ GOLDEN':item.storeItem?'🎁 PRIZE':item.points>0?item.points.toLocaleString()+' pts':'';
-    const cls=item.isGolden&&!item.storeItem?'golden-trigger':item.rarity;
-    return `<div class="rname">${item.name}</div><div class="rpts">${pts}</div>`;
+    if(item.isGolden) return GOLD_LOGO;
+    if(item.rarity==='bust') return `<span style="font-size:28px;line-height:1">🗑️</span>`;
+    if(item.storeItem) return `<span style="font-size:26px;line-height:1">🎁</span><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.04em;margin-top:2px">${item.name}</div>`;
+    if(item.points>0) return `<div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1">${item.points.toLocaleString()}</div><div style="font-size:9px;color:rgba(221,227,239,.4);letter-spacing:.06em;text-transform:uppercase">pts</div>`;
+    return '';
   }
 
   function Roller({items,winner,isGolden,onDone}){
@@ -381,7 +384,7 @@
         {/* Golden ready — user must click to spin */}
         {phase==='golden-ready'&&(
           <div className="g-announce" style={{marginBottom:8}}>
-            <div className="g-icon">✨</div>
+            <img src="/assets/niksi.png" style={{width:64,height:64,borderRadius:'50%',objectFit:'cover',border:'3px solid #e8a427',boxShadow:'0 0 24px rgba(232,164,39,.8)',filter:'sepia(.4) saturate(2) hue-rotate(5deg) brightness(1.15)',marginBottom:8,animation:'goldenFlash 1.5s ease-in-out infinite'}}/>
             <div className="g-text">Golden Spin!</div>
             <div className="g-sub" style={{marginBottom:16}}>You triggered the bonus round - click below to spin for free</div>
             <button onClick={triggerGoldenSpin} style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',padding:'14px 48px',borderRadius:10,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#e8a427,#f5d080)',color:'#07080c',animation:'goldenFlash 2s ease-in-out infinite'}}>
@@ -392,7 +395,11 @@
 
         {/* Golden announce */}
         {phase==='golden-announce'&&(
-          <div className="g-announce"><div className="g-icon">✨</div><div className="g-text">Golden Spin!</div><div className="g-sub">Bonus round triggered</div></div>
+          <div className="g-announce">
+            <img src="/assets/niksi.png" style={{width:56,height:56,borderRadius:'50%',objectFit:'cover',border:'3px solid #e8a427',boxShadow:'0 0 24px rgba(232,164,39,.8)',filter:'sepia(.4) saturate(2) hue-rotate(5deg) brightness(1.15)',marginBottom:8}}/>
+            <div className="g-text">Golden Spin!</div>
+            <div className="g-sub">Bonus round triggered</div>
+          </div>
         )}
 
         {/* Rollers — full width */}
