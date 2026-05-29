@@ -193,7 +193,7 @@
             <a href="/" className="on">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
-            <a href="/store">STORE</a>
+            <a href="/store">STORE</a><a href="/gamble">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
@@ -229,7 +229,7 @@
         <a href="/" className="on">HOME</a>
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
-        <a href="/store">STORE</a>
+        <a href="/store">STORE</a><a href="/gamble">CASES</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
@@ -335,4 +335,5 @@
 </script>
 </body>
 </html>
+
 
