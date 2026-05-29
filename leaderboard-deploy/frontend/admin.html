@@ -242,8 +242,64 @@
               </table>
             )}
           </div>
+
+          {/* Points Management */}
+          <div style={{marginTop:32,background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:14,padding:24}} className="f2">
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',marginBottom:16}}>Give / Remove Points</div>
+            <PointsManager sessionId={sessionId}/>
+          </div>
         </div>
       </>
+    );
+  }
+
+  function PointsManager({sessionId}){
+    const [username,setUsername]=React.useState('');
+    const [amount,setAmount]=React.useState('');
+    const [action,setAction]=React.useState('add');
+    const [msg,setMsg]=React.useState('');
+    const [err,setErr]=React.useState('');
+    const [loading,setLoading]=React.useState(false);
+
+    async function submit(){
+      if(!username.trim()||!amount.trim())return;
+      setLoading(true);setMsg('');setErr('');
+      try{
+        const r=await fetch('/admin/points',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-session-id':sessionId},
+          body:JSON.stringify({username:username.trim().toLowerCase(),amount:Number(amount),action,session:sessionId})
+        });
+        const d=await r.json();
+        if(!r.ok){setErr(d.error||'Error');}
+        else{setMsg(`${action==='add'?'Added':'Removed'} ${amount} pts - ${d.username} now has ${d.newBalance.toLocaleString()} pts`);}
+      }catch{setErr('Connection error');}
+      setLoading(false);
+    }
+
+    return(
+      <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'flex-end'}}>
+        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+          <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Username (Kick)</label>
+          <input className="search-bar" style={{marginBottom:0,width:200}} placeholder="e.g. niksi777" value={username} onChange={e=>setUsername(e.target.value)}/>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+          <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Amount</label>
+          <input className="search-bar" style={{marginBottom:0,width:120}} type="number" min="1" placeholder="100" value={amount} onChange={e=>setAmount(e.target.value)}/>
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          {['add','remove','set'].map(a=>(
+            <button key={a} onClick={()=>setAction(a)} style={{padding:'10px 16px',borderRadius:8,border:`1px solid ${action===a?'rgba(255,255,255,.3)':'rgba(255,255,255,.1)'}`,background:action===a?'rgba(255,255,255,.12)':'rgba(255,255,255,.04)',color:action===a?'#fff':'var(--mu)',cursor:'pointer',fontSize:12,fontWeight:600,letterSpacing:'.08em',textTransform:'uppercase',transition:'all .15s'}}>
+              {a}
+            </button>
+          ))}
+        </div>
+        <button onClick={submit} disabled={loading||!username||!amount} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#22c55e',color:'#fff',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase',opacity:loading||!username||!amount?0.4:1}}>
+          {loading?'...':'Apply'}
+        </button>
+        {msg&&<div style={{fontSize:12,color:'#22c55e',marginTop:4,width:'100%'}}>{msg}</div>}
+        {err&&<div style={{fontSize:12,color:'var(--rd)',marginTop:4,width:'100%'}}>{err}</div>}
+      </div>
     );
   }
 

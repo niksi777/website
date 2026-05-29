@@ -683,6 +683,24 @@ app.get('/giveaway/timer', (req, res) => {
   res.json({ signal: sig ? sig.action : null, duration: sig ? sig.duration : 60 });
 });
 
+app.post('/admin/points', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const { username, amount, action } = req.body;
+  if (!username || !amount || !action) return res.status(400).json({ error: 'Missing fields' });
+  const ptsPath = require('path').join(__dirname, '../../points.json');
+  let pts = {};
+  try { pts = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
+  const key = username.toLowerCase();
+  const current = pts[key] || 0;
+  if (action === 'add') pts[key] = current + Number(amount);
+  else if (action === 'remove') pts[key] = Math.max(0, current - Number(amount));
+  else if (action === 'set') pts[key] = Math.max(0, Number(amount));
+  require('fs').writeFileSync(ptsPath, JSON.stringify(pts, null, 2));
+  res.json({ ok: true, username: key, newBalance: pts[key] });
+});
+
 app.get('/admin/accounts', (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'];
   const session = sessions[sessionId];
