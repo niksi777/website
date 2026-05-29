@@ -272,7 +272,7 @@
       });
       const stageW=stage.offsetWidth;
       const center=stageW/2-TILE/2;
-      const targetX=-(landIdx*(TILE+8))+center;
+      const targetX=-(landIdx*TILE)+center;
       requestAnimationFrame(()=>{
         track.style.transition='transform 5.8s cubic-bezier(.08,.92,.2,1)';
         track.style.transform=`translateX(${targetX}px) translateZ(0)`;
