@@ -86,14 +86,14 @@
     .rptb{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
     .rptr.g{border-top-color:#e8a427;filter:drop-shadow(0 0 8px rgba(232,164,39,.8))}
     .rptb.g{border-bottom-color:#e8a427;filter:drop-shadow(0 0 8px rgba(232,164,39,.8))}
-    .rstage{position:relative;height:110px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
+    .rstage{position:relative;height:96px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
     .rstage.gstage{border-color:rgba(232,164,39,.4);animation:goldenGlow 2s ease-in-out infinite}
     .rstage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(to right,#0d0f14,transparent);z-index:4;pointer-events:none}
     .rstage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(to left,#0d0f14,transparent);z-index:4;pointer-events:none}
     .rwin{position:absolute;left:50%;top:0;bottom:0;width:162px;transform:translateX(-50%);border-left:2px solid rgba(184,204,232,.2);border-right:2px solid rgba(184,204,232,.2);z-index:3;pointer-events:none}
     .rwin.g{border-color:rgba(232,164,39,.4)}
-    .rtrack{display:flex;align-items:center;gap:8px;position:absolute;top:0;height:100%;padding:0 4px;transform:translateZ(0)}
-    .rc{flex-shrink:0;width:150px;height:82px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transform:translateZ(0)}
+    .rtrack{display:flex;align-items:center;gap:6px;position:absolute;top:0;height:100%;padding:0 4px;transform:translateZ(0)}
+    .rc{flex-shrink:0;width:110px;height:80px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transform:translateZ(0)}
     .rc.r-bust{border-color:rgba(80,80,100,.3)}
     .rc.r-blue{border-color:#4a90d933}.rc.r-blue .rpts{color:#9bbde0}
     .rc.r-purple{border-color:#9b59d933}.rc.r-purple .rpts{color:#c4a0e8}
@@ -104,8 +104,8 @@
     .rc.r-jackpot{border-color:#d94f9b33}.rc.r-jackpot .rpts{color:#f080c0}
     .rc.r-ultra{border-color:#ff64c8;animation:goldenGlow 1.5s ease-in-out infinite}.rc.r-ultra .rpts{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
     .rc.winner{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite !important}
-    .rname{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(200,205,216,.45)}
-    .rpts{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1}
+    .rname{font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(200,205,216,.45)}
+    .rpts{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:#fff;line-height:1}
 
     /* GOLDEN ANNOUNCE */
     .g-announce{text-align:center;padding:20px 0;animation:pop .5s ease both}
@@ -205,7 +205,7 @@
     ultra:  {bg:'linear-gradient(135deg,#200033,#330050)',border:'rgba(255,100,200,.5)',color:'#ff64c8',icon:'👑'},
   };
 
-  const TILE=158;
+  const TILE=116; // 110px card + 6px gap — shows ~7-8 cards on a full-width stage
 
   function buildDeck(items,winnerItem){
     const totalW=items.reduce((s,i)=>s+i.weight,0);
@@ -337,97 +337,99 @@
 
     return(
       <div className="case-page">
-        <a href="/gamble" className="case-page-back">← All Cases</a>
+        {/* Top bar */}
+        <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:20,flexWrap:'wrap'}}>
+          <a href="/gamble" className="case-page-back">← All Cases</a>
+          <div style={{display:'flex',alignItems:'center',gap:12,flex:1}}>
+            <span style={{fontSize:36,lineHeight:1}}>{caseData.emoji}</span>
+            <div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',lineHeight:1}}>{caseData.name}</div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:2}}>Cost to open: {caseData.cost.toLocaleString()} pts</div>
+            </div>
+          </div>
+          {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} pts</strong></div>}
+        </div>
 
-        <div className="case-page-top">
-          {/* Left: open panel */}
-          <div className="case-open-panel">
-            <div className="case-big-emoji">{caseData.emoji}</div>
-            <div className="case-big-name">{caseData.name}</div>
-            <div className="case-big-cost">Cost to open: {caseData.cost.toLocaleString()} pts</div>
-            {user&&<div className="case-balance-chip">Balance: <strong>{(user.points||0).toLocaleString()} pts</strong></div>}
+        {/* Golden announce */}
+        {phase==='golden-announce'&&(
+          <div className="g-announce"><div className="g-icon">✨</div><div className="g-text">Golden Spin!</div><div className="g-sub">Bonus round triggered</div></div>
+        )}
 
-            {/* Roller area */}
-            {phase==='golden-announce'&&(
-              <div className="g-announce" style={{width:'100%'}}>
-                <div className="g-icon">✨</div>
-                <div className="g-text">Golden Spin!</div>
-                <div className="g-sub">Bonus round triggered</div>
+        {/* Rollers — full width */}
+        {!result?.isDemo&&(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
+          <Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone}/>
+        )}
+        {(phase==='golden-spinning'||phase==='done')&&result?.goldenItem&&(
+          <Roller items={caseData.goldenItems} winner={result.goldenItem} isGolden={true} onDone={onGoldenDone}/>
+        )}
+        {phase==='idle'&&(
+          <div style={{height:96,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:16}}>
+            <span style={{fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(221,227,239,.18)'}}>Open a case to spin</span>
+          </div>
+        )}
+
+        {/* Action buttons */}
+        <div style={{display:'flex',gap:10,marginBottom:16,flexWrap:'wrap'}}>
+          {(phase==='idle'||phase==='done')?(
+            <>
+              <button className="open-btn" style={{flex:1,maxWidth:'none'}}
+                onClick={phase==='done'?()=>{setPhase('idle');setResult(null);}:openCase}
+                disabled={!user||(!canOpen&&phase==='idle')}>
+                {!user?'Login to Open':!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`:phase==='done'?'Open Again':`Open - ${caseData.cost.toLocaleString()} pts`}
+              </button>
+              {phase==='idle'&&caseData.goldenItems&&(
+                <button className="demo-btn" style={{flexShrink:0}} onClick={demoGolden}>✨ Demo Golden Spin</button>
+              )}
+            </>
+          ):(
+            <button className="open-btn" style={{flex:1,maxWidth:'none'}} disabled>
+              {phase==='golden-announce'?'Golden Spin...':'Spinning...'}
+            </button>
+          )}
+        </div>
+
+        {/* Result */}
+        {phase==='done'&&finalItem&&(
+          <div className="result-strip" style={{marginBottom:20}}>
+            {result.isDemo&&<div style={{fontSize:10,color:'#e8a427',letterSpacing:'.1em',textTransform:'uppercase',marginBottom:6}}>DEMO</div>}
+            <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'Result'}</div>
+            <div className="result-name" style={{color:finalItem.rarity==='bust'?'rgba(221,227,239,.5)':(RARITIES[finalItem.rarity]?.color||'#fff')}}>{finalItem.name}</div>
+            {result.storeWin&&<div style={{color:'#22c55e',fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800}}>🎁 Check Discord!</div>}
+            {!result.storeWin&&result.pointsWon>0&&<div className={`result-pts${finalItem.rarity==='ultra'?' u':''}`}>+{result.pointsWon.toLocaleString()} pts</div>}
+            {!result.isDemo&&result.proof&&<button onClick={()=>setShowProof(p=>!p)} style={{marginTop:8,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>{showProof?'Hide Proof':'Verify (Provably Fair)'}</button>}
+            {showProof&&result.proof&&(
+              <div style={{marginTop:8,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:8,padding:'10px 14px',fontSize:10,color:'var(--mu)',lineHeight:2,wordBreak:'break-all',textAlign:'left'}}>
+                <div><strong>Server Seed:</strong> {result.proof.serverSeed}</div>
+                <div><strong>Hash:</strong> {result.proof.resultHash}</div>
+                <div><strong>Roll:</strong> {result.proof.roll1}/{result.proof.tw1}{result.proof.roll2!=null?` → ${result.proof.roll2}/${result.proof.tw2}`:''}</div>
               </div>
-            )}
-            {!result?.isDemo&&(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
-              <div style={{width:'100%'}}><Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone}/></div>
-            )}
-            {(phase==='golden-spinning'||phase==='done')&&result?.goldenItem&&(
-              <div style={{width:'100%'}}><Roller items={caseData.goldenItems} winner={result.goldenItem} isGolden={true} onDone={onGoldenDone}/></div>
-            )}
-            {phase==='idle'&&(
-              <div className="roller-placeholder" style={{width:'100%'}}>
-                <span style={{fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(221,227,239,.2)'}}>Spin the case to see your prize</span>
-              </div>
-            )}
-
-            {/* Result */}
-            {phase==='done'&&finalItem&&(
-              <div className="result-strip" style={{width:'100%'}}>
-                {result.isDemo&&<div style={{fontSize:10,color:'#e8a427',letterSpacing:'.1em',textTransform:'uppercase',marginBottom:6}}>DEMO</div>}
-                <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'Result'}</div>
-                <div className="result-name" style={{color:finalItem.rarity==='bust'?'rgba(221,227,239,.6)':(RARITIES[finalItem.rarity]?.color||'#fff')}}>{finalItem.name}</div>
-                {result.storeWin&&<div style={{color:'#22c55e',fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800}}>🎁 Check Discord!</div>}
-                {!result.storeWin&&result.pointsWon>0&&<div className={`result-pts${finalItem.rarity==='ultra'?' u':''}`}>+{result.pointsWon.toLocaleString()} pts</div>}
-                {!result.isDemo&&result.proof&&<button onClick={()=>setShowProof(p=>!p)} style={{marginTop:8,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>{showProof?'Hide Proof':'Verify (Provably Fair)'}</button>}
-                {showProof&&result.proof&&(
-                  <div style={{marginTop:8,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:8,padding:'10px 14px',fontSize:10,color:'var(--mu)',lineHeight:2,wordBreak:'break-all',textAlign:'left'}}>
-                    <div><strong>Server Seed:</strong> {result.proof.serverSeed}</div>
-                    <div><strong>Hash:</strong> {result.proof.resultHash}</div>
-                    <div><strong>Roll:</strong> {result.proof.roll1}/{result.proof.tw1}{result.proof.roll2!=null?` → ${result.proof.roll2}/${result.proof.tw2}`:''}</div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {err&&<div style={{color:'rgba(217,79,79,.9)',fontSize:13}}>{err}</div>}
-
-            {/* Buttons */}
-            {(phase==='idle'||phase==='done')&&(
-              <>
-                <button className="open-btn" onClick={phase==='done'?()=>{setPhase('idle');setResult(null);}:openCase} disabled={!user||(!canOpen&&phase==='idle')}>
-                  {!user?'Login to Open':!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`:phase==='done'?'Open Again':`Open - ${caseData.cost.toLocaleString()} pts`}
-                </button>
-                {phase==='idle'&&caseData.goldenItems&&(
-                  <button className="demo-btn" onClick={demoGolden}>✨ Demo Golden Spin</button>
-                )}
-              </>
-            )}
-            {(phase!=='idle'&&phase!=='done')&&(
-              <button className="open-btn" disabled>{phase==='golden-announce'?'Golden Spin...':'Spinning...'}</button>
             )}
           </div>
+        )}
 
-          {/* Right: items grid */}
-          <div>
-            <div className="items-section">
-              <div className="items-section-title">Regular spin — what you can win</div>
-              <div className="items-grid">
-                {caseData.items.map((item,i)=>{
-                  const pct=((item.weight/regTW)*100).toFixed(1);
-                  return <ItemCard key={i} item={item} prob={pct}/>;
-                })}
-              </div>
-            </div>
-            {caseData.goldenItems&&(
-              <div className="items-section">
-                <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes — triggered at 1%</div>
-                <div className="items-grid">
-                  {caseData.goldenItems.map((item,i)=>{
-                    const overall=((item.weight/golTW)*0.01*100).toFixed(4);
-                    return <ItemCard key={i} item={item} prob={overall}/>;
-                  })}
-                </div>
-              </div>
-            )}
+        {err&&<div style={{color:'rgba(217,79,79,.9)',fontSize:13,marginBottom:12}}>{err}</div>}
+
+        {/* Items grid — full width below everything */}
+        <div className="items-section">
+          <div className="items-section-title">What you can win</div>
+          <div className="items-grid" style={{gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))'}}>
+            {caseData.items.map((item,i)=>{
+              const pct=((item.weight/regTW)*100).toFixed(1);
+              return <ItemCard key={i} item={item} prob={pct}/>;
+            })}
           </div>
         </div>
+        {caseData.goldenItems&&(
+          <div className="items-section">
+            <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes — triggers at 1%</div>
+            <div className="items-grid" style={{gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))'}}>
+              {caseData.goldenItems.map((item,i)=>{
+                const overall=((item.weight/golTW)*0.01*100).toFixed(4);
+                return <ItemCard key={i} item={item} prob={overall}/>;
+              })}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
