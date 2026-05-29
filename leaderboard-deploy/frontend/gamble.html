@@ -59,10 +59,10 @@
     .case-card:hover{transform:translateY(-6px);border-color:var(--b3);box-shadow:0 20px 40px rgba(0,0,0,.4)}
     .case-top{height:160px;display:flex;align-items:center;justify-content:center;font-size:72px;background:var(--s2);border-bottom:1px solid var(--b2);position:relative;transition:background .2s}
     .case-card:hover .case-top{background:rgba(255,255,255,.04)}
-    .case-body{padding:18px;flex:1;display:flex;flex-direction:column;gap:8px}
+    .case-body{padding:18px;flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
     .case-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.04em}
-    .case-cost{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold)}
-    .case-cta{margin-top:6px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+    .case-cost{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--mu)}
+    .case-cta{margin-top:2px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.3)}
     .case-golden-badge{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#e8a427,#f5d080);color:#07080c;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px}
 
     /* MODAL */
@@ -210,6 +210,14 @@
       for(const item of items){r-=item.weight;if(r<0){deck.push(item);break;}}
     }
     const landIdx=50;
+    // Bait: plant near-miss golden triggers just before the winner
+    if(!winnerItem.isGolden){
+      const golden=items.find(i=>i.isGolden);
+      if(golden){
+        if(Math.random()<0.7) deck[landIdx-1]=golden;  // right before winner
+        if(Math.random()<0.4) deck[landIdx-3]=golden;  // a couple before
+      }
+    }
     deck.splice(landIdx,0,winnerItem);
     return{deck,landIdx};
   }
@@ -306,7 +314,7 @@
     }
 
     function handleRegularDone(){
-      if(!result)return;
+      if(!result||result.isDemo)return;
       if(result.goldenItem){
         setPhase('golden-announce');
         setTimeout(()=>setPhase('golden-spinning'),2200);
@@ -325,12 +333,21 @@
         <div className="modal">
           <button className="modal-close" onClick={onClose} disabled={phase!=='idle'&&phase!=='done'}>✕</button>
 
-          <div className="modal-header">
-            <div className="modal-emoji">{caseData.emoji}</div>
-            <div>
-              <div className="modal-title">{caseData.name}</div>
-              <div className="modal-cost">{caseData.cost.toLocaleString()} points to open - 95% RTP</div>
+          <div className="modal-header" style={{flexDirection:'column',alignItems:'center',textAlign:'center',gap:8}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',width:'100%'}}>
+              <div style={{fontSize:12,color:'var(--mu)',fontWeight:500}}>
+                Balance: <strong style={{color:'var(--gold)'}}>{(user?.points||0).toLocaleString()} pts</strong>
+              </div>
+              {result?.proof&&(
+                <button onClick={()=>setShowProof(p=>!p)} style={{background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 10px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>
+                  {showProof?'Hide':'Verify (Provably Fair)'}
+                </button>
+              )}
+              {!result?.proof&&<div style={{fontSize:10,letterSpacing:'.08em',textTransform:'uppercase',color:'rgba(221,227,239,.2)'}}>Provably Fair</div>}
             </div>
+            <div className="modal-emoji">{caseData.emoji}</div>
+            <div className="modal-title">{caseData.name}</div>
+            <div className="modal-cost">Cost to open: {caseData.cost.toLocaleString()} pts</div>
           </div>
 
           <div className="modal-body">
@@ -343,8 +360,8 @@
               </div>
             )}
 
-            {/* Regular spin */}
-            {(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
+            {/* Regular spin - hidden in demo mode */}
+            {!result?.isDemo&&(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
               <CaseRoller
                 items={caseData.items}
                 winner={result.regularItem}
@@ -374,22 +391,19 @@
             {phase==='done'&&finalItem&&(
               <div className="result" style={{marginBottom:16}}>
                 {result.isDemo&&<div style={{display:'inline-block',background:'rgba(232,164,39,.15)',border:'1px solid rgba(232,164,39,.3)',color:'#e8a427',fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',padding:'3px 10px',borderRadius:100,marginBottom:8}}>DEMO - No points spent</div>}
-                <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'You Won'}</div>
-                <div className="result-name" style={{color:RARITY_COLORS[finalItem.rarity]||'#fff'}}>{finalItem.name}</div>
+                <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'Result'}</div>
+                <div className="result-name" style={{
+                  color: finalItem.rarity==='bust' ? '#fff' : (RARITY_COLORS[finalItem.rarity]||'#fff'),
+                  fontSize: finalItem.rarity==='bust' ? 28 : undefined
+                }}>{finalItem.name}</div>
                 {result.storeWin ? (
                   <>
                     <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#22c55e',lineHeight:1,marginBottom:4}}>🎁 Store Prize!</div>
                     <div style={{fontSize:13,color:'rgba(34,197,94,.8)',marginBottom:4}}>A ticket has been created in Discord - Niksi will deliver it on stream.</div>
                   </>
-                ) : (
+                ) : result.pointsWon > 0 ? (
                   <div className={`result-pts${finalItem.rarity==='ultra'?' ultra':''}`}>+{result.pointsWon.toLocaleString()} pts</div>
-                )}
-                {!result.isDemo&&<div className="result-balance">Balance: <strong>{result.newPoints.toLocaleString()} pts</strong></div>}
-                {result.proof&&(
-                  <button onClick={()=>setShowProof(p=>!p)} style={{marginTop:10,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'5px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>
-                    {showProof?'Hide Proof':'Verify (Provably Fair)'}
-                  </button>
-                )}
+                ) : null}
                 {showProof&&result.proof&&(
                   <div style={{marginTop:10,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:8,padding:'12px 14px',fontSize:10,fontFamily:"'Inter',sans-serif",color:'var(--mu)',lineHeight:2,wordBreak:'break-all',textAlign:'left'}}>
                     <div><strong>Server Seed:</strong> {result.proof.serverSeed}</div>
@@ -519,7 +533,7 @@
                 </div>
                 <div className="case-body">
                   <div className="case-name">{c.name}</div>
-                  <div className="case-cost">{c.cost.toLocaleString()} pts</div>
+                  <div className="case-cost">Cost to open: {c.cost.toLocaleString()} pts</div>
                   <div className="case-cta">Click to open</div>
                 </div>
               </div>
