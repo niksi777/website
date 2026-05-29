@@ -346,7 +346,7 @@ const GAMBLE_CASES = [
 ];
 
 app.get('/gamble/cases', (req, res) => {
-  res.json(GAMBLE_CASES.map(c => ({ id:c.id, name:c.name, cost:c.cost, emoji:c.emoji, items:c.items })));
+  res.json(GAMBLE_CASES.map(c => ({ id:c.id, name:c.name, cost:c.cost, emoji:c.emoji, items:c.items, goldenItems:c.goldenItems })));
 });
 
 function weightedRoll(items, hashHex, offset) {
