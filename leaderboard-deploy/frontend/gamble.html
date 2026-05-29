@@ -274,7 +274,9 @@
       });
       const stageW=stage.offsetWidth;
       const center=stageW/2-TILE/2;
-      const targetX=-(landIdx*TILE)+center;
+      // Land anywhere in the card - biased right so next card's edge is visible (bait effect)
+      const cardNudge=(Math.random()-0.25)*TILE*0.75;
+      const targetX=-(landIdx*TILE)+center+cardNudge;
       requestAnimationFrame(()=>{
         track.style.transition=`transform ${fast?'1.4s cubic-bezier(.2,.95,.35,1)':'5.8s cubic-bezier(.08,.92,.2,1)'}`;
         track.style.transform=`translateX(${targetX}px) translateZ(0)`;
