@@ -118,10 +118,13 @@
     .ftd strong{color:rgba(221,227,239,.9)}
     .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
 
+    /* Wager shown below name on small screens */
+    .lbnm-wrap{display:flex;flex-direction:column;gap:2px;overflow:hidden}
+    .lbwg-sub{display:none;font-size:10px;color:var(--mu);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     @media(max-width:700px){
       .nlinks{display:none}
       .hamburger{display:flex}
-      .wrap{padding:0 16px}
+      .wrap{padding:0 14px}
       .phead{padding:28px 0 20px}
       .phead-toprow{flex-direction:column;align-items:flex-start;gap:10px}
       .pbtns{flex-wrap:wrap}
@@ -129,20 +132,23 @@
       .stat{border-right:none;border-bottom:1px solid var(--b1);padding:14px 18px}
       .stat:last-child{border-bottom:none}
       .podium{grid-template-columns:1fr;gap:8px}
-      /* Hide wager column on small screens, show rank+avatar+name+prize only */
-      .lbhead{grid-template-columns:40px 32px 1fr auto;gap:10px;padding:8px 14px}
-      .lbrow{grid-template-columns:40px 32px 1fr auto;gap:10px;padding:12px 14px}
+      /* 4 columns: rank | avatar | name+wager(stacked) | prize */
+      .lbhead{grid-template-columns:36px 32px 1fr auto;gap:10px;padding:8px 14px}
+      .lbrow{grid-template-columns:36px 32px 1fr auto;gap:10px;padding:11px 14px}
       .lbwg{display:none}
-      .lbh:nth-child(4){display:none}
-      .lbrk{font-size:16px}
+      .lbwg-sub{display:block}
       .lbnm{font-size:12px}
-      .lbrw{font-size:12px;min-width:40px}
+      .lbrk{font-size:15px}
+      .lbrw{font-size:12px;min-width:44px}
     }
     @media(max-width:480px){
       .pcard{padding:14px 10px}
       .pstat-val{font-size:13px}
       .p1 .pstat-val.rw{font-size:17px}
       .ftw{flex-direction:column;align-items:flex-start}
+      .lbhead{grid-template-columns:30px 28px 1fr auto;gap:8px;padding:7px 12px}
+      .lbrow{grid-template-columns:30px 28px 1fr auto;gap:8px;padding:10px 12px}
+      .lbav{width:28px;height:28px}
     }
 
     @media(max-width:700px){
@@ -349,7 +355,10 @@
               <div key={p.id} className="lbrow">
                 <div className="lbrk">#{i+4}</div>
                 <Avatar src={p.avatar} name={p.username} size={32}/>
-                <div className="lbnm">{p.username}</div>
+                <div className="lbnm-wrap">
+                  <div className="lbnm">{p.username}</div>
+                  <div className="lbwg-sub">{fmtMoney(p.wager)} wagered</div>
+                </div>
                 <div className="lbwg">{fmtMoney(p.wager)}</div>
                 <div className="lbrw">{fmtMoney(p.reward)}</div>
               </div>
