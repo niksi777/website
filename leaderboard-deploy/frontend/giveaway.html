@@ -448,7 +448,7 @@
             {onReset&&<button className="btn btn-sec" style={{width:'auto',padding:'4px 12px',fontSize:11}} onClick={onReset}>Reset</button>}
           </div>
           {entries.length===0?(
-            <div className="empty">No entries yet - waiting for Kick chat</div>
+            <div className="empty">No entries yet</div>
           ):(
             <div className="entries-grid">
               {entries.map((e,i)=>(
@@ -612,7 +612,6 @@
       }catch(e){rerollingRef.current=false;}
     }
     async function resetGiveaway(){
-      if(!confirm('Reset and clear all entries?'))return;
       stopTimer();
       clearInterval(respTimerRef.current);clearInterval(chatPollRef.current);
       setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);setShowProof(false);setWinnerAvatarUrl(null);
@@ -654,8 +653,8 @@
           {!giveaway?(
             <div className="card f2">
               <div className="form-grid">
-                <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" placeholder="e.g. haru" value={keyword} onChange={e=>setKeyword(e.target.value)}/></div>
-                <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" placeholder="e.g. $10 tip" value={prize} onChange={e=>setPrize(e.target.value)}/></div>
+                <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" placeholder="e.g. haru" value={keyword} onChange={e=>setKeyword(e.target.value)} autoComplete="off"/></div>
+                <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" placeholder="e.g. $10 tip" value={prize} onChange={e=>setPrize(e.target.value)} autoComplete="off"/></div>
               </div>
               <div className="divider-line"/>
               {!useTimer?(
