@@ -434,15 +434,12 @@
     return(
       <div className="case-page">
         {/* Top bar */}
-        <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:20,flexWrap:'wrap'}}>
+        <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:20,flexWrap:'wrap',position:'relative'}}>
           <a href="/cases" className="case-page-back">← All Cases</a>
-          <div style={{display:'flex',alignItems:'center',gap:12,flex:1}}>
-            <div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',lineHeight:1}}>{caseData.name}</div>
-              <div style={{fontSize:12,color:'var(--mu)',marginTop:2}}>Cost to open: {caseData.cost.toLocaleString()} pts</div>
-            </div>
+          <div style={{position:'absolute',left:'50%',transform:'translateX(-50%)',textAlign:'center'}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',lineHeight:1}}>{caseData.name}</div>
           </div>
-          {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} pts</strong></div>}
+          {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0,marginLeft:'auto'}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} pts</strong></div>}
         </div>
 
         {/* Case graphic centered above spinner */}
