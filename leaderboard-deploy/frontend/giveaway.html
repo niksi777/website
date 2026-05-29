@@ -359,7 +359,7 @@
       if(!track||!stage){setRolling(false);return;}
       const stageW=stage.offsetWidth;
       const trackPad=6;
-      const randomNudge=(Math.random()-0.5)*60; // ±30px off-center
+      const randomNudge=(Math.random()-0.25)*TILE*0.75; // biased right for bait effect
       const centerOffset=stageW/2-CARD_W/2-trackPad+randomNudge;
       const finalX=-(landIdx*TILE-centerOffset);
       track.style.transition='none';
