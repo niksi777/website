@@ -488,12 +488,22 @@ function scheduleChatSave() {
   chatSaveTimer = setTimeout(() => { try { require('fs').writeFileSync(CHAT_BUFFER_PATH, JSON.stringify(chatBuffer)); } catch {} }, 2000);
 }
 app.post('/giveaway/chat-message', (req, res) => {
-  const { username, content, ts } = req.body;
+  const { username, content, ts, avatar } = req.body;
   if (!username || !content) return res.json({ ok: false });
   const key = username.toLowerCase();
   if (!chatBuffer[key]) chatBuffer[key] = [];
   chatBuffer[key].push({ username, content, ts: ts || Date.now() });
   if (chatBuffer[key].length > CHAT_MAX) chatBuffer[key].shift();
+  // Store Kick avatar so it shows up in the giveaway roller
+  if (avatar) {
+    const accounts = loadAccounts();
+    if (!accounts[key]) accounts[key] = { kickUsername: key, kickDisplayName: username, firstSeen: new Date().toISOString() };
+    if (accounts[key].kickAvatar !== avatar) {
+      accounts[key].kickAvatar = avatar;
+      accounts[key].lastSeen = new Date().toISOString();
+      require('fs').writeFileSync(ACCOUNTS_PATH, JSON.stringify(accounts, null, 2));
+    }
+  }
   scheduleChatSave();
   res.json({ ok: true });
 });

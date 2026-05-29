@@ -602,10 +602,13 @@
       try{
         rerollingRef.current=true;
         setWinner(null);
+        setRerollTarget(null); // clear first so React always sees a change
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
-        if(d.winner){setRerollTarget(d.winner);}
-        else{rerollingRef.current=false;}
+        if(d.winner){
+          // Small delay so null render happens before new winner triggers the roll
+          setTimeout(()=>setRerollTarget(d.winner),80);
+        }else{rerollingRef.current=false;}
       }catch(e){rerollingRef.current=false;}
     }
     async function resetGiveaway(){
