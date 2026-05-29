@@ -356,7 +356,7 @@ function weightedRoll(items, hashHex, offset) {
   for (const item of items) { cum += item.weight; if (roll < cum) return { item, roll, totalWeight }; }
   return { item: items[items.length-1], roll, totalWeight };
 }
-app.post('/gamble/open', (req, res) => {
+app.post('/gamble/open', async (req, res) => {
   const sessionId = req.headers['x-session-id'] || req.body.session;
   const session = sessions[sessionId];
   if (!session) return res.status(401).json({ error: 'Not logged in' });
