@@ -121,8 +121,8 @@
     /* ITEMS GRID */
     .items-section{margin-bottom:32px}
     .items-section-title{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(221,227,239,.35);margin-bottom:14px;text-align:center}
-    .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-    .item-card{border-radius:8px;padding:0;text-align:center;display:flex;flex-direction:column;align-items:center;border:1px solid transparent;transition:transform .15s,box-shadow .15s;cursor:default;position:relative;overflow:hidden;min-height:130px;justify-content:flex-end}
+    .items-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .item-card{border-radius:8px;padding:0;text-align:center;display:flex;flex-direction:column;align-items:center;border:1px solid transparent;transition:transform .15s,box-shadow .15s;cursor:default;position:relative;overflow:hidden;min-height:130px;justify-content:flex-end;width:140px;flex-shrink:0}
     .item-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
     .item-card-inner{padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;position:relative;z-index:1}
     .item-bg{position:absolute;inset:0;opacity:.15;transition:opacity .15s}
@@ -428,42 +428,39 @@
           </div>
         )}
 
-        {/* Action buttons */}
-        <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8,padding:'16px 0',background:'linear-gradient(180deg,rgba(8,10,14,0),rgba(8,10,14,.8),rgba(8,10,14,0))'}}>
-          {phase==='golden-ready'?null:(
-            <>
-              {/* Left spacer for symmetry */}
-              <div style={{display:'flex',gap:8,flex:'0 0 auto',visibility:phase==='idle'?'visible':'hidden'}}>
-                <button className="speed-btn" onClick={()=>setFastMode(p=>!p)} title={fastMode?'Fast mode on':'Fast mode off'}
-                  style={fastMode?{background:'rgba(255,255,255,.12)',color:'#fff',borderColor:'rgba(255,255,255,.2)'}:{}}>
-                  <svg viewBox="0 0 16 16" fill="none" style={{width:12,height:12}}><path d="M13 8H3M13 8l-3-3M13 8l-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  {fastMode?'Fast':'Speed'}
-                </button>
-              </div>
-
-              {/* Center open button */}
-              <button className="open-btn"
-                onClick={(phase==='idle'||phase==='done')?
-                  (phase==='done'?()=>{setPhase('idle');setResult(null);setShowProof(false);}:openCase)
-                  :undefined}
-                disabled={!(phase==='idle'||phase==='done')||!user||(!canOpen&&phase==='idle')}>
-                {!user?'Login to Open'
-                  :!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`
-                  :phase==='done'?'Open Again'
-                  :phase!=='idle'?'Spinning...'
-                  :`Open for ${caseData.cost.toLocaleString()} pts`}
+        {/* Action buttons - true center layout using position:relative trick */}
+        <div style={{position:'relative',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px 0'}}>
+          {/* Absolutely positioned side controls - don't affect centering */}
+          {phase==='idle'&&(
+            <div style={{position:'absolute',left:0,display:'flex',gap:8}}>
+              <button className="speed-btn" onClick={()=>setFastMode(p=>!p)}
+                style={fastMode?{background:'rgba(255,255,255,.12)',color:'#fff',borderColor:'rgba(255,255,255,.2)'}:{}}>
+                <svg viewBox="0 0 16 16" fill="none" style={{width:12,height:12}}><path d="M13 8H3M13 8l-3-3M13 8l-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                {fastMode?'Fast':'Speed'}
               </button>
-
-              {/* Right: demo spin */}
-              <div style={{display:'flex',gap:8,flex:'0 0 auto',visibility:phase==='idle'?'visible':'hidden'}}>
-                {caseData.goldenItems&&(
-                  <button className="demo-btn-sm" onClick={demoGolden}>
-                    <svg viewBox="0 0 16 16" fill="none" style={{width:12,height:12,flexShrink:0}}><path d="M13.5 8A5.5 5.5 0 112.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M13.5 4v4h-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    Demo Spin
-                  </button>
-                )}
-              </div>
-            </>
+            </div>
+          )}
+          {phase==='idle'&&caseData.goldenItems&&(
+            <div style={{position:'absolute',right:0,display:'flex',gap:8}}>
+              <button className="demo-btn-sm" onClick={demoGolden}>
+                <svg viewBox="0 0 16 16" fill="none" style={{width:12,height:12,flexShrink:0}}><path d="M13.5 8A5.5 5.5 0 112.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M13.5 4v4h-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Demo Spin
+              </button>
+            </div>
+          )}
+          {/* Centered open button */}
+          {phase!=='golden-ready'&&(
+            <button className="open-btn"
+              onClick={(phase==='idle'||phase==='done')?
+                (phase==='done'?()=>{setPhase('idle');setResult(null);setShowProof(false);}:openCase)
+                :undefined}
+              disabled={!(phase==='idle'||phase==='done')||!user||(!canOpen&&phase==='idle')}>
+              {!user?'Login to Open'
+                :!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`
+                :phase==='done'?'Open Again'
+                :phase!=='idle'?'Spinning...'
+                :`Open for ${caseData.cost.toLocaleString()} pts`}
+            </button>
           )}
         </div>
 
@@ -491,7 +488,7 @@
         {/* Items grid - full width below everything */}
         <div className="items-section">
           <div className="items-section-title">Main Pool - Items in this Case</div>
-          <div className="items-grid" style={{gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))'}}>
+          <div className="items-grid" style={{}}>
             {caseData.items.map((item,i)=>{
               const pct=((item.weight/regTW)*100).toFixed(1);
               return <ItemCard key={i} item={item} prob={pct}/>;
@@ -501,7 +498,7 @@
         {caseData.goldenItems&&(
           <div className="items-section">
             <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes - triggers at 4.5%</div>
-            <div className="items-grid" style={{gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))'}}>
+            <div className="items-grid" style={{}}>
               {caseData.goldenItems.map((item,i)=>{
                 const overall=((item.weight/golTW)*0.01*100).toFixed(4);
                 return <ItemCard key={i} item={item} prob={overall}/>;
