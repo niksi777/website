@@ -166,6 +166,11 @@
             <div className="page-title">Admin Panel</div>
           </div>
 
+          {/* Points Manager - top bar */}
+          <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
+            <PointsManager sessionId={sessionId}/>
+          </div>
+
           <div className="stat-row f1">
             <div className="stat-card">
               <div className="stat-lbl">Total Accounts</div>
@@ -243,11 +248,6 @@
             )}
           </div>
 
-          {/* Points Management */}
-          <div style={{marginTop:32,background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:14,padding:24}} className="f2">
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',marginBottom:16}}>Give / Remove Points</div>
-            <PointsManager sessionId={sessionId}/>
-          </div>
         </div>
       </>
     );
@@ -281,7 +281,7 @@
       <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'flex-end'}}>
         <div style={{display:'flex',flexDirection:'column',gap:6}}>
           <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Username (Kick)</label>
-          <input className="search-bar" style={{marginBottom:0,width:200}} placeholder="e.g. niksi777" value={username} onChange={e=>setUsername(e.target.value)}/>
+          <input className="search-bar" style={{marginBottom:0,width:200}} placeholder="" value={username} onChange={e=>setUsername(e.target.value)}/>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:6}}>
           <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Amount</label>
