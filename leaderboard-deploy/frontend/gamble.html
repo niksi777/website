@@ -135,8 +135,23 @@
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .ftd{font-size:12px;color:var(--mu)}
     .ftc{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
-    @media(max-width:700px){.nlinks{display:none}.cases-grid{grid-template-columns:1fr 1fr}.case-page-top{grid-template-columns:1fr}.items-grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:420px){.cases-grid{grid-template-columns:1fr}.items-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:700px){
+      .nlinks{display:none}
+      .cases-grid{grid-template-columns:1fr 1fr}
+      .case-page{padding:16px 16px 48px}
+      .case-big-emoji{font-size:64px}
+      .case-big-name{font-size:28px}
+      .items-grid{grid-template-columns:repeat(3,1fr)!important}
+      .open-btn{font-size:16px;padding:14px}
+    }
+    @media(max-width:480px){
+      .cases-grid{grid-template-columns:1fr 1fr}
+      .items-grid{grid-template-columns:repeat(2,1fr)!important}
+      .demo-btn{width:100%}
+    }
+    @media(max-width:360px){
+      .cases-grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -194,15 +209,16 @@
 
   // Rarity config
   const RARITIES={
-    bust:   {bg:'linear-gradient(135deg,#0d0f16,#13151e)',border:'rgba(100,100,130,.2)',color:'#8888aa',icon:'💨'},
-    blue:   {bg:'linear-gradient(135deg,#0a1628,#0d2240)',border:'rgba(74,144,217,.35)',color:'#9bbde0',icon:'💠'},
-    purple: {bg:'linear-gradient(135deg,#140d28,#231040)',border:'rgba(155,89,217,.35)',color:'#c4a0e8',icon:'🔮'},
-    pink:   {bg:'linear-gradient(135deg,#280d1a,#401028)',border:'rgba(217,79,155,.35)',color:'#f0a0cc',icon:'💎'},
+    bust:          {bg:'linear-gradient(135deg,#0d0f16,#13151e)',border:'rgba(100,100,130,.2)',color:'#8888aa',icon:'💨'},
+    blue:          {bg:'linear-gradient(135deg,#0a1628,#0d2240)',border:'rgba(74,144,217,.35)',color:'#9bbde0',icon:'💠'},
+    purple:        {bg:'linear-gradient(135deg,#140d28,#231040)',border:'rgba(155,89,217,.35)',color:'#c4a0e8',icon:'🔮'},
+    pink:          {bg:'linear-gradient(135deg,#280d1a,#401028)',border:'rgba(217,79,155,.35)',color:'#f0a0cc',icon:'💎'},
     'golden-trigger':{bg:'linear-gradient(135deg,#281e00,#402e00)',border:'rgba(232,164,39,.6)',color:'#e8a427',icon:'✨'},
-    store:  {bg:'linear-gradient(135deg,#0a2810,#0d3c14)',border:'rgba(34,197,94,.4)',color:'#22c55e',icon:'🎁'},
-    gold:   {bg:'linear-gradient(135deg,#281e00,#402e00)',border:'rgba(232,164,39,.4)',color:'#f0c060',icon:'⭐'},
-    jackpot:{bg:'linear-gradient(135deg,#1e0d28,#2e1040)',border:'rgba(217,79,155,.4)',color:'#f080c0',icon:'💫'},
-    ultra:  {bg:'linear-gradient(135deg,#200033,#330050)',border:'rgba(255,100,200,.5)',color:'#ff64c8',icon:'👑'},
+    gold:          {bg:'linear-gradient(135deg,#281e00,#3d2c00)',border:'rgba(232,164,39,.45)',color:'#f0c060',icon:'⭐'},
+    'gold-ultra':  {bg:'linear-gradient(135deg,#2e1e00,#502e00)',border:'rgba(255,200,50,.7)',color:'#ffe080',icon:'👑'},
+    store:         {bg:'linear-gradient(135deg,#281e00,#3d2c00)',border:'rgba(232,164,39,.45)',color:'#f0c060',icon:'🎁'},
+    jackpot:       {bg:'linear-gradient(135deg,#281e00,#3d2c00)',border:'rgba(232,164,39,.45)',color:'#f0c060',icon:'⭐'},
+    ultra:         {bg:'linear-gradient(135deg,#2e1e00,#502e00)',border:'rgba(255,200,50,.7)',color:'#ffe080',icon:'👑'},
   };
 
   const TILE=116; // 110px card + 6px gap — shows ~7-8 cards on a full-width stage
@@ -280,12 +296,18 @@
 
   function ItemCard({item,prob}){
     const r=RARITIES[item.rarity]||RARITIES.bust;
+    const icon=item.storeItem?'🎁':r.icon;
     return(
       <div className="item-card" style={{background:r.bg,borderColor:r.border}}>
-        <div className="item-icon">{r.icon}</div>
-        <div className="item-name" style={{color:r.color}}>{item.name}</div>
-        {item.points>0&&<div className="item-pts">{item.points.toLocaleString()} pts</div>}
-        {item.storeItem&&<div className="item-pts" style={{color:'#22c55e'}}>Store Prize</div>}
+        <div className="item-icon">{icon}</div>
+        {item.storeItem
+          ?<div className="item-name" style={{color:r.color,fontSize:13}}>{item.name}</div>
+          :item.points>0
+            ?<div className="item-name" style={{color:r.color,fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,letterSpacing:'.02em'}}>{item.points.toLocaleString()} pts</div>
+            :item.isGolden
+              ?<div className="item-name" style={{color:r.color}}>Golden Spin</div>
+              :<div className="item-name" style={{color:'#6666aa'}}>Nothing</div>
+        }
         <div className="item-prob" style={{color:r.color}}>{prob}%</div>
       </div>
     );
