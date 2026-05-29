@@ -105,6 +105,7 @@
     .ci-card.r-golden-trigger{border-color:#e8a427;background:linear-gradient(135deg,rgba(232,164,39,.08),rgba(255,220,100,.04));animation:winnerPulse 2s ease-in-out infinite}
     .ci-card.r-golden-trigger .ci-pts{color:#e8a427}
     .ci-card.r-jackpot{border-color:#d94f9b44}.ci-card.r-jackpot .ci-pts{color:#f080c0}
+    .ci-card.r-store{border-color:#22c55e55;background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(0,0,0,0))}.ci-card.r-store .ci-pts{color:#22c55e}
     .ci-card.r-ultra{border-color:#ff64c8;animation:ultraGlow 1.5s ease-in-out infinite}
     .ci-card.r-ultra .ci-pts{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
     .ci-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite !important}
@@ -214,7 +215,7 @@
   }
 
   function makeCard(item){
-    const ptStr=item.isGolden?'✨ GOLDEN':item.points.toLocaleString()+' pts';
+    const ptStr=item.isGolden?'✨ GOLDEN':item.storeItem?'🎁 PRIZE':item.points.toLocaleString()+' pts';
     return `<div class="ci-name">${item.name}</div><div class="ci-pts">${ptStr}</div>`;
   }
 
@@ -354,7 +355,14 @@
               <div className="result" style={{marginBottom:16}}>
                 <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'You Won'}</div>
                 <div className="result-name" style={{color:RARITY_COLORS[finalItem.rarity]||'#fff'}}>{finalItem.name}</div>
-                <div className={`result-pts${finalItem.rarity==='ultra'?' ultra':''}`}>+{result.pointsWon.toLocaleString()} pts</div>
+                {result.storeWin ? (
+                  <>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#22c55e',lineHeight:1,marginBottom:4}}>🎁 Store Prize!</div>
+                    <div style={{fontSize:13,color:'rgba(34,197,94,.8)',marginBottom:4}}>A ticket has been created in Discord - Niksi will deliver it on stream.</div>
+                  </>
+                ) : (
+                  <div className={`result-pts${finalItem.rarity==='ultra'?' ultra':''}`}>+{result.pointsWon.toLocaleString()} pts</div>
+                )}
                 <div className="result-balance">Balance: <strong>{result.newPoints.toLocaleString()} pts</strong></div>
                 {result.proof&&(
                   <button onClick={()=>setShowProof(p=>!p)} style={{marginTop:10,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'5px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>
@@ -412,12 +420,16 @@
                   <div className="odds-grid">
                     {caseData.goldenItems.map((item,i)=>{
                       const tw=caseData.goldenItems.reduce((s,x)=>s+x.weight,0);
-                      const pct=((item.weight/tw)*100).toFixed(2);
                       const overall=((item.weight/tw)*0.01*100).toFixed(4);
-                      return(<div key={i} className="odds-item" style={{borderLeft:`2px solid ${RARITY_COLORS[item.rarity]||'#333'}`}}>
-                        <span className="odds-name" style={{color:RARITY_COLORS[item.rarity]||'#fff'}}>{item.name}</span>
+                      const isStore=item.storeItem;
+                      return(<div key={i} className="odds-item" style={{borderLeft:`2px solid ${isStore?'#22c55e':(RARITY_COLORS[item.rarity]||'#333')}`}}>
+                        <span className="odds-name" style={{color:isStore?'#22c55e':(RARITY_COLORS[item.rarity]||'#fff')}}>
+                          {isStore?'🎁 ':''}{item.name}
+                        </span>
                         <div className="odds-right">
-                          <div className="odds-pts" style={{color:RARITY_COLORS[item.rarity]||'#fff'}}>{item.points.toLocaleString()}</div>
+                          <div className="odds-pts" style={{color:isStore?'#22c55e':(RARITY_COLORS[item.rarity]||'#fff')}}>
+                            {isStore?'Store Prize':(item.points.toLocaleString()+' pts')}
+                          </div>
                           <div className="odds-pct">{overall}% overall</div>
                         </div>
                       </div>);

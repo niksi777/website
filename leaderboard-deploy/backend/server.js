@@ -259,67 +259,95 @@ app.get("/acebet", async (req, res) => {
 });
 
 // ─── GAMBLE CASES ────────────────────────────────────────────────────────────
-// RTP: ~95% via two-tier system. Regular EV + golden EV × 0.01 = 95% of cost.
+// Store prizes for golden spin (same across all cases)
+const STORE_PRIZES = {
+  tip10:   { storeItem:true, title:'$10 Tip',         itemId:1 },
+  tip15:   { storeItem:true, title:'$15 Tip',         itemId:2 },
+  bonus20: { storeItem:true, title:'$20 Bonus Buy',   itemId:3 },
+  bonus40: { storeItem:true, title:'$40 Bonus Buy',   itemId:4 },
+  bonus100:{ storeItem:true, title:'$100 Bonus Buy',  itemId:5 },
+};
+// Max payout = 100x case cost. Golden spin has store prizes + points.
 const GAMBLE_CASES = [
   { id:'starter', name:'Starter Case', cost:50, emoji:'📦',
     items:[
       {name:'Bust',points:5,weight:400,rarity:'bust'},
       {name:'Small Win',points:40,weight:350,rarity:'blue'},
       {name:'Good Win',points:70,weight:200,rarity:'purple'},
-      {name:'Big Win',points:195,weight:40,rarity:'pink'},
+      {name:'Big Win',points:200,weight:40,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
-      {name:'Gold Win',points:200,weight:550,rarity:'gold'},
-      {name:'Great Win',points:600,weight:250,rarity:'gold'},
-      {name:'Amazing',points:2000,weight:150,rarity:'jackpot'},
-      {name:'Legendary',points:6000,weight:49,rarity:'jackpot'},
-      {name:'ULTRA JACKPOT',points:146000,weight:1,rarity:'ultra'},
+      {name:'200 Points',points:200,weight:380,rarity:'gold'},
+      {name:'500 Points',points:500,weight:220,rarity:'gold'},
+      {name:'1,000 Points',points:1000,weight:130,rarity:'jackpot'},
+      {name:'$10 Tip',...STORE_PRIZES.tip10,points:0,weight:100,rarity:'store'},
+      {name:'$15 Tip',...STORE_PRIZES.tip15,points:0,weight:60,rarity:'store'},
+      {name:'2,500 Points',points:2500,weight:55,rarity:'jackpot'},
+      {name:'$20 Bonus Buy',...STORE_PRIZES.bonus20,points:0,weight:30,rarity:'store'},
+      {name:'5,000 Points',points:5000,weight:14,rarity:'ultra'},
+      {name:'$100 Bonus Buy',...STORE_PRIZES.bonus100,points:0,weight:1,rarity:'ultra'},
     ]},
   { id:'premium', name:'Premium Case', cost:100, emoji:'🎁',
     items:[
       {name:'Bust',points:10,weight:400,rarity:'bust'},
       {name:'Small Win',points:80,weight:350,rarity:'blue'},
       {name:'Good Win',points:140,weight:200,rarity:'purple'},
-      {name:'Big Win',points:390,weight:40,rarity:'pink'},
+      {name:'Big Win',points:400,weight:40,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
-      {name:'Gold Win',points:400,weight:550,rarity:'gold'},
-      {name:'Great Win',points:1200,weight:250,rarity:'gold'},
-      {name:'Amazing',points:4000,weight:150,rarity:'jackpot'},
-      {name:'Legendary',points:12000,weight:49,rarity:'jackpot'},
-      {name:'ULTRA JACKPOT',points:292000,weight:1,rarity:'ultra'},
+      {name:'500 Points',points:500,weight:350,rarity:'gold'},
+      {name:'1,000 Points',points:1000,weight:220,rarity:'gold'},
+      {name:'$10 Tip',...STORE_PRIZES.tip10,points:0,weight:110,rarity:'store'},
+      {name:'$15 Tip',...STORE_PRIZES.tip15,points:0,weight:80,rarity:'store'},
+      {name:'2,500 Points',points:2500,weight:100,rarity:'jackpot'},
+      {name:'$20 Bonus Buy',...STORE_PRIZES.bonus20,points:0,weight:60,rarity:'store'},
+      {name:'5,000 Points',points:5000,weight:40,rarity:'jackpot'},
+      {name:'$40 Bonus Buy',...STORE_PRIZES.bonus40,points:0,weight:25,rarity:'store'},
+      {name:'10,000 Points',points:10000,weight:14,rarity:'ultra'},
+      {name:'$100 Bonus Buy',...STORE_PRIZES.bonus100,points:0,weight:1,rarity:'ultra'},
     ]},
   { id:'elite', name:'Elite Case', cost:250, emoji:'💎',
     items:[
       {name:'Bust',points:25,weight:400,rarity:'bust'},
       {name:'Small Win',points:200,weight:350,rarity:'blue'},
       {name:'Good Win',points:350,weight:200,rarity:'purple'},
-      {name:'Big Win',points:975,weight:40,rarity:'pink'},
+      {name:'Big Win',points:1000,weight:40,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
-      {name:'Gold Win',points:1000,weight:550,rarity:'gold'},
-      {name:'Great Win',points:3000,weight:250,rarity:'gold'},
-      {name:'Amazing',points:10000,weight:150,rarity:'jackpot'},
-      {name:'Legendary',points:30000,weight:49,rarity:'jackpot'},
-      {name:'ULTRA JACKPOT',points:730000,weight:1,rarity:'ultra'},
+      {name:'1,000 Points',points:1000,weight:300,rarity:'gold'},
+      {name:'2,500 Points',points:2500,weight:200,rarity:'gold'},
+      {name:'$10 Tip',...STORE_PRIZES.tip10,points:0,weight:100,rarity:'store'},
+      {name:'$15 Tip',...STORE_PRIZES.tip15,points:0,weight:80,rarity:'store'},
+      {name:'5,000 Points',points:5000,weight:100,rarity:'jackpot'},
+      {name:'$20 Bonus Buy',...STORE_PRIZES.bonus20,points:0,weight:70,rarity:'store'},
+      {name:'$40 Bonus Buy',...STORE_PRIZES.bonus40,points:0,weight:60,rarity:'store'},
+      {name:'12,500 Points',points:12500,weight:50,rarity:'jackpot'},
+      {name:'$100 Bonus Buy',...STORE_PRIZES.bonus100,points:0,weight:25,rarity:'store'},
+      {name:'25,000 Points',points:25000,weight:14,rarity:'ultra'},
+      {name:'$100 Bonus Buy x2',...STORE_PRIZES.bonus100,points:0,weight:1,rarity:'ultra'},
     ]},
   { id:'mega', name:'Mega Case', cost:500, emoji:'👑',
     items:[
       {name:'Bust',points:50,weight:400,rarity:'bust'},
       {name:'Small Win',points:400,weight:350,rarity:'blue'},
       {name:'Good Win',points:700,weight:200,rarity:'purple'},
-      {name:'Big Win',points:1950,weight:40,rarity:'pink'},
+      {name:'Big Win',points:2000,weight:40,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
-      {name:'Gold Win',points:2000,weight:550,rarity:'gold'},
-      {name:'Great Win',points:6000,weight:250,rarity:'gold'},
-      {name:'Amazing',points:20000,weight:150,rarity:'jackpot'},
-      {name:'Legendary',points:60000,weight:49,rarity:'jackpot'},
-      {name:'ULTRA JACKPOT',points:1460000,weight:1,rarity:'ultra'},
+      {name:'2,500 Points',points:2500,weight:250,rarity:'gold'},
+      {name:'5,000 Points',points:5000,weight:200,rarity:'gold'},
+      {name:'$15 Tip',...STORE_PRIZES.tip15,points:0,weight:100,rarity:'store'},
+      {name:'$20 Bonus Buy',...STORE_PRIZES.bonus20,points:0,weight:100,rarity:'store'},
+      {name:'10,000 Points',points:10000,weight:100,rarity:'jackpot'},
+      {name:'$40 Bonus Buy',...STORE_PRIZES.bonus40,points:0,weight:100,rarity:'store'},
+      {name:'$100 Bonus Buy',...STORE_PRIZES.bonus100,points:0,weight:80,rarity:'store'},
+      {name:'25,000 Points',points:25000,weight:55,rarity:'jackpot'},
+      {name:'50,000 Points',points:50000,weight:14,rarity:'ultra'},
+      {name:'$100 Bonus Buy x2',...STORE_PRIZES.bonus100,points:0,weight:1,rarity:'ultra'},
     ]},
 ];
 
@@ -354,11 +382,29 @@ app.post('/gamble/open', (req, res) => {
     goldenItem = gr.item; roll2 = gr.roll; tw2 = gr.totalWeight;
     pointsWon = goldenItem.points;
   }
+  // Deduct case cost, add any points won
   ptsData[session.username] = (current - caseConfig.cost) + pointsWon;
   require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
   session.points = ptsData[session.username];
+
+  // If a store item was won, create a ticket
+  const storeWin = goldenItem?.storeItem ? goldenItem : null;
+  if (storeWin) {
+    try {
+      await axios.post('http://localhost:3002/create-ticket', {
+        username: session.username,
+        item: storeWin.title,
+        cost: 0,
+        note: `Won via ${caseConfig.name} case opening (Cases)`,
+        discordId: session.discordId || null,
+        discordName: session.discordName || null
+      });
+    } catch(e) { console.error('[gamble ticket]', e.message); }
+  }
+
   res.json({
     regularItem, goldenItem, pointsWon,
+    storeWin: storeWin ? { title: storeWin.title } : null,
     newPoints: ptsData[session.username],
     proof: { serverSeed, resultHash, roll1, tw1, roll2, tw2 },
     allItems: caseConfig.items,
