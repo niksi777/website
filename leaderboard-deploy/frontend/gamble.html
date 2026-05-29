@@ -245,6 +245,7 @@
 
   function makeCard(item){
     const pts=item.isGolden?'✨ GOLDEN':item.storeItem?'🎁 PRIZE':item.points>0?item.points.toLocaleString()+' pts':'';
+    const cls=item.isGolden&&!item.storeItem?'golden-trigger':item.rarity;
     return `<div class="rname">${item.name}</div><div class="rpts">${pts}</div>`;
   }
 
@@ -296,19 +297,21 @@
 
   function ItemCard({item,prob}){
     const r=RARITIES[item.rarity]||RARITIES.bust;
-    const icon=item.storeItem?'🎁':r.icon;
+    const icon=item.storeItem?'🎁':item.isGolden&&item.rarity!=='golden-trigger'?'✨':r.icon;
+    const gTrigger=RARITIES['golden-trigger'];
+    const displayR=item.isGolden&&item.rarity!=='golden-trigger'?gTrigger:r;
     return(
-      <div className="item-card" style={{background:r.bg,borderColor:r.border}}>
+      <div className="item-card" style={{background:displayR.bg,borderColor:displayR.border}}>
         <div className="item-icon">{icon}</div>
-        {item.storeItem
-          ?<div className="item-name" style={{color:r.color,fontSize:13}}>{item.name}</div>
-          :item.points>0
-            ?<div className="item-name" style={{color:r.color,fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,letterSpacing:'.02em'}}>{item.points.toLocaleString()} pts</div>
-            :item.isGolden
-              ?<div className="item-name" style={{color:r.color}}>Golden Spin</div>
+        {item.isGolden
+          ?<div className="item-name" style={{color:displayR.color}}>Golden Spin</div>
+          :item.storeItem
+            ?<div className="item-name" style={{color:r.color,fontSize:13}}>{item.name}</div>
+            :item.points>0
+              ?<div className="item-name" style={{color:r.color,fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,letterSpacing:'.02em'}}>{item.points.toLocaleString()} pts</div>
               :<div className="item-name" style={{color:'#6666aa'}}>Nothing</div>
         }
-        <div className="item-prob" style={{color:r.color}}>{prob}%</div>
+        <div className="item-prob" style={{color:displayR.color}}>{prob}%</div>
       </div>
     );
   }

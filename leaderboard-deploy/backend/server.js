@@ -275,8 +275,8 @@ const GAMBLE_CASES = [
     items:[
       {name:'Nothing',points:0,weight:900,rarity:'bust'},
       {name:'40 Points',points:40,weight:55,rarity:'blue'},
-      {name:'120 Points',points:120,weight:25,rarity:'purple'},
-      {name:'350 Points',points:350,weight:10,rarity:'pink'},
+      {name:'120 Points',points:0,weight:25,rarity:'purple',isGolden:true},
+      {name:'350 Points',points:0,weight:10,rarity:'pink',isGolden:true},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
@@ -292,8 +292,8 @@ const GAMBLE_CASES = [
     items:[
       {name:'Nothing',points:0,weight:900,rarity:'bust'},
       {name:'80 Points',points:80,weight:55,rarity:'blue'},
-      {name:'250 Points',points:250,weight:25,rarity:'purple'},
-      {name:'700 Points',points:700,weight:10,rarity:'pink'},
+      {name:'250 Points',points:0,weight:25,rarity:'purple',isGolden:true},
+      {name:'700 Points',points:0,weight:10,rarity:'pink',isGolden:true},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
@@ -310,8 +310,8 @@ const GAMBLE_CASES = [
     items:[
       {name:'Nothing',points:0,weight:900,rarity:'bust'},
       {name:'200 Points',points:200,weight:55,rarity:'blue'},
-      {name:'625 Points',points:625,weight:25,rarity:'purple'},
-      {name:'1,750 Points',points:1750,weight:10,rarity:'pink'},
+      {name:'625 Points',points:0,weight:25,rarity:'purple',isGolden:true},
+      {name:'1,750 Points',points:0,weight:10,rarity:'pink',isGolden:true},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
@@ -328,8 +328,8 @@ const GAMBLE_CASES = [
     items:[
       {name:'Nothing',points:0,weight:900,rarity:'bust'},
       {name:'400 Points',points:400,weight:55,rarity:'blue'},
-      {name:'1,250 Points',points:1250,weight:25,rarity:'purple'},
-      {name:'3,500 Points',points:3500,weight:10,rarity:'pink'},
+      {name:'1,250 Points',points:0,weight:25,rarity:'purple',isGolden:true},
+      {name:'3,500 Points',points:0,weight:10,rarity:'pink',isGolden:true},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
