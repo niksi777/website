@@ -18,7 +18,10 @@ let BOT_TOKEN = process.env.KICK_BOT_TOKEN || '';
 let REFRESH_TOKEN = process.env.KICK_BOT_REFRESH_TOKEN || '';
 
 // ─── TOKEN REFRESH ────────────────────────────────────────────────────────────
+let _refreshing = false; // mutex — prevent simultaneous refresh calls invalidating each other
 async function refreshToken() {
+  if (_refreshing) { console.log('[auth] Refresh already in progress, skipping.'); return; }
+  _refreshing = true;
   try {
     console.log('[auth] Refreshing token...');
     const params = new URLSearchParams();
@@ -43,11 +46,13 @@ async function refreshToken() {
     console.log('[auth] Token refreshed successfully.');
   } catch (err) {
     console.error('[auth] Token refresh failed:', err?.response?.data || err.message);
+  } finally {
+    _refreshing = false;
   }
 }
 
-// Refresh every 90 minutes (tokens last 2 hours)
-setInterval(refreshToken, 90 * 60 * 1000);
+// Refresh every 60 minutes (tokens last 2 hours — more frequent = safer margin)
+setInterval(refreshToken, 60 * 60 * 1000);
 
 // ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
 async function sendMessage(text) {
