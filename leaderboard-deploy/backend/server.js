@@ -407,6 +407,7 @@ app.post('/gamble/open', async (req, res) => {
 });
 
 app.get('/gamble', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
+app.get('/gamble/:caseId', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
 
 // ─── NIKSIBOT TOKEN REFRESH ──────────────────────────────────────────────────
 const NIKSIBOT_CLIENT_ID = '01KSJ34DC0Q8BD3DYQM328H81S';

@@ -10,19 +10,17 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--rd:#d94f4f;--gold:#d4af5a}
-    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--gold:#d4af5a}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes pop{0%{opacity:0;transform:scale(.85)}60%{transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
-    @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 28px 4px rgba(232,164,39,.4),inset 0 0 16px rgba(232,164,39,.15)}}
-    @keyframes winnerShine{0%{background-position:200% center}100%{background-position:-200% center}}
-    @keyframes goldenFlash{0%,100%{opacity:1}50%{opacity:.4}}
-    @keyframes goldenGlow{0%,100%{box-shadow:0 0 40px rgba(255,180,0,.3),0 0 80px rgba(255,180,0,.1)}50%{box-shadow:0 0 80px rgba(255,180,0,.6),0 0 160px rgba(255,100,0,.3)}}
-    @keyframes ultraGlow{0%,100%{box-shadow:0 0 60px rgba(255,100,200,.4),0 0 120px rgba(100,100,255,.3)}50%{box-shadow:0 0 120px rgba(255,100,200,.8),0 0 240px rgba(100,100,255,.6)}}
+    @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 24px 4px rgba(232,164,39,.4)}}
+    @keyframes goldenGlow{0%,100%{box-shadow:0 0 40px rgba(255,180,0,.2)}50%{box-shadow:0 0 80px rgba(255,180,0,.5)}}
     @keyframes rainbow{0%{background-position:0% center}100%{background-position:200% center}}
-    .f1{animation:fu .4s ease both}.f2{animation:fu .4s .1s ease both}.f3{animation:fu .4s .2s ease both}
+    @keyframes goldenFlash{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes pop{0%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+    .f1{animation:fu .4s ease both}.f2{animation:fu .4s .08s ease both}.f3{animation:fu .4s .16s ease both}
 
     nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
     .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
@@ -49,117 +47,113 @@
     .ndrop-logout{color:rgba(217,79,79,.8)}
 
     .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+
+    /* CASE LIST */
     .page-head{padding:48px 0 32px;text-align:center}
-    .page-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;line-height:.92;margin-bottom:10px}
+    .page-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;line-height:.92;margin-bottom:8px}
     .page-sub{font-size:13px;color:var(--mu)}
-
-    /* CASE GRID */
-    .cases-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:48px}
-    .case-card{background:var(--s1);border:1px solid var(--b2);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;display:flex;flex-direction:column;user-select:none}
-    .case-card:hover{transform:translateY(-6px);border-color:var(--b3);box-shadow:0 20px 40px rgba(0,0,0,.4)}
-    .case-top{height:160px;display:flex;align-items:center;justify-content:center;font-size:72px;background:var(--s2);border-bottom:1px solid var(--b2);position:relative;transition:background .2s}
-    .case-card:hover .case-top{background:rgba(255,255,255,.04)}
-    .case-body{padding:18px;flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
-    .case-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.04em}
-    .case-cost{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--mu)}
-    .case-cta{margin-top:2px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.3)}
+    .cases-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:60px}
+    .case-card{background:var(--s1);border:1px solid var(--b2);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;text-decoration:none;display:block;color:inherit}
+    .case-card:hover{transform:translateY(-5px);border-color:var(--b3);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+    .case-top{height:160px;display:flex;align-items:center;justify-content:center;font-size:72px;background:var(--s2);border-bottom:1px solid var(--b2);position:relative}
     .case-golden-badge{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#e8a427,#f5d080);color:#07080c;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px}
+    .case-body{padding:18px;text-align:center}
+    .case-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.04em;margin-bottom:4px}
+    .case-cost{font-size:13px;color:var(--mu)}
 
-    /* MODAL */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
-    .modal{background:var(--s1);border:1px solid var(--b2);border-radius:20px;width:100%;max-width:640px;overflow:hidden;position:relative;animation:pop .3s ease both}
-    .modal-header{padding:24px 28px 20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--b1)}
-    .modal-emoji{font-size:40px;line-height:1}
-    .modal-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.04em}
-    .modal-cost{font-size:13px;color:var(--mu);margin-top:2px}
-    .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:20px;line-height:1;padding:6px;transition:color .15s}
-    .modal-close:hover{color:#fff}
-    .modal-body{padding:24px 28px 28px}
-
-    /* GOLDEN SPIN ANNOUNCEMENT */
-    .golden-announce{text-align:center;padding:24px 0;animation:pop .5s ease both}
-    .golden-announce-icon{font-size:56px;margin-bottom:8px;animation:goldenFlash 1s ease-in-out infinite}
-    .golden-announce-text{font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;text-transform:uppercase;background:linear-gradient(90deg,#e8a427,#fff,#f5d080,#e8a427);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite;letter-spacing:.04em}
-    .golden-announce-sub{font-size:13px;color:rgba(232,164,39,.7);margin-top:6px;letter-spacing:.1em;text-transform:uppercase}
-
-    /* ROLLER */
-    .roller-wrap{margin-bottom:20px}
-    .roller-stage-wrap{position:relative;margin-bottom:16px}
-    .roller-pointer-top{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
-    .roller-pointer-bot{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
-    .roller-pointer-top.golden{border-top-color:#e8a427;filter:drop-shadow(0 0 8px rgba(232,164,39,.8))}
-    .roller-pointer-bot.golden{border-bottom-color:#e8a427;filter:drop-shadow(0 0 8px rgba(232,164,39,.8))}
-    .roller-stage{position:relative;height:110px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
-    .roller-stage.golden-stage{border-color:rgba(232,164,39,.4);animation:goldenGlow 2s ease-in-out infinite}
-    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:100px;background:linear-gradient(to right,#0d0f14,transparent);z-index:4;pointer-events:none}
-    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:100px;background:linear-gradient(to left,#0d0f14,transparent);z-index:4;pointer-events:none}
-    .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:170px;transform:translateX(-50%);border-left:2px solid rgba(184,204,232,.25);border-right:2px solid rgba(184,204,232,.25);z-index:3;pointer-events:none}
-    .roller-win-zone.golden{border-color:rgba(232,164,39,.5)}
-    .roller-track{display:flex;align-items:center;gap:8px;position:absolute;top:0;height:100%;will-change:transform;padding:0 4px}
-    .ci-card{flex-shrink:0;width:152px;height:82px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-    .ci-card.r-bust{border-color:rgba(80,80,100,.3)}
-    .ci-card.r-blue{border-color:#4a90d933}.ci-card.r-blue .ci-pts{color:#9bbde0}
-    .ci-card.r-purple{border-color:#9b59d933}.ci-card.r-purple .ci-pts{color:#c4a0e8}
-    .ci-card.r-pink{border-color:#d94f9b33}.ci-card.r-pink .ci-pts{color:#f0a0cc}
-    .ci-card.r-gold{border-color:#e8a42744}.ci-card.r-gold .ci-pts{color:#f0c060}
-    .ci-card.r-golden-trigger{border-color:#e8a427;background:linear-gradient(135deg,rgba(232,164,39,.08),rgba(255,220,100,.04));animation:winnerPulse 2s ease-in-out infinite}
-    .ci-card.r-golden-trigger .ci-pts{color:#e8a427}
-    .ci-card.r-jackpot{border-color:#d94f9b44}.ci-card.r-jackpot .ci-pts{color:#f080c0}
-    .ci-card.r-store{border-color:#22c55e55;background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(0,0,0,0))}.ci-card.r-store .ci-pts{color:#22c55e}
-    .ci-card.r-ultra{border-color:#ff64c8;animation:ultraGlow 1.5s ease-in-out infinite}
-    .ci-card.r-ultra .ci-pts{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
-    .ci-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite !important}
-    .ci-name{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(200,205,216,.5)}
-    .ci-pts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1}
-
-    /* OPEN BUTTON */
-    .open-btn{width:100%;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s,transform .1s}
+    /* CASE PAGE */
+    .case-page{max-width:1020px;margin:0 auto;padding:32px 28px 60px}
+    .case-page-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);text-decoration:none;margin-bottom:24px;transition:color .15s}
+    .case-page-back:hover{color:#fff}
+    .case-page-top{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:40px;align-items:start}
+    .case-open-panel{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+    .case-big-emoji{font-size:96px;line-height:1;margin-bottom:4px}
+    .case-big-name{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.04em}
+    .case-big-cost{font-size:13px;color:var(--mu);margin-bottom:8px}
+    .case-balance-chip{background:var(--s1);border:1px solid var(--b2);border-radius:8px;padding:8px 16px;font-size:12px;color:var(--mu)}
+    .case-balance-chip strong{color:var(--gold)}
+    .open-btn{width:100%;max-width:320px;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s,transform .1s}
     .open-btn:hover{opacity:.85;transform:translateY(-1px)}
     .open-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
-    .open-btn.golden-btn{background:linear-gradient(135deg,#e8a427,#f5d080);color:#07080c;animation:goldenFlash 2s ease-in-out infinite}
+    .demo-btn{width:100%;max-width:320px;padding:10px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(232,164,39,.4);background:rgba(232,164,39,.06);color:#e8a427;transition:all .15s}
+    .demo-btn:hover{background:rgba(232,164,39,.12);border-color:rgba(232,164,39,.7)}
+
+    /* ROLLER */
+    .roller-section{margin-bottom:16px}
+    .roller-placeholder{height:110px;background:var(--s2);border:1px solid var(--b1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+    .roller-stage-wrap{position:relative;margin-bottom:16px}
+    .rptr{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
+    .rptb{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
+    .rptr.g{border-top-color:#e8a427;filter:drop-shadow(0 0 8px rgba(232,164,39,.8))}
+    .rptb.g{border-bottom-color:#e8a427;filter:drop-shadow(0 0 8px rgba(232,164,39,.8))}
+    .rstage{position:relative;height:110px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
+    .rstage.gstage{border-color:rgba(232,164,39,.4);animation:goldenGlow 2s ease-in-out infinite}
+    .rstage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(to right,#0d0f14,transparent);z-index:4;pointer-events:none}
+    .rstage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(to left,#0d0f14,transparent);z-index:4;pointer-events:none}
+    .rwin{position:absolute;left:50%;top:0;bottom:0;width:162px;transform:translateX(-50%);border-left:2px solid rgba(184,204,232,.2);border-right:2px solid rgba(184,204,232,.2);z-index:3;pointer-events:none}
+    .rwin.g{border-color:rgba(232,164,39,.4)}
+    .rtrack{display:flex;align-items:center;gap:8px;position:absolute;top:0;height:100%;padding:0 4px;transform:translateZ(0)}
+    .rc{flex-shrink:0;width:150px;height:82px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transform:translateZ(0)}
+    .rc.r-bust{border-color:rgba(80,80,100,.3)}
+    .rc.r-blue{border-color:#4a90d933}.rc.r-blue .rpts{color:#9bbde0}
+    .rc.r-purple{border-color:#9b59d933}.rc.r-purple .rpts{color:#c4a0e8}
+    .rc.r-pink{border-color:#d94f9b33}.rc.r-pink .rpts{color:#f0a0cc}
+    .rc.r-golden-trigger{border-color:#e8a427;background:linear-gradient(135deg,rgba(232,164,39,.08),transparent);animation:winnerPulse 2s ease-in-out infinite}.rc.r-golden-trigger .rpts{color:#e8a427}
+    .rc.r-store{border-color:#22c55e44}.rc.r-store .rpts{color:#22c55e}
+    .rc.r-gold{border-color:#e8a42744}.rc.r-gold .rpts{color:#f0c060}
+    .rc.r-jackpot{border-color:#d94f9b33}.rc.r-jackpot .rpts{color:#f080c0}
+    .rc.r-ultra{border-color:#ff64c8;animation:goldenGlow 1.5s ease-in-out infinite}.rc.r-ultra .rpts{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
+    .rc.winner{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite !important}
+    .rname{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(200,205,216,.45)}
+    .rpts{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1}
+
+    /* GOLDEN ANNOUNCE */
+    .g-announce{text-align:center;padding:20px 0;animation:pop .5s ease both}
+    .g-icon{font-size:48px;margin-bottom:6px;animation:goldenFlash 1s ease-in-out infinite}
+    .g-text{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;text-transform:uppercase;background:linear-gradient(90deg,#e8a427,#fff,#f5d080,#e8a427);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite;letter-spacing:.04em}
+    .g-sub{font-size:12px;color:rgba(232,164,39,.6);margin-top:4px;letter-spacing:.1em;text-transform:uppercase}
 
     /* RESULT */
-    .result{text-align:center;padding:8px 0 4px;animation:pop .4s ease both}
+    .result-strip{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px;text-align:center;animation:pop .4s ease both;margin-bottom:12px}
     .result-lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
-    .result-name{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;text-transform:uppercase;color:#fff;margin-bottom:4px}
-    .result-pts{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:800;line-height:1;color:#22c55e;margin-bottom:4px}
-    .result-pts.ultra{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
-    .result-balance{font-size:12px;color:var(--mu)}
-    .result-balance strong{color:var(--gold)}
+    .result-name{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;text-transform:uppercase;color:#fff;margin-bottom:4px}
+    .result-pts{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;line-height:1;color:#22c55e}
+    .result-pts.u{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
 
-    /* ODDS */
-    .odds-section{margin-top:28px;border-top:1px solid var(--b1);padding-top:20px}
-    .odds-title{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
-    .odds-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .odds-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--s2);border-radius:8px;gap:10px}
-    .odds-name{font-size:12px;color:var(--tx);font-weight:500}
-    .odds-right{text-align:right}
-    .odds-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700}
-    .odds-pct{font-size:10px;color:rgba(221,227,239,.4);letter-spacing:.06em}
+    /* ITEMS GRID */
+    .items-section{margin-bottom:32px}
+    .items-section-title{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
+    .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+    .item-card{border-radius:10px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;border:1px solid transparent;transition:transform .15s,border-color .15s;cursor:default}
+    .item-card:hover{transform:translateY(-2px)}
+    .item-icon{font-size:28px;line-height:1}
+    .item-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.2}
+    .item-pts{font-size:12px;opacity:.7}
+    .item-prob{font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.9;margin-top:2px}
 
     footer{border-top:1px solid var(--b1);padding:22px 0;margin-top:40px}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .ftd{font-size:12px;color:var(--mu)}
     .ftc{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
-    @media(max-width:700px){.nlinks{display:none}.cases-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:420px){.cases-grid{grid-template-columns:1fr}}
+    @media(max-width:700px){.nlinks{display:none}.cases-grid{grid-template-columns:1fr 1fr}.case-page-top{grid-template-columns:1fr}.items-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:420px){.cases-grid{grid-template-columns:1fr}.items-grid{grid-template-columns:repeat(2,1fr)}}
   </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 
-  function useSession() {
-    const [user,setUser]=React.useState(null);
-    const [sessionId,setSessionId]=React.useState(null);
-    const [loading,setLoading]=React.useState(true);
+  function useSession(){
+    const[user,setUser]=React.useState(null);
+    const[sessionId,setSessionId]=React.useState(null);
+    const[loading,setLoading]=React.useState(true);
     React.useEffect(()=>{
       const params=new URLSearchParams(window.location.search);
       const sid=params.get('session')||localStorage.getItem('kick_session');
       if(sid){
         localStorage.setItem('kick_session',sid);setSessionId(sid);
         fetch(`/auth/me?session=${sid}`).then(r=>r.ok?r.json():null).then(d=>{if(d)setUser(d);else localStorage.removeItem('kick_session');}).finally(()=>setLoading(false));
-        if(params.get('session'))window.history.replaceState({},'','/gamble');
+        if(params.get('session'))window.history.replaceState({},'',window.location.pathname);
       }else setLoading(false);
     },[]);
     function logout(){const sid=localStorage.getItem('kick_session');if(sid)fetch(`/auth/logout?session=${sid}`);localStorage.removeItem('kick_session');setUser(null);setSessionId(null);}
@@ -172,14 +166,12 @@
     <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
   </>;
 
-  const RARITY_COLORS={bust:'#6060aa',blue:'#4a90d9',purple:'#9b59d9',pink:'#d94f9b','golden-trigger':'#e8a427',gold:'#e8a427',jackpot:'#d94f9b',ultra:'#ff64c8'};
-
-  function Navbar({user,logout}){
+  function Navbar({user,logout,activeCaseId}){
     return(<nav><div className="ni">
       <a href="/" className="nlogo"><img src="/assets/niksi.png" alt=""/><span className="nname">NIKSI777</span></a>
       <div className="nlinks">
         <a href="/">HOME</a><a href="/leaderboards">LEADERBOARDS</a><a href="/points">POINTS</a><a href="/store">STORE</a>
-        <a href="/gamble" className="on">CASES</a>
+        <a href="/gamble" className={activeCaseId?'':'on'}>CASES</a>
         {user&&user.isAdmin&&<><a href="/giveaway">GIVEAWAY</a><a href="/admin">ADMIN</a></>}
       </div>
       <div className="nauth">
@@ -200,22 +192,35 @@
     </div></nav>);
   }
 
-  const TILE=160;
+  // Rarity config
+  const RARITIES={
+    bust:   {bg:'linear-gradient(135deg,#0d0f16,#13151e)',border:'rgba(100,100,130,.2)',color:'#8888aa',icon:'💨'},
+    blue:   {bg:'linear-gradient(135deg,#0a1628,#0d2240)',border:'rgba(74,144,217,.35)',color:'#9bbde0',icon:'💠'},
+    purple: {bg:'linear-gradient(135deg,#140d28,#231040)',border:'rgba(155,89,217,.35)',color:'#c4a0e8',icon:'🔮'},
+    pink:   {bg:'linear-gradient(135deg,#280d1a,#401028)',border:'rgba(217,79,155,.35)',color:'#f0a0cc',icon:'💎'},
+    'golden-trigger':{bg:'linear-gradient(135deg,#281e00,#402e00)',border:'rgba(232,164,39,.6)',color:'#e8a427',icon:'✨'},
+    store:  {bg:'linear-gradient(135deg,#0a2810,#0d3c14)',border:'rgba(34,197,94,.4)',color:'#22c55e',icon:'🎁'},
+    gold:   {bg:'linear-gradient(135deg,#281e00,#402e00)',border:'rgba(232,164,39,.4)',color:'#f0c060',icon:'⭐'},
+    jackpot:{bg:'linear-gradient(135deg,#1e0d28,#2e1040)',border:'rgba(217,79,155,.4)',color:'#f080c0',icon:'💫'},
+    ultra:  {bg:'linear-gradient(135deg,#200033,#330050)',border:'rgba(255,100,200,.5)',color:'#ff64c8',icon:'👑'},
+  };
+
+  const TILE=158;
 
   function buildDeck(items,winnerItem){
     const totalW=items.reduce((s,i)=>s+i.weight,0);
     const deck=[];
-    for(let i=0;i<60;i++){
+    for(let i=0;i<40;i++){
       let r=Math.floor(Math.random()*totalW);
       for(const item of items){r-=item.weight;if(r<0){deck.push(item);break;}}
     }
-    const landIdx=50;
-    // Bait: plant near-miss golden triggers just before the winner
+    const landIdx=32;
+    // Bait: near-miss golden triggers
     if(!winnerItem.isGolden){
       const golden=items.find(i=>i.isGolden);
       if(golden){
-        if(Math.random()<0.7) deck[landIdx-1]=golden;  // right before winner
-        if(Math.random()<0.4) deck[landIdx-3]=golden;  // a couple before
+        if(Math.random()<0.7)deck[landIdx-1]=golden;
+        if(Math.random()<0.4)deck[landIdx-3]=golden;
       }
     }
     deck.splice(landIdx,0,winnerItem);
@@ -223,15 +228,14 @@
   }
 
   function makeCard(item){
-    const ptStr=item.isGolden?'✨ GOLDEN':item.storeItem?'🎁 PRIZE':item.points.toLocaleString()+' pts';
-    return `<div class="ci-name">${item.name}</div><div class="ci-pts">${ptStr}</div>`;
+    const pts=item.isGolden?'✨ GOLDEN':item.storeItem?'🎁 PRIZE':item.points>0?item.points.toLocaleString()+' pts':'';
+    return `<div class="rname">${item.name}</div><div class="rpts">${pts}</div>`;
   }
 
-  function CaseRoller({items,winner,isGolden,onDone}){
+  function Roller({items,winner,isGolden,onDone}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const doneRef=React.useRef(false);
-
     React.useEffect(()=>{
       if(!items||!winner||!trackRef.current||!stageRef.current)return;
       doneRef.current=false;
@@ -242,247 +246,184 @@
       track.innerHTML='';
       deck.forEach(item=>{
         const d=document.createElement('div');
-        d.className=`ci-card r-${item.rarity}`;
+        d.className=`rc r-${item.rarity}`;
         d.innerHTML=makeCard(item);
         track.appendChild(d);
       });
       const stageW=stage.offsetWidth;
-      const centerOffset=stageW/2-TILE/2;
-      const targetX=-(landIdx*TILE-(centerOffset-4));
+      const center=stageW/2-TILE/2;
+      const targetX=-(landIdx*(TILE+8))+center;
       requestAnimationFrame(()=>{
-        track.style.transition='transform 6.2s cubic-bezier(.12,.86,.22,1)';
-        track.style.transform=`translateX(${targetX}px)`;
+        track.style.transition='transform 5.8s cubic-bezier(.08,.92,.2,1)';
+        track.style.transform=`translateX(${targetX}px) translateZ(0)`;
       });
       const t=setTimeout(()=>{
         const cards=track.children;
-        if(cards[landIdx])cards[landIdx].classList.add('winner-card');
+        if(cards[landIdx])cards[landIdx].classList.add('winner');
         if(!doneRef.current){doneRef.current=true;if(onDone)onDone();}
-      },6400);
+      },6000);
       return()=>clearTimeout(t);
     },[items,winner]);
-
     return(
-      <div className="roller-wrap">
+      <div className="roller-section">
         <div className="roller-stage-wrap">
-          <div className={`roller-pointer-top${isGolden?' golden':''}`}/>
-          <div className={`roller-pointer-bot${isGolden?' golden':''}`}/>
-          <div className={`roller-stage${isGolden?' golden-stage':''}`} ref={stageRef}>
-            <div className={`roller-win-zone${isGolden?' golden':''}`}/>
-            <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)',left:0,top:0}}/>
+          <div className={`rptr${isGolden?' g':''}`}/>
+          <div className={`rptb${isGolden?' g':''}`}/>
+          <div className={`rstage${isGolden?' gstage':''}`} ref={stageRef}>
+            <div className={`rwin${isGolden?' g':''}`}/>
+            <div className="rtrack" ref={trackRef} style={{transform:'translateX(0) translateZ(0)',left:0,top:0}}/>
           </div>
         </div>
       </div>
     );
   }
 
-  function CaseModal({caseData,user,sessionId,onClose,onPointsUpdate}){
-    const [phase,setPhase]=React.useState('idle'); // idle|spinning|golden-announce|golden-spinning|done
-    const [result,setResult]=React.useState(null);
-    const [err,setErr]=React.useState('');
-    const [showProof,setShowProof]=React.useState(false);
+  function ItemCard({item,prob}){
+    const r=RARITIES[item.rarity]||RARITIES.bust;
+    return(
+      <div className="item-card" style={{background:r.bg,borderColor:r.border}}>
+        <div className="item-icon">{r.icon}</div>
+        <div className="item-name" style={{color:r.color}}>{item.name}</div>
+        {item.points>0&&<div className="item-pts">{item.points.toLocaleString()} pts</div>}
+        {item.storeItem&&<div className="item-pts" style={{color:'#22c55e'}}>Store Prize</div>}
+        <div className="item-prob" style={{color:r.color}}>{prob}%</div>
+      </div>
+    );
+  }
 
-    function demoGoldenSpin(){
+  function CasePage({caseData,user,setUser,sessionId}){
+    const[phase,setPhase]=React.useState('idle');
+    const[result,setResult]=React.useState(null);
+    const[showProof,setShowProof]=React.useState(false);
+    const[err,setErr]=React.useState('');
+
+    const regTW=caseData.items.reduce((s,i)=>s+i.weight,0);
+    const golTW=(caseData.goldenItems||[]).reduce((s,i)=>s+i.weight,0);
+
+    function demoGolden(){
       if(phase!=='idle')return;
-      const items=caseData.goldenItems;
-      const totalW=items.reduce((s,i)=>s+i.weight,0);
-      let r=Math.floor(Math.random()*totalW);
-      let demoItem=items[items.length-1];
+      const items=caseData.goldenItems||[];
+      if(!items.length)return;
+      const tw=items.reduce((s,i)=>s+i.weight,0);
+      let r=Math.floor(Math.random()*tw),demoItem=items[items.length-1];
       for(const item of items){r-=item.weight;if(r<0){demoItem=item;break;}}
-      setResult({
-        regularItem:{name:'Golden Spin',points:0,rarity:'golden-trigger',isGolden:true},
-        goldenItem:demoItem,
-        pointsWon:0,
-        storeWin:demoItem.storeItem?{title:demoItem.title}:null,
-        newPoints:user?.points||0,
-        allItems:caseData.items,
-        goldenAllItems:caseData.goldenItems,
-        isDemo:true
-      });
+      setResult({regularItem:{name:'Golden Spin',points:0,rarity:'golden-trigger',isGolden:true},goldenItem:demoItem,pointsWon:0,storeWin:demoItem.storeItem?{title:demoItem.title}:null,newPoints:user?.points||0,isDemo:true});
+      setShowProof(false);
       setPhase('golden-announce');
       setTimeout(()=>setPhase('golden-spinning'),2200);
     }
+
     async function openCase(){
-      if(phase!=='idle')return;
-      setPhase('spinning');setErr('');setResult(null);
+      if(phase!=='idle'||!user)return;
+      setPhase('spinning');setErr('');setResult(null);setShowProof(false);
       try{
         const r=await fetch('/gamble/open',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({caseId:caseData.id,session:sessionId})});
         const d=await r.json();
         if(!r.ok){setErr(d.error||'Error');setPhase('idle');return;}
         setResult(d);
-        if(onPointsUpdate)onPointsUpdate(d.newPoints);
+        if(setUser&&d.newPoints!=null)setUser(u=>({...u,points:d.newPoints}));
       }catch{setErr('Connection error');setPhase('idle');}
     }
 
-    function handleRegularDone(){
+    function onRegularDone(){
       if(!result||result.isDemo)return;
-      if(result.goldenItem){
-        setPhase('golden-announce');
-        setTimeout(()=>setPhase('golden-spinning'),2200);
-      }else{
-        setPhase('done');
-      }
+      if(result.goldenItem){setPhase('golden-announce');setTimeout(()=>setPhase('golden-spinning'),2200);}
+      else setPhase('done');
     }
+    function onGoldenDone(){setPhase('done');}
 
-    function handleGoldenDone(){setPhase('done');}
-
-    const isUltra=result?.goldenItem?.rarity==='ultra'||(result?.regularItem?.rarity==='ultra');
     const finalItem=result?.goldenItem||result?.regularItem;
+    const canOpen=user&&(user.points||0)>=caseData.cost;
 
     return(
-      <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget&&phase==='done')onClose();}}>
-        <div className="modal">
-          <button className="modal-close" onClick={onClose} disabled={phase!=='idle'&&phase!=='done'}>✕</button>
+      <div className="case-page">
+        <a href="/gamble" className="case-page-back">← All Cases</a>
 
-          <div className="modal-header" style={{flexDirection:'column',alignItems:'center',textAlign:'center',gap:8}}>
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',width:'100%'}}>
-              <div style={{fontSize:12,color:'var(--mu)',fontWeight:500}}>
-                Balance: <strong style={{color:'var(--gold)'}}>{(user?.points||0).toLocaleString()} pts</strong>
-              </div>
-              {result?.proof&&(
-                <button onClick={()=>setShowProof(p=>!p)} style={{background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 10px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>
-                  {showProof?'Hide':'Verify (Provably Fair)'}
-                </button>
-              )}
-              {!result?.proof&&<div style={{fontSize:10,letterSpacing:'.08em',textTransform:'uppercase',color:'rgba(221,227,239,.2)'}}>Provably Fair</div>}
-            </div>
-            <div className="modal-emoji">{caseData.emoji}</div>
-            <div className="modal-title">{caseData.name}</div>
-            <div className="modal-cost">Cost to open: {caseData.cost.toLocaleString()} pts</div>
-          </div>
+        <div className="case-page-top">
+          {/* Left: open panel */}
+          <div className="case-open-panel">
+            <div className="case-big-emoji">{caseData.emoji}</div>
+            <div className="case-big-name">{caseData.name}</div>
+            <div className="case-big-cost">Cost to open: {caseData.cost.toLocaleString()} pts</div>
+            {user&&<div className="case-balance-chip">Balance: <strong>{(user.points||0).toLocaleString()} pts</strong></div>}
 
-          <div className="modal-body">
-            {/* Golden spin announcement */}
+            {/* Roller area */}
             {phase==='golden-announce'&&(
-              <div className="golden-announce">
-                <div className="golden-announce-icon">✨</div>
-                <div className="golden-announce-text">Golden Spin!</div>
-                <div className="golden-announce-sub">You triggered the bonus round</div>
+              <div className="g-announce" style={{width:'100%'}}>
+                <div className="g-icon">✨</div>
+                <div className="g-text">Golden Spin!</div>
+                <div className="g-sub">Bonus round triggered</div>
               </div>
             )}
-
-            {/* Regular spin - hidden in demo mode */}
             {!result?.isDemo&&(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
-              <CaseRoller
-                items={caseData.items}
-                winner={result.regularItem}
-                isGolden={false}
-                onDone={handleRegularDone}
-              />
+              <div style={{width:'100%'}}><Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone}/></div>
             )}
-
-            {/* Golden spin */}
             {(phase==='golden-spinning'||phase==='done')&&result?.goldenItem&&(
-              <CaseRoller
-                items={caseData.goldenItems}
-                winner={result.goldenItem}
-                isGolden={true}
-                onDone={handleGoldenDone}
-              />
+              <div style={{width:'100%'}}><Roller items={caseData.goldenItems} winner={result.goldenItem} isGolden={true} onDone={onGoldenDone}/></div>
             )}
-
-            {/* Idle state */}
             {phase==='idle'&&(
-              <div style={{background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:10,height:110,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}>
-                <span style={{fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(221,227,239,.2)'}}>Click Open to spin</span>
+              <div className="roller-placeholder" style={{width:'100%'}}>
+                <span style={{fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(221,227,239,.2)'}}>Spin the case to see your prize</span>
               </div>
             )}
 
             {/* Result */}
             {phase==='done'&&finalItem&&(
-              <div className="result" style={{marginBottom:16}}>
-                {result.isDemo&&<div style={{display:'inline-block',background:'rgba(232,164,39,.15)',border:'1px solid rgba(232,164,39,.3)',color:'#e8a427',fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',padding:'3px 10px',borderRadius:100,marginBottom:8}}>DEMO - No points spent</div>}
+              <div className="result-strip" style={{width:'100%'}}>
+                {result.isDemo&&<div style={{fontSize:10,color:'#e8a427',letterSpacing:'.1em',textTransform:'uppercase',marginBottom:6}}>DEMO</div>}
                 <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'Result'}</div>
-                <div className="result-name" style={{
-                  color: finalItem.rarity==='bust' ? '#fff' : (RARITY_COLORS[finalItem.rarity]||'#fff'),
-                  fontSize: finalItem.rarity==='bust' ? 28 : undefined
-                }}>{finalItem.name}</div>
-                {result.storeWin ? (
-                  <>
-                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#22c55e',lineHeight:1,marginBottom:4}}>🎁 Store Prize!</div>
-                    <div style={{fontSize:13,color:'rgba(34,197,94,.8)',marginBottom:4}}>A ticket has been created in Discord - Niksi will deliver it on stream.</div>
-                  </>
-                ) : result.pointsWon > 0 ? (
-                  <div className={`result-pts${finalItem.rarity==='ultra'?' ultra':''}`}>+{result.pointsWon.toLocaleString()} pts</div>
-                ) : null}
+                <div className="result-name" style={{color:finalItem.rarity==='bust'?'rgba(221,227,239,.6)':(RARITIES[finalItem.rarity]?.color||'#fff')}}>{finalItem.name}</div>
+                {result.storeWin&&<div style={{color:'#22c55e',fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800}}>🎁 Check Discord!</div>}
+                {!result.storeWin&&result.pointsWon>0&&<div className={`result-pts${finalItem.rarity==='ultra'?' u':''}`}>+{result.pointsWon.toLocaleString()} pts</div>}
+                {!result.isDemo&&result.proof&&<button onClick={()=>setShowProof(p=>!p)} style={{marginTop:8,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>{showProof?'Hide Proof':'Verify (Provably Fair)'}</button>}
                 {showProof&&result.proof&&(
-                  <div style={{marginTop:10,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:8,padding:'12px 14px',fontSize:10,fontFamily:"'Inter',sans-serif",color:'var(--mu)',lineHeight:2,wordBreak:'break-all',textAlign:'left'}}>
+                  <div style={{marginTop:8,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:8,padding:'10px 14px',fontSize:10,color:'var(--mu)',lineHeight:2,wordBreak:'break-all',textAlign:'left'}}>
                     <div><strong>Server Seed:</strong> {result.proof.serverSeed}</div>
-                    <div><strong>Result Hash:</strong> {result.proof.resultHash}</div>
-                    <div><strong>Regular Roll:</strong> {result.proof.roll1} / {result.proof.tw1}</div>
-                    {result.proof.roll2!=null&&<div><strong>Golden Roll:</strong> {result.proof.roll2} / {result.proof.tw2}</div>}
+                    <div><strong>Hash:</strong> {result.proof.resultHash}</div>
+                    <div><strong>Roll:</strong> {result.proof.roll1}/{result.proof.tw1}{result.proof.roll2!=null?` → ${result.proof.roll2}/${result.proof.tw2}`:''}</div>
                   </div>
                 )}
               </div>
             )}
 
-            {err&&<div style={{color:'var(--rd)',fontSize:13,marginBottom:12,textAlign:'center'}}>{err}</div>}
+            {err&&<div style={{color:'rgba(217,79,79,.9)',fontSize:13}}>{err}</div>}
 
-            {/* Open button */}
+            {/* Buttons */}
             {(phase==='idle'||phase==='done')&&(
-              <div style={{display:'flex',flexDirection:'column',gap:8}}>
-                <button
-                  className="open-btn"
-                  onClick={phase==='done'?()=>{setPhase('idle');setResult(null);setShowProof(false);}:openCase}
-                  disabled={!user||(user.points||0)<caseData.cost}
-                >
-                  {phase==='done'?'Open Again':`Open for ${caseData.cost.toLocaleString()} pts`}
+              <>
+                <button className="open-btn" onClick={phase==='done'?()=>{setPhase('idle');setResult(null);}:openCase} disabled={!user||(!canOpen&&phase==='idle')}>
+                  {!user?'Login to Open':!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`:phase==='done'?'Open Again':`Open - ${caseData.cost.toLocaleString()} pts`}
                 </button>
-                {phase==='idle'&&(
-                  <button
-                    onClick={demoGoldenSpin}
-                    style={{width:'100%',padding:'10px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',cursor:'pointer',border:'1px solid rgba(232,164,39,.4)',background:'rgba(232,164,39,.06)',color:'#e8a427',transition:'all .15s'}}
-                    onMouseEnter={e=>{e.currentTarget.style.background='rgba(232,164,39,.12)';e.currentTarget.style.borderColor='rgba(232,164,39,.7)'}}
-                    onMouseLeave={e=>{e.currentTarget.style.background='rgba(232,164,39,.06)';e.currentTarget.style.borderColor='rgba(232,164,39,.4)'}}
-                  >
-                    ✨ Demo Golden Spin
-                  </button>
+                {phase==='idle'&&caseData.goldenItems&&(
+                  <button className="demo-btn" onClick={demoGolden}>✨ Demo Golden Spin</button>
                 )}
-              </div>
+              </>
             )}
             {(phase!=='idle'&&phase!=='done')&&(
-              <button className="open-btn" disabled>
-                {phase==='golden-announce'?'Golden Spin incoming...':'Spinning...'}
-              </button>
+              <button className="open-btn" disabled>{phase==='golden-announce'?'Golden Spin...':'Spinning...'}</button>
             )}
+          </div>
 
-            {/* Odds table */}
-            {phase==='idle'&&(
-              <div className="odds-section">
-                <div className="odds-title">Drop Rates</div>
-                <div className="odds-grid">
-                  {caseData.items.map((item,i)=>{
-                    const tw=caseData.items.reduce((s,x)=>s+x.weight,0);
-                    const pct=((item.weight/tw)*100).toFixed(1);
-                    return(<div key={i} className="odds-item">
-                      <span className="odds-name" style={{color:RARITY_COLORS[item.rarity]||'#fff'}}>{item.isGolden?'✨ Golden Spin':item.name}</span>
-                      <div className="odds-right">
-                        <div className="odds-pts" style={{color:RARITY_COLORS[item.rarity]||'#fff'}}>{item.isGolden?'Bonus':item.points.toLocaleString()}</div>
-                        <div className="odds-pct">{pct}%</div>
-                      </div>
-                    </div>);
+          {/* Right: items grid */}
+          <div>
+            <div className="items-section">
+              <div className="items-section-title">Regular spin — what you can win</div>
+              <div className="items-grid">
+                {caseData.items.map((item,i)=>{
+                  const pct=((item.weight/regTW)*100).toFixed(1);
+                  return <ItemCard key={i} item={item} prob={pct}/>;
+                })}
+              </div>
+            </div>
+            {caseData.goldenItems&&(
+              <div className="items-section">
+                <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes — triggered at 1%</div>
+                <div className="items-grid">
+                  {caseData.goldenItems.map((item,i)=>{
+                    const overall=((item.weight/golTW)*0.01*100).toFixed(4);
+                    return <ItemCard key={i} item={item} prob={overall}/>;
                   })}
                 </div>
-                {caseData.goldenItems&&<>
-                  <div className="odds-title" style={{marginTop:14,color:'#e8a427'}}>✨ Golden Spin Prizes (triggers at 1%)</div>
-                  <div className="odds-grid">
-                    {caseData.goldenItems.map((item,i)=>{
-                      const tw=caseData.goldenItems.reduce((s,x)=>s+x.weight,0);
-                      const overall=((item.weight/tw)*0.01*100).toFixed(4);
-                      const isStore=item.storeItem;
-                      return(<div key={i} className="odds-item" style={{borderLeft:`2px solid ${isStore?'#22c55e':(RARITY_COLORS[item.rarity]||'#333')}`}}>
-                        <span className="odds-name" style={{color:isStore?'#22c55e':(RARITY_COLORS[item.rarity]||'#fff')}}>
-                          {isStore?'🎁 ':''}{item.name}
-                        </span>
-                        <div className="odds-right">
-                          <div className="odds-pts" style={{color:isStore?'#22c55e':(RARITY_COLORS[item.rarity]||'#fff')}}>
-                            {isStore?'Store Prize':(item.points.toLocaleString()+' pts')}
-                          </div>
-                          <div className="odds-pct">{overall}% overall</div>
-                        </div>
-                      </div>);
-                    })}
-                  </div>
-                </>}
               </div>
             )}
           </div>
@@ -494,81 +435,65 @@
   function App(){
     const{user,setUser,sessionId,loading,logout}=useSession();
     const[cases,setCases]=React.useState([]);
-    const[openCase,setOpenCase]=React.useState(null);
+    const caseId=window.location.pathname.match(/\/gamble\/(\w+)/)?.[1]||null;
+    const activeCaseData=cases.find(c=>c.id===caseId)||null;
 
     React.useEffect(()=>{
       fetch('/gamble/cases').then(r=>r.json()).then(setCases).catch(()=>{});
     },[]);
 
-    function handlePointsUpdate(newPts){
-      setUser(u=>({...u,points:newPts}));
+    if(loading)return<Navbar user={null} logout={logout} activeCaseId={caseId}/>;
+
+    // CASE DETAIL PAGE
+    if(caseId){
+      return(<>
+        <Navbar user={user} logout={logout} activeCaseId={caseId}/>
+        {activeCaseData
+          ?<CasePage caseData={activeCaseData} user={user} setUser={setUser} sessionId={sessionId}/>
+          :<div style={{textAlign:'center',padding:80,color:'var(--mu)'}}>Loading...</div>
+        }
+        <footer><div className="wrap"><div className="ftw">
+          <p className="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair.</p>
+          <div style={{display:'flex',alignItems:'center',gap:4}}><div style={{display:'flex',gap:4}}>{SOCIALS}</div><span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span></div>
+        </div></div></footer>
+      </>);
     }
 
-    if(loading)return<Navbar user={null} logout={logout}/>;
-
+    // CASE LIST
     return(<>
-      <Navbar user={user} logout={logout}/>
+      <Navbar user={user} logout={logout} activeCaseId={null}/>
       <div className="wrap">
         <div className="page-head f1">
           <div className="page-title">Cases</div>
-          <p className="page-sub">Open cases with your points - 95% RTP - provably fair - 1% chance to trigger the Golden Spin</p>
+          <p className="page-sub">Open cases with your points - provably fair - 1% chance for the Golden Spin</p>
         </div>
-
         {!user&&(
           <div style={{textAlign:'center',padding:'60px 0'}}>
             <div style={{fontSize:48,marginBottom:16}}>🎁</div>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800,textTransform:'uppercase',color:'#fff',marginBottom:8}}>Login to Play</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:800,textTransform:'uppercase',color:'#fff',marginBottom:8}}>Login to Play</div>
             <p style={{fontSize:13,color:'var(--mu)',marginBottom:24}}>Connect your Kick account to open cases with your points.</p>
             <a href="/auth/login" className="nlogin-btn" style={{display:'inline-flex',justifyContent:'center',padding:'12px 32px',borderRadius:8,fontSize:13}}>Login with Kick</a>
           </div>
         )}
-
-        {user&&(
-          <div className="cases-grid f2">
-            {cases.map(c=>(
-              <div key={c.id} className="case-card" onClick={()=>setOpenCase(c)}>
-                <div className="case-top">
-                  {c.emoji}
-                  <span className="case-golden-badge">1% GOLDEN</span>
-                </div>
-                <div className="case-body">
-                  <div className="case-name">{c.name}</div>
-                  <div className="case-cost">Cost to open: {c.cost.toLocaleString()} pts</div>
-                  <div className="case-cta">Click to open</div>
-                </div>
+        <div className="cases-grid f2">
+          {cases.map(c=>(
+            <a key={c.id} href={`/gamble/${c.id}`} className="case-card">
+              <div className="case-top">
+                {c.emoji}
+                <span className="case-golden-badge">1% GOLDEN</span>
               </div>
-            ))}
-          </div>
-        )}
-
-        {user&&cases.length>0&&(
-          <div className="f3" style={{textAlign:'center',padding:'0 0 48px',color:'rgba(221,227,239,.3)',fontSize:11,letterSpacing:'.1em',textTransform:'uppercase'}}>
-            House edge 5% - All outcomes provably fair - Ultra Jackpot odds: 0.001%
-          </div>
-        )}
-      </div>
-
-      <footer>
-        <div className="wrap">
-          <div className="ftw">
-            <p className="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair and verifiable.</p>
-            <div style={{display:'flex',alignItems:'center',gap:4}}>
-              <div style={{display:'flex',gap:4}}>{SOCIALS}</div>
-              <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
-            </div>
-          </div>
+              <div className="case-body">
+                <div className="case-name">{c.name}</div>
+                <div className="case-cost">Cost to open: {c.cost.toLocaleString()} pts</div>
+              </div>
+            </a>
+          ))}
         </div>
-      </footer>
-
-      {openCase&&(
-        <CaseModal
-          caseData={openCase}
-          user={user}
-          sessionId={sessionId}
-          onClose={()=>setOpenCase(null)}
-          onPointsUpdate={handlePointsUpdate}
-        />
-      )}
+      </div>
+      <footer><div className="wrap"><div className="ftw">
+        <p className="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair.</p>
+        <div style={{display:'flex',alignItems:'center',gap:4}}><div style={{display:'flex',gap:4}}>{SOCIALS}</div><span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span></div>
+      </div></div></footer>
     </>);
   }
 
