@@ -357,6 +357,7 @@
       const stage=stageRef.current;
       const{deck,landIdx}=buildDeck(items,winner);
       track.style.transition='none';
+      track.style.transform='translateX(0) translateZ(0)';
       track.innerHTML='';
       deck.forEach(item=>{
         const d=document.createElement('div');
@@ -366,9 +367,7 @@
       });
       const stageW=stage.offsetWidth;
       const center=stageW/2-TILE/2;
-      // Land anywhere in the card - biased right so next card's edge is visible (bait effect)
-      const cardNudge=(Math.random()-0.25)*TILE*0.75;
-      const targetX=-(landIdx*TILE)+center+cardNudge;
+      const targetX=-(landIdx*TILE)+center;
       const animDuration=fast?1400:5800;
       // Evaluate the same cubic-bezier used by the CSS transition
       const[bx1,by1,bx2,by2]=fast?[.2,.95,.35,1]:[.08,.92,.2,1];
