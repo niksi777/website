@@ -276,6 +276,25 @@
 
   const TILE=144; // 140px card + 4px gap
 
+  let _audioCtx=null;
+  function playTick(vol){
+    if(!vol)return;
+    try{
+      if(!_audioCtx)_audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+      if(_audioCtx.state==='suspended')_audioCtx.resume();
+      const now=_audioCtx.currentTime;
+      const osc=_audioCtx.createOscillator();
+      const gain=_audioCtx.createGain();
+      osc.connect(gain);gain.connect(_audioCtx.destination);
+      osc.type='sine';
+      osc.frequency.setValueAtTime(1100,now);
+      osc.frequency.exponentialRampToValueAtTime(520,now+0.055);
+      gain.gain.setValueAtTime(vol*0.28,now);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.055);
+      osc.start(now);osc.stop(now+0.06);
+    }catch(e){}
+  }
+
   function buildDeck(items,winnerItem){
     const totalW=items.reduce((s,i)=>s+i.weight,0);
     const deck=[];
@@ -305,10 +324,12 @@
     return '';
   }
 
-  function Roller({items,winner,isGolden,onDone,fast}){
+  function Roller({items,winner,isGolden,onDone,fast,volume}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const doneRef=React.useRef(false);
+    const volRef=React.useRef(volume);
+    React.useEffect(()=>{volRef.current=volume;});
     React.useEffect(()=>{
       if(!items||!winner||!trackRef.current||!stageRef.current)return;
       doneRef.current=false;
@@ -332,12 +353,28 @@
         track.style.transition=`transform ${fast?'1.4s cubic-bezier(.2,.95,.35,1)':'5.8s cubic-bezier(.08,.92,.2,1)'}`;
         track.style.transform=`translateX(${targetX}px) translateZ(0)`;
       });
+      // Tick sound: fire each time a new card crosses the center pointer
+      let lastCardIdx=-1;
+      let rafId;
+      const deckLen=deck.length;
+      function trackTick(){
+        const matrix=new DOMMatrix(window.getComputedStyle(track).transform);
+        const tx=matrix.m41;
+        const cardIdx=Math.floor((-tx+stageW/2-TILE/2)/TILE);
+        if(cardIdx!==lastCardIdx&&cardIdx>=0&&cardIdx<deckLen){
+          lastCardIdx=cardIdx;
+          playTick(volRef.current);
+        }
+        rafId=requestAnimationFrame(trackTick);
+      }
+      rafId=requestAnimationFrame(trackTick);
       const t=setTimeout(()=>{
+        cancelAnimationFrame(rafId);
         const cards=track.children;
         if(cards[landIdx])cards[landIdx].classList.add('winner');
         if(!doneRef.current){doneRef.current=true;if(onDone)onDone();}
       },fast?1600:6000);
-      return()=>clearTimeout(t);
+      return()=>{clearTimeout(t);cancelAnimationFrame(rafId);};
     },[items,winner]);
     return(
       <div className="roller-section">
@@ -383,6 +420,7 @@
     const[showProof,setShowProof]=React.useState(false);
     const[err,setErr]=React.useState('');
     const[fastMode,setFastMode]=React.useState(false);
+    const[volume,setVolume]=React.useState(0.5);
 
     const regTW=caseData.items.reduce((s,i)=>s+i.weight,0);
     const golTW=(caseData.goldenItems||[]).reduce((s,i)=>s+i.weight,0);
@@ -470,11 +508,11 @@
 
         {/* Regular roller */}
         {!result?.isDemo&&(phase==='spinning'||phase==='golden-ready'||phase==='golden-announce'||(phase==='done'&&!result?.goldenItem))&&result&&(
-          <Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone} fast={fastMode}/>
+          <Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone} fast={fastMode} volume={volume}/>
         )}
         {/* Golden roller */}
         {(phase==='golden-spinning'||(phase==='done'&&!!result?.goldenItem))&&result?.goldenItem&&(
-          <Roller items={caseData.goldenItems} winner={result.goldenItem} isGolden={true} onDone={onGoldenDone} fast={fastMode}/>
+          <Roller items={caseData.goldenItems} winner={result.goldenItem} isGolden={true} onDone={onGoldenDone} fast={fastMode} volume={volume}/>
         )}
         {phase==='idle'&&(
           <div style={{height:96,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:16}}>
@@ -485,15 +523,25 @@
         {/* Action buttons - true center layout using position:relative trick */}
         <div style={{position:'relative',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px 0'}}>
           {/* Absolutely positioned side controls - don't affect centering */}
-          {phase==='idle'&&(
-            <div style={{position:'absolute',left:0,display:'flex',gap:8}}>
+          <div style={{position:'absolute',left:0,display:'flex',gap:8,alignItems:'center'}}>
+            {phase==='idle'&&(
               <button className="speed-btn" onClick={()=>setFastMode(p=>!p)}
                 style={fastMode?{background:'rgba(255,255,255,.12)',color:'#fff',borderColor:'rgba(255,255,255,.2)'}:{}}>
                 <svg viewBox="0 0 16 16" fill="none" style={{width:12,height:12}}><path d="M13 8H3M13 8l-3-3M13 8l-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 {fastMode?'Fast':'Speed'}
               </button>
+            )}
+            <div style={{display:'flex',alignItems:'center',gap:5,color:'var(--mu)'}}>
+              <svg viewBox="0 0 16 16" fill="none" style={{width:13,height:13,flexShrink:0}}>
+                <path d="M3 6v4h2.5L9 12V4L5.5 6H3z" fill="currentColor"/>
+                {volume>0&&<path d="M11 5.5a3 3 0 010 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>}
+                {volume>0.5&&<path d="M12.5 3.5a5.5 5.5 0 010 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>}
+              </svg>
+              <input type="range" min="0" max="1" step="0.05" value={volume}
+                onChange={e=>setVolume(Number(e.target.value))}
+                style={{width:64,accentColor:'rgba(255,255,255,.7)',cursor:'pointer',opacity:.7}}/>
             </div>
-          )}
+          </div>
           {phase==='idle'&&caseData.goldenItems&&(
             <div style={{position:'absolute',right:0,display:'flex',gap:8}}>
               <button className="demo-btn-sm" onClick={demoGolden}>
