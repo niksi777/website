@@ -106,27 +106,22 @@
     .roller-stage-wrap{position:relative}
     .roller-pointer-top{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid #b8cce8;z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
     .roller-pointer-bot{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid #b8cce8;z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
-    .roller-stage{position:relative;height:120px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
+    .roller-stage{position:relative;height:130px;overflow:hidden;border-radius:0;background:#080a0e;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
     .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:140px;background:linear-gradient(to right,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
     .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:140px;background:linear-gradient(to left,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
     .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:176px;transform:translateX(-50%);background:linear-gradient(to bottom,transparent,rgba(184,204,232,.04),transparent);z-index:3;pointer-events:none}
-    .roller-track{display:flex;align-items:center;gap:10px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap;padding:0 6px}
-    .roller-card{flex-shrink:0;width:158px;height:90px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;user-select:none;transition:border-color .3s}
-    .roller-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;object-fit:cover}
-    .roller-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c8cdd8}
-    .roller-card.rarity-blue .roller-card-bar{background:#4a90d9}
-    .roller-card.rarity-blue .roller-card-name{color:#9bbde0}
-    .roller-card.rarity-blue{border-color:#4a90d933}
-    .roller-card.rarity-purple .roller-card-bar{background:#9b59d9}
-    .roller-card.rarity-purple .roller-card-name{color:#c4a0e8}
-    .roller-card.rarity-purple{border-color:#9b59d933}
-    .roller-card.rarity-gold .roller-card-bar{background:#e8a427}
-    .roller-card.rarity-gold .roller-card-name{color:#f0c060}
-    .roller-card.rarity-gold{border-color:#e8a42744}
-    @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 28px 4px rgba(232,164,39,.35),inset 0 0 16px 2px rgba(232,164,39,.12)}}
+    .roller-track{display:flex;align-items:center;gap:4px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap;padding:0 4px}
+    .roller-card{flex-shrink:0;width:140px;height:122px;border-radius:6px;background:linear-gradient(160deg,#0f1218,#0a0c10);border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;user-select:none;transition:border-color .3s;position:relative;overflow:hidden}
+    .roller-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08)}
+    .roller-avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid rgba(255,255,255,.15)}
+    .roller-card-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c8cdd8}
+    .roller-card.rarity-blue{border-color:rgba(74,144,217,.25)}.roller-card.rarity-blue::after{background:#4a90d9}.roller-card.rarity-blue .roller-card-name{color:#9bbde0}
+    .roller-card.rarity-purple{border-color:rgba(155,89,217,.25)}.roller-card.rarity-purple::after{background:#9b59d9}.roller-card.rarity-purple .roller-card-name{color:#c4a0e8}
+    .roller-card.rarity-gold{border-color:rgba(232,164,39,.4);background:linear-gradient(160deg,#141006,#0d0c0a)}.roller-card.rarity-gold::after{background:#e8a427}.roller-card.rarity-gold .roller-card-name{color:#f0c060}
+    @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 28px 4px rgba(232,164,39,.4)}}
     @keyframes winnerShine{0%{background-position:200% center}100%{background-position:-200% center}}
-    .roller-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite}
-    .roller-card.winner-card .roller-card-bar{background:linear-gradient(90deg,#e8a427,#f5d080,#e8a427);background-size:200% auto;animation:winnerShine 2s linear infinite}
+    .roller-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite !important}
+    .roller-card.winner-card::after{background:linear-gradient(90deg,#e8a427,#f5d080,#e8a427)!important;background-size:200% auto;animation:winnerShine 2s linear infinite}
     .roller-card.winner-card .roller-card-name{background:linear-gradient(90deg,#e8a427,#fff,#e8a427);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:winnerShine 2.5s linear infinite}
     .roll-btn{width:100%;padding:15px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s,transform .1s}
     .roll-btn:hover{opacity:.85;transform:translateY(-1px)}
@@ -275,7 +270,7 @@
     const idleRaf=React.useRef(null);
     const idleX=React.useRef(0);
     const entriesRef=React.useRef(entries);
-    const CARD_W=158,TILE=168,TOTAL=60;
+    const CARD_W=140,TILE=144,TOTAL=60;
     const RARITIES=['blue','blue','blue','purple','purple','gold'];
     const AVATAR_COLORS=['#e05c5c','#e07c3a','#d4a017','#4caf7d','#3a9bd4','#7c5ce4','#d44a8a','#38b2b2'];
 
@@ -359,7 +354,8 @@
       if(!track||!stage){setRolling(false);return;}
       const stageW=stage.offsetWidth;
       const trackPad=6;
-      const randomNudge=(Math.random()-0.25)*TILE*0.75; // biased right for bait effect
+      // Land anywhere in the card biased right — winner stops left-of-center so next card peeks in
+      const randomNudge=(Math.random()-0.25)*TILE*0.75;
       const centerOffset=stageW/2-CARD_W/2-trackPad+randomNudge;
       const finalX=-(landIdx*TILE-centerOffset);
       track.style.transition='none';
