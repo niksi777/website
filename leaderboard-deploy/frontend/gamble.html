@@ -273,6 +273,26 @@
     const [err,setErr]=React.useState('');
     const [showProof,setShowProof]=React.useState(false);
 
+    function demoGoldenSpin(){
+      if(phase!=='idle')return;
+      const items=caseData.goldenItems;
+      const totalW=items.reduce((s,i)=>s+i.weight,0);
+      let r=Math.floor(Math.random()*totalW);
+      let demoItem=items[items.length-1];
+      for(const item of items){r-=item.weight;if(r<0){demoItem=item;break;}}
+      setResult({
+        regularItem:{name:'Golden Spin',points:0,rarity:'golden-trigger',isGolden:true},
+        goldenItem:demoItem,
+        pointsWon:0,
+        storeWin:demoItem.storeItem?{title:demoItem.title}:null,
+        newPoints:user?.points||0,
+        allItems:caseData.items,
+        goldenAllItems:caseData.goldenItems,
+        isDemo:true
+      });
+      setPhase('golden-announce');
+      setTimeout(()=>setPhase('golden-spinning'),2200);
+    }
     async function openCase(){
       if(phase!=='idle')return;
       setPhase('spinning');setErr('');setResult(null);
@@ -353,6 +373,7 @@
             {/* Result */}
             {phase==='done'&&finalItem&&(
               <div className="result" style={{marginBottom:16}}>
+                {result.isDemo&&<div style={{display:'inline-block',background:'rgba(232,164,39,.15)',border:'1px solid rgba(232,164,39,.3)',color:'#e8a427',fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',padding:'3px 10px',borderRadius:100,marginBottom:8}}>DEMO - No points spent</div>}
                 <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'You Won'}</div>
                 <div className="result-name" style={{color:RARITY_COLORS[finalItem.rarity]||'#fff'}}>{finalItem.name}</div>
                 {result.storeWin ? (
@@ -363,7 +384,7 @@
                 ) : (
                   <div className={`result-pts${finalItem.rarity==='ultra'?' ultra':''}`}>+{result.pointsWon.toLocaleString()} pts</div>
                 )}
-                <div className="result-balance">Balance: <strong>{result.newPoints.toLocaleString()} pts</strong></div>
+                {!result.isDemo&&<div className="result-balance">Balance: <strong>{result.newPoints.toLocaleString()} pts</strong></div>}
                 {result.proof&&(
                   <button onClick={()=>setShowProof(p=>!p)} style={{marginTop:10,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'5px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>
                     {showProof?'Hide Proof':'Verify (Provably Fair)'}
@@ -384,13 +405,25 @@
 
             {/* Open button */}
             {(phase==='idle'||phase==='done')&&(
-              <button
-                className="open-btn"
-                onClick={phase==='done'?()=>{setPhase('idle');setResult(null);setShowProof(false);}:openCase}
-                disabled={!user||(user.points||0)<caseData.cost}
-              >
-                {phase==='done'?'Open Again':`Open for ${caseData.cost.toLocaleString()} pts`}
-              </button>
+              <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                <button
+                  className="open-btn"
+                  onClick={phase==='done'?()=>{setPhase('idle');setResult(null);setShowProof(false);}:openCase}
+                  disabled={!user||(user.points||0)<caseData.cost}
+                >
+                  {phase==='done'?'Open Again':`Open for ${caseData.cost.toLocaleString()} pts`}
+                </button>
+                {phase==='idle'&&(
+                  <button
+                    onClick={demoGoldenSpin}
+                    style={{width:'100%',padding:'10px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',cursor:'pointer',border:'1px solid rgba(232,164,39,.4)',background:'rgba(232,164,39,.06)',color:'#e8a427',transition:'all .15s'}}
+                    onMouseEnter={e=>{e.currentTarget.style.background='rgba(232,164,39,.12)';e.currentTarget.style.borderColor='rgba(232,164,39,.7)'}}
+                    onMouseLeave={e=>{e.currentTarget.style.background='rgba(232,164,39,.06)';e.currentTarget.style.borderColor='rgba(232,164,39,.4)'}}
+                  >
+                    ✨ Demo Golden Spin
+                  </button>
+                )}
+              </div>
             )}
             {(phase!=='idle'&&phase!=='done')&&(
               <button className="open-btn" disabled>
