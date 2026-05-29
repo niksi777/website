@@ -402,11 +402,12 @@
           </div>
         )}
 
-        {/* Rollers - full width */}
-        {!result?.isDemo&&(phase==='spinning'||phase==='golden-announce'||phase==='golden-spinning'||phase==='done')&&result&&(
+        {/* Regular roller: show while spinning + golden-ready/announce + done without golden */}
+        {!result?.isDemo&&(phase==='spinning'||phase==='golden-ready'||phase==='golden-announce'||(phase==='done'&&!result?.goldenItem))&&result&&(
           <Roller items={caseData.items} winner={result.regularItem} isGolden={false} onDone={onRegularDone}/>
         )}
-        {(phase==='golden-spinning'||phase==='done')&&result?.goldenItem&&(
+        {/* Golden roller: ONLY during golden-spinning and done-with-golden - hides the regular roller */}
+        {(phase==='golden-spinning'||(phase==='done'&&!!result?.goldenItem))&&result?.goldenItem&&(
           <Roller items={caseData.goldenItems} winner={result.goldenItem} isGolden={true} onDone={onGoldenDone}/>
         )}
         {phase==='idle'&&(
@@ -421,7 +422,7 @@
             <>
               <button className="open-btn"
                 style={{padding:'12px 32px',fontSize:15,letterSpacing:'.1em',width:'auto',maxWidth:280}}
-                onClick={phase==='done'?()=>{setPhase('idle');setResult(null);}:openCase}
+                onClick={phase==='done'?()=>{setPhase('idle');setResult(null);setShowProof(false);}:openCase}
                 disabled={!user||(!canOpen&&phase==='idle')}>
                 {!user?'Login to Open':!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`:phase==='done'?'Open Again':`Open - ${caseData.cost.toLocaleString()} pts`}
               </button>
