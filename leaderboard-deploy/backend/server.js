@@ -259,8 +259,8 @@ app.get("/acebet", async (req, res) => {
 });
 
 // ─── NIKSIBOT TOKEN REFRESH ──────────────────────────────────────────────────
-const NIKSIBOT_CLIENT_ID = '01KSJ0GNJ0CERH1HPH4GQEPVDC';
-const NIKSIBOT_CLIENT_SECRET = 'af5a2596218d09ac63a65038ed7a8688689c8cb55c7d31903876fa372c88282c';
+const NIKSIBOT_CLIENT_ID = '01KSJ34DC0Q8BD3DYQM328H81S';
+const NIKSIBOT_CLIENT_SECRET = '724b7105d889578107727bf454f909096a4f20d73bb1c0e2a84988c1759b1bae';
 const TOKEN_REDIRECT = 'http://niksi777.com/token-callback';
 let tokenPkce = null;
 

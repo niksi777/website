@@ -2,9 +2,9 @@ const http = require('http');
 const crypto = require('crypto');
 const axios = require('axios');
 
-const CLIENT_ID = '01KSJ0GNJ0CERH1HPH4GQEPVDC';
-const CLIENT_SECRET = 'af5a2596218d09ac63a65038ed7a8688689c8cb55c7d31903876fa372c88282c';
-const REDIRECT_URI = 'http://localhost:8080/callback';
+const CLIENT_ID = '01KSJ34DC0Q8BD3DYQM328H81S';
+const CLIENT_SECRET = '724b7105d889578107727bf454f909096a4f20d73bb1c0e2a84988c1759b1bae';
+const REDIRECT_URI = 'http://niksi777.com/token-callback';
 
 const codeVerifier = crypto.randomBytes(64).toString('base64url');
 const codeChallenge = crypto.createHash('sha256').update(codeVerifier).digest('base64url');
