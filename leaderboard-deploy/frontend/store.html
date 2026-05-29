@@ -197,7 +197,7 @@
             <a href="/">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
-            <a href="/store" className="on">STORE</a><a href="/gamble">CASES</a>
+            <a href="/store" className="on">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
@@ -235,7 +235,7 @@
         <a href="/">HOME</a>
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
-        <a href="/store" className="on">STORE</a><a href="/gamble">CASES</a>
+        <a href="/store" className="on">STORE</a><a href="/cases">CASES</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {user ? <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a> : <a href="/auth/login">Login with Kick</a>}
@@ -441,6 +441,7 @@
 </script>
 </body>
 </html>
+
 
 
 

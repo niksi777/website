@@ -277,7 +277,7 @@ const GAMBLE_CASES = [
       {name:'40 Points',points:40,weight:55,rarity:'blue'},
       {name:'120 Points',points:0,weight:25,rarity:'purple',isGolden:true},
       {name:'350 Points',points:0,weight:10,rarity:'pink',isGolden:true},
-      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+      {name:'Golden Spin',points:0,weight:15,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
       {name:'100 Points',points:100,weight:285,rarity:'purple'},
@@ -294,7 +294,7 @@ const GAMBLE_CASES = [
       {name:'80 Points',points:80,weight:55,rarity:'blue'},
       {name:'250 Points',points:0,weight:25,rarity:'purple',isGolden:true},
       {name:'700 Points',points:0,weight:10,rarity:'pink',isGolden:true},
-      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+      {name:'Golden Spin',points:0,weight:15,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
       {name:'200 Points',points:200,weight:265,rarity:'purple'},
@@ -312,7 +312,7 @@ const GAMBLE_CASES = [
       {name:'200 Points',points:200,weight:55,rarity:'blue'},
       {name:'625 Points',points:0,weight:25,rarity:'purple',isGolden:true},
       {name:'1,750 Points',points:0,weight:10,rarity:'pink',isGolden:true},
-      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+      {name:'Golden Spin',points:0,weight:15,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
       {name:'500 Points',points:500,weight:250,rarity:'purple'},
@@ -330,7 +330,7 @@ const GAMBLE_CASES = [
       {name:'400 Points',points:400,weight:55,rarity:'blue'},
       {name:'1,250 Points',points:0,weight:25,rarity:'purple',isGolden:true},
       {name:'3,500 Points',points:0,weight:10,rarity:'pink',isGolden:true},
-      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+      {name:'Golden Spin',points:0,weight:15,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
       {name:'1,000 Points',points:1000,weight:240,rarity:'purple'},
@@ -405,8 +405,10 @@ app.post('/gamble/open', async (req, res) => {
   });
 });
 
-app.get('/gamble', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
-app.get('/gamble/:caseId', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
+app.get('/cases', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
+app.get('/cases/:caseId', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
+app.get('/gamble', (req, res) => res.redirect('/cases'));
+app.get('/gamble/:caseId', (req, res) => res.redirect('/cases/' + req.params.caseId));
 
 // ─── NIKSIBOT TOKEN REFRESH ──────────────────────────────────────────────────
 const NIKSIBOT_CLIENT_ID = '01KSJ34DC0Q8BD3DYQM328H81S';

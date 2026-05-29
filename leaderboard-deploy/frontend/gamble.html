@@ -188,7 +188,7 @@
       <a href="/" className="nlogo"><img src="/assets/niksi.png" alt=""/><span className="nname">NIKSI777</span></a>
       <div className="nlinks">
         <a href="/">HOME</a><a href="/leaderboards">LEADERBOARDS</a><a href="/points">POINTS</a><a href="/store">STORE</a>
-        <a href="/gamble" className={activeCaseId?'':'on'}>CASES</a>
+        <a href="/cases" className={activeCaseId?'':'on'}>CASES</a>
         {user&&user.isAdmin&&<><a href="/giveaway">GIVEAWAY</a><a href="/admin">ADMIN</a></>}
       </div>
       <div className="nauth">
@@ -384,7 +384,7 @@
       <div className="case-page">
         {/* Top bar */}
         <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:20,flexWrap:'wrap'}}>
-          <a href="/gamble" className="case-page-back">← All Cases</a>
+          <a href="/cases" className="case-page-back">← All Cases</a>
           <div style={{display:'flex',alignItems:'center',gap:12,flex:1}}>
             <span style={{fontSize:36,lineHeight:1}}>{caseData.emoji}</span>
             <div>
@@ -515,7 +515,7 @@
   function App(){
     const{user,setUser,sessionId,loading,logout}=useSession();
     const[cases,setCases]=React.useState([]);
-    const caseId=window.location.pathname.match(/\/gamble\/(\w+)/)?.[1]||null;
+    const caseId=window.location.pathname.match(/\/cases\/(\w+)/)?.[1]||null;
     const activeCaseData=cases.find(c=>c.id===caseId)||null;
 
     React.useEffect(()=>{
@@ -581,4 +581,5 @@
 </script>
 </body>
 </html>
+
 
