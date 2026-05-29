@@ -367,9 +367,7 @@
       });
       const stageW=stage.offsetWidth;
       const center=stageW/2-TILE/2;
-      // Land anywhere in the card - biased right so next card's edge is visible (bait effect)
-      const cardNudge=(Math.random()-0.25)*TILE*0.75;
-      const targetX=-(landIdx*TILE)+center+cardNudge;
+      const targetX=-(landIdx*TILE)+center;
       const animDuration=fast?1400:5800;
       // Capture track start position for accurate bezier tick timing
       const prevM=track.style.transform&&track.style.transform.match(/translateX\(([^p]+)px\)/);
