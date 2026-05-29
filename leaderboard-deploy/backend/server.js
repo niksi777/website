@@ -520,6 +520,32 @@ app.get('/giveaway/winner-info', (req, res) => {
   } catch { res.json({ discordAvatar: null, discordName: null }); }
 });
 
+// ─── WATCH TIME REWARDS ──────────────────────────────────────────────────────
+const WATCH_INTERVAL_MS = 20 * 60 * 1000; // 20 minutes
+setInterval(() => {
+  try {
+    const accounts = loadAccounts();
+    const cutoff = Date.now() - WATCH_INTERVAL_MS;
+    const ptsPath = require('path').join(__dirname, '../../points.json');
+    let ptsData = {};
+    try { ptsData = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
+    let rewarded = 0;
+    Object.entries(chatBuffer).forEach(([username, messages]) => {
+      const wasActive = messages.some(m => m.ts > cutoff);
+      if (!wasActive) return;
+      const acc = accounts[username.toLowerCase()];
+      if (acc && acc.discordId) {
+        ptsData[username.toLowerCase()] = (ptsData[username.toLowerCase()] || 0) + 1;
+        rewarded++;
+      }
+    });
+    if (rewarded > 0) {
+      require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
+      console.log(`[watchtime] +1 pt to ${rewarded} linked viewers`);
+    }
+  } catch (err) { console.error('[watchtime]', err.message); }
+}, WATCH_INTERVAL_MS);
+
 // Provably Fair
 const cryptoPF = require('crypto');
 let pfState = { seed: null, hash: null };
