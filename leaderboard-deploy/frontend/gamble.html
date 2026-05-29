@@ -391,20 +391,24 @@
         )}
 
         {/* Action buttons */}
-        <div style={{display:'flex',gap:10,marginBottom:16,flexWrap:'wrap'}}>
+        <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:16}}>
           {(phase==='idle'||phase==='done')?(
             <>
-              <button className="open-btn" style={{flex:1,maxWidth:'none'}}
+              <button className="open-btn"
+                style={{padding:'11px',fontSize:15,letterSpacing:'.1em'}}
                 onClick={phase==='done'?()=>{setPhase('idle');setResult(null);}:openCase}
                 disabled={!user||(!canOpen&&phase==='idle')}>
                 {!user?'Login to Open':!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`:phase==='done'?'Open Again':`Open - ${caseData.cost.toLocaleString()} pts`}
               </button>
               {phase==='idle'&&caseData.goldenItems&&(
-                <button className="demo-btn" style={{flexShrink:0}} onClick={demoGolden}>✨ Demo Golden Spin</button>
+                <button className="demo-btn"
+                  style={{padding:'9px',fontSize:12}}
+                  onClick={demoGolden}>✨ Demo Golden Spin
+                </button>
               )}
             </>
           ):(
-            <button className="open-btn" style={{flex:1,maxWidth:'none'}} disabled>
+            <button className="open-btn" style={{padding:'11px',fontSize:15}} disabled>
               {phase==='golden-announce'?'Golden Spin...':'Spinning...'}
             </button>
           )}
