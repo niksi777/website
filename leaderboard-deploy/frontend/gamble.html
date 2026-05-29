@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>NIKSI777 - Cases</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07080c;--s1:#0c0e14;--s2:#11131a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.1);--b3:rgba(255,255,255,.18);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#b8cce8;--rd:#d94f4f;--gold:#d4af5a}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(140,170,210,.04),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(110,140,190,.03),transparent 60%)}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
+    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 28px 4px rgba(232,164,39,.4),inset 0 0 16px 2px rgba(232,164,39,.15)}}
+    @keyframes winnerShine{0%{background-position:200% center}100%{background-position:-200% center}}
+    @keyframes jackpotGlow{0%,100%{box-shadow:0 0 20px rgba(255,100,200,.3)}50%{box-shadow:0 0 60px rgba(255,100,200,.8),0 0 120px rgba(100,100,255,.4)}}
+    @keyframes jackpotText{0%{background-position:0% center}100%{background-position:200% center}}
+    .f1{animation:fu .4s ease both}.f2{animation:fu .4s .1s ease both}.f3{animation:fu .4s .2s ease both}
+
+    nav{background:rgba(7,8,12,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;margin-left:auto}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap}
+    .nlogin-btn:hover{opacity:.85}
+    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
+    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .ndrop{position:relative}
+    .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
+    .ndrop:hover .ndrop-menu{display:block}
+    .ndrop-box{background:rgba(7,8,12,.97);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+    .ndrop-item{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(221,227,239,.75);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:6px;transition:background .1s;box-sizing:border-box}
+    .ndrop-item:hover{background:rgba(255,255,255,.06)}
+    .ndrop-logout{color:rgba(217,79,79,.8)}
+
+    .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+    .page-head{padding:48px 0 32px;text-align:center}
+    .page-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;line-height:.92;margin-bottom:10px}
+    .page-sub{font-size:13px;color:var(--mu);line-height:1.6}
+
+    /* CASE GRID */
+    .cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:40px}
+    .case-card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s;display:flex;flex-direction:column}
+    .case-card:hover{transform:translateY(-4px);border-color:var(--b3)}
+    .case-card.selected{border-color:rgba(184,204,232,.6);box-shadow:0 0 0 1px rgba(184,204,232,.3)}
+    .case-top{height:140px;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--s2);border-bottom:1px solid var(--b2);position:relative}
+    .case-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:10px}
+    .case-name{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:.04em}
+    .case-cost{display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold)}
+    .case-rtp{font-size:11px;color:rgba(221,227,239,.4);margin-top:2px}
+    .case-items-preview{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+    .rarity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    /* ROLLER */
+    .roller-section{margin-bottom:32px}
+    .roller-stage-wrap{position:relative;margin-bottom:16px}
+    .roller-pointer-top{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
+    .roller-pointer-bot{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid var(--ac);z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
+    .roller-stage{position:relative;height:120px;overflow:hidden;border-radius:10px;background:#0d0f14;border:1px solid var(--b1)}
+    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:140px;background:linear-gradient(to right,#0d0f14,rgba(13,15,20,.6),transparent);z-index:4;pointer-events:none}
+    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:140px;background:linear-gradient(to left,#0d0f14,rgba(13,15,20,.6),transparent);z-index:4;pointer-events:none}
+    .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:176px;transform:translateX(-50%);border-left:2px solid rgba(184,204,232,.25);border-right:2px solid rgba(184,204,232,.25);background:linear-gradient(to bottom,transparent,rgba(184,204,232,.04),transparent);z-index:3;pointer-events:none}
+    .roller-track{display:flex;align-items:center;gap:10px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap;padding:0 6px}
+    .case-item-card{flex-shrink:0;width:158px;height:90px;border-radius:8px;background:#13161e;border:1px solid #252a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;user-select:none}
+    .case-item-card.rarity-bust{border-color:rgba(80,80,100,.4)}
+    .case-item-card.rarity-blue{border-color:#4a90d933}
+    .case-item-card.rarity-blue .item-pts{color:#9bbde0}
+    .case-item-card.rarity-purple{border-color:#9b59d933}
+    .case-item-card.rarity-purple .item-pts{color:#c4a0e8}
+    .case-item-card.rarity-pink{border-color:#d94f9b33}
+    .case-item-card.rarity-pink .item-pts{color:#f0a0cc}
+    .case-item-card.rarity-gold{border-color:#e8a42744;animation:winnerPulse 2s ease-in-out infinite}
+    .case-item-card.rarity-gold .item-pts{color:#f0c060}
+    .case-item-card.rarity-jackpot{border-color:#ff64c8;animation:jackpotGlow 1.5s ease-in-out infinite}
+    .case-item-card.rarity-jackpot .item-pts{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:jackpotText 2s linear infinite}
+    .case-item-card.winner-card{border-color:#e8a427 !important;animation:winnerPulse 1.8s ease-in-out infinite !important}
+    .item-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c8cdd8}
+    .item-pts{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;line-height:1}
+
+    .open-btn{width:100%;padding:16px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:#fff;color:#07080c;transition:opacity .15s,transform .1s}
+    .open-btn:hover{opacity:.85;transform:translateY(-1px)}
+    .open-btn:active{transform:translateY(0)}
+    .open-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+    /* RESULT */
+    .result-panel{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:28px;text-align:center;margin-bottom:20px;animation:fu .4s ease both}
+    .result-panel.rarity-gold{border-color:rgba(232,164,39,.4)}
+    .result-panel.rarity-jackpot{border-color:#ff64c8;animation:fu .4s ease both,jackpotGlow 1.5s 0.4s ease-in-out infinite}
+    .result-lbl{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+    .result-name{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase;color:#fff;margin-bottom:6px}
+    .result-pts{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:800;line-height:1;color:#22c55e}
+    .result-pts.minus{color:var(--rd)}
+    .result-pts.jackpot{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:jackpotText 1.5s linear infinite}
+
+    /* PF + INFO */
+    .info-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:32px}
+    .pf-inline{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);display:flex;align-items:center;gap:8px;cursor:pointer}
+    .pf-inline:hover{color:var(--tx)}
+    .pf-detail{background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:12px 16px;font-size:11px;font-family:'Inter',sans-serif;color:var(--mu);line-height:2;word-break:break-all;margin-bottom:16px}
+    .odds-table{width:100%;border-collapse:collapse;margin-top:4px}
+    .odds-table th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.4);padding:6px 0;text-align:left;border-bottom:1px solid var(--b1)}
+    .odds-table td{padding:8px 0;font-size:12px;border-bottom:1px solid var(--b1)}
+    .odds-table tr:last-child td{border-bottom:none}
+    .rarity-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .rb-bust{background:rgba(80,80,100,.2);color:#9090b0}
+    .rb-blue{background:rgba(74,144,217,.15);color:#9bbde0}
+    .rb-purple{background:rgba(155,89,217,.15);color:#c4a0e8}
+    .rb-pink{background:rgba(217,79,155,.15);color:#f0a0cc}
+    .rb-gold{background:rgba(232,164,39,.15);color:#f0c060}
+    .rb-jackpot{background:linear-gradient(90deg,rgba(255,100,200,.15),rgba(160,100,255,.15));color:#ff64c8}
+
+    .not-logged-wrap{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center}
+    .not-logged-box{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:48px;text-align:center;max-width:380px}
+    .not-logged-box h2{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase;color:#fff;margin-bottom:10px}
+    .not-logged-box p{font-size:13px;color:var(--mu);margin-bottom:24px;line-height:1.6}
+
+    footer{border-top:1px solid var(--b1);padding:22px 0;margin-top:40px}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;color:var(--mu)}
+    .ftc{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    @media(max-width:680px){.nlinks{display:none}.cases-grid{grid-template-columns:1fr 1fr}.info-row{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+  function useSession() {
+    const [user, setUser] = React.useState(null);
+    const [sessionId, setSessionId] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+    React.useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get('session') || localStorage.getItem('kick_session');
+      if (sid) {
+        localStorage.setItem('kick_session', sid);
+        setSessionId(sid);
+        fetch(`/auth/me?session=${sid}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
+          .finally(() => setLoading(false));
+        if (params.get('session')) window.history.replaceState({}, '', '/gamble');
+      } else { setLoading(false); }
+    }, []);
+    function logout() { const sid = localStorage.getItem('kick_session'); if (sid) fetch(`/auth/logout?session=${sid}`); localStorage.removeItem('kick_session'); setUser(null); setSessionId(null); }
+    return { user, sessionId, loading, logout, setUser };
+  }
+
+  const SOCIALS = <>
+    <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
+    <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
+    <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
+  </>;
+
+  function Navbar({ user, logout }) {
+    return (
+      <nav>
+        <div className="ni">
+          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+          <div className="nlinks">
+            <a href="/">HOME</a>
+            <a href="/leaderboards">LEADERBOARDS</a>
+            <a href="/points">POINTS</a>
+            <a href="/store">STORE</a>
+            <a href="/gamble" className="on">CASES</a>
+            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+          </div>
+          <div className="nauth">
+            {user ? (
+              <div className="ndrop">
+                <div className="nuser" style={{cursor:'default'}}>
+                  {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
+                  <span className="nuser-name">{user.displayName}</span>
+                  <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                </div>
+                <div className="ndrop-menu">
+                  <div className="ndrop-box">
+                    <a href="/settings" className="ndrop-item">Settings</a>
+                    <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a href="/auth/login" className="nlogin-btn">Login with Kick</a>
+            )}
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
+  const RARITY_COLORS = { bust:'#6060808', blue:'#4a90d9', purple:'#9b59d9', pink:'#d94f9b', gold:'#e8a427', jackpot:'#ff64c8' };
+  const CARD_W = 158, CARD_GAP = 10, TILE = CARD_W + CARD_GAP;
+
+  function CaseRoller({ items, onDone }) {
+    const trackRef = React.useRef(null);
+    const stageRef = React.useRef(null);
+    const [rolling, setRolling] = React.useState(false);
+    const [winner, setWinner] = React.useState(null);
+
+    function makeItemCard(item) {
+      const colors = { bust:'#6a6a8a', blue:'#9bbde0', purple:'#c4a0e8', pink:'#f0a0cc', gold:'#f0c060', jackpot:'#ff64c8' };
+      const color = colors[item.rarity] || '#fff';
+      return `<div class="item-name" style="color:#9a9aaa">${item.name}</div><div class="item-pts" style="color:${color};font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800">${item.points.toLocaleString()} pts</div>`;
+    }
+
+    function buildDeck(winnerItem) {
+      const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+      const deck = [];
+      for (let i = 0; i < 60; i++) {
+        let r = Math.floor(Math.random() * totalWeight);
+        for (const item of items) { r -= item.weight; if (r < 0) { deck.push(item); break; } }
+      }
+      const landIdx = 50;
+      deck.splice(landIdx, 0, winnerItem);
+      return { deck, landIdx };
+    }
+
+    React.useEffect(() => {
+      if (!items || rolling) return;
+      const track = trackRef.current;
+      const stage = stageRef.current;
+      if (!track || !stage) return;
+
+      setRolling(true);
+      setWinner(null);
+
+      const { deck, landIdx } = buildDeck(items._winner);
+      track.style.transition = 'none';
+      track.innerHTML = '';
+      deck.forEach(item => {
+        const d = document.createElement('div');
+        d.className = `case-item-card rarity-${item.rarity}`;
+        d.innerHTML = makeItemCard(item);
+        track.appendChild(d);
+      });
+
+      const stageW = stage.offsetWidth;
+      const centerOffset = stageW / 2 - CARD_W / 2;
+      const targetX = -(landIdx * TILE) + centerOffset;
+
+      requestAnimationFrame(() => {
+        track.style.transition = 'transform 6s cubic-bezier(.15,.85,.25,1)';
+        track.style.transform = `translateX(${targetX}px)`;
+      });
+
+      setTimeout(() => {
+        const cards = track.children;
+        if (cards[landIdx]) cards[landIdx].classList.add('winner-card');
+        setWinner(items._winner);
+        setRolling(false);
+        if (onDone) onDone(items._winner);
+      }, 6200);
+    }, [items]);
+
+    return (
+      <div className="roller-section">
+        <div className="roller-stage-wrap">
+          <div className="roller-pointer-top"/>
+          <div className="roller-pointer-bot"/>
+          <div className="roller-stage" ref={stageRef}>
+            <div className="roller-win-zone"/>
+            <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)',left:0,top:0}}/>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function App() {
+    const { user, sessionId, loading, logout, setUser } = useSession();
+    const [cases, setCases] = React.useState([]);
+    const [selectedCase, setSelectedCase] = React.useState(null);
+    const [opening, setOpening] = React.useState(false);
+    const [rollerItems, setRollerItems] = React.useState(null);
+    const [result, setResult] = React.useState(null);
+    const [showProof, setShowProof] = React.useState(false);
+    const [err, setErr] = React.useState('');
+
+    React.useEffect(() => {
+      fetch('/gamble/cases').then(r => r.json()).then(data => {
+        setCases(data);
+        setSelectedCase(data[0]?.id || null);
+      }).catch(() => {});
+    }, []);
+
+    async function openCase() {
+      if (!user || !selectedCase || opening) return;
+      setOpening(true);
+      setResult(null);
+      setErr('');
+      setRollerItems(null);
+      try {
+        const r = await fetch('/gamble/open', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId },
+          body: JSON.stringify({ caseId: selectedCase, session: sessionId })
+        });
+        const d = await r.json();
+        if (!r.ok) { setErr(d.error || 'Error'); setOpening(false); return; }
+        // Trigger roller with the winning item
+        setRollerItems({ ...d.allItems.reduce((a, i) => ({ ...a }), {}), _winner: d.item, ...(d.allItems) });
+        setRollerItems(Object.assign(d.allItems, { _winner: d.item }));
+        // Update local points immediately
+        if (user) setUser({ ...user, points: d.newPoints });
+        // Result shown after animation via onDone
+        setTimeout(() => setResult(d), 6400);
+      } catch { setErr('Connection error'); setOpening(false); }
+    }
+
+    function handleRollerDone() {
+      setOpening(false);
+    }
+
+    const selCase = cases.find(c => c.id === selectedCase);
+
+    if (loading) return <Navbar user={null} logout={logout}/>;
+
+    if (!user) return (
+      <>
+        <Navbar user={null} logout={logout}/>
+        <div className="not-logged-wrap">
+          <div className="not-logged-box">
+            <h2>Login to Play</h2>
+            <p>Connect your Kick account to open cases with your points.</p>
+            <a href="/auth/login" className="nlogin-btn" style={{display:'inline-flex',justifyContent:'center',width:'100%',padding:'13px',borderRadius:8,fontSize:13}}>Login with Kick</a>
+          </div>
+        </div>
+      </>
+    );
+
+    return (
+      <>
+        <Navbar user={user} logout={logout}/>
+        <div className="wrap">
+          <div className="page-head f1">
+            <div className="page-title">Cases</div>
+            <p className="page-sub">Open cases with your points. 95% RTP - provably fair.</p>
+          </div>
+
+          {/* Case selection */}
+          <div className="cases-grid f2">
+            {cases.map(c => (
+              <div key={c.id} className={`case-card${selectedCase===c.id?' selected':''}`} onClick={() => { setSelectedCase(c.id); setResult(null); setRollerItems(null); }}>
+                <div className="case-top">{c.emoji}</div>
+                <div className="case-body">
+                  <div className="case-name">{c.name}</div>
+                  <div className="case-cost">
+                    <svg viewBox="0 0 16 16" fill="none" style={{width:14,height:14}}><circle cx="8" cy="8" r="7" stroke="#d4af5a" strokeWidth="1.5"/><text x="8" y="12" textAnchor="middle" fill="#d4af5a" fontSize="9" fontWeight="700">P</text></svg>
+                    {c.cost.toLocaleString()} pts
+                  </div>
+                  <div className="case-rtp">~95% RTP</div>
+                  <div className="case-items-preview">
+                    {c.items?.map((item, i) => (
+                      <div key={i} className="rarity-dot" style={{background: RARITY_COLORS[item.rarity] || '#666'}} title={`${item.name}: ${item.points.toLocaleString()} pts`}/>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Roller */}
+          {selCase && (
+            <div className="f2">
+              {rollerItems ? (
+                <CaseRoller items={rollerItems} onDone={handleRollerDone}/>
+              ) : (
+                <div style={{background:'var(--s1)',border:'1px solid var(--b1)',borderRadius:10,height:122,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:16}}>
+                  <span style={{fontSize:11,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(221,227,239,.25)'}}>Select a case and open it</span>
+                </div>
+              )}
+
+              {err && <div style={{color:'var(--rd)',fontSize:13,marginBottom:12,textAlign:'center'}}>{err}</div>}
+
+              <button className="open-btn" onClick={openCase} disabled={opening || !user}>
+                {opening ? 'Opening...' : `Open ${selCase.name} - ${selCase.cost.toLocaleString()} pts`}
+              </button>
+            </div>
+          )}
+
+          {/* Result */}
+          {result && (
+            <div className={`result-panel rarity-${result.item.rarity} f1`} style={{marginTop:20}}>
+              <div className="result-lbl">You won</div>
+              <div className="result-name">{result.item.name}</div>
+              <div className={`result-pts${result.item.rarity==='jackpot'?' jackpot':''}`}>
+                +{result.item.points.toLocaleString()} pts
+              </div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:8}}>
+                Balance: <strong style={{color:'var(--gold)'}}>{result.newPoints.toLocaleString()} pts</strong>
+              </div>
+            </div>
+          )}
+
+          {/* Odds table + PF */}
+          {selCase && (
+            <div className="f3" style={{marginTop:24,marginBottom:40}}>
+              <div className="info-row">
+                <div style={{fontSize:11,fontWeight:500,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)'}}>
+                  <span style={{color:'#22c55e',marginRight:6}}>●</span>Provably Fair{result?' ✓':''}
+                  {result && (
+                    <button onClick={()=>setShowProof(p=>!p)} style={{marginLeft:12,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 10px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>
+                      {showProof?'Hide':'View Proof'}
+                    </button>
+                  )}
+                </div>
+                <div style={{fontSize:11,color:'rgba(221,227,239,.35)',letterSpacing:'.08em',textTransform:'uppercase'}}>House edge: 5%</div>
+              </div>
+
+              {showProof && result && (
+                <div className="pf-detail">
+                  <div><strong>Server Seed:</strong> {result.proof.serverSeed}</div>
+                  <div><strong>Result Hash:</strong> {result.proof.resultHash}</div>
+                  <div><strong>Roll:</strong> {result.proof.roll} / {result.proof.totalWeight}</div>
+                  <div style={{marginTop:6,fontSize:10,color:'rgba(221,227,239,.3)'}}>SHA256(serverSeed) = resultHash, roll = resultHash mod {result.proof.totalWeight}</div>
+                </div>
+              )}
+
+              <table className="odds-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Rarity</th>
+                    <th>Points</th>
+                    <th style={{textAlign:'right'}}>Chance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cases.find(c=>c.id===selectedCase)?.items?.map((item, i) => {
+                    const totalW = cases.find(c=>c.id===selectedCase)?.items?.reduce((s,x)=>s+x.weight,0)||1;
+                    const pct = ((item.weight/totalW)*100).toFixed(1);
+                    return (
+                      <tr key={i}>
+                        <td style={{fontWeight:600,color:'#fff'}}>{item.name}</td>
+                        <td><span className={`rarity-badge rb-${item.rarity}`}>{item.rarity}</span></td>
+                        <td style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:16,fontWeight:700,color:RARITY_COLORS[item.rarity]||'#fff'}}>{item.points.toLocaleString()}</td>
+                        <td style={{textAlign:'right',color:'var(--mu)'}}>{pct}%</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <footer>
+          <div className="wrap">
+            <div className="ftw">
+              <p className="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair and verifiable.</p>
+              <div style={{display:'flex',alignItems:'center',gap:4}}>
+                <div style={{display:'flex',gap:4,alignItems:'center'}}>{SOCIALS}</div>
+                <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

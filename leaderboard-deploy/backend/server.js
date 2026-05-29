@@ -258,6 +258,75 @@ app.get("/acebet", async (req, res) => {
   }
 });
 
+// ─── GAMBLE CASES ────────────────────────────────────────────────────────────
+const GAMBLE_CASES = [
+  { id:'starter', name:'Starter Case', cost:100, emoji:'📦',
+    items:[
+      {name:'Bust',points:25,weight:450,rarity:'bust'},
+      {name:'Small Win',points:65,weight:300,rarity:'blue'},
+      {name:'Good Win',points:110,weight:180,rarity:'purple'},
+      {name:'Big Win',points:250,weight:50,rarity:'pink'},
+      {name:'Mega Win',points:500,weight:15,rarity:'gold'},
+      {name:'JACKPOT',points:5000,weight:5,rarity:'jackpot'},
+    ]},
+  { id:'premium', name:'Premium Case', cost:500, emoji:'🎁',
+    items:[
+      {name:'Bust',points:125,weight:450,rarity:'bust'},
+      {name:'Small Win',points:325,weight:300,rarity:'blue'},
+      {name:'Good Win',points:550,weight:180,rarity:'purple'},
+      {name:'Big Win',points:1250,weight:50,rarity:'pink'},
+      {name:'Mega Win',points:2500,weight:15,rarity:'gold'},
+      {name:'JACKPOT',points:25000,weight:5,rarity:'jackpot'},
+    ]},
+  { id:'elite', name:'Elite Case', cost:2000, emoji:'💎',
+    items:[
+      {name:'Bust',points:500,weight:450,rarity:'bust'},
+      {name:'Small Win',points:1300,weight:300,rarity:'blue'},
+      {name:'Good Win',points:2200,weight:180,rarity:'purple'},
+      {name:'Big Win',points:5000,weight:50,rarity:'pink'},
+      {name:'Mega Win',points:10000,weight:15,rarity:'gold'},
+      {name:'JACKPOT',points:100000,weight:5,rarity:'jackpot'},
+    ]},
+  { id:'mega', name:'Mega Case', cost:10000, emoji:'👑',
+    items:[
+      {name:'Bust',points:2500,weight:450,rarity:'bust'},
+      {name:'Small Win',points:6500,weight:300,rarity:'blue'},
+      {name:'Good Win',points:11000,weight:180,rarity:'purple'},
+      {name:'Big Win',points:25000,weight:50,rarity:'pink'},
+      {name:'Mega Win',points:50000,weight:15,rarity:'gold'},
+      {name:'JACKPOT',points:500000,weight:5,rarity:'jackpot'},
+    ]},
+];
+
+app.get('/gamble/cases', (req, res) => {
+  res.json(GAMBLE_CASES.map(c => ({ id:c.id, name:c.name, cost:c.cost, emoji:c.emoji, items:c.items })));
+});
+
+app.post('/gamble/open', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session) return res.status(401).json({ error: 'Not logged in' });
+  const caseConfig = GAMBLE_CASES.find(c => c.id === req.body.caseId);
+  if (!caseConfig) return res.status(400).json({ error: 'Invalid case' });
+  const ptsPath = require('path').join(__dirname, '../../points.json');
+  let ptsData = {};
+  try { ptsData = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
+  const current = ptsData[session.username] || 0;
+  if (current < caseConfig.cost) return res.status(400).json({ error: `Not enough points. Have ${current}, need ${caseConfig.cost}.` });
+  const serverSeed = cryptoPF.randomBytes(32).toString('hex');
+  const resultHash = cryptoPF.createHash('sha256').update(serverSeed).digest('hex');
+  const totalWeight = caseConfig.items.reduce((s, i) => s + i.weight, 0);
+  const roll = Number(BigInt('0x' + resultHash.slice(0, 16)) % BigInt(totalWeight));
+  let cumWeight = 0, wonItem = caseConfig.items[caseConfig.items.length - 1];
+  for (const item of caseConfig.items) { cumWeight += item.weight; if (roll < cumWeight) { wonItem = item; break; } }
+  ptsData[session.username] = (current - caseConfig.cost) + wonItem.points;
+  require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
+  session.points = ptsData[session.username];
+  res.json({ item: wonItem, newPoints: ptsData[session.username], proof: { serverSeed, resultHash, roll, totalWeight }, allItems: caseConfig.items });
+});
+
+app.get('/gamble', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
+
 // ─── NIKSIBOT TOKEN REFRESH ──────────────────────────────────────────────────
 const NIKSIBOT_CLIENT_ID = '01KSJ34DC0Q8BD3DYQM328H81S';
 const NIKSIBOT_CLIENT_SECRET = '724b7105d889578107727bf454f909096a4f20d73bb1c0e2a84988c1759b1bae';
