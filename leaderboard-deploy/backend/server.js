@@ -748,7 +748,7 @@ app.get('/leaderboard', (req, res) => {
 // Store Redemption
 const { Client: DClient2, GatewayIntentBits: GI2 } = require("discord.js");
 const discordClient = new DClient2({ intents: [GI2.Guilds] });
-discordClient.login('MTUwNzQ2MDgwNTUxODY5MjU1Mg.GG0MLQ.u9vybc8e0PnVGm8rWZiiBPEVNEoQO1PChKzkiA').catch(err => console.error('[discord bot] Login failed:', err.message));
+discordClient.login(process.env.DISCORD_BOT_TOKEN).catch(err => console.error('[discord bot] Login failed:', err.message));
 discordClient.on("ready", () => console.log("[discord] Bot ready:", discordClient.user.tag));
 
 const REDEMPTION_ITEMS = [
