@@ -267,7 +267,7 @@
     </>);
   }
   function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-  function CardRoller({entries,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner,recentWinners,onReset}){
+  function CardRoller({entries,avatarMap,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner,recentWinners,onReset}){
     const trackRef=React.useRef(null);
     const stageRef=React.useRef(null);
     const [rolling,setRolling]=React.useState(false);
@@ -290,8 +290,10 @@
       return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length];
     }
     function makeCard(name){
+      const realAvatar=(avatarMap||{})[name.toLowerCase()];
       const seed=encodeURIComponent(name);
-      return '<img class="roller-avatar" src="https://api.dicebear.com/7.x/big-ears/svg?seed='+seed+'" width="38" height="38"/><div class="roller-card-name">'+name+'</div>';
+      const src=realAvatar||'https://api.dicebear.com/7.x/big-ears/svg?seed='+seed;
+      return '<img class="roller-avatar" src="'+src+'" width="38" height="38" style="border-radius:50%;object-fit:cover"/><div class="roller-card-name">'+name+'</div>';
     }
 
     function startIdle(pool){
@@ -501,6 +503,7 @@
     const winnerPanelRef=React.useRef(null);
     const [winnerAvatarUrl,setWinnerAvatarUrl]=React.useState(null);
     const rerollingRef=React.useRef(false);
+    const [avatarMap,setAvatarMap]=React.useState({});
     function login(){if(pw===CORRECT_PASSWORD){setAuthed(true);setPwErr('');}else setPwErr('Incorrect password.');}
     async function fetchState(){
       try{
@@ -511,6 +514,9 @@
       }catch(e){}
     }
     React.useEffect(()=>{if(!authed)return;fetchState();const id=setInterval(fetchState,3000);return()=>clearInterval(id);},[authed]);
+    React.useEffect(()=>{
+      if(entries.length>0) fetch('/giveaway/avatars').then(r=>r.json()).then(setAvatarMap).catch(()=>{});
+    },[entries.length]);
     React.useEffect(()=>{
       const total=timerMins*60+timerSecs;
       setDuration(total);setSecondsLeft(total);
@@ -715,7 +721,7 @@
             </div>
           )}
 
-          {isActive&&<CardRoller entries={entries} onWinner={handleWinner} forceWinner={pfForce||rerollTarget} onForceConsumed={()=>{setPfForce(null);setRerollTarget(null);}} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
+          {isActive&&<CardRoller entries={entries} avatarMap={avatarMap} onWinner={handleWinner} forceWinner={pfForce||rerollTarget} onForceConsumed={()=>{setPfForce(null);setRerollTarget(null);}} onRollingChange={setRollerRolling} onReroll={rerollWinner} hasWinner={!!(winner||giveaway?.winner)} recentWinners={recentWinners} onReset={giveaway?resetGiveaway:null}/>}
 
           {/* Proof details - only visible when toggled */}
           {pfProof&&showProof&&(

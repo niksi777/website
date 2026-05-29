@@ -351,6 +351,16 @@ app.get('/giveaway/winner-chat', (req, res) => {
   const key = (req.query.username || '').toLowerCase();
   res.json((chatBuffer[key] || []).slice(-20));
 });
+app.get('/giveaway/avatars', (req, res) => {
+  const accounts = loadAccounts();
+  const result = {};
+  (giveawayState.entries || []).forEach(e => {
+    const key = e.username.toLowerCase();
+    const acc = accounts[key];
+    result[key] = (acc && (acc.discordAvatar || acc.kickAvatar)) || null;
+  });
+  res.json(result);
+});
 app.get('/giveaway/winner-info', (req, res) => {
   const key = (req.query.username || '').toLowerCase();
   try {
@@ -635,6 +645,13 @@ app.get('/auth/callback', async (req, res) => {
     const sessionId = cryptoM.randomBytes(32).toString('hex');
     sessions[sessionId] = { username: user.name.toLowerCase(), displayName: user.name, avatar: user.profile_picture, createdAt: Date.now() };
     upsertAccount({ kickUsername: user.name.toLowerCase(), kickDisplayName: user.name, kickAvatar: user.profile_picture });
+    // Restore permanently linked Discord info
+    const savedAcc = loadAccounts()[user.name.toLowerCase()];
+    if (savedAcc && savedAcc.discordId) {
+      sessions[sessionId].discordId = savedAcc.discordId;
+      sessions[sessionId].discordName = savedAcc.discordName;
+      sessions[sessionId].discordAvatar = savedAcc.discordAvatar;
+    }
     saveSessions();
     res.redirect(`/store?session=${sessionId}`);
   } catch (err) {
