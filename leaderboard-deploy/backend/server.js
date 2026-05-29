@@ -286,10 +286,21 @@ app.get('/token-callback', async (req, res) => {
     params.append('code', code);
     const { data } = await axios.post('https://id.kick.com/oauth/token', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
     const envPath = '/root/website/.env';
-    let env = require('fs').readFileSync(envPath, 'utf8');
-    env = env.replace(/KICK_BOT_TOKEN=.*/, `KICK_BOT_TOKEN=${data.access_token}`);
-    if (data.refresh_token) env = env.replace(/KICK_BOT_REFRESH_TOKEN=.*/, `KICK_BOT_REFRESH_TOKEN=${data.refresh_token}`);
-    require('fs').writeFileSync(envPath, env);
+    const fs = require('fs');
+    let env = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
+    if (env.includes('KICK_BOT_TOKEN=')) {
+      env = env.replace(/KICK_BOT_TOKEN=.*/, `KICK_BOT_TOKEN=${data.access_token}`);
+    } else {
+      env += `\nKICK_BOT_TOKEN=${data.access_token}`;
+    }
+    if (data.refresh_token) {
+      if (env.includes('KICK_BOT_REFRESH_TOKEN=')) {
+        env = env.replace(/KICK_BOT_REFRESH_TOKEN=.*/, `KICK_BOT_REFRESH_TOKEN=${data.refresh_token}`);
+      } else {
+        env += `\nKICK_BOT_REFRESH_TOKEN=${data.refresh_token}`;
+      }
+    }
+    fs.writeFileSync(envPath, env.trim() + '\n');
     tokenPkce = null;
     require('child_process').exec('pm2 restart niksibot');
     res.send('<h1 style="font-family:sans-serif;color:#22c55e;background:#07080c;margin:0;padding:60px;min-height:100vh">✅ Token saved! NiksiBot is restarting with the new token.</h1>');
