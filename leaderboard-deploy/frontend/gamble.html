@@ -223,6 +223,57 @@
     ultra:         {bg:'linear-gradient(135deg,#2e1e00,#502e00)',border:'rgba(255,200,50,.7)',color:'#ffe080',icon:'👑'},
   };
 
+  const CASE_THEMES={
+    starter:{lid:'#1a3a6a',body:'#0d1e38',accent:'#4a90d9',glow:'rgba(74,144,217,.5)',stars:1,stripe:'rgba(74,144,217,.15)'},
+    premium:{lid:'#2a1a5a',body:'#150d2e',accent:'#9b59d9',glow:'rgba(155,89,217,.5)',stars:2,stripe:'rgba(155,89,217,.15)'},
+    elite:  {lid:'#0d2a3a',body:'#061520',accent:'#00bcd4',glow:'rgba(0,188,212,.5)',stars:3,stripe:'rgba(0,188,212,.15)'},
+    mega:   {lid:'#3a2000',body:'#1e1000',accent:'#e8a427',glow:'rgba(232,164,39,.6)',stars:4,stripe:'rgba(232,164,39,.15)'},
+  };
+  function CaseGraphic({id,size=120}){
+    const t=CASE_THEMES[id]||CASE_THEMES.starter;
+    const w=size,h=Math.round(size*0.78);
+    const lid=Math.round(h*0.38);
+    const stars=Array.from({length:t.stars},(_,i)=>i);
+    return(
+      <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h} style={{display:'block',filter:`drop-shadow(0 0 12px ${t.glow})`}}>
+        <defs>
+          <linearGradient id={`lg-${id}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={t.lid}/>
+            <stop offset="100%" stopColor={t.body}/>
+          </linearGradient>
+          <linearGradient id={`lg2-${id}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={t.stripe} stopOpacity="1"/>
+            <stop offset="100%" stopColor={t.stripe} stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        {/* Body */}
+        <rect x="2" y={lid} width={w-4} height={h-lid-2} rx="5" fill={`url(#lg-${id})`} stroke={t.accent} strokeWidth="1" strokeOpacity=".4"/>
+        {/* Lid */}
+        <rect x="2" y="2" width={w-4} height={lid} rx="5" fill={t.lid} stroke={t.accent} strokeWidth="1" strokeOpacity=".5"/>
+        {/* Stripe overlay */}
+        <rect x="2" y="2" width={w-4} height={h-4} rx="5" fill={`url(#lg2-${id})`}/>
+        {/* Lid bottom edge highlight */}
+        <line x1="2" y1={lid+1} x2={w-2} y2={lid+1} stroke={t.accent} strokeWidth="1.5" strokeOpacity=".6"/>
+        {/* Clasp/latch */}
+        <rect x={w/2-10} y={lid-7} width="20" height="14" rx="4" fill={t.body} stroke={t.accent} strokeWidth="1.2"/>
+        {/* Lock shackle */}
+        <path d={`M ${w/2-5} ${lid-7} a5 5 0 0 1 10 0`} fill="none" stroke={t.accent} strokeWidth="1.5" strokeLinecap="round"/>
+        {/* Lock hole */}
+        <circle cx={w/2} cy={lid} r="2.5" fill={t.accent} opacity=".8"/>
+        {/* Corner bolts */}
+        {[[10,8],[w-10,8],[10,h-10],[w-10,h-10]].map(([cx,cy],i)=>(
+          <circle key={i} cx={cx} cy={cy} r="3" fill={t.body} stroke={t.accent} strokeWidth="1" strokeOpacity=".5"/>
+        ))}
+        {/* Stars row */}
+        <g transform={`translate(${w/2-stars.length*7+7},${h-12})`}>
+          {stars.map(i=>(
+            <text key={i} x={i*14} y="0" fontSize="10" fill={t.accent} textAnchor="middle" dominantBaseline="auto">★</text>
+          ))}
+        </g>
+      </svg>
+    );
+  }
+
   const TILE=144; // 140px card + 4px gap
 
   function buildDeck(items,winnerItem){
@@ -386,7 +437,7 @@
         <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:20,flexWrap:'wrap'}}>
           <a href="/cases" className="case-page-back">← All Cases</a>
           <div style={{display:'flex',alignItems:'center',gap:12,flex:1}}>
-            <span style={{fontSize:36,lineHeight:1}}>{caseData.emoji}</span>
+            <CaseGraphic id={caseData.id} size={56}/>
             <div>
               <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',lineHeight:1}}>{caseData.name}</div>
               <div style={{fontSize:12,color:'var(--mu)',marginTop:2}}>Cost to open: {caseData.cost.toLocaleString()} pts</div>
@@ -559,8 +610,8 @@
           {cases.map(c=>(
             <a key={c.id} href={`/gamble/${c.id}`} className="case-card">
               <div className="case-top">
-                {c.emoji}
-                <span className="case-golden-badge">1% GOLDEN</span>
+                <CaseGraphic id={c.id} size={110}/>
+                <span className="case-golden-badge">5% GOLDEN</span>
               </div>
               <div className="case-body">
                 <div className="case-name">{c.name}</div>
