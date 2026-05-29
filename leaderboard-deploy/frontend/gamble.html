@@ -349,32 +349,40 @@
       // Land anywhere in the card - biased right so next card's edge is visible (bait effect)
       const cardNudge=(Math.random()-0.25)*TILE*0.75;
       const targetX=-(landIdx*TILE)+center+cardNudge;
+      const animDuration=fast?1400:5800;
+      // Evaluate the same cubic-bezier used by the CSS transition
+      const[bx1,by1,bx2,by2]=fast?[.2,.95,.35,1]:[.08,.92,.2,1];
+      function evalBezier(t){
+        const cx=3*bx1,bx=3*(bx2-bx1)-cx,ax=1-cx-bx;
+        const cy=3*by1,by=3*(by2-by1)-cy,ay=1-cy-by;
+        let u=t;
+        for(let i=0;i<8;i++){const err=((ax*u+bx)*u+cx)*u-t;const d=(3*ax*u+2*bx)*u+cx;if(Math.abs(d)<1e-6)break;u-=err/d;}
+        return((ay*u+by)*u+cy)*u;
+      }
+      const rafRef={current:null};
       requestAnimationFrame(()=>{
         track.style.transition=`transform ${fast?'1.4s cubic-bezier(.2,.95,.35,1)':'5.8s cubic-bezier(.08,.92,.2,1)'}`;
         track.style.transform=`translateX(${targetX}px) translateZ(0)`;
-      });
-      // Tick sound: fire each time a new card crosses the center pointer
-      let lastCardIdx=-1;
-      let rafId;
-      const deckLen=deck.length;
-      function trackTick(){
-        const matrix=new DOMMatrix(window.getComputedStyle(track).transform);
-        const tx=matrix.m41;
-        const cardIdx=Math.floor((-tx+stageW/2-TILE/2)/TILE);
-        if(cardIdx!==lastCardIdx&&cardIdx>=0&&cardIdx<deckLen){
-          lastCardIdx=cardIdx;
-          playTick(volRef.current);
+        const startTime=performance.now();
+        const deckLen=deck.length;
+        let lastCardIdx=-1;
+        function trackTick(){
+          const elapsed=performance.now()-startTime;
+          const t=Math.min(elapsed/animDuration,1);
+          const tx=targetX*evalBezier(t);
+          const cardIdx=Math.round((-tx+stageW/2-TILE/2)/TILE);
+          if(cardIdx!==lastCardIdx&&cardIdx>=0&&cardIdx<deckLen){lastCardIdx=cardIdx;playTick(volRef.current);}
+          if(elapsed<animDuration+200)rafRef.current=requestAnimationFrame(trackTick);
         }
-        rafId=requestAnimationFrame(trackTick);
-      }
-      rafId=requestAnimationFrame(trackTick);
+        rafRef.current=requestAnimationFrame(trackTick);
+      });
       const t=setTimeout(()=>{
-        cancelAnimationFrame(rafId);
+        if(rafRef.current)cancelAnimationFrame(rafRef.current);
         const cards=track.children;
         if(cards[landIdx])cards[landIdx].classList.add('winner');
         if(!doneRef.current){doneRef.current=true;if(onDone)onDone();}
       },fast?1600:6000);
-      return()=>{clearTimeout(t);cancelAnimationFrame(rafId);};
+      return()=>{clearTimeout(t);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
     },[items,winner]);
     return(
       <div className="roller-section">
