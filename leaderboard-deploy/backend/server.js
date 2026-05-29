@@ -271,10 +271,10 @@ const STORE_PRIZES = {
 const GAMBLE_CASES = [
   { id:'starter', name:'Starter Case', cost:50, emoji:'📦',
     items:[
-      {name:'Bust',points:5,weight:400,rarity:'bust'},
-      {name:'Small Win',points:40,weight:350,rarity:'blue'},
-      {name:'Good Win',points:70,weight:200,rarity:'purple'},
-      {name:'Big Win',points:200,weight:40,rarity:'pink'},
+      {name:'Nothing',points:0,weight:900,rarity:'bust'},
+      {name:'Small Win',points:40,weight:55,rarity:'blue'},
+      {name:'Good Win',points:120,weight:25,rarity:'purple'},
+      {name:'Big Win',points:350,weight:10,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
@@ -290,10 +290,10 @@ const GAMBLE_CASES = [
     ]},
   { id:'premium', name:'Premium Case', cost:100, emoji:'🎁',
     items:[
-      {name:'Bust',points:10,weight:400,rarity:'bust'},
-      {name:'Small Win',points:80,weight:350,rarity:'blue'},
-      {name:'Good Win',points:140,weight:200,rarity:'purple'},
-      {name:'Big Win',points:400,weight:40,rarity:'pink'},
+      {name:'Nothing',points:0,weight:900,rarity:'bust'},
+      {name:'Small Win',points:80,weight:55,rarity:'blue'},
+      {name:'Good Win',points:250,weight:25,rarity:'purple'},
+      {name:'Big Win',points:700,weight:10,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
@@ -310,10 +310,10 @@ const GAMBLE_CASES = [
     ]},
   { id:'elite', name:'Elite Case', cost:250, emoji:'💎',
     items:[
-      {name:'Bust',points:25,weight:400,rarity:'bust'},
-      {name:'Small Win',points:200,weight:350,rarity:'blue'},
-      {name:'Good Win',points:350,weight:200,rarity:'purple'},
-      {name:'Big Win',points:1000,weight:40,rarity:'pink'},
+      {name:'Nothing',points:0,weight:900,rarity:'bust'},
+      {name:'Small Win',points:200,weight:55,rarity:'blue'},
+      {name:'Good Win',points:625,weight:25,rarity:'purple'},
+      {name:'Big Win',points:1750,weight:10,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
@@ -331,10 +331,10 @@ const GAMBLE_CASES = [
     ]},
   { id:'mega', name:'Mega Case', cost:500, emoji:'👑',
     items:[
-      {name:'Bust',points:50,weight:400,rarity:'bust'},
-      {name:'Small Win',points:400,weight:350,rarity:'blue'},
-      {name:'Good Win',points:700,weight:200,rarity:'purple'},
-      {name:'Big Win',points:2000,weight:40,rarity:'pink'},
+      {name:'Nothing',points:0,weight:900,rarity:'bust'},
+      {name:'Small Win',points:400,weight:55,rarity:'blue'},
+      {name:'Good Win',points:1250,weight:25,rarity:'purple'},
+      {name:'Big Win',points:3500,weight:10,rarity:'pink'},
       {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
     ],
     goldenItems:[
