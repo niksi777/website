@@ -93,6 +93,7 @@
     .rc{flex-shrink:0;width:140px;height:122px;border-radius:6px;background:linear-gradient(160deg,#0f1218,#0a0c10);border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transform:translateZ(0);position:relative;overflow:hidden}
     .rc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08)}
     .rc.r-bust{border-color:rgba(60,60,80,.3)}.rc.r-bust::after{background:rgba(80,80,100,.3)}
+    .rc.winner{outline:2px solid rgba(255,255,255,.55);outline-offset:-1px;z-index:5}
     .rc.r-blue{border-color:rgba(74,144,217,.25)}.rc.r-blue::after{background:#4a90d9}.rc.r-blue .rpts{color:#9bbde0}
     .rc.r-purple{border-color:rgba(155,89,217,.25)}.rc.r-purple::after{background:#9b59d9}.rc.r-purple .rpts{color:#c4a0e8}
     .rc.r-pink{border-color:rgba(217,79,155,.25)}.rc.r-pink::after{background:#d94f9b}.rc.r-pink .rpts{color:#f0a0cc}
@@ -357,7 +358,6 @@
       const stage=stageRef.current;
       const{deck,landIdx}=buildDeck(items,winner);
       track.style.transition='none';
-      track.style.transform='translateX(0) translateZ(0)';
       track.innerHTML='';
       deck.forEach(item=>{
         const d=document.createElement('div');
@@ -367,15 +367,20 @@
       });
       const stageW=stage.offsetWidth;
       const center=stageW/2-TILE/2;
-      const targetX=-(landIdx*TILE)+center;
+      // Land anywhere in the card - biased right so next card's edge is visible (bait effect)
+      const cardNudge=(Math.random()-0.25)*TILE*0.75;
+      const targetX=-(landIdx*TILE)+center+cardNudge;
       const animDuration=fast?1400:5800;
+      // Capture track start position for accurate bezier tick timing
+      const prevM=track.style.transform&&track.style.transform.match(/translateX\(([^p]+)px\)/);
+      const startTx=prevM?parseFloat(prevM[1]):0;
       // Evaluate the same cubic-bezier used by the CSS transition
       const[bx1,by1,bx2,by2]=fast?[.2,.95,.35,1]:[.08,.92,.2,1];
-      function evalBezier(t){
+      function evalBezier(p){
         const cx=3*bx1,bx=3*(bx2-bx1)-cx,ax=1-cx-bx;
         const cy=3*by1,by=3*(by2-by1)-cy,ay=1-cy-by;
-        let u=t;
-        for(let i=0;i<8;i++){const err=((ax*u+bx)*u+cx)*u-t;const d=(3*ax*u+2*bx)*u+cx;if(Math.abs(d)<1e-6)break;u-=err/d;}
+        let u=p;
+        for(let i=0;i<8;i++){const err=((ax*u+bx)*u+cx)*u-p;const d=(3*ax*u+2*bx)*u+cx;if(Math.abs(d)<1e-6)break;u-=err/d;}
         return((ay*u+by)*u+cy)*u;
       }
       const rafRef={current:null};
@@ -387,8 +392,8 @@
         let lastCardIdx=-1;
         function trackTick(){
           const elapsed=performance.now()-startTime;
-          const t=Math.min(elapsed/animDuration,1);
-          const tx=targetX*evalBezier(t);
+          const p=Math.min(elapsed/animDuration,1);
+          const tx=startTx+(targetX-startTx)*evalBezier(p);
           const cardIdx=Math.round((-tx+stageW/2-TILE/2)/TILE);
           if(cardIdx!==lastCardIdx&&cardIdx>=0&&cardIdx<deckLen){lastCardIdx=cardIdx;playTick(volRef.current);}
           if(elapsed<animDuration+200)rafRef.current=requestAnimationFrame(trackTick);
