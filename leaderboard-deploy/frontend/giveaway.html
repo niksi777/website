@@ -500,12 +500,14 @@
     const chatFeedRef=React.useRef(null);
     const winnerPanelRef=React.useRef(null);
     const [winnerAvatarUrl,setWinnerAvatarUrl]=React.useState(null);
+    const rerollingRef=React.useRef(false);
     function login(){if(pw===CORRECT_PASSWORD){setAuthed(true);setPwErr('');}else setPwErr('Incorrect password.');}
     async function fetchState(){
       try{
         const r=await fetch('/giveaway/state');const d=await r.json();
         setGiveaway(d.giveaway);setEntries(d.entries||[]);
-        if(d.giveaway?.winner) setWinner(d.giveaway.winner);
+        // Don't update winner from server while a reroll animation is playing
+        if(d.giveaway?.winner && !rerollingRef.current) setWinner(d.giveaway.winner);
       }catch(e){}
     }
     React.useEffect(()=>{if(!authed)return;fetchState();const id=setInterval(fetchState,3000);return()=>clearInterval(id);},[authed]);
@@ -575,6 +577,7 @@
       poll();chatPollRef.current=setInterval(poll,2000);
     }
     function handleWinner(name){
+      rerollingRef.current=false;
       confirmWinner(name);
       setPfLoading(false);
       setWinnerAvatarUrl(null);
@@ -594,11 +597,13 @@
     }
     async function rerollWinner(){
       try{
-        await fetchState();
+        rerollingRef.current=true;
+        setWinner(null);
         const r=await fetch('/giveaway/reroll',{method:'POST'});
         const d=await r.json();
-        if(d.winner){setWinner(null);setRerollTarget(d.winner);}
-      }catch(e){}
+        if(d.winner){setRerollTarget(d.winner);}
+        else{rerollingRef.current=false;}
+      }catch(e){rerollingRef.current=false;}
     }
     async function resetGiveaway(){
       if(!confirm('Reset and clear all entries?'))return;
@@ -643,7 +648,8 @@
           {!giveaway?(
             <div className="card f2">
               <div className="form-grid">
-                <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" value={keyword} onChange={e=>setKeyword(e.target.value)}/></div>
+                <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" placeholder="e.g. haru" value={keyword} onChange={e=>setKeyword(e.target.value)}/></div>
+                <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" placeholder="e.g. $10 tip" value={prize} onChange={e=>setPrize(e.target.value)}/></div>
               </div>
               <div className="divider-line"/>
               {!useTimer?(
