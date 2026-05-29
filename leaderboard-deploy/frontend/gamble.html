@@ -263,7 +263,7 @@
       track.innerHTML='';
       deck.forEach(item=>{
         const d=document.createElement('div');
-        d.className=`rc r-${item.rarity}`;
+        d.className=`rc r-${item.isGolden?'golden-trigger':item.rarity}`;
         d.innerHTML=makeCard(item);
         track.appendChild(d);
       });
@@ -334,8 +334,7 @@
       for(const item of items){r-=item.weight;if(r<0){demoItem=item;break;}}
       setResult({regularItem:{name:'Golden Spin',points:0,rarity:'golden-trigger',isGolden:true},goldenItem:demoItem,pointsWon:0,storeWin:demoItem.storeItem?{title:demoItem.title}:null,newPoints:user?.points||0,isDemo:true});
       setShowProof(false);
-      setPhase('golden-announce');
-      setTimeout(()=>setPhase('golden-spinning'),2200);
+      setPhase('golden-ready');
     }
 
     async function openCase(){
@@ -352,8 +351,12 @@
 
     function onRegularDone(){
       if(!result||result.isDemo)return;
-      if(result.goldenItem){setPhase('golden-announce');setTimeout(()=>setPhase('golden-spinning'),2200);}
+      if(result.goldenItem){setPhase('golden-ready');}
       else setPhase('done');
+    }
+    function triggerGoldenSpin(){
+      setPhase('golden-announce');
+      setTimeout(()=>setPhase('golden-spinning'),2200);
     }
     function onGoldenDone(){setPhase('done');}
 
@@ -374,6 +377,18 @@
           </div>
           {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} pts</strong></div>}
         </div>
+
+        {/* Golden ready — user must click to spin */}
+        {phase==='golden-ready'&&(
+          <div className="g-announce" style={{marginBottom:8}}>
+            <div className="g-icon">✨</div>
+            <div className="g-text">Golden Spin!</div>
+            <div className="g-sub" style={{marginBottom:16}}>You triggered the bonus round - click below to spin for free</div>
+            <button onClick={triggerGoldenSpin} style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',padding:'14px 48px',borderRadius:10,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#e8a427,#f5d080)',color:'#07080c',animation:'goldenFlash 2s ease-in-out infinite'}}>
+              ✨ Spin Now
+            </button>
+          </div>
+        )}
 
         {/* Golden announce */}
         {phase==='golden-announce'&&(
@@ -415,7 +430,7 @@
             </>
           ):(
             <button className="open-btn" style={{padding:'12px 32px',fontSize:15,width:'auto',maxWidth:280}} disabled>
-              {phase==='golden-announce'?'Golden Spin...':'Spinning...'}
+              {phase==='golden-ready'?'Golden Spin Ready...':phase==='golden-announce'?'Golden Spin...':'Spinning...'}
             </button>
           )}
         </div>
