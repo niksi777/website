@@ -259,42 +259,67 @@ app.get("/acebet", async (req, res) => {
 });
 
 // ─── GAMBLE CASES ────────────────────────────────────────────────────────────
+// RTP: ~95% via two-tier system. Regular EV + golden EV × 0.01 = 95% of cost.
 const GAMBLE_CASES = [
-  { id:'starter', name:'Starter Case', cost:100, emoji:'📦',
+  { id:'starter', name:'Starter Case', cost:50, emoji:'📦',
     items:[
-      {name:'Bust',points:25,weight:450,rarity:'bust'},
-      {name:'Small Win',points:65,weight:300,rarity:'blue'},
-      {name:'Good Win',points:110,weight:180,rarity:'purple'},
-      {name:'Big Win',points:250,weight:50,rarity:'pink'},
-      {name:'Mega Win',points:500,weight:15,rarity:'gold'},
-      {name:'JACKPOT',points:5000,weight:5,rarity:'jackpot'},
+      {name:'Bust',points:5,weight:400,rarity:'bust'},
+      {name:'Small Win',points:40,weight:350,rarity:'blue'},
+      {name:'Good Win',points:70,weight:200,rarity:'purple'},
+      {name:'Big Win',points:195,weight:40,rarity:'pink'},
+      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+    ],
+    goldenItems:[
+      {name:'Gold Win',points:200,weight:550,rarity:'gold'},
+      {name:'Great Win',points:600,weight:250,rarity:'gold'},
+      {name:'Amazing',points:2000,weight:150,rarity:'jackpot'},
+      {name:'Legendary',points:6000,weight:49,rarity:'jackpot'},
+      {name:'ULTRA JACKPOT',points:146000,weight:1,rarity:'ultra'},
     ]},
-  { id:'premium', name:'Premium Case', cost:250, emoji:'🎁',
+  { id:'premium', name:'Premium Case', cost:100, emoji:'🎁',
     items:[
-      {name:'Bust',points:62,weight:450,rarity:'bust'},
-      {name:'Small Win',points:162,weight:300,rarity:'blue'},
-      {name:'Good Win',points:275,weight:180,rarity:'purple'},
-      {name:'Big Win',points:625,weight:50,rarity:'pink'},
-      {name:'Mega Win',points:1250,weight:15,rarity:'gold'},
-      {name:'JACKPOT',points:12500,weight:5,rarity:'jackpot'},
+      {name:'Bust',points:10,weight:400,rarity:'bust'},
+      {name:'Small Win',points:80,weight:350,rarity:'blue'},
+      {name:'Good Win',points:140,weight:200,rarity:'purple'},
+      {name:'Big Win',points:390,weight:40,rarity:'pink'},
+      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+    ],
+    goldenItems:[
+      {name:'Gold Win',points:400,weight:550,rarity:'gold'},
+      {name:'Great Win',points:1200,weight:250,rarity:'gold'},
+      {name:'Amazing',points:4000,weight:150,rarity:'jackpot'},
+      {name:'Legendary',points:12000,weight:49,rarity:'jackpot'},
+      {name:'ULTRA JACKPOT',points:292000,weight:1,rarity:'ultra'},
     ]},
-  { id:'elite', name:'Elite Case', cost:500, emoji:'💎',
+  { id:'elite', name:'Elite Case', cost:250, emoji:'💎',
     items:[
-      {name:'Bust',points:125,weight:450,rarity:'bust'},
-      {name:'Small Win',points:325,weight:300,rarity:'blue'},
-      {name:'Good Win',points:550,weight:180,rarity:'purple'},
-      {name:'Big Win',points:1250,weight:50,rarity:'pink'},
-      {name:'Mega Win',points:2500,weight:15,rarity:'gold'},
-      {name:'JACKPOT',points:25000,weight:5,rarity:'jackpot'},
+      {name:'Bust',points:25,weight:400,rarity:'bust'},
+      {name:'Small Win',points:200,weight:350,rarity:'blue'},
+      {name:'Good Win',points:350,weight:200,rarity:'purple'},
+      {name:'Big Win',points:975,weight:40,rarity:'pink'},
+      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+    ],
+    goldenItems:[
+      {name:'Gold Win',points:1000,weight:550,rarity:'gold'},
+      {name:'Great Win',points:3000,weight:250,rarity:'gold'},
+      {name:'Amazing',points:10000,weight:150,rarity:'jackpot'},
+      {name:'Legendary',points:30000,weight:49,rarity:'jackpot'},
+      {name:'ULTRA JACKPOT',points:730000,weight:1,rarity:'ultra'},
     ]},
-  { id:'mega', name:'Mega Case', cost:1000, emoji:'👑',
+  { id:'mega', name:'Mega Case', cost:500, emoji:'👑',
     items:[
-      {name:'Bust',points:250,weight:450,rarity:'bust'},
-      {name:'Small Win',points:650,weight:300,rarity:'blue'},
-      {name:'Good Win',points:1100,weight:180,rarity:'purple'},
-      {name:'Big Win',points:2500,weight:50,rarity:'pink'},
-      {name:'Mega Win',points:5000,weight:15,rarity:'gold'},
-      {name:'JACKPOT',points:50000,weight:5,rarity:'jackpot'},
+      {name:'Bust',points:50,weight:400,rarity:'bust'},
+      {name:'Small Win',points:400,weight:350,rarity:'blue'},
+      {name:'Good Win',points:700,weight:200,rarity:'purple'},
+      {name:'Big Win',points:1950,weight:40,rarity:'pink'},
+      {name:'Golden Spin',points:0,weight:10,rarity:'golden-trigger',isGolden:true},
+    ],
+    goldenItems:[
+      {name:'Gold Win',points:2000,weight:550,rarity:'gold'},
+      {name:'Great Win',points:6000,weight:250,rarity:'gold'},
+      {name:'Amazing',points:20000,weight:150,rarity:'jackpot'},
+      {name:'Legendary',points:60000,weight:49,rarity:'jackpot'},
+      {name:'ULTRA JACKPOT',points:1460000,weight:1,rarity:'ultra'},
     ]},
 ];
 
@@ -302,6 +327,13 @@ app.get('/gamble/cases', (req, res) => {
   res.json(GAMBLE_CASES.map(c => ({ id:c.id, name:c.name, cost:c.cost, emoji:c.emoji, items:c.items })));
 });
 
+function weightedRoll(items, hashHex, offset) {
+  const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+  const roll = Number(BigInt('0x' + hashHex.slice(offset, offset+16)) % BigInt(totalWeight));
+  let cum = 0;
+  for (const item of items) { cum += item.weight; if (roll < cum) return { item, roll, totalWeight }; }
+  return { item: items[items.length-1], roll, totalWeight };
+}
 app.post('/gamble/open', (req, res) => {
   const sessionId = req.headers['x-session-id'] || req.body.session;
   const session = sessions[sessionId];
@@ -315,14 +347,23 @@ app.post('/gamble/open', (req, res) => {
   if (current < caseConfig.cost) return res.status(400).json({ error: `Not enough points. Have ${current}, need ${caseConfig.cost}.` });
   const serverSeed = cryptoPF.randomBytes(32).toString('hex');
   const resultHash = cryptoPF.createHash('sha256').update(serverSeed).digest('hex');
-  const totalWeight = caseConfig.items.reduce((s, i) => s + i.weight, 0);
-  const roll = Number(BigInt('0x' + resultHash.slice(0, 16)) % BigInt(totalWeight));
-  let cumWeight = 0, wonItem = caseConfig.items[caseConfig.items.length - 1];
-  for (const item of caseConfig.items) { cumWeight += item.weight; if (roll < cumWeight) { wonItem = item; break; } }
-  ptsData[session.username] = (current - caseConfig.cost) + wonItem.points;
+  const { item: regularItem, roll: roll1, totalWeight: tw1 } = weightedRoll(caseConfig.items, resultHash, 0);
+  let goldenItem = null, roll2 = null, tw2 = null, pointsWon = regularItem.points;
+  if (regularItem.isGolden && caseConfig.goldenItems) {
+    const gr = weightedRoll(caseConfig.goldenItems, resultHash, 16);
+    goldenItem = gr.item; roll2 = gr.roll; tw2 = gr.totalWeight;
+    pointsWon = goldenItem.points;
+  }
+  ptsData[session.username] = (current - caseConfig.cost) + pointsWon;
   require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
   session.points = ptsData[session.username];
-  res.json({ item: wonItem, newPoints: ptsData[session.username], proof: { serverSeed, resultHash, roll, totalWeight }, allItems: caseConfig.items });
+  res.json({
+    regularItem, goldenItem, pointsWon,
+    newPoints: ptsData[session.username],
+    proof: { serverSeed, resultHash, roll1, tw1, roll2, tw2 },
+    allItems: caseConfig.items,
+    goldenAllItems: caseConfig.goldenItems || null
+  });
 });
 
 app.get('/gamble', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamble.html')));
