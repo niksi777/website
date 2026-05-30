@@ -808,11 +808,12 @@ app.get('/points/:username', (req, res) => {
     res.json({ username: req.params.username, points: data[req.params.username.toLowerCase()] || 0 });
   } catch { res.json({ username: req.params.username, points: 0 }); }
 });
+const LEADERBOARD_HIDDEN = ['niksi777','niksibot'];
 app.get('/leaderboard', (req, res) => {
   try {
     const data = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
     const limit = parseInt(req.query.limit) || 10;
-    const leaderboard = Object.entries(data).sort(([,a],[,b]) => b-a).slice(0,limit).map(([username,points],i) => ({ rank:i+1, username, points }));
+    const leaderboard = Object.entries(data).filter(([u])=>!LEADERBOARD_HIDDEN.includes(u.toLowerCase())).sort(([,a],[,b]) => b-a).slice(0,limit).map(([username,points],i) => ({ rank:i+1, username, points }));
     res.json({ leaderboard });
   } catch { res.json({ leaderboard: [] }); }
 });
@@ -874,7 +875,7 @@ app.get('/api/leaderboard', (req, res) => {
   try {
     const data = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../../points.json'), 'utf8'));
     const limit = parseInt(req.query.limit) || 10;
-    const leaderboard = Object.entries(data).sort(([,a],[,b]) => b-a).slice(0,limit).map(([username,points],i) => ({ rank:i+1, username, points }));
+    const leaderboard = Object.entries(data).filter(([u])=>!LEADERBOARD_HIDDEN.includes(u.toLowerCase())).sort(([,a],[,b]) => b-a).slice(0,limit).map(([username,points],i) => ({ rank:i+1, username, points }));
     res.json({ leaderboard });
   } catch { res.json({ leaderboard: [] }); }
 });
