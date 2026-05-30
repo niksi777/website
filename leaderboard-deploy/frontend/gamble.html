@@ -635,9 +635,15 @@
               if (goldenWeight > 0) {
                 merged.push({item: {name:'Golden Spin',points:0,rarity:'golden-trigger',isGolden:true,weight:goldenWeight}, key:'g'});
               }
-              return merged.map(({item,key}) => {
-                const pct = ((item.weight/regTW)*100).toFixed(1);
-                return <ItemCard key={key} item={item} prob={pct}/>;
+              // Largest remainder method — ensures displayed percentages sum to exactly 100%
+              const exacts=merged.map(({item})=>item.weight/regTW*100);
+              const floored=exacts.map(x=>Math.floor(x*10)/10);
+              const toDistribute=Math.round((100-floored.reduce((s,x)=>s+x,0))*10);
+              const order=[...exacts.map((x,i)=>({i,r:(x*10)%1}))].sort((a,b)=>b.r-a.r);
+              const pcts=[...floored];
+              for(let i=0;i<toDistribute;i++)pcts[order[i].i]=Math.round((pcts[order[i].i]+0.1)*10)/10;
+              return merged.map(({item,key},i) => {
+                return <ItemCard key={key} item={item} prob={pcts[i].toFixed(1)}/>;
               });
             })()}
           </div>
