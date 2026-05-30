@@ -692,18 +692,18 @@
     },[]);
     if(!drops.length)return null;
     return(
-      <div style={{marginBottom:48}}>
+      <div style={{marginBottom:48,textAlign:'center'}}>
         <div className="drops-title">Recent Drops</div>
-        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+        <div style={{display:'flex',flexDirection:'column',gap:6,maxWidth:560,margin:'0 auto'}}>
           {drops.map((d,i)=>(
-            <div key={i} className="drop-row">
+            <div key={i} className="drop-row" style={{justifyContent:'center'}}>
               {d.avatar?<img className="drop-avatar" src={d.avatar} alt=""/>:<div className="drop-avatar"/>}
-              <div style={{minWidth:0,flex:'0 0 auto',maxWidth:110}}>
+              <div style={{textAlign:'left',minWidth:0,flex:'0 0 auto',maxWidth:110}}>
                 <div className="drop-user">{d.displayName||d.username}</div>
                 <div className="drop-case">{d.caseName}</div>
               </div>
               <div style={{fontSize:11,color:'var(--mu)',flexShrink:0}}>→</div>
-              <div className="drop-item" style={{color:RARITY_COLORS[d.itemRarity]||'#fff',flex:1}}>
+              <div className="drop-item" style={{color:RARITY_COLORS[d.itemRarity]||'#fff',flex:1,textAlign:'left'}}>
                 {d.isGolden&&<span style={{color:'#e8a427',marginRight:4}}>✨</span>}
                 {d.itemName}
               </div>
@@ -748,7 +748,7 @@
       <div className="wrap">
         <div className="page-head f1">
           <div className="page-title">Cases</div>
-          <p className="page-sub">Open cases with your points - provably fair - 1% chance for the Golden Spin</p>
+          <p className="page-sub">Open cases with your points - provably fair - 5% chance for the Golden Spin</p>
         </div>
         {!user&&(
           <div style={{textAlign:'center',padding:'60px 0'}}>
