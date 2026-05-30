@@ -317,12 +317,15 @@
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
           <div className="ce-lbl" style={{marginBottom:0}}>{pool==='items'?'Main Pool':'Golden Spin Pool'}</div>
           <div style={{fontSize:11,color:'var(--mu)'}}>total weight: {totalW}</div>
+          <div style={{fontSize:11,fontWeight:600,color:Math.abs(items.reduce((s,i)=>s+(totalW>0?i.weight/totalW*100:0),0)-100)<0.1?'#22c55e':'#e8a427'}}>
+            {items.reduce((s,i)=>s+(totalW>0?i.weight/totalW*100:0),0).toFixed(1)}% total
+          </div>
         </div>
         <div style={{background:'var(--s2)',borderRadius:10,overflow:'auto',border:'1px solid var(--b1)'}}>
           <table className="ce-table">
             <thead>
               <tr>
-                <th>Name</th><th>Points</th><th>Weight</th><th>%</th><th>Rarity</th>
+                <th>Name</th><th>Points</th><th>Weight</th><th>% (editable)</th><th>Rarity</th>
                 {showIsGolden&&<th>Golden?</th>}
                 {showStoreItem&&<th>Store item?</th>}
                 <th></th>
@@ -334,7 +337,17 @@
                   <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(i,'name',e.target.value)} style={{width:140}}/></td>
                   <td><input className="ce-inp" type="number" value={item.points} onChange={e=>onUpdate(i,'points',Number(e.target.value))} style={{width:80}}/></td>
                   <td><input className="ce-inp" type="number" value={item.weight} onChange={e=>onUpdate(i,'weight',Number(e.target.value))} style={{width:70}}/></td>
-                  <td style={{fontSize:11,color:'var(--mu)',whiteSpace:'nowrap'}}>{totalW>0?((item.weight/totalW)*100).toFixed(1):'0.0'}%</td>
+                  <td>{(() => {
+                    const pctVal = totalW>0 ? ((item.weight/totalW)*100).toFixed(2) : '0.00';
+                    function onPctChange(e) {
+                      const newPct = parseFloat(e.target.value);
+                      if (isNaN(newPct) || newPct <= 0 || newPct >= 100) return;
+                      const otherTotal = items.reduce((s,it,j)=>j!==i?s+Number(it.weight||0):s,0);
+                      const newWeight = Math.round(newPct / (100 - newPct) * otherTotal);
+                      onUpdate(i,'weight',newWeight);
+                    }
+                    return <input className="ce-inp" type="number" step="0.01" value={pctVal} onChange={onPctChange} style={{width:72}}/>;
+                  })()}</td>
                   <td>
                     <select className="ce-sel" value={item.rarity} onChange={e=>onUpdate(i,'rarity',e.target.value)}>
                       {RARITIES.map(r=><option key={r} value={r}>{r}</option>)}
