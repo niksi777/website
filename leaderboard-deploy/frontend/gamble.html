@@ -483,7 +483,7 @@
     const WIN_RARITIES=['gold','gold-ultra','ultra','jackpot','store'];
     function onRegularDone(){
       if(!result||result.isDemo)return;
-      if(result.goldenItem){setPhase('golden-ready');}
+      if(result.goldenItem){setPhase('golden-ready');playCelebration(volume);}
       else{
         setPhase('done');
         if(WIN_RARITIES.includes(result.regularItem?.rarity))playCelebration(volume);
@@ -524,7 +524,6 @@
           <div className="g-announce" style={{marginBottom:8}}>
             <img src="/assets/niksi.png" style={{width:64,height:64,borderRadius:'50%',objectFit:'cover',border:'3px solid #e8a427',boxShadow:'0 0 24px rgba(232,164,39,.8)',filter:'sepia(.4) saturate(2) hue-rotate(5deg) brightness(1.15)',marginBottom:8,animation:'goldenFlash 1.5s ease-in-out infinite'}}/>
             <div className="g-text">Golden Spin!</div>
-            <div className="g-sub" style={{marginBottom:16}}>You triggered the bonus round - click below to spin for free</div>
             <button onClick={triggerGoldenSpin} style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:22,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',padding:'14px 48px',borderRadius:10,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#e8a427,#f5d080)',color:'#07080c',animation:'goldenFlash 2s ease-in-out infinite'}}>
               ✨ Spin Now
             </button>
