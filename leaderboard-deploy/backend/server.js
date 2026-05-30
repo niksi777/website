@@ -362,6 +362,20 @@ function weightedRoll(items, hashHex, offset) {
   for (const item of items) { cum += item.weight; if (roll < cum) return { item, roll, totalWeight }; }
   return { item: items[items.length-1], roll, totalWeight };
 }
+const HISTORY_PATH = require('path').join(__dirname, '../../case_history.json');
+let caseHistory = [];
+try { caseHistory = JSON.parse(require('fs').readFileSync(HISTORY_PATH, 'utf8')); } catch {}
+
+function pushHistory(entry) {
+  caseHistory.unshift(entry);
+  if (caseHistory.length > 50) caseHistory = caseHistory.slice(0, 50);
+  require('fs').writeFileSync(HISTORY_PATH, JSON.stringify(caseHistory));
+}
+
+app.get('/gamble/history', (req, res) => {
+  res.json(caseHistory.slice(0, 10));
+});
+
 app.post('/gamble/open', async (req, res) => {
   const sessionId = req.headers['x-session-id'] || req.body.session;
   const session = sessions[sessionId];
@@ -401,6 +415,21 @@ app.post('/gamble/open', async (req, res) => {
       });
     } catch(e) { console.error('[gamble ticket]', e.message); }
   }
+
+  const wonItem = goldenItem || regularItem;
+  pushHistory({
+    ts: Date.now(),
+    username: session.username,
+    displayName: session.displayName || session.username,
+    avatar: session.avatar || null,
+    caseName: caseConfig.name,
+    caseId: caseConfig.id,
+    itemName: wonItem.name,
+    itemRarity: wonItem.rarity,
+    itemPoints: wonItem.points || 0,
+    isGolden: !!goldenItem,
+    isStore: !!storeWin,
+  });
 
   res.json({
     regularItem, goldenItem, pointsWon,

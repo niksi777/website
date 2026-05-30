@@ -138,6 +138,15 @@
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .ftd{font-size:12px;color:var(--mu)}
     .ftc{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    /* RECENT DROPS */
+    .drops-title{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(221,227,239,.4);margin-bottom:14px}
+    .drop-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);transition:background .15s}
+    .drop-row:hover{background:rgba(255,255,255,.05)}
+    .drop-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.06);flex-shrink:0}
+    .drop-user{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+    .drop-case{font-size:10px;color:var(--mu);white-space:nowrap}
+    .drop-item{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .drop-time{font-size:10px;color:rgba(221,227,239,.3);margin-left:auto;flex-shrink:0}
     @media(max-width:700px){
       .nlinks{display:none}
       .cases-grid{grid-template-columns:1fr 1fr}
@@ -664,6 +673,48 @@
     );
   }
 
+  const RARITY_COLORS={bust:'rgba(221,227,239,.35)',blue:'#4a90d9',purple:'#9b59d9',pink:'#d94f9b',gold:'#e8a427','gold-ultra':'#ffe080',ultra:'#a064ff',jackpot:'#ff4040','golden-trigger':'#e8a427'};
+
+  function timeAgo(ts){
+    const s=Math.floor((Date.now()-ts)/1000);
+    if(s<60)return `${s}s ago`;
+    if(s<3600)return `${Math.floor(s/60)}m ago`;
+    return `${Math.floor(s/3600)}h ago`;
+  }
+
+  function RecentDrops(){
+    const[drops,setDrops]=React.useState([]);
+    React.useEffect(()=>{
+      function load(){fetch('/gamble/history').then(r=>r.json()).then(d=>{if(Array.isArray(d))setDrops(d);}).catch(()=>{});}
+      load();
+      const id=setInterval(load,15000);
+      return()=>clearInterval(id);
+    },[]);
+    if(!drops.length)return null;
+    return(
+      <div style={{marginBottom:48}}>
+        <div className="drops-title">Recent Drops</div>
+        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+          {drops.map((d,i)=>(
+            <div key={i} className="drop-row">
+              {d.avatar?<img className="drop-avatar" src={d.avatar} alt=""/>:<div className="drop-avatar"/>}
+              <div style={{minWidth:0,flex:'0 0 auto',maxWidth:110}}>
+                <div className="drop-user">{d.displayName||d.username}</div>
+                <div className="drop-case">{d.caseName}</div>
+              </div>
+              <div style={{fontSize:11,color:'var(--mu)',flexShrink:0}}>→</div>
+              <div className="drop-item" style={{color:RARITY_COLORS[d.itemRarity]||'#fff',flex:1}}>
+                {d.isGolden&&<span style={{color:'#e8a427',marginRight:4}}>✨</span>}
+                {d.itemName}
+              </div>
+              <div className="drop-time">{timeAgo(d.ts)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   function App(){
     const{user,setUser,sessionId,loading,logout}=useSession();
     const[cases,setCases]=React.useState([]);
@@ -721,6 +772,7 @@
             </a>
           ))}
         </div>
+        <RecentDrops/>
       </div>
       <footer><div className="wrap"><div className="ftw">
         <p className="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair.</p>
