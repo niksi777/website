@@ -270,7 +270,8 @@ const STORE_PRIZES = {
 // Max payout = 100x case cost. Golden spin has store prizes + points.
 // All golden spin items use 'gold' rarity so they share the same golden visual style.
 // 'gold-big' = slightly brighter gold for larger prizes. 'gold-ultra' = special top prize.
-const GAMBLE_CASES = [
+const CASES_PATH = require('path').join(__dirname, '../../cases.json');
+let GAMBLE_CASES = [
   { id:'starter', name:'Starter Case', cost:50, emoji:'📦',
     items:[
       {name:'Nothing',points:0,weight:900,rarity:'bust'},
@@ -343,6 +344,12 @@ const GAMBLE_CASES = [
       {name:'$100 Bonus Buy x2',...STORE_PRIZES.bonus100,points:0,weight:15,rarity:'gold-ultra'},
     ]},
 ];
+
+// Load persisted case config from file if it exists
+try {
+  const saved = JSON.parse(require('fs').readFileSync(CASES_PATH, 'utf8'));
+  if (Array.isArray(saved) && saved.length) { GAMBLE_CASES = saved; console.log('[cases] Loaded from cases.json'); }
+} catch(e) {}
 
 app.get('/gamble/cases', (req, res) => {
   res.json(GAMBLE_CASES.map(c => ({ id:c.id, name:c.name, cost:c.cost, emoji:c.emoji, items:c.items, goldenItems:c.goldenItems })));
@@ -699,6 +706,24 @@ app.post('/admin/points', (req, res) => {
   else if (action === 'set') pts[key] = Math.max(0, Number(amount));
   require('fs').writeFileSync(ptsPath, JSON.stringify(pts, null, 2));
   res.json({ ok: true, username: key, newBalance: pts[key] });
+});
+
+app.get('/admin/cases', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  res.json(GAMBLE_CASES);
+});
+
+app.post('/admin/cases', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const { cases } = req.body;
+  if (!Array.isArray(cases) || !cases.length) return res.status(400).json({ error: 'Invalid data' });
+  GAMBLE_CASES = cases;
+  require('fs').writeFileSync(CASES_PATH, JSON.stringify(cases, null, 2));
+  res.json({ ok: true });
 });
 
 app.get('/admin/accounts', (req, res) => {

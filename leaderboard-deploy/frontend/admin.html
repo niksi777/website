@@ -61,6 +61,21 @@
     .forbidden-box{text-align:center;max-width:320px}
     .forbidden-box h2{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase;color:var(--rd);margin-bottom:10px}
     .forbidden-box p{font-size:13px;color:var(--mu);line-height:1.6}
+    .tab-bar{display:flex;gap:4px;background:var(--s1);border-radius:10px;padding:4px;border:1px solid var(--b2);width:fit-content;margin-bottom:28px}
+    .tab-btn{padding:7px 22px;border-radius:7px;border:none;cursor:pointer;background:transparent;color:var(--mu);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:all .15s}
+    .tab-btn.on{background:rgba(255,255,255,.1);color:#fff}
+    .ce-inp{background:var(--s2);border:1px solid var(--b2);border-radius:6px;padding:7px 10px;color:#fff;font-size:12px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+    .ce-inp:focus{border-color:var(--b3)}
+    .ce-sel{background:var(--s2);border:1px solid var(--b2);border-radius:6px;padding:7px 10px;color:#fff;font-size:12px;font-family:'Inter',sans-serif;outline:none;cursor:pointer}
+    .ce-lbl{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+    .ce-table{width:100%;border-collapse:collapse}
+    .ce-table th{padding:8px 10px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-align:left;border-bottom:1px solid var(--b2);white-space:nowrap}
+    .ce-table td{padding:7px 10px;border-bottom:1px solid var(--b1);vertical-align:middle}
+    .ce-table tbody tr:last-child td{border-bottom:none}
+    .btn-remove{background:rgba(217,79,79,.12);border:1px solid rgba(217,79,79,.25);color:#d94f4f;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:600}
+    .btn-add{background:rgba(255,255,255,.05);border:1px solid var(--b2);color:var(--mu);border-radius:7px;padding:7px 14px;cursor:pointer;font-size:11px;font-weight:600;margin-top:8px}
+    .btn-save{padding:10px 28px;border-radius:8px;background:#22c55e;color:#fff;border:none;cursor:pointer;font-weight:700;font-size:13px;letter-spacing:.06em}
+    .btn-save:disabled{opacity:.5;cursor:not-allowed}
     @media(max-width:700px){.stat-row{grid-template-columns:1fr 1fr}.nlinks{display:none}}
   </style>
 </head>
@@ -123,6 +138,7 @@
 
   function App() {
     const { user, sessionId, loading } = useSession();
+    const [tab, setTab] = React.useState('users');
     const [accounts, setAccounts] = React.useState([]);
     const [fetching, setFetching] = React.useState(false);
     const [search, setSearch] = React.useState('');
@@ -165,6 +181,14 @@
           <div className="page-header f1">
             <div className="page-title">Admin Panel</div>
           </div>
+
+          {/* Tab bar */}
+          <div className="tab-bar f1">
+            <button className={`tab-btn${tab==='users'?' on':''}`} onClick={()=>setTab('users')}>Users</button>
+            <button className={`tab-btn${tab==='cases'?' on':''}`} onClick={()=>setTab('cases')}>Cases</button>
+          </div>
+
+          {tab==='cases' ? <CasesEditor sessionId={sessionId}/> : <>
 
           {/* Points Manager - top bar */}
           <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
@@ -248,8 +272,133 @@
             )}
           </div>
 
+        </>}
         </div>
       </>
+    );
+  }
+
+  const RARITIES=['bust','blue','purple','pink','gold','gold-ultra','golden-trigger'];
+
+  function ItemsTable({items,pool,showIsGolden,showStoreItem,onUpdate,onAdd,onRemove}){
+    const totalW=items.reduce((s,i)=>s+Number(i.weight||0),0);
+    return(
+      <div style={{marginBottom:24}}>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
+          <div className="ce-lbl" style={{marginBottom:0}}>{pool==='items'?'Main Pool':'Golden Spin Pool'}</div>
+          <div style={{fontSize:11,color:'var(--mu)'}}>total weight: {totalW}</div>
+        </div>
+        <div style={{background:'var(--s2)',borderRadius:10,overflow:'auto',border:'1px solid var(--b1)'}}>
+          <table className="ce-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Points</th><th>Weight</th><th>%</th><th>Rarity</th>
+                {showIsGolden&&<th>Golden?</th>}
+                {showStoreItem&&<th>Store item?</th>}
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item,i)=>(
+                <tr key={i}>
+                  <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(i,'name',e.target.value)} style={{width:140}}/></td>
+                  <td><input className="ce-inp" type="number" value={item.points} onChange={e=>onUpdate(i,'points',Number(e.target.value))} style={{width:80}}/></td>
+                  <td><input className="ce-inp" type="number" value={item.weight} onChange={e=>onUpdate(i,'weight',Number(e.target.value))} style={{width:70}}/></td>
+                  <td style={{fontSize:11,color:'var(--mu)',whiteSpace:'nowrap'}}>{totalW>0?((item.weight/totalW)*100).toFixed(1):'0.0'}%</td>
+                  <td>
+                    <select className="ce-sel" value={item.rarity} onChange={e=>onUpdate(i,'rarity',e.target.value)}>
+                      {RARITIES.map(r=><option key={r} value={r}>{r}</option>)}
+                    </select>
+                  </td>
+                  {showIsGolden&&<td style={{textAlign:'center'}}><input type="checkbox" checked={!!item.isGolden} onChange={e=>onUpdate(i,'isGolden',e.target.checked)}/></td>}
+                  {showStoreItem&&<td style={{textAlign:'center'}}><input type="checkbox" checked={!!item.storeItem} onChange={e=>onUpdate(i,'storeItem',e.target.checked)}/></td>}
+                  <td><button className="btn-remove" onClick={()=>onRemove(i)}>Remove</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <button className="btn-add" onClick={onAdd}>+ Add Item</button>
+      </div>
+    );
+  }
+
+  function CasesEditor({sessionId}){
+    const [cases,setCases]=React.useState(null);
+    const [activeIdx,setActiveIdx]=React.useState(0);
+    const [saving,setSaving]=React.useState(false);
+    const [msg,setMsg]=React.useState('');
+
+    React.useEffect(()=>{
+      fetch('/admin/cases',{headers:{'x-session-id':sessionId}})
+        .then(r=>r.json())
+        .then(d=>{if(Array.isArray(d))setCases(JSON.parse(JSON.stringify(d)));});
+    },[sessionId]);
+
+    function setField(cIdx,field,val){
+      setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][field]=val;return n;});
+    }
+    function setItem(cIdx,pool,iIdx,field,val){
+      setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool][iIdx][field]=val;return n;});
+    }
+    function addItem(cIdx,pool){
+      setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool].push({name:'New Item',points:0,weight:10,rarity:'bust'});return n;});
+    }
+    function removeItem(cIdx,pool,iIdx){
+      setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool].splice(iIdx,1);return n;});
+    }
+
+    async function save(){
+      setSaving(true);setMsg('');
+      try{
+        const r=await fetch('/admin/cases',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({cases,session:sessionId})});
+        const d=await r.json();
+        setMsg(r.ok?'✓ Saved':d.error||'Error');
+      }catch(e){setMsg('Network error');}
+      setSaving(false);
+      setTimeout(()=>setMsg(''),3000);
+    }
+
+    if(!cases)return <div style={{padding:'40px 0',textAlign:'center',color:'var(--mu)'}}>Loading cases...</div>;
+    const c=cases[activeIdx];
+
+    return(
+      <div className="f2">
+        {/* Case selector tabs */}
+        <div style={{display:'flex',gap:8,marginBottom:24,flexWrap:'wrap'}}>
+          {cases.map((cas,i)=>(
+            <button key={i} onClick={()=>setActiveIdx(i)} style={{padding:'8px 18px',borderRadius:8,border:'1px solid',borderColor:activeIdx===i?'rgba(255,255,255,.3)':'var(--b2)',background:activeIdx===i?'rgba(255,255,255,.08)':'transparent',color:activeIdx===i?'#fff':'var(--mu)',cursor:'pointer',fontSize:13,fontWeight:600}}>
+              {cas.emoji} {cas.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Case header fields */}
+        <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'20px',marginBottom:24}}>
+          <div style={{display:'flex',gap:16,flexWrap:'wrap',alignItems:'flex-end'}}>
+            <div><div className="ce-lbl">Case Name</div><input className="ce-inp" value={c.name} onChange={e=>setField(activeIdx,'name',e.target.value)} style={{width:180}}/></div>
+            <div><div className="ce-lbl">Cost (pts)</div><input className="ce-inp" type="number" value={c.cost} onChange={e=>setField(activeIdx,'cost',Number(e.target.value))} style={{width:100}}/></div>
+            <div><div className="ce-lbl">Emoji</div><input className="ce-inp" value={c.emoji||''} onChange={e=>setField(activeIdx,'emoji',e.target.value)} style={{width:60}}/></div>
+          </div>
+        </div>
+
+        {/* Item tables */}
+        <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'20px',marginBottom:24}}>
+          <ItemsTable items={c.items} pool="items" showIsGolden={true} showStoreItem={false}
+            onUpdate={(i,f,v)=>setItem(activeIdx,'items',i,f,v)}
+            onAdd={()=>addItem(activeIdx,'items')}
+            onRemove={i=>removeItem(activeIdx,'items',i)}/>
+          <ItemsTable items={c.goldenItems||[]} pool="goldenItems" showIsGolden={false} showStoreItem={true}
+            onUpdate={(i,f,v)=>setItem(activeIdx,'goldenItems',i,f,v)}
+            onAdd={()=>addItem(activeIdx,'goldenItems')}
+            onRemove={i=>removeItem(activeIdx,'goldenItems',i)}/>
+        </div>
+
+        <div style={{display:'flex',alignItems:'center',gap:12}}>
+          <button className="btn-save" onClick={save} disabled={saving}>{saving?'Saving...':'Save All Cases'}</button>
+          {msg&&<span style={{fontSize:13,color:msg.includes('✓')?'#22c55e':'#ef4444'}}>{msg}</span>}
+        </div>
+      </div>
     );
   }
 
