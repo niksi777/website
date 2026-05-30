@@ -744,6 +744,24 @@ app.get('/admin/cases', (req, res) => {
   res.json(GAMBLE_CASES);
 });
 
+// Bot API — authenticated by BOT_API_SECRET in .env
+app.post('/bot/points', (req, res) => {
+  if (req.headers['x-bot-secret'] !== process.env.BOT_API_SECRET) return res.status(403).json({ error: 'Forbidden' });
+  const { username, amount, action } = req.body;
+  if (!username || amount == null || !action) return res.status(400).json({ error: 'Missing fields' });
+  const ptsPath = require('path').join(__dirname, '../../points.json');
+  let pts = {};
+  try { pts = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
+  const key = username.toLowerCase();
+  const current = pts[key] || 0;
+  if (action === 'add') pts[key] = current + Number(amount);
+  else if (action === 'remove') pts[key] = Math.max(0, current - Number(amount));
+  else if (action === 'set') pts[key] = Math.max(0, Number(amount));
+  else return res.status(400).json({ error: 'Invalid action' });
+  require('fs').writeFileSync(ptsPath, JSON.stringify(pts, null, 2));
+  res.json({ ok: true, username: key, action, newBalance: pts[key] });
+});
+
 app.post('/admin/cases', (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
   const session = sessions[sessionId];
