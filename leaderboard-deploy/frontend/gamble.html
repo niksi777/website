@@ -367,7 +367,7 @@
       });
       const stageW=stage.offsetWidth;
       const center=stageW/2-TILE/2;
-      const cardNudge=(Math.random()-0.5)*TILE*0.75; // ±54px — pointer always stays on winner
+      const cardNudge=(Math.random()>0.5?1:-1)*(0.35+Math.random()*0.13)*TILE; // ±50-69px, always baiting
       const targetX=-(landIdx*TILE)+center+cardNudge;
       const animDuration=fast?1400:5800;
       // Capture track start position for accurate bezier tick timing
