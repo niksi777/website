@@ -311,21 +311,19 @@
   }
 
   function ItemsTable({items,pool,showIsGolden,showStoreItem,onUpdate,onAdd,onRemove}){
-    const totalW=items.reduce((s,i)=>s+Number(i.weight||0),0);
+    const totalPct=items.reduce((s,i)=>s+Number(i._pct||0),0);
+    const pctOk=Math.abs(totalPct-100)<0.05;
     return(
       <div style={{marginBottom:24}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
           <div className="ce-lbl" style={{marginBottom:0}}>{pool==='items'?'Main Pool':'Golden Spin Pool'}</div>
-          <div style={{fontSize:11,color:'var(--mu)'}}>total weight: {totalW}</div>
-          <div style={{fontSize:11,fontWeight:600,color:Math.abs(items.reduce((s,i)=>s+(totalW>0?i.weight/totalW*100:0),0)-100)<0.1?'#22c55e':'#e8a427'}}>
-            {items.reduce((s,i)=>s+(totalW>0?i.weight/totalW*100:0),0).toFixed(1)}% total
-          </div>
+          <div style={{fontSize:12,fontWeight:700,color:pctOk?'#22c55e':'#e8a427'}}>{totalPct.toFixed(2)}% total {pctOk?'✓':'— must equal 100%'}</div>
         </div>
         <div style={{background:'var(--s2)',borderRadius:10,overflow:'auto',border:'1px solid var(--b1)'}}>
           <table className="ce-table">
             <thead>
               <tr>
-                <th>Name</th><th>Points</th><th>Weight</th><th>% (editable)</th><th>Rarity</th>
+                <th>Name</th><th>Points</th><th>%</th><th>Rarity</th>
                 {showIsGolden&&<th>Golden?</th>}
                 {showStoreItem&&<th>Store item?</th>}
                 <th></th>
@@ -334,20 +332,9 @@
             <tbody>
               {items.map((item,i)=>(
                 <tr key={i}>
-                  <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(i,'name',e.target.value)} style={{width:140}}/></td>
+                  <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(i,'name',e.target.value)} style={{width:150}}/></td>
                   <td><input className="ce-inp" type="number" value={item.points} onChange={e=>onUpdate(i,'points',Number(e.target.value))} style={{width:80}}/></td>
-                  <td><input className="ce-inp" type="number" value={item.weight} onChange={e=>onUpdate(i,'weight',Number(e.target.value))} style={{width:70}}/></td>
-                  <td>{(() => {
-                    const pctVal = totalW>0 ? ((item.weight/totalW)*100).toFixed(2) : '0.00';
-                    function onPctChange(e) {
-                      const newPct = parseFloat(e.target.value);
-                      if (isNaN(newPct) || newPct <= 0 || newPct >= 100) return;
-                      const otherTotal = items.reduce((s,it,j)=>j!==i?s+Number(it.weight||0):s,0);
-                      const newWeight = Math.round(newPct / (100 - newPct) * otherTotal);
-                      onUpdate(i,'weight',newWeight);
-                    }
-                    return <input className="ce-inp" type="number" step="0.01" value={pctVal} onChange={onPctChange} style={{width:72}}/>;
-                  })()}</td>
+                  <td><input className="ce-inp" type="number" step="0.01" value={item._pct??0} onChange={e=>onUpdate(i,'_pct',parseFloat(e.target.value)||0)} style={{width:80}}/></td>
                   <td>
                     <select className="ce-sel" value={item.rarity} onChange={e=>onUpdate(i,'rarity',e.target.value)}>
                       {RARITIES.map(r=><option key={r} value={r}>{r}</option>)}
@@ -372,10 +359,20 @@
     const [saving,setSaving]=React.useState(false);
     const [msg,setMsg]=React.useState('');
 
+    function injectPcts(d){
+      d.forEach(cas=>{
+        ['items','goldenItems'].forEach(pool=>{
+          const tw=(cas[pool]||[]).reduce((s,i)=>s+Number(i.weight||0),0);
+          (cas[pool]||[]).forEach(item=>{item._pct=tw>0?parseFloat((item.weight/tw*100).toFixed(2)):0;});
+        });
+      });
+      return d;
+    }
+
     React.useEffect(()=>{
       fetch('/admin/cases',{headers:{'x-session-id':sessionId}})
         .then(r=>r.json())
-        .then(d=>{if(Array.isArray(d))setCases(JSON.parse(JSON.stringify(d)));});
+        .then(d=>{if(Array.isArray(d))setCases(injectPcts(JSON.parse(JSON.stringify(d))));});
     },[sessionId]);
 
     function setField(cIdx,field,val){
@@ -385,7 +382,7 @@
       setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool][iIdx][field]=val;return n;});
     }
     function addItem(cIdx,pool){
-      setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool].push({name:'New Item',points:0,weight:10,rarity:'bust'});return n;});
+      setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool].push({name:'New Item',points:0,weight:10,rarity:'bust',_pct:0});return n;});
     }
     function removeItem(cIdx,pool,iIdx){
       setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool].splice(iIdx,1);return n;});
@@ -394,8 +391,21 @@
     async function save(){
       setSaving(true);setMsg('');
       try{
-        const r=await fetch('/admin/cases',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({cases,session:sessionId})});
+        // Convert _pct → weight (normalise to 1000 total), strip _pct before sending
+        const cleaned=JSON.parse(JSON.stringify(cases));
+        cleaned.forEach(cas=>{
+          ['items','goldenItems'].forEach(pool=>{
+            if(!cas[pool])return;
+            const sumPct=cas[pool].reduce((s,i)=>s+Number(i._pct||0),0);
+            cas[pool].forEach(item=>{
+              item.weight=sumPct>0?Math.round(Number(item._pct||0)/sumPct*1000):item.weight;
+              delete item._pct;
+            });
+          });
+        });
+        const r=await fetch('/admin/cases',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({cases:cleaned,session:sessionId})});
         const d=await r.json();
+        if(r.ok){setCases(injectPcts(JSON.parse(JSON.stringify(cleaned))));}
         setMsg(r.ok?'✓ Saved':d.error||'Error');
       }catch(e){setMsg('Network error');}
       setSaving(false);
