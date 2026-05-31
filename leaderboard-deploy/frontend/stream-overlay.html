@@ -84,25 +84,27 @@
       height:260px;flex-shrink:0;
       border-top:1px solid rgba(255,255,255,.06);
       display:flex;flex-direction:column;
+      position:relative;overflow:hidden;
+    }
+    /* Soft vignette edges on webcam */
+    .webcam-wrap::after{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      box-shadow:inset 0 0 28px 14px #07080c;
+      z-index:2;
     }
     .webcam-inner{
       flex:1;
       display:flex;align-items:center;justify-content:center;
     }
-    .webcam-hint{font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.15);text-align:center}
+    .webcam-hint{font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.15);text-align:center;position:relative;z-index:3}
 
     /* ─── BOTTOM STRIP ──────────────────────────────────────────── */
     .bottom-strip{
       position:fixed;left:18px;top:911px;
       width:1884px;height:151px;
-      border:1px solid rgba(255,255,255,.08);
-      border-top:2px solid rgba(232,164,39,.35);
-      border-radius:12px;
       background-color:#07080c;
       background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);
       background-size:28px 28px;
-      display:flex;align-items:center;justify-content:center;
-      overflow:hidden;
     }
 
     /* Giveaway idle */
