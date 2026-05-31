@@ -688,10 +688,10 @@
     const[toast,setToast]=React.useState(null);
     const[visible,setVisible]=React.useState(false);
     React.useEffect(()=>{
-      // TEMP: always show for testing — revert after 5 min
+      if(sessionStorage.getItem('winToastShown'))return;
       fetch('/gamble/history').then(r=>r.json()).then(data=>{
         if(!Array.isArray(data))return;
-        const win=data.find(d=>d.itemRarity!=='bust');
+        const win=data.find(d=>d.itemRarity!=='bust'&&Date.now()-d.ts<86400000&&!DROPS_HIDDEN.includes((d.username||'').toLowerCase()));
         if(win){setToast(win);setVisible(true);sessionStorage.setItem('winToastShown','1');setTimeout(()=>setVisible(false),6000);}
       }).catch(()=>{});
     },[]);
