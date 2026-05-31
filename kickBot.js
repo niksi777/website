@@ -82,9 +82,12 @@ async function sendMessage(text) {
 }
 
 // â”€â”€â”€ PERMISSIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function isModOrBroadcaster(username, isBadgeMod = false) {
+function isBroadcaster(username) {
   const u = username.toLowerCase();
-  return u === CHANNEL.toLowerCase() || MODS.includes(u) || isBadgeMod;
+  return u === CHANNEL.toLowerCase() || MODS.includes(u);
+}
+function isModOrBroadcaster(username, isBadgeMod = false) {
+  return isBroadcaster(username) || isBadgeMod;
 }
 
 // â”€â”€â”€ EARLY POINTS ROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -105,7 +108,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
   const cmd = parts[0].toLowerCase();
 
   if (cmd === '!raffle') {
-    if (!isModOrBroadcaster(username, isBadgeMod)) return;
+    if (!isBroadcaster(username)) return;
     const result = openRaffle(sendMessage);
     if (!result.success) await sendMessage(result.message);
     return;
@@ -118,7 +121,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
   }
 
   if (cmd === '!early') {
-    if (!isModOrBroadcaster(username, isBadgeMod)) return;
+    if (!isBroadcaster(username)) return;
     if (earlyRaffle) { await sendMessage('An early points roll is already active! Type !join to enter.'); return; }
     earlyRaffle = { entries: new Set() };
     await sendMessage('ðŸŽ° Early Points Roll! Type !join to enter â€” winner gets 25 points! Rolling in 2 minutes!');
@@ -134,7 +137,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
   }
 
   if (cmd === '!cancelraffle') {
-    if (!isModOrBroadcaster(username, isBadgeMod)) return;
+    if (!isBroadcaster(username)) return;
     const result = cancelRaffle();
     await sendMessage(result.message);
     return;
@@ -153,7 +156,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
     return;
   }
 
-  if (!isModOrBroadcaster(username, isBadgeMod)) return;
+  if (!isBroadcaster(username)) return;
 
   if (cmd === '!addpoints') {
     const target = parts[1]?.replace('@', '').trim().toLowerCase();
