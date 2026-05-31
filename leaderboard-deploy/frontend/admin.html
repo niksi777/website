@@ -289,30 +289,46 @@
   };
   function CaseGraphic({id,size=120}){
     const t=CASE_THEMES[id]||CASE_THEMES.starter;
-    const w=size,h=Math.round(size*0.78);
-    const lid=Math.round(h*0.38);
+    const FW=84,FH=70,LID=24,DX=26,DY=16;
+    const VW=FW+DX,VH=FH+DY;
+    const cx=FW/2,lidY=DY+LID;
+    const logoR=13,logoCX=cx,logoCY=lidY+(FH-LID)/2;
+    const a=t.accent;
     const stars=Array.from({length:t.stars},(_,i)=>i);
-    const logoR=Math.round(size*0.15);
-    const logoCY=lid+Math.round((h-lid)/2);
     return(
-      <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h}
-           style={{display:'block',filter:`drop-shadow(0 0 14px ${t.glow})`,transform:'perspective(420px) rotateY(-12deg)'}}>
+      <svg viewBox={`0 0 ${VW} ${VH}`} width={size} height={Math.round(size*VH/VW)}
+           style={{display:'block',filter:`drop-shadow(0 8px 20px ${t.glow})`}}>
         <defs>
-          <linearGradient id={`lg-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid}/><stop offset="100%" stopColor={t.body}/></linearGradient>
-          <linearGradient id={`lg2-${id}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor={t.stripe} stopOpacity="1"/><stop offset="100%" stopColor={t.stripe} stopOpacity="0"/></linearGradient>
-          <clipPath id={`lc-${id}`}><circle cx={w/2} cy={logoCY} r={logoR}/></clipPath>
+          <linearGradient id={`gf-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid}/><stop offset="100%" stopColor={t.body}/></linearGradient>
+          <linearGradient id={`gl-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid} stopOpacity=".9"/><stop offset="100%" stopColor={t.lid} stopOpacity=".6"/></linearGradient>
+          <clipPath id={`lc-${id}`}><circle cx={logoCX} cy={logoCY} r={logoR}/></clipPath>
         </defs>
-        <rect x="2" y={lid} width={w-4} height={h-lid-2} rx="5" fill={`url(#lg-${id})`} stroke={t.accent} strokeWidth="1" strokeOpacity=".4"/>
-        <rect x="2" y="2" width={w-4} height={lid} rx="5" fill={t.lid} stroke={t.accent} strokeWidth="1" strokeOpacity=".5"/>
-        <rect x="2" y="2" width={w-4} height={h-4} rx="5" fill={`url(#lg2-${id})`}/>
-        <line x1="2" y1={lid+1} x2={w-2} y2={lid+1} stroke={t.accent} strokeWidth="1.5" strokeOpacity=".6"/>
-        <rect x={w/2-10} y={lid-7} width="20" height="14" rx="4" fill={t.body} stroke={t.accent} strokeWidth="1.2"/>
-        <path d={`M ${w/2-5} ${lid-7} a5 5 0 0 1 10 0`} fill="none" stroke={t.accent} strokeWidth="1.5" strokeLinecap="round"/>
-        <circle cx={w/2} cy={lid} r="2.5" fill={t.accent} opacity=".8"/>
-        {[[10,8],[w-10,8],[10,h-10],[w-10,h-10]].map(([cx,cy],i)=>(<circle key={i} cx={cx} cy={cy} r="3" fill={t.body} stroke={t.accent} strokeWidth="1" strokeOpacity=".5"/>))}
-        <circle cx={w/2} cy={logoCY} r={logoR+2} fill={t.body} stroke={t.accent} strokeWidth="1.2" strokeOpacity=".6"/>
-        <image href="/assets/niksi.png" x={w/2-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lc-${id})`}/>
-        <g transform={`translate(${w/2-stars.length*7+7},${h-12})`}>{stars.map(i=>(<text key={i} x={i*14} y="0" fontSize="10" fill={t.accent} textAnchor="middle" dominantBaseline="auto">★</text>))}</g>
+        <polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill={t.lid}/>
+        <polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill="rgba(255,255,255,.13)"/>
+        <polygon points={`${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}`} fill={t.body}/>
+        <polygon points={`${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}`} fill="rgba(0,0,0,.4)"/>
+        <polygon points={`${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}`} fill={t.body}/>
+        <polygon points={`${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}`} fill="rgba(0,0,0,.55)"/>
+        <rect x="0" y={DY} width={FW} height={LID} fill={`url(#gl-${id})`}/>
+        <rect x="0" y={lidY} width={FW} height={FH-LID} fill={`url(#gf-${id})`}/>
+        <rect x="0" y={lidY} width={FW} height={FH-LID} fill={t.stripe} opacity=".5"/>
+        <polygon points={`0,${DY} ${FW},${DY} ${FW},${FH+DY} 0,${FH+DY}`} fill="none" stroke={a} strokeWidth=".8" strokeOpacity=".5"/>
+        <polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill="none" stroke={a} strokeWidth=".8" strokeOpacity=".4"/>
+        <polygon points={`${FW},${DY} ${VW},0 ${VW},${FH} ${FW},${FH+DY}`} fill="none" stroke={a} strokeWidth=".8" strokeOpacity=".4"/>
+        <line x1="0" y1={lidY} x2={FW} y2={lidY} stroke={a} strokeWidth="2" strokeOpacity=".8"/>
+        <line x1={FW} y1={lidY} x2={VW} y2={LID} stroke={a} strokeWidth="1.5" strokeOpacity=".6"/>
+        <polyline points={`0,${DY+11} 0,${DY} 11,${DY}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <polyline points={`${FW-11},${DY} ${FW},${DY} ${FW},${DY+11}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <polyline points={`0,${FH+DY-11} 0,${FH+DY} 11,${FH+DY}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <polyline points={`${FW-11},${FH+DY} ${FW},${FH+DY} ${FW},${FH+DY-11}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <line x1={FW} y1={DY} x2={VW} y2="0" stroke={a} strokeWidth="2.5" strokeLinecap="round" strokeOpacity=".7"/>
+        <line x1={FW} y1={FH+DY} x2={VW} y2={FH} stroke={a} strokeWidth="2.5" strokeLinecap="round" strokeOpacity=".6"/>
+        <rect x={cx-9} y={lidY-7} width="18" height="13" rx="3" fill={t.body} stroke={a} strokeWidth="1.5"/>
+        <path d={`M ${cx-5} ${lidY-7} a5 5 0 0 1 10 0`} fill="none" stroke={a} strokeWidth="1.8" strokeLinecap="round"/>
+        <circle cx={cx} cy={lidY} r="2.5" fill={a} opacity=".9"/>
+        <circle cx={logoCX} cy={logoCY} r={logoR+3} fill="rgba(0,0,0,.3)" stroke={a} strokeWidth="1.5" strokeOpacity=".7"/>
+        <image href="/assets/niksi.png" x={logoCX-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lc-${id})`}/>
+        <g transform={`translate(${cx-stars.length*7+7},${FH+DY-10})`}>{stars.map(i=><text key={i} x={i*14} y="0" fontSize="9" fill={a} textAnchor="middle" dominantBaseline="auto">★</text>)}</g>
       </svg>
     );
   }
