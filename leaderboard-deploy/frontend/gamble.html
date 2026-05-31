@@ -708,7 +708,7 @@
             <span style={{color}}>{toast.itemName}</span>
           </div>
         </div>
-        <button onClick={()=>setVisible(false)} style={{background:'none',border:'none',color:'var(--mu)',cursor:'pointer',padding:'2px 4px',fontSize:14,lineHeight:1,flexShrink:0}}>✕</button>
+        <button onClick={()=>{setVisible(false);sessionStorage.setItem('winToastShown','1');}} style={{background:'none',border:'none',color:'var(--mu)',cursor:'pointer',padding:'2px 4px',fontSize:14,lineHeight:1,flexShrink:0}}>✕</button>
       </div>
     );
   }
