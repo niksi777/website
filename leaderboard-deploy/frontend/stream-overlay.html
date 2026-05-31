@@ -28,6 +28,8 @@
     .e-left  {top:0;left:0;width:18px;height:1080px}
     .e-right {top:0;right:0;width:18px;height:1080px}
     .e-gap   {top:0;left:1448px;width:20px;height:1080px}
+    /* Horizontal divider between top panels and bottom strip */
+    .e-div   {top:893px;left:0;right:0;height:18px}
 
     /* Game frame — transparent inside, border + corners only */
     .game-frame{
@@ -137,6 +139,7 @@
   <div class="e e-left"></div>
   <div class="e e-right"></div>
   <div class="e e-gap"></div>
+  <div class="e e-div"></div>
 
   <!-- Game frame (transparent cutout for game capture) -->
   <div class="game-frame">
@@ -163,6 +166,20 @@
     </div>
   </div>
 
+  <!-- Bottom strip - giveaways / banners -->
+  <div class="bottom-strip">
+    <div class="gw-idle" id="gw-idle">No active giveaway</div>
+    <div class="gw-active" id="gw-active">
+      <div class="gw-row">
+        <div class="gw-dot"></div>
+        <div class="gw-label">Giveaway - type to enter</div>
+        <div class="gw-dot"></div>
+      </div>
+      <div class="gw-keyword" id="gw-keyword">-</div>
+      <div class="gw-entries">Entries: <span id="gw-entries">0</span></div>
+      <div class="bar-track"><div class="bar-fill" id="gw-bar"></div></div>
+    </div>
+  </div>
 
 <script>
   let DURATION=60,secondsLeft=60,timerInterval=null;
