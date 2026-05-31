@@ -87,6 +87,15 @@ function isModOrBroadcaster(username) {
   return u === CHANNEL.toLowerCase() || MODS.includes(u);
 }
 
+// ─── CUSTOM COMMANDS ──────────────────────────────────────────────────────────
+const CMDS_PATH = path.join(__dirname, 'commands.json');
+function loadCmds() {
+  try { return JSON.parse(fs.readFileSync(CMDS_PATH, 'utf8')); } catch { return {}; }
+}
+function saveCmds(cmds) {
+  fs.writeFileSync(CMDS_PATH, JSON.stringify(cmds, null, 2));
+}
+
 // ─── COMMANDS ─────────────────────────────────────────────────────────────────
 async function handleCommand(username, message) {
   const parts = message.trim().split(/\s+/);
@@ -148,6 +157,51 @@ async function handleCommand(username, message) {
     const amount = parseInt(parts[2]);
     if (!target || isNaN(amount) || amount < 0) { await sendMessage('Usage: !setpoints <user> <amount>'); return; }
     await sendMessage(`Set @${target} points to ${setPoints(target, amount).toLocaleString()}`);
+    return;
+  }
+
+  if (cmd === '!addcom') {
+    if (!isModOrBroadcaster(username)) return;
+    const name = parts[1]?.toLowerCase();
+    const text = parts.slice(2).join(' ');
+    if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !addcom !command response text'); return; }
+    const cmds = loadCmds();
+    if (cmds[name]) { await sendMessage(`Command ${name} already exists. Use !editcom to update it.`); return; }
+    cmds[name] = text;
+    saveCmds(cmds);
+    await sendMessage(`Command ${name} added.`);
+    return;
+  }
+
+  if (cmd === '!editcom') {
+    if (!isModOrBroadcaster(username)) return;
+    const name = parts[1]?.toLowerCase();
+    const text = parts.slice(2).join(' ');
+    if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !editcom !command new response text'); return; }
+    const cmds = loadCmds();
+    if (!cmds[name]) { await sendMessage(`Command ${name} doesn't exist. Use !addcom to create it.`); return; }
+    cmds[name] = text;
+    saveCmds(cmds);
+    await sendMessage(`Command ${name} updated.`);
+    return;
+  }
+
+  if (cmd === '!delcom') {
+    if (!isModOrBroadcaster(username)) return;
+    const name = parts[1]?.toLowerCase();
+    if (!name || !name.startsWith('!')) { await sendMessage('Usage: !delcom !command'); return; }
+    const cmds = loadCmds();
+    if (!cmds[name]) { await sendMessage(`Command ${name} doesn't exist.`); return; }
+    delete cmds[name];
+    saveCmds(cmds);
+    await sendMessage(`Command ${name} deleted.`);
+    return;
+  }
+
+  // Custom command lookup (available to everyone)
+  const cmds = loadCmds();
+  if (cmds[cmd]) {
+    await sendMessage(cmds[cmd]);
     return;
   }
 }
