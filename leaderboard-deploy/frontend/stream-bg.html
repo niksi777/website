@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      width:1920px;height:1080px;overflow:hidden;
+      background-color:#07080c;
+      background-image:radial-gradient(circle,rgba(255,255,255,.055) 1px,transparent 1px);
+      background-size:28px 28px;
+    }
+    /* Ambient light matching the website */
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse 900px 500px at 0% 0%,rgba(140,170,210,.05),transparent 60%),
+        radial-gradient(ellipse 700px 700px at 100% 100%,rgba(110,140,190,.04),transparent 60%),
+        radial-gradient(ellipse 600px 400px at 100% 0%,rgba(232,164,39,.03),transparent 60%);
+    }
+  </style>
+</head>
+<body></body>
+</html>
