@@ -11,190 +11,161 @@
       font-family:'Inter',sans-serif;
     }
 
-    /* ─── RIGHT SIDEBAR ─────────────────────────────────── */
+    /* ─── LAYOUT MEASUREMENTS (matching screenshot) ──────────────────
+       Game area:   left=18  top=18  width=1430  height=1044
+       Gap:         20px
+       Sidebar:     left=1468  top=18  width=434  height=1044
+    ─────────────────────────────────────────────────────────────────── */
+
+    /* Left margin strip (top, bottom, left edge) - dark background */
+    .edge-top{position:fixed;top:0;left:0;right:0;height:18px;background:#07080c}
+    .edge-bottom{position:fixed;bottom:0;left:0;right:0;height:18px;background:#07080c}
+    .edge-left{position:fixed;top:0;left:0;width:18px;height:1080px;background:#07080c}
+
+    /* Gap strip between game and sidebar */
+    .edge-gap{position:fixed;top:0;left:1448px;width:20px;height:1080px;background:#07080c}
+
+    /* Game frame - border only, transparent inside */
+    .game-frame{
+      position:fixed;left:18px;top:18px;
+      width:1430px;height:1044px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;
+      background:transparent;
+      pointer-events:none;
+      z-index:10;
+    }
+    /* Gold corner accents */
+    .c{position:absolute;width:24px;height:24px;}
+    .c-tl{top:-1px;left:-1px;border-top:2px solid rgba(232,164,39,.5);border-left:2px solid rgba(232,164,39,.5);border-radius:12px 0 0 0}
+    .c-tr{top:-1px;right:-1px;border-top:2px solid rgba(232,164,39,.5);border-right:2px solid rgba(232,164,39,.5);border-radius:0 12px 0 0}
+    .c-bl{bottom:-1px;left:-1px;border-bottom:2px solid rgba(232,164,39,.5);border-left:2px solid rgba(232,164,39,.5);border-radius:0 0 0 12px}
+    .c-br{bottom:-1px;right:-1px;border-bottom:2px solid rgba(232,164,39,.5);border-right:2px solid rgba(232,164,39,.5);border-radius:0 0 12px 0}
+
+    /* ─── SIDEBAR ─────────────────────────────────────────────────── */
     .sidebar{
-      position:fixed;right:0;top:0;
-      width:320px;height:1080px;
+      position:fixed;left:1468px;top:18px;
+      width:434px;height:1044px;
       background-color:#07080c;
       background-image:radial-gradient(circle,rgba(255,255,255,.055) 1px,transparent 1px);
       background-size:28px 28px;
-      border-left:1px solid rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      border-top:2px solid rgba(232,164,39,.35);
+      border-radius:12px;
       display:flex;flex-direction:column;
+      overflow:hidden;
     }
 
-    /* ─── BRANDING ──────────────────────────────────────── */
+    /* Branding header */
     .brand{
-      padding:22px 20px 18px;
+      padding:20px 24px 16px;
       border-bottom:1px solid rgba(255,255,255,.06);
-      display:flex;align-items:center;justify-content:center;gap:10px;
-      text-align:center;
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      flex-shrink:0;
     }
     .brand-logo{
-      width:36px;height:36px;border-radius:50%;object-fit:cover;
+      width:38px;height:38px;border-radius:50%;object-fit:cover;
       border:2px solid rgba(232,164,39,.5);
-      box-shadow:0 0 12px rgba(232,164,39,.3);
+      box-shadow:0 0 14px rgba(232,164,39,.3);
     }
     .brand-name{
       font-family:'Barlow Condensed',sans-serif;
-      font-size:22px;font-weight:800;letter-spacing:.16em;
+      font-size:24px;font-weight:800;letter-spacing:.16em;
       text-transform:uppercase;color:#fff;
     }
-    .brand-dot{
-      width:6px;height:6px;border-radius:50%;
-      background:#22c55e;
-      box-shadow:0 0 6px rgba(34,197,94,.8);
-      animation:pulse 1.5s ease-in-out infinite;
+    .live-badge{
+      display:flex;align-items:center;gap:5px;
+      background:rgba(217,79,79,.12);border:1px solid rgba(217,79,79,.25);
+      border-radius:100px;padding:3px 8px;
     }
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .live-dot{width:5px;height:5px;border-radius:50%;background:#d94f4f;animation:pulse 1.2s ease-in-out infinite}
+    .live-txt{font-size:9px;font-weight:600;letter-spacing:.12em;color:#d94f4f;text-transform:uppercase}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 
-    /* ─── CHAT AREA ─────────────────────────────────────── */
+    /* Chat section */
     .chat-section{
-      flex:1;display:flex;flex-direction:column;
+      flex:1;display:flex;flex-direction:column;min-height:0;
       border-bottom:1px solid rgba(255,255,255,.06);
-      min-height:0;
     }
-    .section-label{
-      padding:10px 16px;
-      font-size:9px;font-weight:600;letter-spacing:.18em;
-      text-transform:uppercase;color:rgba(221,227,239,.35);
+    .section-hdr{
+      padding:8px 16px;
+      font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+      color:rgba(221,227,239,.3);text-align:center;
       border-bottom:1px solid rgba(255,255,255,.04);
-      text-align:center;
+      flex-shrink:0;
     }
-    .chat-placeholder{
-      flex:1;
-      /* OBS: position a Chat widget browser source over this area */
+    .chat-area{flex:1;/* OBS chat widget goes here */}
+
+    /* Giveaway section */
+    .giveaway-wrap{
+      padding:14px 20px 18px;
+      flex-shrink:0;
+      text-align:center;
     }
 
-    /* ─── GIVEAWAY SECTION ──────────────────────────────── */
-    .giveaway-section{
-      padding:14px 16px 16px;
-      border-top:1px solid rgba(255,255,255,.06);
-    }
-    /* Hidden when no giveaway */
-    .giveaway-idle{
-      text-align:center;
-      padding:12px 0;
-    }
-    .giveaway-idle-txt{
-      font-size:10px;font-weight:500;letter-spacing:.12em;
-      text-transform:uppercase;color:rgba(221,227,239,.2);
-    }
-    /* Active giveaway */
-    .giveaway-active{display:none;flex-direction:column;gap:8px;text-align:center;}
-    .giveaway-header{
-      display:flex;align-items:center;justify-content:center;gap:6px;
-    }
-    .giveaway-label{
-      font-size:9px;font-weight:600;letter-spacing:.18em;
-      text-transform:uppercase;color:rgba(221,227,239,.4);
-    }
-    .giveaway-dot{
-      width:5px;height:5px;border-radius:50%;
-      background:#e8a427;animation:pulse 1s ease-in-out infinite;
-    }
-    .giveaway-keyword{
+    /* Idle state */
+    .gw-idle{color:rgba(221,227,239,.2);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:6px 0;}
+
+    /* Active state */
+    .gw-active{display:none;flex-direction:column;gap:6px;align-items:center;}
+    .gw-top{display:flex;align-items:center;justify-content:center;gap:6px}
+    .gw-label{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(221,227,239,.4)}
+    .gw-dot{width:5px;height:5px;border-radius:50%;background:#e8a427;animation:pulse 1s ease-in-out infinite}
+    .gw-keyword{
       font-family:'Barlow Condensed',sans-serif;
-      font-size:32px;font-weight:800;letter-spacing:.06em;
+      font-size:42px;font-weight:800;letter-spacing:.06em;
       text-transform:uppercase;color:#e8a427;line-height:1;
     }
-    .giveaway-entries{
-      font-size:11px;color:rgba(221,227,239,.4);
-      letter-spacing:.06em;
-    }
-    .giveaway-entries span{color:rgba(221,227,239,.7);font-weight:600;}
-    .bar-track{
-      height:3px;background:rgba(255,255,255,.06);
-      border-radius:99px;overflow:hidden;margin-top:4px;
-    }
-    .bar-fill{
-      height:100%;border-radius:99px;
-      background:linear-gradient(90deg,#b06000,#e8a427,#ffe580);
-      transition:width .9s linear;width:100%;
-    }
-    .bar-fill.urgent{background:linear-gradient(90deg,#7a0000,#d94f4f,#ff8080);}
-
-    /* ─── GAME FRAME ────────────────────────────────────── */
-    .game-frame{
-      position:fixed;left:18px;top:18px;
-      width:1564px;height:1044px;
-      border:1px solid rgba(255,255,255,.07);
-      border-radius:16px;
-      /* transparent - game capture goes here */
-      pointer-events:none;
-    }
-    /* Corner accents */
-    .game-frame::before,.game-frame::after{
-      content:'';position:absolute;
-      width:28px;height:28px;
-    }
-    .game-frame::before{
-      top:-1px;left:-1px;
-      border-top:2px solid rgba(232,164,39,.4);
-      border-left:2px solid rgba(232,164,39,.4);
-      border-radius:16px 0 0 0;
-    }
-    .game-frame::after{
-      top:-1px;right:-1px;
-      border-top:2px solid rgba(232,164,39,.4);
-      border-right:2px solid rgba(232,164,39,.4);
-      border-radius:0 16px 0 0;
-    }
-
-    /* ─── BOTTOM CORNERS ON GAME FRAME ─────────────────── */
-    .corner-bl,.corner-br{
-      position:fixed;
-      width:28px;height:28px;
-    }
-    .corner-bl{
-      left:18px;bottom:18px;
-      border-bottom:2px solid rgba(232,164,39,.4);
-      border-left:2px solid rgba(232,164,39,.4);
-      border-radius:0 0 0 16px;
-    }
-    .corner-br{
-      left:1564px;bottom:18px;
-      border-bottom:2px solid rgba(232,164,39,.4);
-      border-right:2px solid rgba(232,164,39,.4);
-      border-radius:0 0 16px 0;
-    }
+    .gw-entries{font-size:12px;color:rgba(221,227,239,.4);letter-spacing:.06em}
+    .gw-entries span{color:rgba(221,227,239,.65);font-weight:600}
+    .bar-track{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;width:100%;margin-top:4px}
+    .bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#b06000,#e8a427,#ffe580);transition:width .9s linear;width:100%}
+    .bar-fill.urgent{background:linear-gradient(90deg,#7a0000,#d94f4f,#ff8080)}
   </style>
 </head>
 <body>
 
-  <!-- Game frame border (transparent inside) -->
-  <div class="game-frame"></div>
-  <div class="corner-bl"></div>
-  <div class="corner-br"></div>
+  <!-- Edge fills (dark strips around game area) -->
+  <div class="edge-top"></div>
+  <div class="edge-bottom"></div>
+  <div class="edge-left"></div>
+  <div class="edge-gap"></div>
 
-  <!-- Right sidebar -->
+  <!-- Game frame (border only - transparent inside for game capture) -->
+  <div class="game-frame">
+    <div class="c c-tl"></div>
+    <div class="c c-tr"></div>
+    <div class="c c-bl"></div>
+    <div class="c c-br"></div>
+  </div>
+
+  <!-- Sidebar -->
   <div class="sidebar">
 
-    <!-- Branding -->
     <div class="brand">
-      <img class="brand-logo" src="/assets/niksi.png" alt="niksi"/>
+      <img class="brand-logo" src="/assets/niksi.png" alt=""/>
       <div class="brand-name">Niksi777</div>
-      <div class="brand-dot"></div>
-    </div>
-
-    <!-- Chat area (OBS adds chat widget browser source positioned here) -->
-    <div class="chat-section">
-      <div class="section-label">Live Chat</div>
-      <div class="chat-placeholder"></div>
-    </div>
-
-    <!-- Giveaway -->
-    <div class="giveaway-section">
-      <div class="giveaway-idle" id="giveaway-idle">
-        <div class="giveaway-idle-txt">No active giveaway</div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <div class="live-txt">Live</div>
       </div>
-      <div class="giveaway-active" id="giveaway-active">
-        <div class="giveaway-header">
-          <div class="giveaway-dot"></div>
-          <div class="giveaway-label">Giveaway - type to enter</div>
-          <div class="giveaway-dot"></div>
+    </div>
+
+    <div class="chat-section">
+      <div class="section-hdr">Live Chat</div>
+      <div class="chat-area"></div>
+    </div>
+
+    <div class="giveaway-wrap">
+      <div class="gw-idle" id="gw-idle">No active giveaway</div>
+      <div class="gw-active" id="gw-active">
+        <div class="gw-top">
+          <div class="gw-dot"></div>
+          <div class="gw-label">Giveaway - type to enter</div>
+          <div class="gw-dot"></div>
         </div>
-        <div class="giveaway-keyword" id="gw-keyword">-</div>
-        <div class="giveaway-entries">Entries: <span id="gw-entries">0</span></div>
+        <div class="gw-keyword" id="gw-keyword">-</div>
+        <div class="gw-entries">Entries: <span id="gw-entries">0</span></div>
         <div class="bar-track"><div class="bar-fill" id="gw-bar"></div></div>
       </div>
     </div>
@@ -202,56 +173,45 @@
   </div>
 
 <script>
-  let DURATION=60, secondsLeft=60, timerInterval=null;
-
+  let DURATION=60,secondsLeft=60,timerInterval=null;
   function startTimer(dur){
-    DURATION=dur; secondsLeft=dur; clearInterval(timerInterval);
+    DURATION=dur;secondsLeft=dur;clearInterval(timerInterval);
     timerInterval=setInterval(()=>{
       secondsLeft=Math.max(0,secondsLeft-1);
       const pct=(secondsLeft/DURATION)*100;
       const bar=document.getElementById('gw-bar');
       bar.style.width=pct+'%';
       bar.className='bar-fill'+(secondsLeft<=10?' urgent':'');
-      if(secondsLeft===0) clearInterval(timerInterval);
+      if(secondsLeft===0)clearInterval(timerInterval);
     },1000);
   }
-
   function stopTimer(){
     clearInterval(timerInterval);
     const bar=document.getElementById('gw-bar');
-    bar.style.width='100%';
-    bar.className='bar-fill';
+    bar.style.width='100%';bar.className='bar-fill';
   }
-
   async function pollTimer(){
-    try{
-      const d=await fetch('/giveaway/timer').then(r=>r.json());
-      if(d.signal==='start') startTimer(d.duration||60);
-      else if(d.signal==='stop') stopTimer();
+    try{const d=await fetch('/giveaway/timer').then(r=>r.json());
+      if(d.signal==='start')startTimer(d.duration||60);
+      else if(d.signal==='stop')stopTimer();
     }catch(e){}
   }
-
   async function pollState(){
-    try{
-      const d=await fetch('/giveaway/state').then(r=>r.json());
-      const idle=document.getElementById('giveaway-idle');
-      const active=document.getElementById('giveaway-active');
+    try{const d=await fetch('/giveaway/state').then(r=>r.json());
       if(d.giveaway&&!d.giveaway.winner){
-        idle.style.display='none';
-        active.style.display='flex';
+        document.getElementById('gw-idle').style.display='none';
+        const a=document.getElementById('gw-active');a.style.display='flex';
         document.getElementById('gw-keyword').textContent=d.giveaway.keyword;
         document.getElementById('gw-entries').textContent=d.entries?d.entries.length:0;
       }else{
-        idle.style.display='block';
-        active.style.display='none';
+        document.getElementById('gw-idle').style.display='block';
+        document.getElementById('gw-active').style.display='none';
         stopTimer();
       }
     }catch(e){}
   }
-
-  pollState(); pollTimer();
-  setInterval(pollState,2000);
-  setInterval(pollTimer,1000);
+  pollState();pollTimer();
+  setInterval(pollState,2000);setInterval(pollTimer,1000);
 </script>
 </body>
 </html>
