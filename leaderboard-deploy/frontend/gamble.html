@@ -688,11 +688,11 @@
     const[toast,setToast]=React.useState(null);
     const[visible,setVisible]=React.useState(false);
     React.useEffect(()=>{
-      if(sessionStorage.getItem('winToastShown'))return;
+      if(localStorage.getItem('winToastShown'))return;
       fetch('/gamble/history').then(r=>r.json()).then(data=>{
         if(!Array.isArray(data))return;
         const win=data.find(d=>d.itemRarity!=='bust'&&Date.now()-d.ts<86400000&&!DROPS_HIDDEN.includes((d.username||'').toLowerCase()));
-        if(win){setToast(win);setVisible(true);sessionStorage.setItem('winToastShown','1');setTimeout(()=>setVisible(false),6000);}
+        if(win){setToast(win);setVisible(true);localStorage.setItem('winToastShown','1');setTimeout(()=>setVisible(false),6000);}
       }).catch(()=>{});
     },[]);
     if(!toast||!visible)return null;
@@ -708,7 +708,7 @@
             <span style={{color}}>{toast.itemName}</span>
           </div>
         </div>
-        <button onClick={()=>{setVisible(false);sessionStorage.setItem('winToastShown','1');}} style={{background:'none',border:'none',color:'var(--mu)',cursor:'pointer',padding:'2px 4px',fontSize:14,lineHeight:1,flexShrink:0}}>✕</button>
+        <button onClick={()=>{setVisible(false);localStorage.setItem('winToastShown','1');}} style={{background:'none',border:'none',color:'var(--mu)',cursor:'pointer',padding:'2px 4px',fontSize:14,lineHeight:1,flexShrink:0}}>✕</button>
       </div>
     );
   }
