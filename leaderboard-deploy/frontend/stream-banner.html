@@ -5,141 +5,150 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=Inter:wght@600;700&display=swap" rel="stylesheet"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{
-      width:640px;height:130px;overflow:hidden;
-      background:transparent;
-    }
+    html,body{width:460px;height:130px;overflow:hidden;background:transparent}
 
-    /* ─── OUTER BANNER FRAME ──────────────────────────────── */
+    /* ─── BANNER FRAME ─────────────────────────────────────── */
     .banner{
-      width:640px;height:130px;
+      width:460px;height:130px;
       background:#0c0d10;
       border:1px solid rgba(255,255,255,.12);
       border-top:2px solid #e8a427;
       border-radius:10px;
-      overflow:hidden;
-      position:relative;
+      overflow:hidden;position:relative;
     }
-
-    /* Animated swoosh background */
-    .swoosh{position:absolute;inset:0;overflow:hidden;z-index:0;opacity:1}
-    .swoosh svg{position:absolute;width:200%;height:200%;top:-50%;left:-25%}
+    .swoosh{position:absolute;inset:0;overflow:hidden;z-index:0}
+    .swoosh svg{position:absolute;width:220%;height:220%;top:-60%;left:-30%}
     .sw1{animation:sw 9s ease-in-out infinite;opacity:.06}
     .sw2{animation:sw 13s ease-in-out infinite reverse;opacity:.04}
-    @keyframes sw{0%,100%{transform:translateX(0) rotate(0deg)}50%{transform:translateX(-60px) rotate(2deg)}}
+    @keyframes sw{0%,100%{transform:translateX(0)}50%{transform:translateX(-50px)}}
+    .vignette{position:absolute;inset:0;z-index:1;pointer-events:none;box-shadow:inset 30px 0 30px rgba(0,0,0,.5),inset -30px 0 30px rgba(0,0,0,.5)}
 
-    /* Edge vignette */
-    .vignette{position:absolute;inset:0;z-index:1;pointer-events:none;
-      box-shadow:inset 40px 0 40px rgba(0,0,0,.5),inset -40px 0 40px rgba(0,0,0,.5);
-    }
-
-    /* ─── SLIDES ───────────────────────────────────────────── */
+    /* ─── SLIDES ─────────────────────────────────────────────── */
     .slides{position:absolute;inset:0;z-index:2}
-    .slide{
-      position:absolute;inset:0;
-      display:flex;align-items:center;justify-content:center;
-      gap:14px;padding:0 28px;
-      opacity:0;transition:opacity .6s ease;
-    }
+    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:12px;padding:0 22px;opacity:0;transition:opacity .6s ease}
     .slide.active{opacity:1}
 
-    /* ─── TYPOGRAPHY ───────────────────────────────────────── */
-    .val{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:52px;font-weight:900;line-height:1;
-      color:#fff;text-transform:uppercase;letter-spacing:.02em;
-      text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 20px rgba(255,255,255,.1);
-      white-space:nowrap;text-align:center;
-    }
+    /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+    .val{font-family:'Barlow Condensed',sans-serif;font-size:50px;font-weight:900;line-height:1;color:#fff;text-transform:uppercase;letter-spacing:.02em;text-shadow:2px 2px 0 rgba(0,0,0,.6);white-space:nowrap;text-align:center}
     .val.gold{color:#e8a427;text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 20px rgba(232,164,39,.4)}
     .val.teal{color:#00c8d4;text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 20px rgba(0,200,212,.4)}
-    .sub{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:16px;font-weight:800;letter-spacing:.1em;
-      text-transform:uppercase;color:rgba(255,255,255,.6);
-      text-align:center;line-height:1.3;
-    }
+    .sub{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;line-height:1.3}
     .sub.bright{color:rgba(255,255,255,.9)}
     .stack{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
-    .div{width:1px;height:60px;background:rgba(255,255,255,.12);flex-shrink:0}
-
-    /* ─── LOGOS ────────────────────────────────────────────── */
-    .gamba-logo{height:50px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(0,200,212,.3))}
-    .niksi-logo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(232,164,39,.5);box-shadow:0 0 10px rgba(232,164,39,.3)}
-    .coin{height:46px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,164,39,.5))}
-
-    /* ─── GOLD ARROWS (lossback) ───────────────────────────── */
+    .div{width:1px;height:55px;background:rgba(255,255,255,.12);flex-shrink:0}
+    .gamba-logo{height:44px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(0,200,212,.3))}
+    .niksi-logo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(232,164,39,.5);box-shadow:0 0 10px rgba(232,164,39,.3)}
+    .coin{height:42px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,164,39,.5))}
     .arrows{display:flex;flex-direction:column;gap:3px;flex-shrink:0}
-    .arr{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:15px solid #e8a427;filter:drop-shadow(0 0 4px rgba(232,164,39,.8))}
-
-    /* ─── ANIMATED 70% ─────────────────────────────────────── */
+    .arr{width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:14px solid #e8a427;filter:drop-shadow(0 0 4px rgba(232,164,39,.8))}
     .bounce{animation:bounce 1.8s ease-in-out infinite}
-    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
     .pulse-glow{animation:pglow 1.8s ease-in-out infinite}
-    @keyframes pglow{0%,100%{text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 10px rgba(232,164,39,.2)}50%{text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 30px rgba(232,164,39,.8),0 0 60px rgba(232,164,39,.3)}}
+    @keyframes pglow{0%,100%{text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 10px rgba(232,164,39,.2)}50%{text-shadow:2px 2px 0 rgba(0,0,0,.6),0 0 30px rgba(232,164,39,.9),0 0 60px rgba(232,164,39,.4)}}
 
-    /* ─── CASE OPENING ANIMATION ───────────────────────────── */
-    .case-wrap{position:relative;flex-shrink:0}
-    .case-lid{transform-origin:top center;animation:openLid 2s ease-in-out forwards}
-    @keyframes openLid{0%{transform:scaleY(1) translateY(0)}60%{transform:scaleY(0) translateY(-20px)}100%{transform:scaleY(0) translateY(-20px)}}
-    .case-glow{
-      position:absolute;top:20%;left:50%;transform:translateX(-50%);
-      width:60px;height:60px;border-radius:50%;
-      background:radial-gradient(circle,rgba(232,164,39,.9),transparent 70%);
-      opacity:0;animation:glowBurst 2s ease-in-out forwards;
+    /* ─── MINI SPINNER (slide 1) ─────────────────────────────── */
+    .spinner-wrap{
+      width:100%;height:100%;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:4px;
     }
-    @keyframes glowBurst{0%,40%{opacity:0;transform:translateX(-50%) scale(0.3)}60%,80%{opacity:1;transform:translateX(-50%) scale(1.4)}100%{opacity:0;transform:translateX(-50%) scale(2)}}
-
-    /* Slide 1 only shows for 3s then transitions */
-    .slide-intro{animation:introHold 3s ease forwards}
-    @keyframes introHold{0%,70%{opacity:1}100%{opacity:0}}
+    .spinner-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(221,227,239,.4);text-align:center}
+    .spinner-stage-wrap{position:relative;width:100%}
+    /* Top pointer */
+    .ptr-top{
+      position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;
+      border-top:12px solid #4a90d9;z-index:10;filter:drop-shadow(0 0 4px rgba(74,144,217,.7));
+    }
+    /* Bottom pointer */
+    .ptr-bot{
+      position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;
+      border-bottom:12px solid #4a90d9;z-index:10;filter:drop-shadow(0 0 4px rgba(74,144,217,.7));
+    }
+    .spinner-stage{
+      width:100%;height:62px;overflow:hidden;position:relative;
+      background:#080a0e;
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    /* left/right fade edges */
+    .spinner-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:60px;background:linear-gradient(to right,#080a0e,transparent);z-index:4}
+    .spinner-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:60px;background:linear-gradient(to left,#080a0e,transparent);z-index:4}
+    .spinner-track{
+      display:flex;align-items:center;gap:4px;
+      position:absolute;top:0;height:100%;padding:0 4px;
+      /* Animation: fast start, ease-out stop. 16 cards * 48px = 768px total.
+         Winner is card index 11. Winner center = 11*48+24 = 552.
+         Container center = 230. Final translateX = -(552-230) = -322px.
+         Start 440px to the right so it flies in. */
+      transform:translateX(118px);
+      animation:spin 2.8s cubic-bezier(.06,.95,.25,1) forwards;
+    }
+    @keyframes spin{
+      0%  {transform:translateX(118px)}
+      100%{transform:translateX(-322px)}
+    }
+    .rc{
+      flex-shrink:0;width:44px;height:54px;border-radius:5px;
+      background:linear-gradient(160deg,#0f1218,#0a0c10);
+      border:1px solid rgba(255,255,255,.07);
+      display:flex;align-items:center;justify-content:center;
+      font-size:20px;position:relative;overflow:hidden;
+    }
+    .rc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(255,255,255,.08)}
+    .rc.gold{border-color:rgba(232,164,39,.6);background:linear-gradient(160deg,#141006,#0d0c0a)}
+    .rc.gold::after{background:#e8a427}
+    .rc-img{width:28px;height:28px;object-fit:contain}
+    /* Winner highlight that appears at the end */
+    .winner-flash{
+      position:absolute;left:50%;transform:translateX(-50%);top:0;bottom:0;
+      width:52px;background:rgba(232,164,39,.0);z-index:5;pointer-events:none;
+      animation:flash 2.8s ease forwards;
+    }
+    @keyframes flash{0%,85%{background:rgba(232,164,39,0);box-shadow:none}92%,100%{background:rgba(232,164,39,.12);box-shadow:inset 0 0 10px rgba(232,164,39,.4)}}
   </style>
 </head>
 <body>
 <div class="banner">
-
-  <!-- Background swoosh -->
   <div class="swoosh">
-    <svg viewBox="0 0 1280 260"><path class="sw1" d="M-200,200 Q200,20 500,140 Q800,260 1100,80 Q1300,0 1500,120" fill="none" stroke="#fff" stroke-width="200"/><path class="sw2" d="M-100,60 Q300,220 600,80 Q900,-60 1200,180 Q1400,260 1600,100" fill="none" stroke="#fff" stroke-width="140"/></svg>
+    <svg viewBox="0 0 1000 260"><path class="sw1" d="M-200,200 Q200,20 500,140 Q800,260 1100,80 Q1300,0 1500,120" fill="none" stroke="#fff" stroke-width="200"/><path class="sw2" d="M-100,60 Q300,220 600,80 Q900,-60 1200,180 Q1400,260 1600,100" fill="none" stroke="#fff" stroke-width="140"/></svg>
   </div>
   <div class="vignette"></div>
 
   <div class="slides">
 
-    <!-- SLIDE 1: Case opening intro → leaderboard -->
-    <div class="slide" id="s1">
-      <div class="case-wrap">
-        <!-- Inline mini 3D case -->
-        <svg viewBox="0 0 110 86" width="88" height="69" style="display:block;filter:drop-shadow(0 4px 12px rgba(232,164,39,.7))">
-          <defs>
-            <linearGradient id="gf1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a2000"/><stop offset="100%" stop-color="#1e1000"/></linearGradient>
-            <linearGradient id="gl1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a2000" stop-opacity=".9"/><stop offset="100%" stop-color="#3a2000" stop-opacity=".6"/></linearGradient>
-            <clipPath id="lcc"><circle cx="42" cy="57" r="13"/></clipPath>
-          </defs>
-          <polygon points="0,16 26,0 110,0 84,16" fill="#3a2000"/><polygon points="0,16 26,0 110,0 84,16" fill="rgba(255,255,255,.13)"/>
-          <polygon points="84,16 110,0 110,24 84,40" fill="#1e1000"/><polygon points="84,16 110,0 110,24 84,40" fill="rgba(0,0,0,.4)"/>
-          <polygon points="84,40 110,24 110,70 84,86" fill="#1e1000"/><polygon points="84,40 110,24 110,70 84,86" fill="rgba(0,0,0,.55)"/>
-          <g class="case-lid">
-            <rect x="0" y="16" width="84" height="24" fill="url(#gl1)"/>
-            <polygon points="84,16 110,0 110,24 84,40" fill="#2a1500" opacity=".9"/>
-          </g>
-          <rect x="0" y="40" width="84" height="46" fill="url(#gf1)"/>
-          <line x1="0" y1="40" x2="84" y2="40" stroke="#e8a427" stroke-width="2" stroke-opacity=".8"/>
-          <polyline points="0,27 0,16 11,16" fill="none" stroke="#e8a427" stroke-width="2.5" stroke-linecap="square" stroke-opacity=".85"/>
-          <polyline points="73,16 84,16 84,27" fill="none" stroke="#e8a427" stroke-width="2.5" stroke-linecap="square" stroke-opacity=".85"/>
-          <polyline points="0,75 0,86 11,86" fill="none" stroke="#e8a427" stroke-width="2.5" stroke-linecap="square" stroke-opacity=".85"/>
-          <polyline points="73,86 84,86 84,75" fill="none" stroke="#e8a427" stroke-width="2.5" stroke-linecap="square" stroke-opacity=".85"/>
-          <rect x="33" y="33" width="18" height="13" rx="3" fill="#1e1000" stroke="#e8a427" stroke-width="1.5"/>
-          <path d="M 37 33 a5 5 0 0 1 10 0" fill="none" stroke="#e8a427" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="42" cy="40" r="2.5" fill="#e8a427" opacity=".9"/>
-          <circle cx="42" cy="57" r="16" fill="rgba(0,0,0,.3)" stroke="#e8a427" stroke-width="1.5" stroke-opacity=".7"/>
-          <image href="/assets/niksi.png" x="29" y="44" width="26" height="26" clip-path="url(#lcc)"/>
-        </svg>
-        <div class="case-glow"></div>
-      </div>
-      <div class="stack">
-        <div class="sub bright">Opening...</div>
-        <div class="val gold" style="font-size:32px">Mega Case</div>
+    <!-- SLIDE 1: Actual Spinner Animation -->
+    <div class="slide" id="s1" style="padding:0">
+      <div class="spinner-wrap">
+        <div class="spinner-label">Opening Mega Case...</div>
+        <div class="spinner-stage-wrap">
+          <div class="ptr-top"></div>
+          <div class="ptr-bot"></div>
+          <div class="spinner-stage">
+            <div class="winner-flash"></div>
+            <div class="spinner-track" id="track">
+              <!-- 16 cards: mostly bust/np-coin, winner (niksi gold) at index 11 -->
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
+              <!-- INDEX 11: WINNER (gold niksi) -->
+              <div class="rc gold"><img class="rc-img" style="width:32px;height:32px;border-radius:50%;border:1.5px solid #e8a427" src="/assets/niksi.png"/></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
+              <div class="rc"><span>🗑️</span></div>
+              <div class="rc"><span>🗑️</span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -153,7 +162,7 @@
         <div class="sub">niksi777.com</div>
       </div>
       <div class="div"></div>
-      <img class="niksi-logo" src="/assets/niksi.png" alt="niksi"/>
+      <img class="niksi-logo" src="/assets/niksi.png" alt=""/>
     </div>
 
     <!-- SLIDE 3: Use Code NIKSI -->
@@ -167,7 +176,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 4: 70% Commission - animated bounce -->
+    <!-- SLIDE 4: 70% Commission - bouncing -->
     <div class="slide" id="s4">
       <div class="stack">
         <div class="sub bright">Commission</div>
@@ -176,12 +185,12 @@
       </div>
     </div>
 
-    <!-- SLIDE 5: Up to 20% Lossback -->
+    <!-- SLIDE 5: 20% Lossback -->
     <div class="slide" id="s5">
       <div class="arrows"><div class="arr"></div><div class="arr"></div></div>
       <div class="stack">
         <div class="sub bright">Up to</div>
-        <div class="val" style="font-size:42px">20% Lossback</div>
+        <div class="val" style="font-size:40px">20% Lossback</div>
         <div class="sub">on Gamba.com - code NIKSI</div>
       </div>
       <div class="arrows"><div class="arr"></div><div class="arr"></div></div>
@@ -192,25 +201,20 @@
       <img class="coin" src="/assets/np-coin.svg" alt="NP"/>
       <div class="div"></div>
       <div class="stack">
-        <div class="val gold" style="font-size:36px">Earn NiksiPoints</div>
-        <div class="sub bright">Watch stream - join giveaways - be active</div>
+        <div class="val gold" style="font-size:34px">Earn NiksiPoints</div>
+        <div class="sub bright">Watch - join giveaways - be active</div>
         <div class="sub">niksi777.com</div>
       </div>
     </div>
 
     <!-- SLIDE 7: Open Cases -->
     <div class="slide" id="s7">
-      <svg viewBox="0 0 110 86" width="72" height="56" style="display:block;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(232,164,39,.6))">
-        <defs>
-          <linearGradient id="gf2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a2000"/><stop offset="100%" stop-color="#1e1000"/></linearGradient>
-          <linearGradient id="gl2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a2000" stop-opacity=".9"/><stop offset="100%" stop-color="#3a2000" stop-opacity=".6"/></linearGradient>
-          <clipPath id="lcc2"><circle cx="42" cy="57" r="13"/></clipPath>
-        </defs>
+      <svg viewBox="0 0 110 86" width="66" height="51" style="display:block;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(232,164,39,.6))">
+        <defs><linearGradient id="gf2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a2000"/><stop offset="100%" stop-color="#1e1000"/></linearGradient><linearGradient id="gl2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a2000" stop-opacity=".9"/><stop offset="100%" stop-color="#3a2000" stop-opacity=".6"/></linearGradient><clipPath id="lcc2"><circle cx="42" cy="57" r="13"/></clipPath></defs>
         <polygon points="0,16 26,0 110,0 84,16" fill="#3a2000"/><polygon points="0,16 26,0 110,0 84,16" fill="rgba(255,255,255,.13)"/>
         <polygon points="84,16 110,0 110,24 84,40" fill="#1e1000"/><polygon points="84,16 110,0 110,24 84,40" fill="rgba(0,0,0,.4)"/>
         <polygon points="84,40 110,24 110,70 84,86" fill="#1e1000"/><polygon points="84,40 110,24 110,70 84,86" fill="rgba(0,0,0,.55)"/>
-        <rect x="0" y="16" width="84" height="24" fill="url(#gl2)"/>
-        <rect x="0" y="40" width="84" height="46" fill="url(#gf2)"/>
+        <rect x="0" y="16" width="84" height="24" fill="url(#gl2)"/><rect x="0" y="40" width="84" height="46" fill="url(#gf2)"/>
         <line x1="0" y1="40" x2="84" y2="40" stroke="#e8a427" stroke-width="2" stroke-opacity=".8"/>
         <polyline points="0,27 0,16 11,16" fill="none" stroke="#e8a427" stroke-width="2.5" stroke-linecap="square" stroke-opacity=".85"/>
         <polyline points="73,16 84,16 84,27" fill="none" stroke="#e8a427" stroke-width="2.5" stroke-linecap="square" stroke-opacity=".85"/>
@@ -223,8 +227,8 @@
         <image href="/assets/niksi.png" x="29" y="44" width="26" height="26" clip-path="url(#lcc2)"/>
       </svg>
       <div class="stack">
-        <div class="val gold" style="font-size:38px">Open Cases</div>
-        <div class="sub bright">Spend your NiksiPoints for free rewards</div>
+        <div class="val gold" style="font-size:34px">Open Cases</div>
+        <div class="sub bright">Spend NiksiPoints - free rewards</div>
         <div class="sub">niksi777.com/cases</div>
       </div>
       <img class="coin" src="/assets/np-coin.svg" alt="NP"/>
@@ -232,11 +236,11 @@
 
     <!-- SLIDE 8: NIKSI777.COM -->
     <div class="slide" id="s8">
-      <img class="niksi-logo" src="/assets/niksi.png" alt="niksi"/>
+      <img class="niksi-logo" src="/assets/niksi.png" alt=""/>
       <div class="div"></div>
       <div class="stack">
-        <div class="val" style="font-size:40px">NIKSI777.COM</div>
-        <div class="sub bright">Visit my website to see all available offers</div>
+        <div class="val" style="font-size:36px">NIKSI777.COM</div>
+        <div class="sub bright">Visit for all available offers</div>
       </div>
     </div>
 
@@ -244,26 +248,30 @@
 </div>
 
 <script>
-  const DURATIONS = [3000,6000,6000,6000,6000,6000,6000,6000]; // ms per slide
-  const slides = document.querySelectorAll('.slide');
-  let cur = 0;
+  const DURATIONS=[4000,6000,6000,6000,6000,6000,6000,6000];
+  const slides=document.querySelectorAll('.slide');
+  let cur=0;
 
-  function show(i) {
+  function restartSpinner(){
+    const t=document.getElementById('track');
+    if(!t)return;
+    t.style.animation='none';
+    void t.offsetWidth;
+    t.style.animation='';
+    const w=document.querySelector('.winner-flash');
+    if(w){w.style.animation='none';void w.offsetWidth;w.style.animation='';}
+  }
+
+  function show(i){
     slides[cur].classList.remove('active');
-    cur = i % slides.length;
+    cur=i%slides.length;
     slides[cur].classList.add('active');
-    // Restart case lid animation on slide 0
-    if (cur === 0) {
-      const lid = document.querySelector('.case-lid');
-      const glow = document.querySelector('.case-glow');
-      if (lid) { lid.style.animation='none'; void lid.offsetWidth; lid.style.animation=''; }
-      if (glow) { glow.style.animation='none'; void glow.offsetWidth; glow.style.animation=''; }
-    }
-    setTimeout(() => show(cur + 1), DURATIONS[cur]);
+    if(cur===0)setTimeout(restartSpinner,50);
+    setTimeout(()=>show(cur+1),DURATIONS[cur]);
   }
 
   slides[0].classList.add('active');
-  setTimeout(() => show(1), DURATIONS[0]);
+  setTimeout(()=>show(1),DURATIONS[0]);
 </script>
 </body>
 </html>
