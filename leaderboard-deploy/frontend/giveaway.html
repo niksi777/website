@@ -769,11 +769,16 @@
                     winnerChat.map((m,i)=>{
                       const d=new Date(m.ts);
                       const t=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+                      const renderMsg=(text)=>text.split(/(\[emote:\d+:[^\]]+\])/).map((part,j)=>{
+                        const em=part.match(/\[emote:(\d+):([^\]]+)\]/);
+                        if(em)return<img key={j} src={`https://files.kick.com/emotes/${em[1]}/fullsize`} alt={em[2]} title={em[2]} style={{width:20,height:20,verticalAlign:'middle',display:'inline-block',margin:'0 1px'}}/>;
+                        return part;
+                      });
                       return(
                         <div key={i} className="chat-msg">
                           <span className="chat-ts">{t}</span>
                           <span className="chat-user">{m.username}:</span>
-                          <span className="chat-content">{m.content}</span>
+                          <span className="chat-content">{renderMsg(m.content)}</span>
                         </div>
                       );
                     })
