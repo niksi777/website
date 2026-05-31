@@ -110,7 +110,11 @@
     .lbav{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--b2);flex-shrink:0;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--mu)}
     .lbnm{font-size:13px;font-weight:500;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .lbwg{font-family:'Inter',sans-serif;font-size:12px;font-weight:400;color:var(--mu);text-align:right;white-space:nowrap}
-    .lbrw{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-align:right;white-space:nowrap;min-width:52px}
+    .lbrw{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-align:center;white-space:nowrap;min-width:52px}
+    .lbpts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#e8a427;text-align:center;white-space:nowrap}
+    .lb-mob-right{display:none;flex-direction:column;align-items:flex-end;gap:3px}
+    .lb-mob-prize{font-size:12px;font-weight:600;color:#fff}
+    .lb-mob-pts{font-size:12px;font-weight:700;color:#e8a427}
 
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -132,14 +136,16 @@
       .stat{border-right:none;border-bottom:1px solid var(--b1);padding:14px 18px}
       .stat:last-child{border-bottom:none}
       .podium{grid-template-columns:1fr;gap:8px}
-      /* 4 columns: rank | avatar | name+wager(stacked) | prize */
+      /* 4 columns: rank | avatar | name+wager(stacked) | prize+pts(stacked) */
       .lbhead{grid-template-columns:36px 32px 1fr auto;gap:10px;padding:8px 14px}
       .lbrow{grid-template-columns:36px 32px 1fr auto;gap:10px;padding:11px 14px}
       .lbwg{display:none}
       .lbwg-sub{display:block}
       .lbnm{font-size:12px}
       .lbrk{font-size:15px}
-      .lbrw{font-size:12px;min-width:44px}
+      .lbrw{display:none}
+      .lbpts{display:none}
+      .lb-mob-right{display:flex}
     }
     @media(max-width:480px){
       .pcard{padding:14px 10px}
@@ -163,7 +169,8 @@
       .stat:last-child{border-bottom:none}
       .podium{gap:8px}
       .lbhead,.lbrow{grid-template-columns:40px 30px 1fr auto;gap:8px;padding:10px 14px}
-      .lbwg{display:none}
+      .lbwg,.lbrw,.lbpts{display:none}
+      .lb-mob-right{display:flex}
       .ftw{flex-direction:column;align-items:flex-start}
     }
   </style>
@@ -355,8 +362,9 @@
               <div className="lbh"/>
               <div className="lbh">Player</div>
               <div className="lbh" style={{textAlign:'center'}}>Wagered</div>
-              <div className="lbh" style={{textAlign:'center'}}>Prize</div>
-              <div className="lbh" style={{textAlign:'center'}}>Points</div>
+              <div className="lbh lbrw" style={{textAlign:'center'}}>Prize</div>
+              <div className="lbh lbpts" style={{textAlign:'center'}}>Points</div>
+              <div className="lbh lb-mob-right" style={{fontSize:11}}>Prize / Pts</div>
             </div>
             {rest.map((p,i)=>(
               <div key={p.id} className="lbrow">
@@ -368,7 +376,11 @@
                 </div>
                 <div className="lbwg" style={{textAlign:'center'}}>{fmtMoney(p.wager)}</div>
                 <div className="lbrw" style={{textAlign:'center'}}>{fmtMoney(p.reward)}</div>
-                <div style={{textAlign:'center',fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#e8a427',whiteSpace:'nowrap'}}>+{ptsForRank(i+4).toLocaleString()}</div>
+                <div className="lbpts" style={{textAlign:'center'}}>+{ptsForRank(i+4).toLocaleString()}</div>
+                <div className="lb-mob-right">
+                  <span className="lb-mob-prize">{fmtMoney(p.reward)}</span>
+                  <span className="lb-mob-pts">+{ptsForRank(i+4).toLocaleString()}</span>
+                </div>
               </div>
             ))}
           </div>
