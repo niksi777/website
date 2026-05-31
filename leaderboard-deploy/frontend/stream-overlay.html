@@ -11,165 +11,174 @@
       font-family:'Inter',sans-serif;
     }
 
-    /* ─── LAYOUT MEASUREMENTS (matching screenshot) ──────────────────
-       Game area:   left=18  top=18  width=1430  height=1044
-       Gap:         20px
-       Sidebar:     left=1468  top=18  width=434  height=1044
-    ─────────────────────────────────────────────────────────────────── */
+    /* ─── LAYOUT ──────────────────────────────────────────────────
+       Game area:      x=18   y=18   w=1430  h=875   (ends y=893)
+       Gap:            20px between game and sidebar
+       Sidebar:        x=1468 y=18   w=434   h=875
+         - Branding:   80px top
+         - Chat:       flex fill
+         - Webcam:     260px bottom
+       Bottom strip:   x=18   y=911  w=1884  h=151   (18+875+18=911, 911+151+18=1080)
+    ──────────────────────────────────────────────────────────────── */
 
-    /* Left margin strip (top, bottom, left edge) - dark background */
-    .edge-top{position:fixed;top:0;left:0;right:0;height:18px;background:#07080c}
-    .edge-bottom{position:fixed;bottom:0;left:0;right:0;height:18px;background:#07080c}
-    .edge-left{position:fixed;top:0;left:0;width:18px;height:1080px;background:#07080c}
+    /* Dark edge fills */
+    .e{position:fixed;background:#07080c}
+    .e-top   {top:0;left:0;right:0;height:18px}
+    .e-bottom{bottom:0;left:0;right:0;height:18px}
+    .e-left  {top:0;left:0;width:18px;height:1080px}
+    .e-right {top:0;right:0;width:18px;height:1080px}
+    .e-gap   {top:0;left:1448px;width:20px;height:1080px}
+    /* Horizontal divider between top panels and bottom strip */
+    .e-div   {top:893px;left:0;right:0;height:18px}
 
-    /* Gap strip between game and sidebar */
-    .edge-gap{position:fixed;top:0;left:1448px;width:20px;height:1080px;background:#07080c}
-
-    /* Game frame - border only, transparent inside */
+    /* Game frame — transparent inside, border + corners only */
     .game-frame{
       position:fixed;left:18px;top:18px;
-      width:1430px;height:1044px;
-      border:1px solid rgba(255,255,255,.12);
+      width:1430px;height:875px;
+      border:1px solid rgba(255,255,255,.1);
       border-radius:12px;
       background:transparent;
-      pointer-events:none;
-      z-index:10;
+      pointer-events:none;z-index:10;
     }
-    /* Gold corner accents */
-    .c{position:absolute;width:24px;height:24px;}
+    .c{position:absolute;width:22px;height:22px}
     .c-tl{top:-1px;left:-1px;border-top:2px solid rgba(232,164,39,.5);border-left:2px solid rgba(232,164,39,.5);border-radius:12px 0 0 0}
     .c-tr{top:-1px;right:-1px;border-top:2px solid rgba(232,164,39,.5);border-right:2px solid rgba(232,164,39,.5);border-radius:0 12px 0 0}
     .c-bl{bottom:-1px;left:-1px;border-bottom:2px solid rgba(232,164,39,.5);border-left:2px solid rgba(232,164,39,.5);border-radius:0 0 0 12px}
     .c-br{bottom:-1px;right:-1px;border-bottom:2px solid rgba(232,164,39,.5);border-right:2px solid rgba(232,164,39,.5);border-radius:0 0 12px 0}
 
-    /* ─── SIDEBAR ─────────────────────────────────────────────────── */
+    /* ─── RIGHT SIDEBAR ────────────────────────────────────────── */
     .sidebar{
       position:fixed;left:1468px;top:18px;
-      width:434px;height:1044px;
+      width:434px;height:875px;
+      display:flex;flex-direction:column;
+      border:1px solid rgba(255,255,255,.08);
+      border-top:2px solid rgba(232,164,39,.35);
+      border-radius:12px;overflow:hidden;
       background-color:#07080c;
-      background-image:radial-gradient(circle,rgba(255,255,255,.055) 1px,transparent 1px);
+      background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);
       background-size:28px 28px;
+    }
+
+    /* Branding */
+    .brand{
+      height:80px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:0 20px;
+      text-align:center;
+    }
+    .brand-logo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(232,164,39,.45);box-shadow:0 0 12px rgba(232,164,39,.3)}
+    .brand-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fff}
+    .live-badge{display:flex;align-items:center;gap:4px;background:rgba(217,79,79,.12);border:1px solid rgba(217,79,79,.2);border-radius:100px;padding:3px 8px;flex-shrink:0}
+    .live-dot{width:5px;height:5px;border-radius:50%;background:#d94f4f;animation:pu 1.2s ease-in-out infinite}
+    .live-txt{font-size:9px;font-weight:600;letter-spacing:.12em;color:#d94f4f;text-transform:uppercase}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.2}}
+
+    /* Chat area */
+    .chat-wrap{flex:1;display:flex;flex-direction:column;min-height:0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .sec-label{padding:8px 16px;font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(221,227,239,.28);text-align:center;border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0}
+    .chat-inner{flex:1}
+
+    /* Webcam area */
+    .webcam-wrap{
+      height:260px;flex-shrink:0;
+      border-top:1px solid rgba(255,255,255,.06);
+      display:flex;flex-direction:column;
+    }
+    .webcam-inner{
+      flex:1;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .webcam-hint{font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.15);text-align:center}
+
+    /* ─── BOTTOM STRIP ──────────────────────────────────────────── */
+    .bottom-strip{
+      position:fixed;left:18px;top:911px;
+      width:1884px;height:151px;
       border:1px solid rgba(255,255,255,.08);
       border-top:2px solid rgba(232,164,39,.35);
       border-radius:12px;
-      display:flex;flex-direction:column;
+      background-color:#07080c;
+      background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);
+      background-size:28px 28px;
+      display:flex;align-items:center;justify-content:center;
       overflow:hidden;
     }
 
-    /* Branding header */
-    .brand{
-      padding:20px 24px 16px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      display:flex;align-items:center;justify-content:center;gap:12px;
-      flex-shrink:0;
-    }
-    .brand-logo{
-      width:38px;height:38px;border-radius:50%;object-fit:cover;
-      border:2px solid rgba(232,164,39,.5);
-      box-shadow:0 0 14px rgba(232,164,39,.3);
-    }
-    .brand-name{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:24px;font-weight:800;letter-spacing:.16em;
-      text-transform:uppercase;color:#fff;
-    }
-    .live-badge{
-      display:flex;align-items:center;gap:5px;
-      background:rgba(217,79,79,.12);border:1px solid rgba(217,79,79,.25);
-      border-radius:100px;padding:3px 8px;
-    }
-    .live-dot{width:5px;height:5px;border-radius:50%;background:#d94f4f;animation:pulse 1.2s ease-in-out infinite}
-    .live-txt{font-size:9px;font-weight:600;letter-spacing:.12em;color:#d94f4f;text-transform:uppercase}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-
-    /* Chat section */
-    .chat-section{
-      flex:1;display:flex;flex-direction:column;min-height:0;
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .section-hdr{
-      padding:8px 16px;
-      font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-      color:rgba(221,227,239,.3);text-align:center;
-      border-bottom:1px solid rgba(255,255,255,.04);
-      flex-shrink:0;
-    }
-    .chat-area{flex:1;/* OBS chat widget goes here */}
-
-    /* Giveaway section */
-    .giveaway-wrap{
-      padding:14px 20px 18px;
-      flex-shrink:0;
-      text-align:center;
+    /* Giveaway idle */
+    .gw-idle{
+      font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(221,227,239,.18);text-align:center;
     }
 
-    /* Idle state */
-    .gw-idle{color:rgba(221,227,239,.2);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:6px 0;}
-
-    /* Active state */
-    .gw-active{display:none;flex-direction:column;gap:6px;align-items:center;}
-    .gw-top{display:flex;align-items:center;justify-content:center;gap:6px}
-    .gw-label{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(221,227,239,.4)}
-    .gw-dot{width:5px;height:5px;border-radius:50%;background:#e8a427;animation:pulse 1s ease-in-out infinite}
+    /* Giveaway active */
+    .gw-active{
+      display:none;flex-direction:column;align-items:center;justify-content:center;
+      gap:8px;width:100%;padding:0 60px;text-align:center;
+    }
+    .gw-row{display:flex;align-items:center;justify-content:center;gap:10px}
+    .gw-label{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(221,227,239,.4)}
+    .gw-dot{width:6px;height:6px;border-radius:50%;background:#e8a427;animation:pu 1s ease-in-out infinite;flex-shrink:0}
     .gw-keyword{
       font-family:'Barlow Condensed',sans-serif;
-      font-size:42px;font-weight:800;letter-spacing:.06em;
+      font-size:52px;font-weight:800;letter-spacing:.06em;
       text-transform:uppercase;color:#e8a427;line-height:1;
     }
-    .gw-entries{font-size:12px;color:rgba(221,227,239,.4);letter-spacing:.06em}
+    .gw-entries{font-size:12px;color:rgba(221,227,239,.4);letter-spacing:.06em;text-align:center}
     .gw-entries span{color:rgba(221,227,239,.65);font-weight:600}
-    .bar-track{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;width:100%;margin-top:4px}
+    .bar-track{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;width:600px;max-width:80%}
     .bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#b06000,#e8a427,#ffe580);transition:width .9s linear;width:100%}
     .bar-fill.urgent{background:linear-gradient(90deg,#7a0000,#d94f4f,#ff8080)}
   </style>
 </head>
 <body>
 
-  <!-- Edge fills (dark strips around game area) -->
-  <div class="edge-top"></div>
-  <div class="edge-bottom"></div>
-  <div class="edge-left"></div>
-  <div class="edge-gap"></div>
+  <!-- Edge fills -->
+  <div class="e e-top"></div>
+  <div class="e e-bottom"></div>
+  <div class="e e-left"></div>
+  <div class="e e-right"></div>
+  <div class="e e-gap"></div>
+  <div class="e e-div"></div>
 
-  <!-- Game frame (border only - transparent inside for game capture) -->
+  <!-- Game frame (transparent cutout for game capture) -->
   <div class="game-frame">
-    <div class="c c-tl"></div>
-    <div class="c c-tr"></div>
-    <div class="c c-bl"></div>
-    <div class="c c-br"></div>
+    <div class="c c-tl"></div><div class="c c-tr"></div>
+    <div class="c c-bl"></div><div class="c c-br"></div>
   </div>
 
-  <!-- Sidebar -->
+  <!-- Right sidebar -->
   <div class="sidebar">
-
     <div class="brand">
       <img class="brand-logo" src="/assets/niksi.png" alt=""/>
       <div class="brand-name">Niksi777</div>
-      <div class="live-badge">
-        <div class="live-dot"></div>
-        <div class="live-txt">Live</div>
+      <div class="live-badge"><div class="live-dot"></div><div class="live-txt">Live</div></div>
+    </div>
+    <div class="chat-wrap">
+      <div class="sec-label">Live Chat</div>
+      <div class="chat-inner"></div>
+    </div>
+    <div class="webcam-wrap">
+      <div class="sec-label">Webcam</div>
+      <div class="webcam-inner">
+        <div class="webcam-hint">Position webcam<br/>source here</div>
       </div>
     </div>
+  </div>
 
-    <div class="chat-section">
-      <div class="section-hdr">Live Chat</div>
-      <div class="chat-area"></div>
-    </div>
-
-    <div class="giveaway-wrap">
-      <div class="gw-idle" id="gw-idle">No active giveaway</div>
-      <div class="gw-active" id="gw-active">
-        <div class="gw-top">
-          <div class="gw-dot"></div>
-          <div class="gw-label">Giveaway - type to enter</div>
-          <div class="gw-dot"></div>
-        </div>
-        <div class="gw-keyword" id="gw-keyword">-</div>
-        <div class="gw-entries">Entries: <span id="gw-entries">0</span></div>
-        <div class="bar-track"><div class="bar-fill" id="gw-bar"></div></div>
+  <!-- Bottom strip - giveaways / banners -->
+  <div class="bottom-strip">
+    <div class="gw-idle" id="gw-idle">No active giveaway</div>
+    <div class="gw-active" id="gw-active">
+      <div class="gw-row">
+        <div class="gw-dot"></div>
+        <div class="gw-label">Giveaway - type to enter</div>
+        <div class="gw-dot"></div>
       </div>
+      <div class="gw-keyword" id="gw-keyword">-</div>
+      <div class="gw-entries">Entries: <span id="gw-entries">0</span></div>
+      <div class="bar-track"><div class="bar-fill" id="gw-bar"></div></div>
     </div>
-
   </div>
 
 <script>
@@ -185,11 +194,7 @@
       if(secondsLeft===0)clearInterval(timerInterval);
     },1000);
   }
-  function stopTimer(){
-    clearInterval(timerInterval);
-    const bar=document.getElementById('gw-bar');
-    bar.style.width='100%';bar.className='bar-fill';
-  }
+  function stopTimer(){clearInterval(timerInterval);const b=document.getElementById('gw-bar');b.style.width='100%';b.className='bar-fill';}
   async function pollTimer(){
     try{const d=await fetch('/giveaway/timer').then(r=>r.json());
       if(d.signal==='start')startTimer(d.duration||60);
