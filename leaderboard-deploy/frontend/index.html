@@ -139,6 +139,47 @@
 <div id="root"></div>
 <script type="text/babel">
 
+  const CASE_THEMES={
+    starter:{lid:'#1a3a6a',body:'#0d1e38',accent:'#4a90d9',glow:'rgba(74,144,217,.5)',stars:1,stripe:'rgba(74,144,217,.15)'},
+    mega:   {lid:'#3a2000',body:'#1e1000',accent:'#e8a427',glow:'rgba(232,164,39,.6)',stars:4,stripe:'rgba(232,164,39,.15)'},
+  };
+  function CaseGraphic({id,size=80}){
+    const t=CASE_THEMES[id]||CASE_THEMES.mega;
+    const FW=84,FH=70,LID=24,DX=26,DY=16,VW=FW+DX,VH=FH+DY;
+    const cx=FW/2,lidY=DY+LID,logoR=13,logoCX=cx,logoCY=lidY+(FH-LID)/2,a=t.accent;
+    const stars=Array.from({length:t.stars},(_,i)=>i);
+    function rr(ctx,x,y,w,h,r){return `M${x+r},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h-r} Q${x+w},${y+h} ${x+w-r},${y+h} L${x+r},${y+h} Q${x},${y+h} ${x},${y+h-r} L${x},${y+r} Q${x},${y} ${x+r},${y} Z`;}
+    return(
+      <svg viewBox={`0 0 ${VW} ${VH}`} width={size} height={Math.round(size*VH/VW)} style={{display:'block',filter:`drop-shadow(0 8px 20px ${t.glow})`}}>
+        <defs>
+          <linearGradient id={`gfi-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid}/><stop offset="100%" stopColor={t.body}/></linearGradient>
+          <linearGradient id={`gli-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid} stopOpacity=".9"/><stop offset="100%" stopColor={t.lid} stopOpacity=".6"/></linearGradient>
+          <clipPath id={`lci-${id}`}><circle cx={logoCX} cy={logoCY} r={logoR}/></clipPath>
+        </defs>
+        <polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill={t.lid}/><polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill="rgba(255,255,255,.13)"/>
+        <polygon points={`${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}`} fill={t.body}/><polygon points={`${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}`} fill="rgba(0,0,0,.4)"/>
+        <polygon points={`${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}`} fill={t.body}/><polygon points={`${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}`} fill="rgba(0,0,0,.55)"/>
+        <rect x="0" y={DY} width={FW} height={LID} fill={`url(#gli-${id})`}/>
+        <rect x="0" y={lidY} width={FW} height={FH-LID} fill={`url(#gfi-${id})`}/>
+        <rect x="0" y={lidY} width={FW} height={FH-LID} fill={t.stripe} opacity=".5"/>
+        <line x1="0" y1={lidY} x2={FW} y2={lidY} stroke={a} strokeWidth="2" strokeOpacity=".8"/>
+        <line x1={FW} y1={lidY} x2={VW} y2={LID} stroke={a} strokeWidth="1.5" strokeOpacity=".6"/>
+        <polyline points={`0,${DY+11} 0,${DY} 11,${DY}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <polyline points={`${FW-11},${DY} ${FW},${DY} ${FW},${DY+11}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <polyline points={`0,${FH+DY-11} 0,${FH+DY} 11,${FH+DY}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <polyline points={`${FW-11},${FH+DY} ${FW},${FH+DY} ${FW},${FH+DY-11}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
+        <line x1={FW} y1={DY} x2={VW} y2="0" stroke={a} strokeWidth="2.5" strokeLinecap="round" strokeOpacity=".7"/>
+        <line x1={FW} y1={FH+DY} x2={VW} y2={FH} stroke={a} strokeWidth="2.5" strokeLinecap="round" strokeOpacity=".6"/>
+        <rect x={cx-9} y={lidY-7} width="18" height="13" rx="3" fill={t.body} stroke={a} strokeWidth="1.5"/>
+        <path d={`M ${cx-5} ${lidY-7} a5 5 0 0 1 10 0`} fill="none" stroke={a} strokeWidth="1.8" strokeLinecap="round"/>
+        <circle cx={cx} cy={lidY} r="2.5" fill={a} opacity=".9"/>
+        <circle cx={logoCX} cy={logoCY} r={logoR+3} fill="rgba(0,0,0,.3)" stroke={a} strokeWidth="1.5" strokeOpacity=".7"/>
+        <image href="/assets/niksi.png" x={logoCX-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lci-${id})`}/>
+        <g transform={`translate(${cx-stars.length*7+7},${FH+DY-10})`}>{stars.map(i=><text key={i} x={i*14} y="0" fontSize="9" fill={a} textAnchor="middle" dominantBaseline="auto">★</text>)}</g>
+      </svg>
+    );
+  }
+
   const RACES = {
     gamba:   { prize:1500, start:new Date("2026-05-31T00:00:00Z"), end:new Date("2026-06-14T23:59:59Z"), visible:true  },
     chancer: { prize:2000, start:new Date("2026-04-23T14:00:00Z"), end:new Date("2026-05-13T14:00:00Z"), visible:false },
@@ -349,8 +390,11 @@
             </a>
           </div>
           <a href="/cases" className="bfeature">
-            <div className="bfeature-title">Points & Cases</div>
-            <div className="bfeature-desc">Earn NiksiPoints by watching, joining giveaways and being active on stream - then claim real money prizes or open cases for a shot at big rewards!</div>
+            <CaseGraphic id="mega" size={90}/>
+            <div style={{flex:1,minWidth:0}}>
+              <div className="bfeature-title">Points & Cases</div>
+              <div className="bfeature-desc">Earn NiksiPoints <img src="/assets/np-coin.svg" style={{width:16,height:16,verticalAlign:'middle',display:'inline-block',margin:'0 2px'}}/> by watching, joining giveaways and being active on stream - then claim real money prizes or open cases for a shot at big rewards!</div>
+            </div>
             <div className="bfeature-cta">Open Cases <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:13,height:13}}><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
           </a>
         </div>
