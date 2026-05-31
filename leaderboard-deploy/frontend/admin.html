@@ -295,7 +295,7 @@
     const cx=FW/2,lidY=DY+LID;
     const logoR=13,logoCX=cx,logoCY=lidY+(FH-LID)/2;
     const a=t.accent;
-    const stars=Array.from({length:t.stars},(_,i)=>i);
+    
     return(
       <svg viewBox={`0 0 ${VW} ${VH}`} width={size} height={Math.round(size*VH/VW)}
            style={{display:'block',filter:`drop-shadow(0 8px 20px ${t.glow})`}}>

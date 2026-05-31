@@ -249,7 +249,7 @@
     const cx=FW/2, lidY=DY+LID;
     const logoR=13, logoCX=cx, logoCY=lidY+(FH-LID)/2;
     const a=t.accent;
-    const stars=Array.from({length:t.stars},(_,i)=>i);
+    
     // face point helpers
     const fp=(x,y)=>`${x},${y+DY}`;           // front face (offset by DY)
     const rp=(x,y)=>`${FW+x*DX/DX},${y*DY/DY+DY-y}`; // not used, manual below

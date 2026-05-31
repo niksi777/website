@@ -147,7 +147,7 @@
     const t=CASE_THEMES[id]||CASE_THEMES.mega;
     const FW=84,FH=70,LID=24,DX=26,DY=16,VW=FW+DX,VH=FH+DY;
     const cx=FW/2,lidY=DY+LID,logoR=13,logoCX=cx,logoCY=lidY+(FH-LID)/2,a=t.accent;
-    const stars=Array.from({length:t.stars},(_,i)=>i);
+    
     function rr(ctx,x,y,w,h,r){return `M${x+r},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h-r} Q${x+w},${y+h} ${x+w-r},${y+h} L${x+r},${y+h} Q${x},${y+h} ${x},${y+h-r} L${x},${y+r} Q${x},${y} ${x+r},${y} Z`;}
     return(
       <svg viewBox={`0 0 ${VW} ${VH}`} width={size} height={Math.round(size*VH/VW)} style={{display:'block',filter:`drop-shadow(0 8px 20px ${t.glow})`}}>
@@ -390,7 +390,13 @@
             </a>
           </div>
           <a href="/cases" className="bfeature">
-            <CaseGraphic id="mega" size={90}/>
+            <div style={{display:'flex',alignItems:'center',gap:8,flexShrink:0}}>
+              <img src="/assets/np-coin.svg" style={{width:36,height:36,objectFit:'contain',filter:'drop-shadow(0 2px 6px rgba(232,164,39,.5))'}}/>
+              <span style={{fontSize:16,color:'rgba(232,164,39,.5)'}}>→</span>
+              <CaseGraphic id="mega" size={90}/>
+              <span style={{fontSize:16,color:'rgba(232,164,39,.5)'}}>←</span>
+              <img src="/assets/np-coin.svg" style={{width:36,height:36,objectFit:'contain',filter:'drop-shadow(0 2px 6px rgba(232,164,39,.5))'}}/>
+            </div>
             <div style={{flex:1,minWidth:0}}>
               <div className="bfeature-title" style={{display:'flex',alignItems:'center',gap:10}}>
                 <img src="/assets/niksi.png" style={{width:28,height:28,borderRadius:'50%',objectFit:'cover',border:'1.5px solid #e8a427',boxShadow:'0 0 8px rgba(232,164,39,.5)',filter:'sepia(.3) saturate(2) hue-rotate(5deg) brightness(1.1)'}}/>
