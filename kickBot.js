@@ -294,7 +294,7 @@ setInterval(async () => {
       if (state.giveaway.keyword !== lastAnnouncedKeyword) {
         lastAnnouncedKeyword = state.giveaway.keyword;
         const prize = state.giveaway.prize ? ` Prize: ${state.giveaway.prize}` : '';
-        await sendMessage(`🎉 Giveaway started! Type "${state.giveaway.keyword}" in chat to enter!${prize}`);
+        await sendMessage(`Giveaway started! Type "${state.giveaway.keyword}" in chat to enter!${prize}`);
       }
     } else if (!state.giveaway) {
       lastAnnouncedKeyword = null;
