@@ -334,15 +334,12 @@
     );
   }
 
-  function ItemsTable({items,pool,showIsGolden,showStoreItem,onUpdate,onAdd,onRemove,goldenTriggerPct}){
+  function ItemsTable({items,pool,showIsGolden,showStoreItem,onUpdate,onAdd,onRemove,onMove,goldenTriggerPct}){
     const isGoldenPool = pool==='goldenItems';
     const totalPct=items.reduce((s,i)=>s+Number(i._pct||0),0);
     const target = isGoldenPool ? (goldenTriggerPct||5) : 100;
     const pctOk=Math.abs(totalPct-target)<0.05;
-    // Sort golden pool by _pct descending (highest overall chance first)
-    const displayed = isGoldenPool
-      ? items.map((item,origIdx)=>({item,origIdx})).sort((a,b)=>Number(b.item._pct||0)-Number(a.item._pct||0))
-      : items.map((item,origIdx)=>({item,origIdx}));
+    const displayed = items.map((item,origIdx)=>({item,origIdx}));
     return(
       <div style={{marginBottom:24}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
@@ -355,7 +352,7 @@
           <table className="ce-table">
             <thead>
               <tr>
-                <th>Name</th><th>Points</th><th>%</th><th>Rarity</th>
+                <th></th><th>Name</th><th>Points</th><th>%</th><th>Rarity</th>
                 {showIsGolden&&<th>Golden?</th>}
                 {showStoreItem&&<th>Store item?</th>}
                 <th></th>
@@ -364,6 +361,12 @@
             <tbody>
               {displayed.map(({item,origIdx})=>(
                 <tr key={origIdx}>
+                  <td style={{padding:'4px 6px'}}>
+                    <div style={{display:'flex',flexDirection:'column',gap:2}}>
+                      <button onClick={()=>onMove(origIdx,origIdx-1)} disabled={origIdx===0} style={{background:'none',border:'1px solid var(--b2)',color:'var(--mu)',borderRadius:4,cursor:'pointer',padding:'1px 5px',fontSize:11,lineHeight:1}}>↑</button>
+                      <button onClick={()=>onMove(origIdx,origIdx+1)} disabled={origIdx===items.length-1} style={{background:'none',border:'1px solid var(--b2)',color:'var(--mu)',borderRadius:4,cursor:'pointer',padding:'1px 5px',fontSize:11,lineHeight:1}}>↓</button>
+                    </div>
+                  </td>
                   <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(origIdx,'name',e.target.value)} style={{width:150}}/></td>
                   <td><input className="ce-inp" type="number" value={item.points} onChange={e=>onUpdate(origIdx,'points',Number(e.target.value))} style={{width:80}}/></td>
                   <td><input className="ce-inp" type="number" step={isGoldenPool?'0.0001':'0.01'} value={item._pct??0} onChange={e=>onUpdate(origIdx,'_pct',parseFloat(e.target.value)||0)} style={{width:90}}/></td>
@@ -423,6 +426,15 @@
     }
     function removeItem(cIdx,pool,iIdx){
       setCases(prev=>{const n=JSON.parse(JSON.stringify(prev));n[cIdx][pool].splice(iIdx,1);return n;});
+    }
+    function moveItem(cIdx,pool,fromIdx,toIdx){
+      setCases(prev=>{
+        const n=JSON.parse(JSON.stringify(prev));
+        const arr=n[cIdx][pool];
+        if(toIdx<0||toIdx>=arr.length)return n;
+        const tmp=arr[fromIdx];arr[fromIdx]=arr[toIdx];arr[toIdx]=tmp;
+        return n;
+      });
     }
 
     async function save(){
@@ -489,7 +501,8 @@
           <ItemsTable items={c.items} pool="items" showIsGolden={true} showStoreItem={false}
             onUpdate={(i,f,v)=>setItem(activeIdx,'items',i,f,v)}
             onAdd={()=>addItem(activeIdx,'items')}
-            onRemove={i=>removeItem(activeIdx,'items',i)}/>
+            onRemove={i=>removeItem(activeIdx,'items',i)}
+            onMove={(f,t)=>moveItem(activeIdx,'items',f,t)}/>
           {(c.goldenItems&&c.goldenItems.length>0)&&(()=>{
             const mainTW=(c.items||[]).reduce((s,i)=>s+Number(i.weight||0),0);
             const goldenTriggerPct=mainTW>0?(c.items||[]).filter(i=>i.isGolden).reduce((s,i)=>s+Number(i.weight||0),0)/mainTW*100:5;
@@ -497,7 +510,8 @@
               goldenTriggerPct={goldenTriggerPct}
               onUpdate={(i,f,v)=>setItem(activeIdx,'goldenItems',i,f,v)}
               onAdd={()=>addItem(activeIdx,'goldenItems')}
-              onRemove={i=>removeItem(activeIdx,'goldenItems',i)}/>;
+              onRemove={i=>removeItem(activeIdx,'goldenItems',i)}
+              onMove={(f,t)=>moveItem(activeIdx,'goldenItems',f,t)}/>;
           })()}
         </div>
 
