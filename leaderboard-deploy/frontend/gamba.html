@@ -101,9 +101,9 @@
     .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
 
     .lbtable{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:56px}
-    .lbhead{display:grid;grid-template-columns:52px 36px 1fr auto auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
+    .lbhead{display:grid;grid-template-columns:52px 36px 1fr auto auto auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
     .lbh{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
-    .lbrow{display:grid;grid-template-columns:52px 36px 1fr auto auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
+    .lbrow{display:grid;grid-template-columns:52px 36px 1fr auto auto auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
     .lbrow:last-child{border-bottom:none}
     .lbrow:hover{background:var(--s2)}
     .lbrk{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-align:center;color:var(--mu)}
@@ -175,6 +175,11 @@
   const RACE_END   = new Date("2026-06-14T23:59:59Z");
   const RACE_START = new Date("2026-05-31T00:00:00Z");
   const PRIZE      = 1500;
+
+  // Points pool mirroring the cash prize distribution percentages
+  const POINTS_POOL = 10000;
+  const POINTS_PCT  = {1:.45,2:.25,3:.115,4:.05,5:.035,6:.03,7:.025,8:.02,9:.015,10:.01};
+  function ptsForRank(rank){ return Math.round((POINTS_PCT[rank]||0)*POINTS_POOL); }
 
   function fmtMoney(n){return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Number(n)||0)}
   function fmtCD(target){
@@ -336,6 +341,7 @@
                 <div className="puname">{p.username}</div>
                 <div className="pstat"><div className="pstat-lbl">Wagered</div><div className="pstat-val">{fmtMoney(p.wager)}</div></div>
                 <div className="pstat"><div className="pstat-lbl">Prize</div><div className="pstat-val rw">{fmtMoney(p.reward)}</div></div>
+                <div className="pstat"><div className="pstat-lbl">Points</div><div className="pstat-val" style={{color:'#e8a427'}}>+{ptsForRank(p.rank).toLocaleString()} pts</div></div>
               </div>
             ))}
           </div>
@@ -350,6 +356,7 @@
               <div className="lbh">Player</div>
               <div className="lbh" style={{textAlign:'right'}}>Wagered</div>
               <div className="lbh" style={{textAlign:'right'}}>Prize</div>
+              <div className="lbh" style={{textAlign:'right'}}>Points</div>
             </div>
             {rest.map((p,i)=>(
               <div key={p.id} className="lbrow">
@@ -361,6 +368,7 @@
                 </div>
                 <div className="lbwg">{fmtMoney(p.wager)}</div>
                 <div className="lbrw">{fmtMoney(p.reward)}</div>
+                <div style={{textAlign:'right',fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#e8a427'}}>+{ptsForRank(i+4).toLocaleString()}</div>
               </div>
             ))}
           </div>
