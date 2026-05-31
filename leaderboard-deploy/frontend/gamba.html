@@ -354,9 +354,9 @@
               <div className="lbh" style={{textAlign:'center'}}>#</div>
               <div className="lbh"/>
               <div className="lbh">Player</div>
-              <div className="lbh" style={{textAlign:'right'}}>Wagered</div>
-              <div className="lbh" style={{textAlign:'right'}}>Prize</div>
-              <div className="lbh" style={{textAlign:'right'}}>Points</div>
+              <div className="lbh" style={{textAlign:'center'}}>Wagered</div>
+              <div className="lbh" style={{textAlign:'center'}}>Prize</div>
+              <div className="lbh" style={{textAlign:'center'}}>Points</div>
             </div>
             {rest.map((p,i)=>(
               <div key={p.id} className="lbrow">
@@ -366,9 +366,9 @@
                   <div className="lbnm">{p.username}</div>
                   <div className="lbwg-sub">{fmtMoney(p.wager)} wagered</div>
                 </div>
-                <div className="lbwg">{fmtMoney(p.wager)}</div>
-                <div className="lbrw">{fmtMoney(p.reward)}</div>
-                <div style={{textAlign:'right',fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#e8a427'}}>+{ptsForRank(i+4).toLocaleString()}</div>
+                <div className="lbwg" style={{textAlign:'center'}}>{fmtMoney(p.wager)}</div>
+                <div className="lbrw" style={{textAlign:'center'}}>{fmtMoney(p.reward)}</div>
+                <div style={{textAlign:'center',fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#e8a427',whiteSpace:'nowrap'}}>+{ptsForRank(i+4).toLocaleString()}</div>
               </div>
             ))}
           </div>
