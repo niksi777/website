@@ -90,7 +90,7 @@ function isModOrBroadcaster(username, isBadgeMod = false) {
   return isBroadcaster(username) || isBadgeMod;
 }
 
-// â”€â”€â”€ EARLY POINTS ROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€â”€ EARLY NP ROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let earlyRaffle = null; // { entries: Set, timeout }
 
 // â”€â”€â”€ CUSTOM COMMANDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -122,16 +122,16 @@ async function handleCommand(username, message, isBadgeMod = false) {
 
   if (cmd === '!early') {
     if (!isBroadcaster(username)) return;
-    if (earlyRaffle) { await sendMessage('An early points roll is already active! Type !join to enter.'); return; }
+    if (earlyRaffle) { await sendMessage('An early NP roll is already active! Type !join to enter.'); return; }
     earlyRaffle = { entries: new Set() };
-    await sendMessage('ðŸŽ° Early Points Roll! Type !join to enter â€” winner gets 25 points! Rolling in 2 minutes!');
+    await sendMessage('ðŸŽ° Early NP Roll! Type !join to enter â€” winner gets 25 NP! Rolling in 2 minutes!');
     earlyRaffle.timeout = setTimeout(async () => {
       const entries = [...earlyRaffle.entries];
       earlyRaffle = null;
-      if (entries.length === 0) { await sendMessage('No one joined the early points roll!'); return; }
+      if (entries.length === 0) { await sendMessage('No one joined the early NP roll!'); return; }
       const winner = entries[Math.floor(Math.random() * entries.length)];
       const newBal = addPoints(winner, 25);
-      await sendMessage(`ðŸ† @${winner} won the early points roll and received 25 points! Balance: ${newBal.toLocaleString()} pts`);
+      await sendMessage(`ðŸ† @${winner} won the early NP roll and received 25 NP! Balance: ${newBal.toLocaleString()} NP`);
     }, 2 * 60 * 1000);
     return;
   }
@@ -145,14 +145,14 @@ async function handleCommand(username, message, isBadgeMod = false) {
 
   if (cmd === '!points') {
     const target = parts[1]?.replace('@', '') || username;
-    await sendMessage(`@${target} has ${getPoints(target).toLocaleString()} points.`);
+    await sendMessage(`@${target} has ${getPoints(target).toLocaleString()} NP.`);
     return;
   }
 
   if (cmd === '!top') {
     const lb = getLeaderboard(5);
-    if (lb.length === 0) { await sendMessage('No points data yet.'); return; }
-    await sendMessage(`Top Points: ${lb.map(e => `#${e.rank} ${e.username} (${e.points.toLocaleString()})`).join(' | ')}`);
+    if (lb.length === 0) { await sendMessage('No NP data yet.'); return; }
+    await sendMessage(`Top NP: ${lb.map(e => `#${e.rank} ${e.username} (${e.points.toLocaleString()})`).join(' | ')}`);
     return;
   }
 
@@ -173,7 +173,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
     const amount = parseInt(parts[2]);
     if (!target || isNaN(amount) || amount <= 0) { await sendMessage('Usage: !removepoints <user> <amount>'); return; }
     const result = deductPoints(target, amount);
-    if (result === null) await sendMessage(`@${target} does not have enough points.`);
+    if (result === null) await sendMessage(`@${target} does not have enough NP.`);
     else await sendMessage(`Removed ${amount.toLocaleString()} pts from @${target}. Balance: ${result.toLocaleString()}`);
     return;
   }
@@ -182,7 +182,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
     const target = parts[1]?.replace('@', '');
     const amount = parseInt(parts[2]);
     if (!target || isNaN(amount) || amount < 0) { await sendMessage('Usage: !setpoints <user> <amount>'); return; }
-    await sendMessage(`Set @${target} points to ${setPoints(target, amount).toLocaleString()}`);
+    await sendMessage(`Set @${target} NP to ${setPoints(target, amount).toLocaleString()}`);
     return;
   }
 

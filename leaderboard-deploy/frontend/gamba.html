@@ -37,7 +37,7 @@
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
     .ndrop{position:relative}
     .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
     .ndrop:hover .ndrop-menu{display:block}
@@ -114,7 +114,7 @@
     .lbpts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#e8a427;text-align:center;white-space:nowrap}
     .lb-mob-right{display:none;flex-direction:column;align-items:flex-end;gap:3px}
     .lb-mob-prize{font-size:12px;font-weight:600;color:#fff}
-    .lb-mob-pts{font-size:12px;font-weight:700;color:#e8a427}
+    .lb-mob-NP{font-size:12px;font-weight:700;color:#e8a427}
 
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -136,7 +136,7 @@
       .stat{border-right:none;border-bottom:1px solid var(--b1);padding:14px 18px}
       .stat:last-child{border-bottom:none}
       .podium{grid-template-columns:1fr;gap:8px}
-      /* 4 columns: rank | avatar | name+wager(stacked) | prize+pts(stacked) */
+      /* 4 columns: rank | avatar | name+wager(stacked) | prize+NP(stacked) */
       .lbhead{grid-template-columns:36px 32px 1fr auto;gap:10px;padding:8px 14px}
       .lbrow{grid-template-columns:36px 32px 1fr auto;gap:10px;padding:11px 14px}
       .lbwg{display:none}
@@ -257,7 +257,7 @@
           <div className="nlinks">
             <a href="/">HOME</a>
             <a href="/leaderboards" className="on">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
+            <a href="/points">NiksiPoints</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -268,7 +268,7 @@
                 <div className="nuser" style={{cursor:'default'}}>
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
@@ -294,7 +294,7 @@
       <div className={`drawer${open?' open':''}`}>
         <a href="/">HOME</a>
         <a href="/leaderboards" className="on">LEADERBOARDS</a>
-        <a href="/points">POINTS</a>
+        <a href="/points">NiksiPoints</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -348,7 +348,7 @@
                 <div className="puname">{p.username}</div>
                 <div className="pstat"><div className="pstat-lbl">Wagered</div><div className="pstat-val">{fmtMoney(p.wager)}</div></div>
                 <div className="pstat"><div className="pstat-lbl">Prize</div><div className="pstat-val rw">{fmtMoney(p.reward)}</div></div>
-                <div className="pstat"><div className="pstat-lbl">Points</div><div className="pstat-val" style={{color:'#e8a427'}}>+{ptsForRank(p.rank).toLocaleString()} pts</div></div>
+                <div className="pstat"><div className="pstat-lbl">NiksiPoints</div><div className="pstat-val" style={{color:'#e8a427'}}>+{ptsForRank(p.rank).toLocaleString()} NP</div></div>
               </div>
             ))}
           </div>
@@ -363,8 +363,8 @@
               <div className="lbh">Player</div>
               <div className="lbh" style={{textAlign:'center'}}>Wagered</div>
               <div className="lbh lbrw" style={{textAlign:'center'}}>Prize</div>
-              <div className="lbh lbpts" style={{textAlign:'center'}}>Points</div>
-              <div className="lbh lb-mob-right" style={{fontSize:11}}>Prize / Pts</div>
+              <div className="lbh lbpts" style={{textAlign:'center'}}>NiksiPoints</div>
+              <div className="lbh lb-mob-right" style={{fontSize:11}}>Prize / NP</div>
             </div>
             {rest.map((p,i)=>(
               <div key={p.id} className="lbrow">
@@ -379,7 +379,7 @@
                 <div className="lbpts" style={{textAlign:'center'}}>+{ptsForRank(i+4).toLocaleString()}</div>
                 <div className="lb-mob-right">
                   <span className="lb-mob-prize">{fmtMoney(p.reward)}</span>
-                  <span className="lb-mob-pts">+{ptsForRank(i+4).toLocaleString()}</span>
+                  <span className="lb-mob-NP">+{ptsForRank(i+4).toLocaleString()}</span>
                 </div>
               </div>
             ))}

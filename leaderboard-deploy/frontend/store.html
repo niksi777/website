@@ -37,7 +37,7 @@
     .nuser:hover{border-color:var(--b3)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
     .ndrop{position:relative}
     .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
     .ndrop:hover .ndrop-menu{display:block}
@@ -73,8 +73,8 @@
     .user-banner-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--s2);flex-shrink:0}
     .user-banner-info{flex:1}
     .user-banner-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:2px}
-    .user-banner-pts{font-size:12px;color:var(--mu)}
-    .user-banner-pts span{color:var(--gold);font-weight:600}
+    .user-banner-NP{font-size:12px;color:var(--mu)}
+    .user-banner-NP span{color:var(--gold);font-weight:600}
     .user-logout{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--mu);background:none;border:1px solid var(--b2);padding:7px 14px;border-radius:7px;cursor:pointer;transition:all .15s}
     .user-logout:hover{color:#fff;border-color:var(--b3)}
 
@@ -196,7 +196,7 @@
           <div className="nlinks">
             <a href="/">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
+            <a href="/points">NiksiPoints</a>
             <a href="/store" className="on">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -207,7 +207,7 @@
                 <div className="nuser" style={{cursor:'default'}}>
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
@@ -234,7 +234,7 @@
       <div className={`drawer${open?' open':''}`}>
         <a href="/">HOME</a>
         <a href="/leaderboards">LEADERBOARDS</a>
-        <a href="/points">POINTS</a>
+        <a href="/points">NiksiPoints</a>
         <a href="/store" className="on">STORE</a><a href="/cases">CASES</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -281,7 +281,7 @@
             <button className="modal-confirm" style={{width:'100%'}} onClick={onClose}>Close</button>
           </>) : (<>
             <h2>Redeem {item.title}</h2>
-            <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Redeeming as <strong style={{color:'#fff'}}>{user.displayName}</strong> ({(user.points||0).toLocaleString()} pts).</p>
+            <p>This costs <strong style={{color:'var(--gold)'}}>{item.cost.toLocaleString()} points</strong>. Redeeming as <strong style={{color:'#fff'}}>{user.displayName}</strong> ({(user.points||0).toLocaleString()} NP).</p>
             {!canAfford && <p style={{color:'var(--rd)',fontSize:12,marginBottom:12}}>You don't have enough points for this item.</p>}
             {!user?.discordLinked&&<div style={{fontSize:12,color:'var(--rd)',padding:'8px 12px',background:'rgba(217,79,79,.08)',borderRadius:6}}>You need to link your Discord account before redeeming. Close this and click "Link Discord".</div>}
             <input className="modal-input" placeholder="Extra note (optional)" value={note} onChange={e=>setNote(e.target.value)}/>
@@ -313,7 +313,7 @@
       <div className="wrap">
         <div className="phead f1">
           <div className="phead-eyebrow"><span className="pdot"/>Points Store</div>
-          <h1>Spend Your<br/><em>Points</em></h1>
+          <h1>Spend Your<br/><em>NiksiPoints</em></h1>
           <p>Earn points by winning raffles in chat. Redeem them here for real rewards on stream.</p>
         </div>
 
@@ -353,7 +353,7 @@
             {displayUser.avatar && <img className="user-banner-avatar" src={displayUser.avatar} alt={displayUser.displayName}/>}
             <div className="user-banner-info">
               <div className="user-banner-name">{displayUser.displayName}</div>
-              <div className="user-banner-pts">Balance: <span>{(displayUser.points||0).toLocaleString()} points</span></div>
+              <div className="user-banner-NP">Balance: <span>{(displayUser.points||0).toLocaleString()} points</span></div>
             </div>
             <div style={{display:'flex',alignItems:'center',gap:10,marginLeft:'auto'}}>
               {displayUser.discordLinked ? (
@@ -384,7 +384,7 @@
               <div className="scard-bottom">
                 <div className="scard-cost">
                   <div className="scard-cost-lbl">Cost</div>
-                  <div className="scard-cost-val">{item.cost.toLocaleString()} pts</div>
+                  <div className="scard-cost-val">{item.cost.toLocaleString()} NP</div>
                 </div>
                 <button
                   className="scard-redeem"

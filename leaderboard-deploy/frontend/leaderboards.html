@@ -93,7 +93,7 @@
     .nuser:hover{border-color:var(--b3)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
   </style>
 </head>
 <body>
@@ -142,7 +142,7 @@
           <div className="nlinks">
             <a href="/">HOME</a>
             <a href="/leaderboards" className="on">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
+            <a href="/points">NiksiPoints</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -153,7 +153,7 @@
                 <div className="nuser" style={{cursor:'default'}}>
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
@@ -178,7 +178,7 @@
       <div className={`drawer${open?' open':''}`}>
         <a href="/">HOME</a>
         <a href="/leaderboards" className="on">LEADERBOARDS</a>
-        <a href="/points">POINTS</a>
+        <a href="/points">NiksiPoints</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}

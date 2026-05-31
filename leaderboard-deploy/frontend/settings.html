@@ -28,7 +28,7 @@
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
     .wrap{max-width:600px;margin:0 auto;padding:40px 28px 80px}
     .page-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;margin-bottom:32px}
     .card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:24px;margin-bottom:16px}
@@ -37,8 +37,8 @@
     .profile-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--s2);flex-shrink:0}
     .profile-info-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:.04em}
     .profile-info-sub{font-size:12px;color:var(--mu);margin-top:3px}
-    .pts-val{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:var(--gold);line-height:1}
-    .pts-lbl{font-size:12px;color:var(--mu);margin-top:4px;letter-spacing:.06em}
+    .NP-val{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:var(--gold);line-height:1}
+    .NP-lbl{font-size:12px;color:var(--mu);margin-top:4px;letter-spacing:.06em}
     .discord-linked{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(88,101,242,.08);border:1px solid rgba(88,101,242,.25);border-radius:10px}
     .discord-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0}
     .discord-info-name{font-size:13px;font-weight:600;color:#fff}
@@ -99,7 +99,7 @@
           <div className="nlinks">
             <a href="/">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
+            <a href="/points">NiksiPoints</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -110,7 +110,7 @@
               <div className="nuser">
                 {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                 <span className="nuser-name">{user.displayName}</span>
-                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
               </div>
             )}
           </div>
@@ -159,8 +159,8 @@
           {/* Points */}
           <div className="card f1">
             <div className="card-label">Points Balance</div>
-            <div className="pts-val">{(user.points||0).toLocaleString()}</div>
-            <div className="pts-lbl">points</div>
+            <div className="NP-val">{(user.points||0).toLocaleString()}</div>
+            <div className="NP-lbl">NiksiPoints</div>
           </div>
 
           {/* Discord */}

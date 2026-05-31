@@ -1,4 +1,4 @@
-require("dotenv").config({path:"/root/website/.env"});
+﻿require("dotenv").config({path:"/root/website/.env"});
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
@@ -417,7 +417,7 @@ app.post('/gamble/open', async (req, res) => {
   let ptsData = {};
   try { ptsData = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
   const current = ptsData[session.username] || 0;
-  if (current < caseConfig.cost) return res.status(400).json({ error: `Not enough points. Have ${current}, need ${caseConfig.cost}.` });
+  if (current < caseConfig.cost) return res.status(400).json({ error: `Not enough NP. Have ${current}, need ${caseConfig.cost}.` });
   const serverSeed = cryptoPF.randomBytes(32).toString('hex');
   const resultHash = cryptoPF.createHash('sha256').update(serverSeed).digest('hex');
   const { item: regularItem, roll: roll1, totalWeight: tw1 } = weightedRoll(caseConfig.items, resultHash, 0);
@@ -868,7 +868,7 @@ app.post('/redeem', async (req, res) => {
   let ptsData = {};
   try { ptsData = JSON.parse(require('fs').readFileSync(ptsPath, 'utf8')); } catch {}
   const current = ptsData[username.toLowerCase()] || 0;
-  if (current < item.cost) return res.status(400).json({ error: `Not enough points. You have ${current}, need ${item.cost}.` });
+  if (current < item.cost) return res.status(400).json({ error: `Not enough NP. You have ${current}, need ${item.cost}.` });
   ptsData[username.toLowerCase()] = current - item.cost;
   require('fs').writeFileSync(ptsPath, JSON.stringify(ptsData, null, 2));
   console.log(`[redeem] ${username} (Discord: ${redeemSession.discordName}) redeemed ${item.title} for ${item.cost} pts. Balance: ${ptsData[username.toLowerCase()]}`);

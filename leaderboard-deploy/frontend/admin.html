@@ -28,7 +28,7 @@
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
     .wrap{max-width:1200px;margin:0 auto;padding:40px 28px 80px}
     .page-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
     .page-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em}
@@ -53,7 +53,7 @@
     .discord-mini-avatar{width:22px;height:22px;border-radius:50%;object-fit:cover;flex-shrink:0}
     .discord-name{color:rgba(136,145,242,.9);font-size:12px}
     .not-linked{color:var(--mu);font-size:12px;font-style:italic}
-    .pts-cell{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold)}
+    .NP-cell{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold)}
     .date-cell{font-size:11px;color:var(--mu)}
     .badge-linked{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:100px;background:rgba(88,101,242,.15);color:#5865F2}
     .badge-unlinked{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:100px;background:rgba(255,255,255,.05);color:var(--mu)}
@@ -111,7 +111,7 @@
           <div className="nlinks">
             <a href="/">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
+            <a href="/points">NiksiPoints</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin" className="on">ADMIN</a>}
@@ -122,7 +122,7 @@
               <div className="nuser">
                 {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                 <span className="nuser-name">{user.displayName}</span>
-                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
               </div>
             )}
           </div>
@@ -205,7 +205,7 @@
               <div className="stat-val">{linkedCount}</div>
             </div>
             <div className="stat-card">
-              <div className="stat-lbl">Total Points</div>
+              <div className="stat-lbl">Total NiksiPoints</div>
               <div className="stat-val">{totalPts.toLocaleString()}</div>
             </div>
           </div>
@@ -229,7 +229,7 @@
                     <th>Kick Account</th>
                     <th>Discord</th>
                     <th>Status</th>
-                    <th>Points</th>
+                    <th>NiksiPoints</th>
                     <th>First Seen</th>
                     <th>Last Seen</th>
                   </tr>
@@ -262,7 +262,7 @@
                           : <span className="badge-unlinked">Unlinked</span>
                         }
                       </td>
-                      <td><span className="pts-cell">{(a.points||0).toLocaleString()}</span></td>
+                      <td><span className="NP-cell">{(a.points||0).toLocaleString()}</span></td>
                       <td><span className="date-cell">{fmtDate(a.firstSeen)}</span></td>
                       <td><span className="date-cell">{fmtDate(a.lastSeen)}</span></td>
                     </tr>
@@ -352,7 +352,7 @@
           <table className="ce-table">
             <thead>
               <tr>
-                <th></th><th>Name</th><th>Points</th><th>%</th><th>Rarity</th>
+                <th></th><th>Name</th><th>NiksiPoints</th><th>%</th><th>Rarity</th>
                 {showIsGolden&&<th>Golden?</th>}
                 {showStoreItem&&<th>Store item?</th>}
                 <th></th>
@@ -491,7 +491,7 @@
         <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'20px',marginBottom:24}}>
           <div style={{display:'flex',gap:16,flexWrap:'wrap',alignItems:'flex-end'}}>
             <div><div className="ce-lbl">Case Name</div><input className="ce-inp" value={c.name} onChange={e=>setField(activeIdx,'name',e.target.value)} style={{width:180}}/></div>
-            <div><div className="ce-lbl">Cost (pts)</div><input className="ce-inp" type="number" value={c.cost} onChange={e=>setField(activeIdx,'cost',Number(e.target.value))} style={{width:100}}/></div>
+            <div><div className="ce-lbl">Cost (NP)</div><input className="ce-inp" type="number" value={c.cost} onChange={e=>setField(activeIdx,'cost',Number(e.target.value))} style={{width:100}}/></div>
             <div><div className="ce-lbl">Emoji</div><input className="ce-inp" value={c.emoji||''} onChange={e=>setField(activeIdx,'emoji',e.target.value)} style={{width:60}}/></div>
           </div>
         </div>
@@ -542,7 +542,7 @@
         });
         const d=await r.json();
         if(!r.ok){setErr(d.error||'Error');}
-        else{setMsg(`${action==='add'?'Added':'Removed'} ${amount} pts - ${d.username} now has ${d.newBalance.toLocaleString()} pts`);}
+        else{setMsg(`${action==='add'?'Added':'Removed'} ${amount} NP - ${d.username} now has ${d.newBalance.toLocaleString()} NP`);}
       }catch{setErr('Connection error');}
       setLoading(false);
     }

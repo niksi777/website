@@ -37,7 +37,7 @@
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
     .ndrop{position:relative}
     .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
     .ndrop:hover .ndrop-menu{display:block}
@@ -116,8 +116,8 @@
     .result-strip{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px;text-align:center;animation:pop .4s ease both;margin-bottom:12px}
     .result-lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
     .result-name{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;text-transform:uppercase;color:#fff;margin-bottom:4px}
-    .result-pts{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;line-height:1;color:#22c55e}
-    .result-pts.u{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
+    .result-NP{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;line-height:1;color:#22c55e}
+    .result-NP.u{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 1.5s linear infinite}
 
     /* ITEMS GRID */
     .items-section{margin-bottom:32px}
@@ -131,7 +131,7 @@
     .item-pct-badge{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;letter-spacing:.04em;z-index:2;background:rgba(0,0,0,.5);padding:3px 6px;border-radius:4px}
     .item-icon{font-size:36px;line-height:1}
     .item-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.2}
-    .item-pts{font-size:11px;opacity:.6}
+    .item-NP{font-size:11px;opacity:.6}
     .item-prob{font-size:10px;font-weight:700;letter-spacing:.06em;opacity:.8}
 
     footer{border-top:1px solid var(--b1);padding:22px 0;margin-top:40px}
@@ -197,7 +197,7 @@
     return(<nav><div className="ni">
       <a href="/" className="nlogo"><img src="/assets/niksi.png" alt=""/><span className="nname">NIKSI777</span></a>
       <div className="nlinks">
-        <a href="/">HOME</a><a href="/leaderboards">LEADERBOARDS</a><a href="/points">POINTS</a><a href="/store">STORE</a>
+        <a href="/">HOME</a><a href="/leaderboards">LEADERBOARDS</a><a href="/points">NiksiPoints</a><a href="/store">STORE</a>
         <a href="/cases" className={activeCaseId?'':'on'}>CASES</a>
         {user&&user.isAdmin&&<><a href="/giveaway">GIVEAWAY</a><a href="/admin">ADMIN</a></>}
       </div>
@@ -207,7 +207,7 @@
             <div className="nuser" style={{cursor:'default'}}>
               {user.avatar&&<img className="nuser-avatar" src={user.avatar} alt=""/>}
               <span className="nuser-name">{user.displayName}</span>
-              <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+              <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
             </div>
             <div className="ndrop-menu"><div className="ndrop-box">
               <a href="/settings" className="ndrop-item">Settings</a>
@@ -389,7 +389,7 @@
     if(item.isGolden) return GOLD_LOGO;
     if(item.rarity==='bust') return `<span style="font-size:28px;line-height:1">🗑️</span>`;
     if(item.storeItem) return `<img src="/assets/gamba.png" style="width:32px;height:32px;object-fit:contain"/><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.04em;margin-top:2px">${item.name}</div>`;
-    if(item.points>0) return `<div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1">${item.points.toLocaleString()}</div><div style="font-size:9px;color:rgba(221,227,239,.4);letter-spacing:.06em;text-transform:uppercase">pts</div>`;
+    if(item.points>0) return `<div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1">${item.points.toLocaleString()}</div><div style="font-size:9px;color:rgba(221,227,239,.4);letter-spacing:.06em;text-transform:uppercase">NP</div>`;
     return '';
   }
 
@@ -485,7 +485,7 @@
             :item.storeItem
               ?<div className="item-name" style={{color:displayR.color,fontSize:12}}>{item.name}</div>
               :item.points>0
-                ?<div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:displayR.color,lineHeight:1}}>{item.points.toLocaleString()} pts</div>
+                ?<div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:displayR.color,lineHeight:1}}>{item.points.toLocaleString()} NP</div>
                 :<div className="item-name" style={{color:'rgba(150,150,180,.6)'}}>Nothing</div>
           }
         </div>
@@ -559,7 +559,7 @@
           <div style={{position:'absolute',left:'50%',transform:'translateX(-50%)',textAlign:'center'}}>
             <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:28,fontWeight:800,textTransform:'uppercase',color:'#fff',letterSpacing:'.04em',lineHeight:1}}>{caseData.name}</div>
           </div>
-          {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0,marginLeft:'auto'}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} pts</strong></div>}
+          {user&&<div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:8,padding:'7px 14px',fontSize:12,color:'var(--mu)',flexShrink:0,marginLeft:'auto'}}>Balance: <strong style={{color:'var(--gold)'}}>{(user.points||0).toLocaleString()} NP</strong></div>}
         </div>
 
         {/* Case graphic centered above spinner */}
@@ -639,10 +639,10 @@
                 :undefined}
               disabled={!(phase==='idle'||phase==='done')||!user||(!canOpen&&phase==='idle')}>
               {!user?'Login to Open'
-                :!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} pts`
+                :!canOpen&&phase==='idle'?`Need ${caseData.cost.toLocaleString()} NP`
                 :phase==='done'?'Open Again'
                 :phase!=='idle'?'Spinning...'
-                :`Open for ${caseData.cost.toLocaleString()} pts`}
+                :`Open for ${caseData.cost.toLocaleString()} NP`}
             </button>
           )}
         </div>
@@ -654,7 +654,7 @@
             <div className="result-lbl">{result.goldenItem?'Golden Spin Result':'Result'}</div>
             <div className="result-name" style={{color:finalItem.rarity==='bust'?'rgba(221,227,239,.5)':(RARITIES[finalItem.rarity]?.color||'#fff')}}>{finalItem.name}</div>
             {result.storeWin&&<div style={{color:'#22c55e',fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800}}>🎁 Check Discord!</div>}
-            {!result.storeWin&&result.pointsWon>0&&<div className={`result-pts${finalItem.rarity==='ultra'?' u':''}`}>+{result.pointsWon.toLocaleString()} pts</div>}
+            {!result.storeWin&&result.pointsWon>0&&<div className={`result-NP${finalItem.rarity==='ultra'?' u':''}`}>+{result.pointsWon.toLocaleString()} NP</div>}
             {!result.isDemo&&result.proof&&<button onClick={()=>setShowProof(p=>!p)} style={{marginTop:8,background:'none',border:'1px solid var(--b2)',color:'var(--mu)',padding:'4px 12px',borderRadius:6,cursor:'pointer',fontSize:10,letterSpacing:'.08em',textTransform:'uppercase'}}>{showProof?'Hide Proof':'Verify (Provably Fair)'}</button>}
             {showProof&&result.proof&&(
               <div style={{marginTop:8,background:'var(--s2)',border:'1px solid var(--b1)',borderRadius:8,padding:'10px 14px',fontSize:10,color:'var(--mu)',lineHeight:2,wordBreak:'break-all',textAlign:'left'}}>
@@ -860,7 +860,7 @@
               </div>
               <div className="case-body">
                 <div className="case-name">{c.name}</div>
-                <div className="case-cost">Cost to open: {c.cost.toLocaleString()} pts</div>
+                <div className="case-cost">Cost to open: {c.cost.toLocaleString()} NP</div>
               </div>
             </a>
           ))}

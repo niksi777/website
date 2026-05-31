@@ -37,7 +37,7 @@
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
     .ndrop{position:relative}
     .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
     .ndrop:hover .ndrop-menu{display:block}
@@ -217,7 +217,7 @@
         <div className="nlinks">
           <a href="/">HOME</a>
           <a href="/leaderboards">LEADERBOARDS</a>
-          <a href="/points">POINTS</a>
+          <a href="/points">NiksiPoints</a>
           <a href="/store">STORE</a><a href="/cases">CASES</a>
           {user && user.isAdmin && <a href="/giveaway" className="on">GIVEAWAY</a>}
           {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -228,7 +228,7 @@
               <div className="nuser" style={{cursor:'default'}}>
                 {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                 <span className="nuser-name">{user.displayName}</span>
-                <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
               </div>
                         <div className="ndrop-menu">
                 <div className="ndrop-box">
@@ -253,7 +253,7 @@
       <div className={'drawer'+(open?' open':'')}>
         <a href="/">HOME</a>
         <a href="/leaderboards">LEADERBOARDS</a>
-        <a href="/points">POINTS</a>
+        <a href="/points">NiksiPoints</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a>
         {user && user.isAdmin && <a href="/giveaway" className="on">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}

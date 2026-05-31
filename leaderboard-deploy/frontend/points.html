@@ -126,7 +126,7 @@
     .nuser:hover{border-color:var(--b3)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
   </style>
 </head>
 <body>
@@ -175,7 +175,7 @@
           <div className="nlinks">
             <a href="/">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points" className="on">POINTS</a>
+            <a href="/points" className="on">NiksiPoints</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -186,7 +186,7 @@
                 <div className="nuser" style={{cursor:'default'}}>
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-pts">{(user.points||0).toLocaleString()} pts</span>
+                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
@@ -211,7 +211,7 @@
       <div className={`drawer${open?' open':''}`}>
         <a href="/">HOME</a>
         <a href="/leaderboards">LEADERBOARDS</a>
-        <a href="/points" className="on">POINTS</a>
+        <a href="/points" className="on">NiksiPoints</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -239,7 +239,7 @@
     const totalPts = lb.reduce((s,p)=>s+p.points,0);
 
     const [username,setUsername]=React.useState('');
-    const [pts,setPts]=React.useState(null);
+    const [NP,setPts]=React.useState(null);
     const [loading,setLoading]=React.useState(false);
 
     async function check(){
@@ -254,7 +254,7 @@
       <div className="wrap">
         <div className="phead f1">
           <div className="phead-eyebrow"><span className="pdot"/>Chat Points - Live</div>
-          <h1>Points<br/><em>Leaderboard</em></h1>
+          <h1>NiksiPoints<br/><em>Leaderboard</em></h1>
           <p>Win raffles in Kick chat to earn points. Spend them in the store for real rewards.</p>
         </div>
 
@@ -270,7 +270,7 @@
             <input className="check-input" placeholder="Your Kick username" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={e=>e.key==='Enter'&&check()}/>
             <button className="check-btn" onClick={check}>{loading?'...':'Check'}</button>
           </div>
-          {pts !== null && <div className="check-result">{pts.toLocaleString()} pts</div>}
+          {NP !== null && <div className="check-result">{NP.toLocaleString()} NP</div>}
         </div>
 
         {podiumOrder.length > 0 && (
@@ -280,7 +280,7 @@
                 <div className="prank">{rankLbls[p.rank-1]}</div>
                 <div className="pavatar">{(p.username||'?').slice(0,2).toUpperCase()}</div>
                 <div className="puname">{p.username}</div>
-                <div className="ppts-lbl">Points</div>
+                <div className="ppts-lbl">NiksiPoints</div>
                 <div className="ppts">{p.points.toLocaleString()}</div>
               </div>
             ))}
@@ -293,7 +293,7 @@
             <div className="lbhead">
               <div className="lbh" style={{textAlign:'center'}}>#</div>
               <div className="lbh">Player</div>
-              <div className="lbh" style={{textAlign:'right'}}>Points</div>
+              <div className="lbh" style={{textAlign:'right'}}>NiksiPoints</div>
             </div>
             {rest.map(p=>(
               <div key={p.username} className="lbrow">
