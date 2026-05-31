@@ -175,10 +175,12 @@
         <circle cx={cx} cy={lidY} r="2.5" fill={a} opacity=".9"/>
         <circle cx={logoCX} cy={logoCY} r={logoR+3} fill="rgba(0,0,0,.3)" stroke={a} strokeWidth="1.5" strokeOpacity=".7"/>
         <image href="/assets/niksi.png" x={logoCX-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lci-${id})`}/>
-        {/* NP coin on top face */}
-        <image href="/assets/np-coin.svg" x={DX+4} y={1} width="18" height="18"/>
-        {/* NP coin on right side face */}
-        <image href="/assets/np-coin.svg" x={FW+3} y={LID+2} width="18" height="18"/>
+        {/* NP coin on top face — affine transform maps unit square to the top parallelogram at 55% scale, centered */}
+        <image href="/assets/np-coin.svg" width="1" height="1" opacity=".85"
+          transform={`matrix(${(FW*0.55).toFixed(1)},0,${(-DX*0.55).toFixed(1)},${(DY*0.55).toFixed(1)},${((FW-DX)*0.225).toFixed(1)},${(DY*0.225).toFixed(1)})`}/>
+        {/* NP coin on right side face — affine transform maps unit square to the side parallelogram at 50% scale, centered */}
+        <image href="/assets/np-coin.svg" width="1" height="1" opacity=".75"
+          transform={`matrix(${(DX*0.5).toFixed(1)},${(-DY*0.5).toFixed(1)},0,${(FH*0.5).toFixed(1)},${(DX*0.25+FW).toFixed(1)},${(DY*0.75+FH*0.25).toFixed(1)})`}/>
       </svg>
     );
   }
