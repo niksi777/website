@@ -89,20 +89,22 @@ async function updateAcebet() {
 // Fetch Gamba leaderboard
 async function updateLeaderboard() {
   try {
-    const raceId = 12640;
+    const raceId = 13300;
 
-    const url =
-  "https://gamba.com/_api/@?operationName=getRaceById" +
-  `&variables=%7B%22raceId%22%3A${raceId}%7D` +
-  "&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22edad63165a235e578a7ff3bc850e72a2dac211713ca37e80f1496cb59198c305%22%7D%7D";
+    const gql = JSON.stringify({
+      query: `query { getRaceById(raceId: ${raceId}) { id prize_pool start_date end_date race_name competitors { id display_name total_wagered position avatar vip_level_name } prize_distribution { position percentage amount } } }`
+    });
 
-   const response = await fetch(url, {
-  headers: {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://gamba.com/promotions/exclusive-leaderboards/12640",
-    "Origin": "https://gamba.com",
-  },
-});
+    const response = await fetch("https://gamba.com/_api/@", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0",
+        "Referer": `https://gamba.com/promotions/exclusive-leaderboards/${raceId}`,
+        "Origin": "https://gamba.com",
+      },
+      body: gql,
+    });
 
 const text = await response.text();
 
