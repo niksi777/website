@@ -691,7 +691,7 @@
       // TEMP: always show for testing — revert after 5 min
       fetch('/gamble/history').then(r=>r.json()).then(data=>{
         if(!Array.isArray(data))return;
-        const win=data.find(d=>d.itemRarity!=='bust'&&!DROPS_HIDDEN.includes((d.username||'').toLowerCase()));
+        const win=data.find(d=>d.itemRarity!=='bust');
         if(win){setToast(win);setVisible(true);sessionStorage.setItem('winToastShown','1');setTimeout(()=>setVisible(false),6000);}
       }).catch(()=>{});
     },[]);
