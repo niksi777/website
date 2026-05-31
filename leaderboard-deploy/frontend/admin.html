@@ -285,17 +285,22 @@
     premium:{lid:'#2a1a5a',body:'#150d2e',accent:'#9b59d9',glow:'rgba(155,89,217,.5)',stars:2,stripe:'rgba(155,89,217,.15)'},
     elite:  {lid:'#0d2a3a',body:'#061520',accent:'#00bcd4',glow:'rgba(0,188,212,.5)',stars:3,stripe:'rgba(0,188,212,.15)'},
     mega:   {lid:'#3a2000',body:'#1e1000',accent:'#e8a427',glow:'rgba(232,164,39,.6)',stars:4,stripe:'rgba(232,164,39,.15)'},
+    flip:   {lid:'#003a1a',body:'#001810',accent:'#22c55e',glow:'rgba(34,197,94,.5)', stars:0,stripe:'rgba(34,197,94,.12)'},
   };
   function CaseGraphic({id,size=120}){
     const t=CASE_THEMES[id]||CASE_THEMES.starter;
     const w=size,h=Math.round(size*0.78);
     const lid=Math.round(h*0.38);
     const stars=Array.from({length:t.stars},(_,i)=>i);
+    const logoR=Math.round(size*0.15);
+    const logoCY=lid+Math.round((h-lid)/2);
     return(
-      <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h} style={{display:'block',filter:`drop-shadow(0 0 12px ${t.glow})`}}>
+      <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h}
+           style={{display:'block',filter:`drop-shadow(0 0 14px ${t.glow})`,transform:'perspective(420px) rotateY(-12deg)'}}>
         <defs>
           <linearGradient id={`lg-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid}/><stop offset="100%" stopColor={t.body}/></linearGradient>
           <linearGradient id={`lg2-${id}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor={t.stripe} stopOpacity="1"/><stop offset="100%" stopColor={t.stripe} stopOpacity="0"/></linearGradient>
+          <clipPath id={`lc-${id}`}><circle cx={w/2} cy={logoCY} r={logoR}/></clipPath>
         </defs>
         <rect x="2" y={lid} width={w-4} height={h-lid-2} rx="5" fill={`url(#lg-${id})`} stroke={t.accent} strokeWidth="1" strokeOpacity=".4"/>
         <rect x="2" y="2" width={w-4} height={lid} rx="5" fill={t.lid} stroke={t.accent} strokeWidth="1" strokeOpacity=".5"/>
@@ -305,6 +310,8 @@
         <path d={`M ${w/2-5} ${lid-7} a5 5 0 0 1 10 0`} fill="none" stroke={t.accent} strokeWidth="1.5" strokeLinecap="round"/>
         <circle cx={w/2} cy={lid} r="2.5" fill={t.accent} opacity=".8"/>
         {[[10,8],[w-10,8],[10,h-10],[w-10,h-10]].map(([cx,cy],i)=>(<circle key={i} cx={cx} cy={cy} r="3" fill={t.body} stroke={t.accent} strokeWidth="1" strokeOpacity=".5"/>))}
+        <circle cx={w/2} cy={logoCY} r={logoR+2} fill={t.body} stroke={t.accent} strokeWidth="1.2" strokeOpacity=".6"/>
+        <image href="/assets/niksi.png" x={w/2-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lc-${id})`}/>
         <g transform={`translate(${w/2-stars.length*7+7},${h-12})`}>{stars.map(i=>(<text key={i} x={i*14} y="0" fontSize="10" fill={t.accent} textAnchor="middle" dominantBaseline="auto">★</text>))}</g>
       </svg>
     );
