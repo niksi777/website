@@ -87,6 +87,9 @@ function isModOrBroadcaster(username) {
   return u === CHANNEL.toLowerCase() || MODS.includes(u);
 }
 
+// ─── EARLY POINTS ROLL ────────────────────────────────────────────────────────
+let earlyRaffle = null; // { entries: Set, timeout }
+
 // ─── CUSTOM COMMANDS ──────────────────────────────────────────────────────────
 const CMDS_PATH = path.join(__dirname, 'commands.json');
 function loadCmds() {
@@ -108,7 +111,27 @@ async function handleCommand(username, message) {
     return;
   }
 
-  if (cmd === '!join') { joinRaffle(username); return; }
+  if (cmd === '!join') {
+    joinRaffle(username);
+    if (earlyRaffle) earlyRaffle.entries.add(username.toLowerCase());
+    return;
+  }
+
+  if (cmd === '!early') {
+    if (!isModOrBroadcaster(username)) return;
+    if (earlyRaffle) { await sendMessage('An early points roll is already active! Type !join to enter.'); return; }
+    earlyRaffle = { entries: new Set() };
+    await sendMessage('🎰 Early Points Roll! Type !join to enter — winner gets 25 points! Rolling in 2 minutes!');
+    earlyRaffle.timeout = setTimeout(async () => {
+      const entries = [...earlyRaffle.entries];
+      earlyRaffle = null;
+      if (entries.length === 0) { await sendMessage('No one joined the early points roll!'); return; }
+      const winner = entries[Math.floor(Math.random() * entries.length)];
+      const newBal = addPoints(winner, 25);
+      await sendMessage(`🏆 @${winner} won the early points roll and received 25 points! Balance: ${newBal.toLocaleString()} pts`);
+    }, 2 * 60 * 1000);
+    return;
+  }
 
   if (cmd === '!cancelraffle') {
     if (!isModOrBroadcaster(username)) return;
