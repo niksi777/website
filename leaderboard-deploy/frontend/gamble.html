@@ -388,7 +388,7 @@
   function makeCard(item){
     if(item.isGolden) return GOLD_LOGO;
     if(item.rarity==='bust') return `<span style="font-size:28px;line-height:1">🗑️</span>`;
-    if(item.storeItem) return `<img src="/assets/gamba.png" style="width:32px;height:32px;object-fit:contain"/><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.04em;margin-top:2px">${item.name}</div>`;
+    if(item.storeItem) return `<img src="/assets/gamba.png" style="width:44px;height:44px;object-fit:contain"/><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.04em;margin-top:2px">${item.name}</div>`;
     if(item.points>0) return `<img src="/assets/np-coin.svg" style="width:44px;height:44px;object-fit:contain;margin-bottom:2px"/><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;line-height:1">${item.points.toLocaleString()} NP</div>`;
     return '';
   }
@@ -471,7 +471,7 @@
 
   function ItemCard({item,prob}){
     const r=RARITIES[item.rarity]||RARITIES.bust;
-    const icon=item.storeItem?<img src="/assets/gamba.png" style={{width:32,height:32,objectFit:'contain'}}/>:item.isGolden&&item.rarity!=='golden-trigger'?'✨':item.rarity==='bust'?'🗑️':item.points>0?<img src="/assets/np-coin.svg" style={{width:64,height:64,objectFit:'contain',filter:'drop-shadow(0 2px 8px rgba(232,164,39,.6))'}}/>:r.icon;
+    const icon=item.storeItem?<img src="/assets/gamba.png" style={{width:64,height:64,objectFit:'contain'}}/>:item.isGolden&&item.rarity!=='golden-trigger'?'✨':item.rarity==='bust'?'🗑️':item.points>0?<img src="/assets/np-coin.svg" style={{width:64,height:64,objectFit:'contain',filter:'drop-shadow(0 2px 8px rgba(232,164,39,.6))'}}/>:r.icon;
     const gTrigger=RARITIES['golden-trigger'];
     const displayR=item.isGolden&&item.rarity!=='golden-trigger'?gTrigger:r;
     return(
@@ -483,9 +483,9 @@
           {item.isGolden
             ?<div className="item-name" style={{color:displayR.color}}>Golden Spin</div>
             :item.storeItem
-              ?<div className="item-name" style={{color:displayR.color,fontSize:12}}>{item.name}</div>
+              ?<div className="item-name" style={{color:displayR.color}}>{item.name}</div>
               :item.points>0
-                ?<div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:800,color:displayR.color,lineHeight:1}}>{item.points.toLocaleString()} NP</div>
+                ?<div className="item-name" style={{color:displayR.color}}>{item.points.toLocaleString()} NP</div>
                 :<div className="item-name" style={{color:'rgba(150,150,180,.6)'}}>Nothing</div>
           }
         </div>
