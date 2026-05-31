@@ -788,6 +788,7 @@
   function App(){
     const{user,setUser,sessionId,loading,logout}=useSession();
     const[cases,setCases]=React.useState([]);
+    const[sortDesc,setSortDesc]=React.useState(false);
     const caseId=window.location.pathname.match(/\/cases\/(\w+)/)?.[1]||null;
     const activeCaseData=cases.find(c=>c.id===caseId)||null;
 
@@ -828,8 +829,16 @@
             <a href="/auth/login" className="nlogin-btn" style={{display:'inline-flex',justifyContent:'center',padding:'12px 32px',borderRadius:8,fontSize:13}}>Login with Kick</a>
           </div>
         )}
+        <div style={{display:'flex',justifyContent:'center',gap:8,marginBottom:18}} className="f2">
+          <button onClick={()=>setSortDesc(false)} style={{padding:'7px 18px',borderRadius:8,border:'1px solid',borderColor:!sortDesc?'rgba(255,255,255,.3)':'var(--b2)',background:!sortDesc?'rgba(255,255,255,.08)':'transparent',color:!sortDesc?'#fff':'var(--mu)',cursor:'pointer',fontSize:12,fontWeight:600,letterSpacing:'.08em',textTransform:'uppercase'}}>
+            Cheapest first
+          </button>
+          <button onClick={()=>setSortDesc(true)} style={{padding:'7px 18px',borderRadius:8,border:'1px solid',borderColor:sortDesc?'rgba(255,255,255,.3)':'var(--b2)',background:sortDesc?'rgba(255,255,255,.08)':'transparent',color:sortDesc?'#fff':'var(--mu)',cursor:'pointer',fontSize:12,fontWeight:600,letterSpacing:'.08em',textTransform:'uppercase'}}>
+            Most expensive
+          </button>
+        </div>
         <div className="cases-grid f2">
-          {cases.map(c=>(
+          {[...cases].sort((a,b)=>sortDesc?b.cost-a.cost:a.cost-b.cost).map(c=>(
             <a key={c.id} href={`/gamble/${c.id}`} className="case-card">
               <div className="case-top">
                 <CaseGraphic id={c.id} size={110}/>
