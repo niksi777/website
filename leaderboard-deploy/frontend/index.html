@@ -47,8 +47,8 @@
     .hero{padding:56px 0 44px;text-align:center}
     .htag{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 14px;border-radius:100px;margin-bottom:20px}
     .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    .benefits{display:grid;grid-template-columns:1fr 1fr 1fr auto 1fr;gap:10px;margin-bottom:8px;align-items:center}
-    .bcard{border-radius:14px;padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s,box-shadow .2s}
+    .benefits{display:grid;grid-template-columns:1fr 1fr 1fr auto 1fr;gap:10px;margin-bottom:8px;align-items:stretch}
+    .bcard{border-radius:14px;padding:20px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s,box-shadow .2s}
     .bcard:hover{transform:translateY(-3px)}
     .bcard::before{content:'';position:absolute;inset:0;opacity:.12;border-radius:inherit}
     .bcard-val{font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:.02em;line-height:1;text-align:center}
@@ -322,7 +322,6 @@
             <div className="bcard bc-blue">
               <div className="bcard-val">10-20%</div>
               <div className="bcard-lbl">Lossback</div>
-              <div className="bcard-sub">on losses</div>
             </div>
             <div className="bcard bc-gold">
               <div className="bcard-val">$3,000</div>
@@ -330,8 +329,7 @@
             </div>
             <div className="bcard bc-green">
               <div className="bcard-val">70%</div>
-              <div className="bcard-lbl">Commission</div>
-              <div className="bcard-sub">of ALL wager, returned!</div>
+              <div className="bcard-lbl">Get 70% on all your wager!</div>
             </div>
             <div className="benefits-arrow">→</div>
             <div className="bcard bc-white">
