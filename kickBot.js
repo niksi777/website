@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const axios = require('axios');
 const WebSocket = require('ws');
 const fs = require('fs');
@@ -17,8 +17,8 @@ const ENV_PATH = path.join(__dirname, '.env');
 let BOT_TOKEN = process.env.KICK_BOT_TOKEN || '';
 let REFRESH_TOKEN = process.env.KICK_BOT_REFRESH_TOKEN || '';
 
-// ─── TOKEN REFRESH ────────────────────────────────────────────────────────────
-let _refreshing = false; // mutex — prevent simultaneous refresh calls invalidating each other
+// â”€â”€â”€ TOKEN REFRESH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+let _refreshing = false; // mutex â€” prevent simultaneous refresh calls invalidating each other
 async function refreshToken() {
   if (_refreshing) { console.log('[auth] Refresh already in progress, skipping.'); return; }
   _refreshing = true;
@@ -51,10 +51,10 @@ async function refreshToken() {
   }
 }
 
-// Refresh every 60 minutes (tokens last 2 hours — more frequent = safer margin)
+// Refresh every 60 minutes (tokens last 2 hours â€” more frequent = safer margin)
 setInterval(refreshToken, 60 * 60 * 1000);
 
-// ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ SEND MESSAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function sendMessage(text) {
   try {
     await axios.post(
@@ -81,16 +81,16 @@ async function sendMessage(text) {
   }
 }
 
-// ─── PERMISSIONS ──────────────────────────────────────────────────────────────
-function isModOrBroadcaster(username) {
+// â”€â”€â”€ PERMISSIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function isModOrBroadcaster(username, isBadgeMod = false) {
   const u = username.toLowerCase();
-  return u === CHANNEL.toLowerCase() || MODS.includes(u);
+  return u === CHANNEL.toLowerCase() || MODS.includes(u) || isBadgeMod;
 }
 
-// ─── EARLY POINTS ROLL ────────────────────────────────────────────────────────
+// â”€â”€â”€ EARLY POINTS ROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let earlyRaffle = null; // { entries: Set, timeout }
 
-// ─── CUSTOM COMMANDS ──────────────────────────────────────────────────────────
+// â”€â”€â”€ CUSTOM COMMANDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const CMDS_PATH = path.join(__dirname, 'commands.json');
 function loadCmds() {
   try { return JSON.parse(fs.readFileSync(CMDS_PATH, 'utf8')); } catch { return {}; }
@@ -99,13 +99,13 @@ function saveCmds(cmds) {
   fs.writeFileSync(CMDS_PATH, JSON.stringify(cmds, null, 2));
 }
 
-// ─── COMMANDS ─────────────────────────────────────────────────────────────────
-async function handleCommand(username, message) {
+// â”€â”€â”€ COMMANDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function handleCommand(username, message, isBadgeMod = false) {
   const parts = message.trim().split(/\s+/);
   const cmd = parts[0].toLowerCase();
 
   if (cmd === '!raffle') {
-    if (!isModOrBroadcaster(username)) return;
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
     const result = openRaffle(sendMessage);
     if (!result.success) await sendMessage(result.message);
     return;
@@ -118,23 +118,23 @@ async function handleCommand(username, message) {
   }
 
   if (cmd === '!early') {
-    if (!isModOrBroadcaster(username)) return;
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
     if (earlyRaffle) { await sendMessage('An early points roll is already active! Type !join to enter.'); return; }
     earlyRaffle = { entries: new Set() };
-    await sendMessage('🎰 Early Points Roll! Type !join to enter — winner gets 25 points! Rolling in 2 minutes!');
+    await sendMessage('ðŸŽ° Early Points Roll! Type !join to enter â€” winner gets 25 points! Rolling in 2 minutes!');
     earlyRaffle.timeout = setTimeout(async () => {
       const entries = [...earlyRaffle.entries];
       earlyRaffle = null;
       if (entries.length === 0) { await sendMessage('No one joined the early points roll!'); return; }
       const winner = entries[Math.floor(Math.random() * entries.length)];
       const newBal = addPoints(winner, 25);
-      await sendMessage(`🏆 @${winner} won the early points roll and received 25 points! Balance: ${newBal.toLocaleString()} pts`);
+      await sendMessage(`ðŸ† @${winner} won the early points roll and received 25 points! Balance: ${newBal.toLocaleString()} pts`);
     }, 2 * 60 * 1000);
     return;
   }
 
   if (cmd === '!cancelraffle') {
-    if (!isModOrBroadcaster(username)) return;
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
     const result = cancelRaffle();
     await sendMessage(result.message);
     return;
@@ -153,13 +153,13 @@ async function handleCommand(username, message) {
     return;
   }
 
-  if (!isModOrBroadcaster(username)) return;
+  if (!isModOrBroadcaster(username, isBadgeMod)) return;
 
   if (cmd === '!addpoints') {
     const target = parts[1]?.replace('@', '').trim().toLowerCase();
     const amount = parseInt(parts[2]?.replace(/,/g, ''));
     console.log(`[addpoints] user=${username} target=${target} amount=${amount} parts=${JSON.stringify(parts)}`);
-    if (!target || isNaN(amount) || amount <= 0) { await sendMessage(`Usage: !addpoints <user> <amount> — received: "${parts.slice(1).join(' ')}"`); return; }
+    if (!target || isNaN(amount) || amount <= 0) { await sendMessage(`Usage: !addpoints <user> <amount> â€” received: "${parts.slice(1).join(' ')}"`); return; }
     const newBal = addPoints(target, amount);
     await sendMessage(`Added ${amount.toLocaleString()} pts to @${target}. New balance: ${newBal.toLocaleString()}`);
     return;
@@ -184,7 +184,7 @@ async function handleCommand(username, message) {
   }
 
   if (cmd === '!addcom') {
-    if (!isModOrBroadcaster(username)) return;
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
     const name = parts[1]?.toLowerCase();
     const text = parts.slice(2).join(' ');
     if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !addcom !command response text'); return; }
@@ -197,7 +197,7 @@ async function handleCommand(username, message) {
   }
 
   if (cmd === '!editcom') {
-    if (!isModOrBroadcaster(username)) return;
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
     const name = parts[1]?.toLowerCase();
     const text = parts.slice(2).join(' ');
     if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !editcom !command new response text'); return; }
@@ -210,7 +210,7 @@ async function handleCommand(username, message) {
   }
 
   if (cmd === '!delcom') {
-    if (!isModOrBroadcaster(username)) return;
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
     const name = parts[1]?.toLowerCase();
     if (!name || !name.startsWith('!')) { await sendMessage('Usage: !delcom !command'); return; }
     const cmds = loadCmds();
@@ -225,9 +225,9 @@ async function handleCommand(username, message) {
   const cmds = loadCmds();
   if (cmds[cmd]) {
     let response = cmds[cmd];
-    // $(sender) → triggering username
+    // $(sender) â†’ triggering username
     response = response.replace(/\$\(sender\)/gi, username);
-    // Rand[min,max] → random integer between min and max inclusive
+    // Rand[min,max] â†’ random integer between min and max inclusive
     response = response.replace(/Rand\[(\d+),(\d+)\]/gi, (_, min, max) => {
       const lo = parseInt(min), hi = parseInt(max);
       return Math.floor(Math.random() * (hi - lo + 1)) + lo;
@@ -237,7 +237,7 @@ async function handleCommand(username, message) {
   }
 }
 
-// ─── WEBSOCKET ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ WEBSOCKET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function connectWebSocket(chatroomId) {
   const ws = new WebSocket('wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.4.0-rc2&flash=false');
 
@@ -255,9 +255,11 @@ function connectWebSocket(chatroomId) {
         const data = JSON.parse(packet.data);
         const username = data?.sender?.username || data?.sender?.slug;
         const content = data?.content;
+        const badges = data?.sender?.badges || [];
+        const isBadgeMod = badges.some(b => b.type === 'moderator' || b.type === 'broadcaster');
         if (username && content) {
           fetch('http://localhost:4000/giveaway/chat-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,content,ts:Date.now()})}).catch(()=>{});
-          if (content.startsWith('!')) handleCommand(username, content);
+          if (content.startsWith('!')) handleCommand(username, content, isBadgeMod);
           // Giveaway keyword check
           fetch('http://localhost:4000/giveaway/state')
             .then(r=>r.json())
@@ -283,8 +285,8 @@ function connectWebSocket(chatroomId) {
   ws.on('error', (err) => { console.error('[ws error]', err.message); });
 }
 
-// ─── START ────────────────────────────────────────────────────────────────────
-// ─── GIVEAWAY ANNOUNCER ───────────────────────────────────────────────────────
+// â”€â”€â”€ START â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€â”€ GIVEAWAY ANNOUNCER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let lastAnnouncedKeyword = null;
 setInterval(async () => {
   try {
