@@ -334,14 +334,22 @@
     );
   }
 
-  function ItemsTable({items,pool,showIsGolden,showStoreItem,onUpdate,onAdd,onRemove}){
+  function ItemsTable({items,pool,showIsGolden,showStoreItem,onUpdate,onAdd,onRemove,goldenTriggerPct}){
+    const isGoldenPool = pool==='goldenItems';
     const totalPct=items.reduce((s,i)=>s+Number(i._pct||0),0);
-    const pctOk=Math.abs(totalPct-100)<0.05;
+    const target = isGoldenPool ? (goldenTriggerPct||5) : 100;
+    const pctOk=Math.abs(totalPct-target)<0.05;
+    // Sort golden pool by _pct descending (highest overall chance first)
+    const displayed = isGoldenPool
+      ? items.map((item,origIdx)=>({item,origIdx})).sort((a,b)=>Number(b.item._pct||0)-Number(a.item._pct||0))
+      : items.map((item,origIdx)=>({item,origIdx}));
     return(
       <div style={{marginBottom:24}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
-          <div className="ce-lbl" style={{marginBottom:0}}>{pool==='items'?'Main Pool':'Golden Spin Pool'}</div>
-          <div style={{fontSize:12,fontWeight:700,color:pctOk?'#22c55e':'#e8a427'}}>{totalPct.toFixed(2)}% total {pctOk?'✓':'— must equal 100%'}</div>
+          <div className="ce-lbl" style={{marginBottom:0}}>{isGoldenPool?'Golden Spin Pool (% = actual overall chance)':'Main Pool'}</div>
+          <div style={{fontSize:12,fontWeight:700,color:pctOk?'#22c55e':'#e8a427'}}>
+            {totalPct.toFixed(isGoldenPool?4:2)}% total {pctOk?'✓':isGoldenPool?`— should equal ${target.toFixed(2)}%`:'— must equal 100%'}
+          </div>
         </div>
         <div style={{background:'var(--s2)',borderRadius:10,overflow:'auto',border:'1px solid var(--b1)'}}>
           <table className="ce-table">
@@ -354,19 +362,19 @@
               </tr>
             </thead>
             <tbody>
-              {items.map((item,i)=>(
-                <tr key={i}>
-                  <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(i,'name',e.target.value)} style={{width:150}}/></td>
-                  <td><input className="ce-inp" type="number" value={item.points} onChange={e=>onUpdate(i,'points',Number(e.target.value))} style={{width:80}}/></td>
-                  <td><input className="ce-inp" type="number" step="0.01" value={item._pct??0} onChange={e=>onUpdate(i,'_pct',parseFloat(e.target.value)||0)} style={{width:80}}/></td>
+              {displayed.map(({item,origIdx})=>(
+                <tr key={origIdx}>
+                  <td><input className="ce-inp" value={item.name} onChange={e=>onUpdate(origIdx,'name',e.target.value)} style={{width:150}}/></td>
+                  <td><input className="ce-inp" type="number" value={item.points} onChange={e=>onUpdate(origIdx,'points',Number(e.target.value))} style={{width:80}}/></td>
+                  <td><input className="ce-inp" type="number" step={isGoldenPool?'0.0001':'0.01'} value={item._pct??0} onChange={e=>onUpdate(origIdx,'_pct',parseFloat(e.target.value)||0)} style={{width:90}}/></td>
                   <td>
-                    <select className="ce-sel" value={item.rarity} onChange={e=>onUpdate(i,'rarity',e.target.value)}>
+                    <select className="ce-sel" value={item.rarity} onChange={e=>onUpdate(origIdx,'rarity',e.target.value)}>
                       {RARITIES.map(r=><option key={r} value={r}>{r}</option>)}
                     </select>
                   </td>
-                  {showIsGolden&&<td style={{textAlign:'center'}}><input type="checkbox" checked={!!item.isGolden} onChange={e=>onUpdate(i,'isGolden',e.target.checked)}/></td>}
-                  {showStoreItem&&<td style={{textAlign:'center'}}><input type="checkbox" checked={!!item.storeItem} onChange={e=>onUpdate(i,'storeItem',e.target.checked)}/></td>}
-                  <td><button className="btn-remove" onClick={()=>onRemove(i)}>Remove</button></td>
+                  {showIsGolden&&<td style={{textAlign:'center'}}><input type="checkbox" checked={!!item.isGolden} onChange={e=>onUpdate(origIdx,'isGolden',e.target.checked)}/></td>}
+                  {showStoreItem&&<td style={{textAlign:'center'}}><input type="checkbox" checked={!!item.storeItem} onChange={e=>onUpdate(origIdx,'storeItem',e.target.checked)}/></td>}
+                  <td><button className="btn-remove" onClick={()=>onRemove(origIdx)}>Remove</button></td>
                 </tr>
               ))}
             </tbody>
@@ -385,9 +393,14 @@
 
     function injectPcts(d){
       d.forEach(cas=>{
-        ['items','goldenItems'].forEach(pool=>{
-          const tw=(cas[pool]||[]).reduce((s,i)=>s+Number(i.weight||0),0);
-          (cas[pool]||[]).forEach(item=>{item._pct=tw>0?parseFloat((item.weight/tw*100).toFixed(2)):0;});
+        // Main pool: _pct = within-pool %
+        const mainTW=(cas.items||[]).reduce((s,i)=>s+Number(i.weight||0),0);
+        (cas.items||[]).forEach(item=>{item._pct=mainTW>0?parseFloat((item.weight/mainTW*100).toFixed(2)):0;});
+        // Golden pool: _pct = OVERALL probability (golden_trigger_pct * within_pool_pct)
+        const goldenTriggerPct=mainTW>0?(cas.items||[]).filter(i=>i.isGolden).reduce((s,i)=>s+i.weight,0)/mainTW*100:5;
+        const goldenTW=(cas.goldenItems||[]).reduce((s,i)=>s+Number(i.weight||0),0);
+        (cas.goldenItems||[]).forEach(item=>{
+          item._pct=goldenTW>0?parseFloat(((item.weight/goldenTW)*goldenTriggerPct).toFixed(4)):0;
         });
       });
       return d;
@@ -415,17 +428,25 @@
     async function save(){
       setSaving(true);setMsg('');
       try{
-        // Convert _pct → weight (normalise to 1000 total), strip _pct before sending
+        // Convert _pct → weight, strip _pct before sending
         const cleaned=JSON.parse(JSON.stringify(cases));
         cleaned.forEach(cas=>{
-          ['items','goldenItems'].forEach(pool=>{
-            if(!cas[pool])return;
-            const sumPct=cas[pool].reduce((s,i)=>s+Number(i._pct||0),0);
-            cas[pool].forEach(item=>{
-              item.weight=sumPct>0?Math.round(Number(item._pct||0)/sumPct*1000):item.weight;
+          // Main pool: weights from within-pool %
+          if(cas.items){
+            const sum=cas.items.reduce((s,i)=>s+Number(i._pct||0),0);
+            cas.items.forEach(item=>{item.weight=sum>0?Math.round(Number(item._pct||0)/sum*1000):item.weight;delete item._pct;});
+          }
+          // Golden pool: overall % back to within-pool weight
+          if(cas.goldenItems&&cas.goldenItems.length){
+            const mainTW=(cas.items||[]).reduce((s,i)=>s+i.weight,0);
+            const goldenTriggerPct=mainTW>0?(cas.items||[]).filter(i=>i.isGolden).reduce((s,i)=>s+i.weight,0)/mainTW*100:5;
+            const sumOverall=cas.goldenItems.reduce((s,i)=>s+Number(i._pct||0),0);
+            cas.goldenItems.forEach(item=>{
+              const withinPool=sumOverall>0?Number(item._pct||0)/sumOverall:0;
+              item.weight=Math.round(withinPool*1000);
               delete item._pct;
             });
-          });
+          }
         });
         const r=await fetch('/admin/cases',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({cases:cleaned,session:sessionId})});
         const d=await r.json();
@@ -469,10 +490,15 @@
             onUpdate={(i,f,v)=>setItem(activeIdx,'items',i,f,v)}
             onAdd={()=>addItem(activeIdx,'items')}
             onRemove={i=>removeItem(activeIdx,'items',i)}/>
-          <ItemsTable items={c.goldenItems||[]} pool="goldenItems" showIsGolden={false} showStoreItem={true}
-            onUpdate={(i,f,v)=>setItem(activeIdx,'goldenItems',i,f,v)}
-            onAdd={()=>addItem(activeIdx,'goldenItems')}
-            onRemove={i=>removeItem(activeIdx,'goldenItems',i)}/>
+          {(c.goldenItems&&c.goldenItems.length>0)&&(()=>{
+            const mainTW=(c.items||[]).reduce((s,i)=>s+Number(i.weight||0),0);
+            const goldenTriggerPct=mainTW>0?(c.items||[]).filter(i=>i.isGolden).reduce((s,i)=>s+Number(i.weight||0),0)/mainTW*100:5;
+            return<ItemsTable items={c.goldenItems} pool="goldenItems" showIsGolden={false} showStoreItem={true}
+              goldenTriggerPct={goldenTriggerPct}
+              onUpdate={(i,f,v)=>setItem(activeIdx,'goldenItems',i,f,v)}
+              onAdd={()=>addItem(activeIdx,'goldenItems')}
+              onRemove={i=>removeItem(activeIdx,'goldenItems',i)}/>;
+          })()}
         </div>
 
         <div style={{display:'flex',alignItems:'center',gap:12}}>
