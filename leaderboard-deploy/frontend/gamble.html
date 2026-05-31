@@ -238,6 +238,7 @@
     premium:{lid:'#2a1a5a',body:'#150d2e',accent:'#9b59d9',glow:'rgba(155,89,217,.5)',stars:2,stripe:'rgba(155,89,217,.15)'},
     elite:  {lid:'#0d2a3a',body:'#061520',accent:'#00bcd4',glow:'rgba(0,188,212,.5)',stars:3,stripe:'rgba(0,188,212,.15)'},
     mega:   {lid:'#3a2000',body:'#1e1000',accent:'#e8a427',glow:'rgba(232,164,39,.6)',stars:4,stripe:'rgba(232,164,39,.15)'},
+    flip:   {lid:'#003a1a',body:'#001810',accent:'#22c55e',glow:'rgba(34,197,94,.5)', stars:0,stripe:'rgba(34,197,94,.12)'},
   };
   function CaseGraphic({id,size=120}){
     const t=CASE_THEMES[id]||CASE_THEMES.starter;
@@ -657,7 +658,7 @@
             })()}
           </div>
         </div>
-        {caseData.goldenItems&&(
+        {caseData.goldenItems&&caseData.goldenItems.length>0&&(
           <div className="items-section">
             <div className="items-section-title" style={{color:'#e8a427'}}>✨ Golden Spin prizes - triggers at {((caseData.items.filter(i=>i.isGolden).reduce((s,i)=>s+i.weight,0)/regTW)*100).toFixed(2)}%</div>
             <div className="items-grid" style={{}}>
@@ -794,7 +795,9 @@
             <a key={c.id} href={`/gamble/${c.id}`} className="case-card">
               <div className="case-top">
                 <CaseGraphic id={c.id} size={110}/>
-                <span className="case-golden-badge">5% GOLDEN</span>
+                {c.goldenItems&&c.goldenItems.length>0
+                  ?<span className="case-golden-badge">5% GOLDEN</span>
+                  :<span className="case-golden-badge" style={{background:'linear-gradient(135deg,#22c55e,#16a34a)'}}>50% WIN</span>}
               </div>
               <div className="case-body">
                 <div className="case-name">{c.name}</div>

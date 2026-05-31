@@ -327,6 +327,12 @@ let GAMBLE_CASES = [
       {name:'5,000 Points',points:5000,weight:90,rarity:'gold'},
       {name:'$100 Bonus Buy',...STORE_PRIZES.bonus100,points:0,weight:15,rarity:'gold-ultra'},
     ]},
+  { id:'flip', name:'Flip Case', cost:100, emoji:'🪙',
+    items:[
+      {name:'Double Up',points:190,weight:500,rarity:'gold'},
+      {name:'Nothing',  points:0,  weight:500,rarity:'bust'},
+    ],
+    goldenItems:[]},
   { id:'mega', name:'Mega Case', cost:500, emoji:'👑',
     items:[
       {name:'Nothing',points:0,weight:900,rarity:'bust'},
