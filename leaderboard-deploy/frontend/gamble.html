@@ -682,10 +682,41 @@
     return `${Math.floor(s/3600)}h ago`;
   }
 
+  const DROPS_HIDDEN=['niksi777','niksibot'];
+
+  function WinnerToast(){
+    const[toast,setToast]=React.useState(null);
+    const[visible,setVisible]=React.useState(false);
+    React.useEffect(()=>{
+      if(sessionStorage.getItem('winToastShown'))return;
+      fetch('/gamble/history').then(r=>r.json()).then(data=>{
+        if(!Array.isArray(data))return;
+        const win=data.find(d=>d.itemRarity!=='bust'&&Date.now()-d.ts<86400000&&!DROPS_HIDDEN.includes((d.username||'').toLowerCase()));
+        if(win){setToast(win);setVisible(true);sessionStorage.setItem('winToastShown','1');setTimeout(()=>setVisible(false),6000);}
+      }).catch(()=>{});
+    },[]);
+    if(!toast||!visible)return null;
+    const color=RARITY_COLORS[toast.itemRarity]||'#fff';
+    return(
+      <div style={{position:'fixed',bottom:28,left:'50%',transform:'translateX(-50%)',background:'rgba(9,11,15,.97)',border:`1px solid ${color}`,borderRadius:12,padding:'14px 18px',zIndex:1000,boxShadow:`0 0 28px ${color}33,0 8px 32px rgba(0,0,0,.7)`,display:'flex',alignItems:'center',gap:12,minWidth:280,maxWidth:420,animation:'fu .4s ease both'}}>
+        {toast.avatar?<img src={toast.avatar} style={{width:36,height:36,borderRadius:'50%',objectFit:'cover',flexShrink:0,border:`2px solid ${color}`}}/>:<div style={{width:36,height:36,borderRadius:'50%',background:'rgba(255,255,255,.06)',flexShrink:0}}/>}
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:11,color:'var(--mu)',marginBottom:2}}>Recent win — {toast.caseName}</div>
+          <div style={{fontSize:13,fontWeight:700,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
+            <span style={{color:'var(--tx)'}}>{toast.displayName||toast.username}</span>
+            <span style={{color:'var(--mu)'}}> won </span>
+            <span style={{color}}>{toast.itemName}</span>
+          </div>
+        </div>
+        <button onClick={()=>setVisible(false)} style={{background:'none',border:'none',color:'var(--mu)',cursor:'pointer',padding:'2px 4px',fontSize:14,lineHeight:1,flexShrink:0}}>✕</button>
+      </div>
+    );
+  }
+
   function RecentDrops(){
     const[drops,setDrops]=React.useState([]);
     React.useEffect(()=>{
-      function load(){fetch('/gamble/history').then(r=>r.json()).then(d=>{if(Array.isArray(d))setDrops(d);}).catch(()=>{});}
+      function load(){fetch('/gamble/history').then(r=>r.json()).then(d=>{if(Array.isArray(d))setDrops(d.filter(x=>!DROPS_HIDDEN.includes((x.username||'').toLowerCase())));}).catch(()=>{});}
       load();
       const id=setInterval(load,15000);
       return()=>clearInterval(id);
@@ -773,6 +804,7 @@
           ))}
         </div>
         <RecentDrops/>
+        <WinnerToast/>
       </div>
       <footer><div className="wrap"><div className="ftw">
         <p className="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair.</p>
