@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <!-- Face radial gradient: bright upper-left, dark lower-right -->
+    <radialGradient id="face" cx="38%" cy="32%" r="70%">
+      <stop offset="0%"   stop-color="#ffe566"/>
+      <stop offset="40%"  stop-color="#e8a427"/>
+      <stop offset="100%" stop-color="#a05800"/>
+    </radialGradient>
+    <!-- Inner disc gradient -->
+    <radialGradient id="inner" cx="40%" cy="35%" r="68%">
+      <stop offset="0%"   stop-color="#ffd44a"/>
+      <stop offset="100%" stop-color="#8a4800"/>
+    </radialGradient>
+    <!-- Depth ring gradient -->
+    <linearGradient id="depth" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%"   stop-color="#c87a00"/>
+      <stop offset="100%" stop-color="#5a2e00"/>
+    </linearGradient>
+    <!-- Shine -->
+    <radialGradient id="shine" cx="34%" cy="22%" r="48%">
+      <stop offset="0%"   stop-color="rgba(255,255,255,0.42)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="rgba(0,0,0,0.55)"/>
+    </filter>
+  </defs>
+
+  <!-- Drop shadow base -->
+  <ellipse cx="60" cy="110" rx="44" ry="7" fill="rgba(0,0,0,0.28)"/>
+
+  <!-- Coin depth / side edge (bottom band gives 3-D illusion) -->
+  <ellipse cx="60" cy="68" rx="50" ry="9"  fill="#5a2e00"/>
+  <ellipse cx="60" cy="66" rx="50" ry="9"  fill="url(#depth)"/>
+  <!-- Side wall connecting face to bottom -->
+  <rect x="10" y="57" width="100" height="9" fill="url(#depth)" rx="1"/>
+
+  <!-- Main coin face -->
+  <circle cx="60" cy="57" r="50" fill="url(#face)" filter="url(#shadow)"/>
+
+  <!-- Outer rim - dark stroke -->
+  <circle cx="60" cy="57" r="50" fill="none" stroke="#7a4200" stroke-width="3"/>
+  <!-- Rim inner highlight line -->
+  <circle cx="60" cy="57" r="47" fill="none" stroke="rgba(255,235,100,0.45)" stroke-width="1.2"/>
+
+  <!-- Inner embossed disc -->
+  <circle cx="60" cy="57" r="37" fill="url(#inner)"/>
+  <circle cx="60" cy="57" r="37" fill="none" stroke="#b86800" stroke-width="1.8"/>
+  <!-- Inner disc inner edge -->
+  <circle cx="60" cy="57" r="34.5" fill="none" stroke="rgba(255,220,80,0.25)" stroke-width="0.8"/>
+
+  <!-- NP text — shadow layer -->
+  <text x="61.5" y="70"
+        font-family="'Arial Black','Helvetica Neue',Impact,sans-serif"
+        font-size="32" font-weight="900"
+        fill="#6a3600" text-anchor="middle" letter-spacing="-1">NP</text>
+  <!-- NP text — main layer -->
+  <text x="60" y="69"
+        font-family="'Arial Black','Helvetica Neue',Impact,sans-serif"
+        font-size="32" font-weight="900"
+        fill="#ffe566" text-anchor="middle" letter-spacing="-1">NP</text>
+  <!-- NP text — subtle top highlight -->
+  <text x="60" y="69"
+        font-family="'Arial Black','Helvetica Neue',Impact,sans-serif"
+        font-size="32" font-weight="900"
+        fill="rgba(255,255,255,0.18)" text-anchor="middle" letter-spacing="-1">NP</text>
+
+  <!-- Shine overlay on full face -->
+  <circle cx="60" cy="57" r="50" fill="url(#shine)"/>
+
+  <!-- Bright specular highlight spot -->
+  <ellipse cx="43" cy="34" rx="18" ry="11"
+           fill="rgba(255,255,255,0.22)"
+           transform="rotate(-28 43 34)"/>
+</svg>
