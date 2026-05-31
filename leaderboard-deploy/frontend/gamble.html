@@ -315,10 +315,6 @@
         <circle cx={logoCX} cy={logoCY} r={logoR+3} fill="rgba(0,0,0,.3)" stroke={a} strokeWidth="1.5" strokeOpacity=".7"/>
         <image href="/assets/niksi.png" x={logoCX-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lc-${id})`}/>
 
-        {/* Stars */}
-        <g transform={`translate(${cx-stars.length*7+7},${FH+DY-10})`}>
-          {stars.map(i=><text key={i} x={i*14} y="0" fontSize="9" fill={a} textAnchor="middle" dominantBaseline="auto">★</text>)}
-        </g>
       </svg>
     );
   }
