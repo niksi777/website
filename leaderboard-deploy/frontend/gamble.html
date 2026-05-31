@@ -389,7 +389,7 @@
     if(item.isGolden) return GOLD_LOGO;
     if(item.rarity==='bust') return `<span style="font-size:28px;line-height:1">🗑️</span>`;
     if(item.storeItem) return `<img src="/assets/gamba.png" style="width:32px;height:32px;object-fit:contain"/><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.04em;margin-top:2px">${item.name}</div>`;
-    if(item.points>0) return `<div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1">${item.points.toLocaleString()}</div><div style="font-size:9px;color:rgba(221,227,239,.4);letter-spacing:.06em;text-transform:uppercase">NP</div>`;
+    if(item.points>0) return `<img src="/assets/np-coin.svg" style="width:28px;height:28px;object-fit:contain;margin-bottom:2px"/><div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#fff;line-height:1">${item.points.toLocaleString()} NP</div>`;
     return '';
   }
 
@@ -471,7 +471,7 @@
 
   function ItemCard({item,prob}){
     const r=RARITIES[item.rarity]||RARITIES.bust;
-    const icon=item.storeItem?<img src="/assets/gamba.png" style={{width:32,height:32,objectFit:'contain'}}/>:item.isGolden&&item.rarity!=='golden-trigger'?'✨':item.rarity==='bust'?'🗑️':r.icon;
+    const icon=item.storeItem?<img src="/assets/gamba.png" style={{width:32,height:32,objectFit:'contain'}}/>:item.isGolden&&item.rarity!=='golden-trigger'?'✨':item.rarity==='bust'?'🗑️':item.points>0?<img src="/assets/np-coin.svg" style={{width:38,height:38,objectFit:'contain',filter:'drop-shadow(0 2px 6px rgba(232,164,39,.5))'}}/>:r.icon;
     const gTrigger=RARITIES['golden-trigger'];
     const displayR=item.isGolden&&item.rarity!=='golden-trigger'?gTrigger:r;
     return(
