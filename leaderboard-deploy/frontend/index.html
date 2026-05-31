@@ -47,18 +47,19 @@
     .hero{padding:56px 0 44px;text-align:center}
     .htag{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 14px;border-radius:100px;margin-bottom:20px}
     .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    .benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
-    .bcard{border-radius:14px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s,box-shadow .2s}
+    .benefits{display:grid;grid-template-columns:1fr 1fr 1fr auto 1fr;gap:10px;margin-bottom:8px;align-items:center}
+    .bcard{border-radius:14px;padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s,box-shadow .2s}
     .bcard:hover{transform:translateY(-3px)}
     .bcard::before{content:'';position:absolute;inset:0;opacity:.12;border-radius:inherit}
-    .bcard-val{font-family:'Barlow Condensed',sans-serif;font-size:clamp(26px,3.5vw,36px);font-weight:800;letter-spacing:.02em;line-height:1;text-align:center}
-    .bcard-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.6);text-align:center}
-    .bcard-icon{font-size:22px;margin-bottom:2px}
+    .bcard-val{font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:.02em;line-height:1;text-align:center}
+    .bcard-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(221,227,239,.55);text-align:center;line-height:1.4}
+    .bcard-sub{font-family:'Inter',sans-serif;font-size:10px;font-weight:500;color:rgba(221,227,239,.4);text-align:center;line-height:1.4}
+    .benefits-arrow{display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,.25);flex-shrink:0}
     .bc-blue{background:linear-gradient(135deg,#0d1a2e,#0a1220);border-color:rgba(74,144,217,.3);box-shadow:0 0 24px rgba(74,144,217,.08)}.bc-blue .bcard-val{color:#4a90d9}.bc-blue::before{background:#4a90d9}
     .bc-gold{background:linear-gradient(135deg,#1e1400,#160e00);border-color:rgba(232,164,39,.3);box-shadow:0 0 24px rgba(232,164,39,.08)}.bc-gold .bcard-val{color:#e8a427}.bc-gold::before{background:#e8a427}
     .bc-green{background:linear-gradient(135deg,#0a1e0d,#061408);border-color:rgba(34,197,94,.3);box-shadow:0 0 24px rgba(34,197,94,.08)}.bc-green .bcard-val{color:#22c55e}.bc-green::before{background:#22c55e}
-    .bc-white{background:linear-gradient(135deg,#141620,#0e1018);border-color:rgba(255,255,255,.2);box-shadow:0 0 24px rgba(255,255,255,.05)}.bc-white .bcard-val{color:#fff;letter-spacing:.08em}.bc-white::before{background:#fff}
-    @media(max-width:700px){.benefits{grid-template-columns:1fr 1fr}}
+    .bc-white{background:linear-gradient(135deg,#141620,#0e1018);border-color:rgba(255,255,255,.25);box-shadow:0 0 28px rgba(255,255,255,.07)}.bc-white .bcard-val{color:#fff;letter-spacing:.1em;font-size:clamp(20px,2.4vw,28px)}.bc-white::before{background:#fff}
+    @media(max-width:700px){.benefits{grid-template-columns:1fr 1fr}.benefits-arrow{display:none}}
 
     .offers{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:56px}
 
@@ -319,24 +320,22 @@
           <div className="htag"><span className="pdot"/>{activeCount} Active Offers</div>
           <div className="benefits">
             <div className="bcard bc-blue">
-              <div className="bcard-icon">🛡️</div>
-              <div className="bcard-val">Up to 20%</div>
+              <div className="bcard-val">10-20%</div>
               <div className="bcard-lbl">Lossback</div>
+              <div className="bcard-sub">on losses</div>
             </div>
             <div className="bcard bc-gold">
-              <div className="bcard-icon">🏆</div>
               <div className="bcard-val">$3,000</div>
               <div className="bcard-lbl">Monthly Leaderboard</div>
             </div>
             <div className="bcard bc-green">
-              <div className="bcard-icon">💸</div>
               <div className="bcard-val">70%</div>
               <div className="bcard-lbl">Commission</div>
+              <div className="bcard-sub">of ALL wager, returned!</div>
             </div>
+            <div className="benefits-arrow">→</div>
             <div className="bcard bc-white">
-              <div className="bcard-icon">🎟️</div>
-              <div className="bcard-val">NIKSI</div>
-              <div className="bcard-lbl">Use at signup</div>
+              <div className="bcard-val">CODE NIKSI</div>
             </div>
           </div>
         </div>
