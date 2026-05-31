@@ -821,6 +821,7 @@ app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/g
 app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/giveaway.html')));
 app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, '../frontend/settings.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../frontend/admin.html')));
+app.get('/overlay-giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/overlay-giveaway.html')));
 
 // Points API
 app.get('/points/:username', (req, res) => {

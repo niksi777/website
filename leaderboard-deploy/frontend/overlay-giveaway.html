@@ -5,7 +5,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html,body{background:transparent;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
+    html,body{background:transparent;width:320px;height:auto;overflow:visible;display:block;font-family:'Inter',sans-serif;padding:0;margin:0}
 
     .card{
       width:320px;
@@ -84,16 +84,11 @@
 </head>
 <body>
 <div class="card">
-  <div id="idle" class="idle">
-    <div class="idle-dot"></div>
-    <div class="idle-txt">No active giveaway</div>
-    <div class="idle-dot"></div>
-  </div>
-  <div id="active" style="display:none">
+  <div id="active">
     <div class="card-body">
       <div class="card-label">Keyword</div>
-      <div class="card-value" id="kw">-</div>
-      <div class="card-entries">Entries: <span id="entries">0</span></div>
+      <div class="card-value" id="kw" style="color:rgba(232,164,39,.25)">Waiting...</div>
+      <div class="card-entries" id="entries-row" style="display:none">Entries: <span id="entries">0</span></div>
     </div>
   </div>
   <div class="bar-track">
@@ -141,17 +136,17 @@
     try {
       const r = await fetch('/giveaway/state');
       const d = await r.json();
-      const idle = document.getElementById('idle');
-      const active = document.getElementById('active');
+      const kw = document.getElementById('kw');
       if (d.giveaway && !d.giveaway.winner) {
-        idle.style.display = 'none';
-        active.style.display = 'block';
-        document.getElementById('kw').textContent = d.giveaway.keyword;
+        kw.textContent = d.giveaway.keyword;
+        kw.style.color = '#e8a427';
         document.getElementById('entries').textContent = d.entries ? d.entries.length : 0;
+        document.getElementById('entries-row').style.display = 'block';
         lastKeyword = d.giveaway.keyword;
       } else {
-        idle.style.display = 'flex';
-        active.style.display = 'none';
+        kw.textContent = 'Waiting...';
+        kw.style.color = 'rgba(232,164,39,.25)';
+        document.getElementById('entries-row').style.display = 'none';
         lastKeyword = null;
         stopTimer();
       }
