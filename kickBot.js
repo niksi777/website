@@ -201,7 +201,15 @@ async function handleCommand(username, message) {
   // Custom command lookup (available to everyone)
   const cmds = loadCmds();
   if (cmds[cmd]) {
-    await sendMessage(cmds[cmd]);
+    let response = cmds[cmd];
+    // $(sender) → triggering username
+    response = response.replace(/\$\(sender\)/gi, username);
+    // Rand[min,max] → random integer between min and max inclusive
+    response = response.replace(/Rand\[(\d+),(\d+)\]/gi, (_, min, max) => {
+      const lo = parseInt(min), hi = parseInt(max);
+      return Math.floor(Math.random() * (hi - lo + 1)) + lo;
+    });
+    await sendMessage(response);
     return;
   }
 }
