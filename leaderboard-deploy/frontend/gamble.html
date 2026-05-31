@@ -701,7 +701,7 @@
       <div style={{position:'fixed',bottom:28,left:'50%',transform:'translateX(-50%)',background:'rgba(9,11,15,.97)',border:`1px solid ${color}`,borderRadius:12,padding:'14px 18px',zIndex:1000,boxShadow:`0 0 28px ${color}33,0 8px 32px rgba(0,0,0,.7)`,display:'flex',alignItems:'center',gap:12,minWidth:280,maxWidth:420,animation:'fu .4s ease both'}}>
         {toast.avatar?<img src={toast.avatar} style={{width:36,height:36,borderRadius:'50%',objectFit:'cover',flexShrink:0,border:`2px solid ${color}`}}/>:<div style={{width:36,height:36,borderRadius:'50%',background:'rgba(255,255,255,.06)',flexShrink:0}}/>}
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:11,color:'var(--mu)',marginBottom:2}}>Recent win — {toast.caseName}</div>
+          <div style={{fontSize:11,color:'var(--mu)',marginBottom:2}}>Recent win - {toast.caseName}</div>
           <div style={{fontSize:13,fontWeight:700,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
             <span style={{color:'var(--tx)'}}>{toast.displayName||toast.username}</span>
             <span style={{color:'var(--mu)'}}> won </span>
