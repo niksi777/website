@@ -47,10 +47,18 @@
     .hero{padding:56px 0 44px;text-align:center}
     .htag{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 14px;border-radius:100px;margin-bottom:20px}
     .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    .htitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(42px,7vw,72px);font-weight:800;line-height:.92;letter-spacing:-.01em;text-transform:uppercase;color:#fff;margin-bottom:14px}
-    .htitle em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
-    .hsub{font-size:14px;line-height:1.7;color:var(--mu);max-width:440px;margin:0 auto}
-    .hsub strong{color:rgba(221,227,239,.9);font-weight:600}
+    .benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+    .bcard{border-radius:14px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s,box-shadow .2s}
+    .bcard:hover{transform:translateY(-3px)}
+    .bcard::before{content:'';position:absolute;inset:0;opacity:.12;border-radius:inherit}
+    .bcard-val{font-family:'Barlow Condensed',sans-serif;font-size:clamp(26px,3.5vw,36px);font-weight:800;letter-spacing:.02em;line-height:1;text-align:center}
+    .bcard-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(221,227,239,.6);text-align:center}
+    .bcard-icon{font-size:22px;margin-bottom:2px}
+    .bc-blue{background:linear-gradient(135deg,#0d1a2e,#0a1220);border-color:rgba(74,144,217,.3);box-shadow:0 0 24px rgba(74,144,217,.08)}.bc-blue .bcard-val{color:#4a90d9}.bc-blue::before{background:#4a90d9}
+    .bc-gold{background:linear-gradient(135deg,#1e1400,#160e00);border-color:rgba(232,164,39,.3);box-shadow:0 0 24px rgba(232,164,39,.08)}.bc-gold .bcard-val{color:#e8a427}.bc-gold::before{background:#e8a427}
+    .bc-green{background:linear-gradient(135deg,#0a1e0d,#061408);border-color:rgba(34,197,94,.3);box-shadow:0 0 24px rgba(34,197,94,.08)}.bc-green .bcard-val{color:#22c55e}.bc-green::before{background:#22c55e}
+    .bc-white{background:linear-gradient(135deg,#141620,#0e1018);border-color:rgba(255,255,255,.2);box-shadow:0 0 24px rgba(255,255,255,.05)}.bc-white .bcard-val{color:#fff;letter-spacing:.08em}.bc-white::before{background:#fff}
+    @media(max-width:700px){.benefits{grid-template-columns:1fr 1fr}}
 
     .offers{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:56px}
 
@@ -309,8 +317,28 @@
       <div className="page">
         <div className="hero f1">
           <div className="htag"><span className="pdot"/>{activeCount} Active Offers</div>
-          <h1 className="htitle">Play smarter.<br/><em>Earn more.</em></h1>
-          <p className="hsub">Code <strong>NIKSI</strong> gets you into exclusive leaderboards with real cash prizes, a NiksiPoints shop to spend on free case openings, bonus promo codes and much more - the more you play, the more you earn.</p>
+          <div className="benefits">
+            <div className="bcard bc-blue">
+              <div className="bcard-icon">🛡️</div>
+              <div className="bcard-val">Up to 20%</div>
+              <div className="bcard-lbl">Lossback</div>
+            </div>
+            <div className="bcard bc-gold">
+              <div className="bcard-icon">🏆</div>
+              <div className="bcard-val">$3,000</div>
+              <div className="bcard-lbl">Monthly Leaderboard</div>
+            </div>
+            <div className="bcard bc-green">
+              <div className="bcard-icon">💸</div>
+              <div className="bcard-val">70%</div>
+              <div className="bcard-lbl">Commission</div>
+            </div>
+            <div className="bcard bc-white">
+              <div className="bcard-icon">🎟️</div>
+              <div className="bcard-val">NIKSI</div>
+              <div className="bcard-lbl">Use at signup</div>
+            </div>
+          </div>
         </div>
         <div className="offers f2">
           <GambaCard/>
