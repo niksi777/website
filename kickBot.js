@@ -124,14 +124,14 @@ async function handleCommand(username, message, isBadgeMod = false) {
     if (!isBroadcaster(username)) return;
     if (earlyRaffle) { await sendMessage('An early NP roll is already active! Type !join to enter.'); return; }
     earlyRaffle = { entries: new Set() };
-    await sendMessage('ðŸŽ° Early NP Roll! Type !join to enter â€” winner gets 25 NP! Rolling in 2 minutes!');
+    await sendMessage('Early NP Roll! Type !join to enter - winner gets 25 NP! Rolling in 2 minutes!');
     earlyRaffle.timeout = setTimeout(async () => {
       const entries = [...earlyRaffle.entries];
       earlyRaffle = null;
       if (entries.length === 0) { await sendMessage('No one joined the early NP roll!'); return; }
       const winner = entries[Math.floor(Math.random() * entries.length)];
       const newBal = addPoints(winner, 25);
-      await sendMessage(`ðŸ† @${winner} won the early NP roll and received 25 NP! Balance: ${newBal.toLocaleString()} NP`);
+      await sendMessage(`@${winner} won the early NP roll and received 25 NP! Balance: ${newBal.toLocaleString()} NP`);
     }, 2 * 60 * 1000);
     return;
   }

@@ -39,7 +39,7 @@ function openRaffle(send) {
   winners = [];
   sendMessageFn = send;
 
-  send('🎟️ A multiraffle has started! Type !join to participate. Drawing winners in 30 seconds!');
+  send('A multiraffle has started! Type !join to participate. Drawing winners in 30 seconds!');
 
   raffleTimer = setTimeout(() => {
     drawWinners();
