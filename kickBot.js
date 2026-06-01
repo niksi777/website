@@ -156,6 +156,50 @@ async function handleCommand(username, message, isBadgeMod = false) {
     return;
   }
 
+  if (cmd === '!addcom') {
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
+    const name = parts[1]?.toLowerCase();
+    const text = parts.slice(2).join(' ');
+    if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !addcom !command response text'); return; }
+    const cmdsA = loadCmds();
+    if (cmdsA[name]) { await sendMessage(`Command ${name} already exists. Use !editcom to update it.`); return; }
+    cmdsA[name] = text; saveCmds(cmdsA);
+    await sendMessage(`Command ${name} added.`); return;
+  }
+
+  if (cmd === '!editcom') {
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
+    const name = parts[1]?.toLowerCase();
+    const text = parts.slice(2).join(' ');
+    if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !editcom !command new response text'); return; }
+    const cmdsE = loadCmds();
+    if (!cmdsE[name]) { await sendMessage(`Command ${name} doesn't exist. Use !addcom to create it.`); return; }
+    cmdsE[name] = text; saveCmds(cmdsE);
+    await sendMessage(`Command ${name} updated.`); return;
+  }
+
+  if (cmd === '!delcom') {
+    if (!isModOrBroadcaster(username, isBadgeMod)) return;
+    const name = parts[1]?.toLowerCase();
+    if (!name || !name.startsWith('!')) { await sendMessage('Usage: !delcom !command'); return; }
+    const cmdsD = loadCmds();
+    if (!cmdsD[name]) { await sendMessage(`Command ${name} doesn't exist.`); return; }
+    delete cmdsD[name]; saveCmds(cmdsD);
+    await sendMessage(`Command ${name} deleted.`); return;
+  }
+
+  // Custom commands - available to everyone
+  const cmdsLookup = loadCmds();
+  if (cmdsLookup[cmd]) {
+    let response = cmdsLookup[cmd];
+    response = response.replace(/\$\(sender\)/gi, username);
+    response = response.replace(/Rand\[(\d+),(\d+)\]/gi, (_, min, max) => {
+      const lo = parseInt(min), hi = parseInt(max);
+      return Math.floor(Math.random() * (hi - lo + 1)) + lo;
+    });
+    await sendMessage(response); return;
+  }
+
   if (!isBroadcaster(username)) return;
 
   if (cmd === '!addpoints') {
@@ -186,58 +230,6 @@ async function handleCommand(username, message, isBadgeMod = false) {
     return;
   }
 
-  if (cmd === '!addcom') {
-    if (!isModOrBroadcaster(username, isBadgeMod)) return;
-    const name = parts[1]?.toLowerCase();
-    const text = parts.slice(2).join(' ');
-    if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !addcom !command response text'); return; }
-    const cmds = loadCmds();
-    if (cmds[name]) { await sendMessage(`Command ${name} already exists. Use !editcom to update it.`); return; }
-    cmds[name] = text;
-    saveCmds(cmds);
-    await sendMessage(`Command ${name} added.`);
-    return;
-  }
-
-  if (cmd === '!editcom') {
-    if (!isModOrBroadcaster(username, isBadgeMod)) return;
-    const name = parts[1]?.toLowerCase();
-    const text = parts.slice(2).join(' ');
-    if (!name || !name.startsWith('!') || !text) { await sendMessage('Usage: !editcom !command new response text'); return; }
-    const cmds = loadCmds();
-    if (!cmds[name]) { await sendMessage(`Command ${name} doesn't exist. Use !addcom to create it.`); return; }
-    cmds[name] = text;
-    saveCmds(cmds);
-    await sendMessage(`Command ${name} updated.`);
-    return;
-  }
-
-  if (cmd === '!delcom') {
-    if (!isModOrBroadcaster(username, isBadgeMod)) return;
-    const name = parts[1]?.toLowerCase();
-    if (!name || !name.startsWith('!')) { await sendMessage('Usage: !delcom !command'); return; }
-    const cmds = loadCmds();
-    if (!cmds[name]) { await sendMessage(`Command ${name} doesn't exist.`); return; }
-    delete cmds[name];
-    saveCmds(cmds);
-    await sendMessage(`Command ${name} deleted.`);
-    return;
-  }
-
-  // Custom command lookup (available to everyone)
-  const cmds = loadCmds();
-  if (cmds[cmd]) {
-    let response = cmds[cmd];
-    // $(sender) â†’ triggering username
-    response = response.replace(/\$\(sender\)/gi, username);
-    // Rand[min,max] â†’ random integer between min and max inclusive
-    response = response.replace(/Rand\[(\d+),(\d+)\]/gi, (_, min, max) => {
-      const lo = parseInt(min), hi = parseInt(max);
-      return Math.floor(Math.random() * (hi - lo + 1)) + lo;
-    });
-    await sendMessage(response);
-    return;
-  }
 }
 
 // â”€â”€â”€ WEBSOCKET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
