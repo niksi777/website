@@ -130,13 +130,6 @@
     .rc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(255,255,255,.07)}
     .rc-img{width:26px;height:26px;object-fit:contain}
 
-    /* Winner highlight flash */
-    .win-flash{
-      position:absolute;left:50%;transform:translateX(-50%);top:0;bottom:0;width:52px;
-      background:rgba(232,164,39,0);z-index:5;pointer-events:none;
-      animation:winFlash 3.2s 2.1s ease forwards;
-    }
-    @keyframes winFlash{0%,88%{background:rgba(232,164,39,0);box-shadow:none}94%,100%{background:rgba(232,164,39,.12);box-shadow:inset 0 0 12px rgba(232,164,39,.5)}}
   </style>
 </head>
 <body>
@@ -193,7 +186,6 @@
           <div class="ptr top"></div>
           <div class="ptr bot"></div>
           <div class="spin-stage">
-            <div class="win-flash"></div>
             <div class="spin-track">
               <div class="rc"><span>🗑️</span></div>
               <div class="rc"><img class="rc-img" src="/assets/np-coin.svg"/></div>
