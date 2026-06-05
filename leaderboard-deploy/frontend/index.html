@@ -68,8 +68,6 @@
     @media(max-width:800px){.benefits{grid-template-columns:1fr 1fr 1fr}.benefits-arrow{display:none}.bc-white{grid-column:1/-1}}
     @media(max-width:500px){.benefits{grid-template-columns:1fr 1fr}}
 
-    .offers{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:56px}
-
     .ocard{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;color:inherit;transition:transform .2s;width:100%;text-decoration:none}
     .ocard:hover{transform:translateY(-3px)}
     .obanner{height:160px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:#0e1018;border:1px solid var(--b2);border-bottom:none;border-radius:14px 14px 0 0}
@@ -101,6 +99,18 @@
     .qzino-cta{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:8px;background:linear-gradient(135deg,#7ac832,#4a9e1a);color:#fff;transition:opacity .15s;text-decoration:none;margin-top:auto}
     .qzino-cta:hover{opacity:.85}
     .qzino-cta svg{width:13px;height:13px;flex-shrink:0}
+
+    .packy-banner{border-color:rgba(160,100,230,.2) !important}
+    .packy-body{border-color:rgba(160,100,230,.2) !important;border-top-color:rgba(160,100,230,.5) !important}
+    .packy-badge{color:rgba(190,140,250,.9) !important;background:rgba(160,100,230,.08) !important;border-color:rgba(160,100,230,.2) !important}
+    .packy-prize{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,6vw,64px);font-weight:800;letter-spacing:.01em;line-height:1;color:#c084fc}
+    .packy-cta{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:8px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;transition:opacity .15s;text-decoration:none}
+    .packy-cta:hover{opacity:.85}
+    .packy-cta svg{width:13px;height:13px;flex-shrink:0}
+
+    .offers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding-bottom:40px}
+    @media(max-width:900px){.offers{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.offers{grid-template-columns:1fr}}
 
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -184,6 +194,7 @@
     chancer: { prize:2000, start:new Date("2026-04-23T14:00:00Z"), end:new Date("2026-05-13T14:00:00Z"), visible:false },
   };
   const VISIBLE = Object.entries(RACES).filter(([,r])=>r.visible).map(([k])=>k);
+  const PACKY_PRIZE = 1000;
 
   function fmtCD(target){
     const ms=target-Date.now(); if(ms<=0)return"Ended";
@@ -358,14 +369,52 @@
     );
   }
 
+  function PackyCard(){
+    const amount = useAnimNum(PACKY_PRIZE);
+    return (
+      <div className="ocard">
+        <div className="obanner packy-banner">
+          <span className="obadge packy-badge">Packy.gg</span>
+          <img src="/assets/packy.png" alt="Packy" onError={e=>{e.target.style.display='none'}}/>
+        </div>
+        <div className="obody packy-body">
+          <div>
+            <div className="oprize-lbl">Leaderboard Prize</div>
+            <div className="packy-prize">${amount.toLocaleString("en-US")}</div>
+          </div>
+          <p className="qzino-desc">
+            Sign up on Packy.gg using my code <strong>NIKSI</strong> and compete in the monthly leaderboard for a share of the $1,000 prize pool!
+          </p>
+          <div className="obtn-row">
+            <a href="/leaderboards" className="octa">
+              Leaderboard
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://packy.gg" target="_blank" rel="noreferrer" className="packy-cta">
+              Sign Up
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function App(){
-    const activeCount = VISIBLE.length + 1;
+    const activeCount = VISIBLE.length + 2;
     return (<>
       <Navbar/>
       <div className="page">
-        <div className="hero f1">
+        <div className="hero f1" style={{paddingBottom:24}}>
           <div className="htag"><span className="pdot"/>{activeCount} Active Offers</div>
-          <div className="benefits">
+        </div>
+        <div className="offers f2">
+          <GambaCard/>
+          <QzinoCard/>
+          <PackyCard/>
+        </div>
+        <div className="f3" style={{paddingBottom:56}}>
+          <div className="benefits" style={{marginBottom:8}}>
             <a href="/gamba" className="bcard bc-gold" style={{textDecoration:'none',cursor:'pointer'}}>
               <div className="bcard-val">$3,000</div>
               <div className="bcard-lbl">Monthly Leaderboard</div>
@@ -400,10 +449,6 @@
             </div>
             <CaseGraphic id="starter" size={100}/>
           </a>
-        </div>
-        <div className="offers f2">
-          <GambaCard/>
-          <QzinoCard/>
         </div>
       </div>
       <footer>
