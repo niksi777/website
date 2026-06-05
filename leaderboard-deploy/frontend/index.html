@@ -11,14 +11,14 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080707;--s1:#100d0d;--s2:#161212;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#efe0e0;--mu:rgba(239,224,224,.7);--ac:#e03535;--rd:#e03535;--gold:#d4af5a}
-    html,body{background-color:var(--bg);background-image:radial-gradient(circle,rgba(255,255,255,.055) 1px,transparent 1px);background-size:28px 28px;color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(200,40,40,.05),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(160,20,20,.04),transparent 60%)}
+    :root{--bg:#070809;--s1:#0c0e13;--s2:#111318;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#3d8ef0;--rd:#e03535;--gold:#d4af5a}
+    html,body{background-color:var(--bg);background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);background-size:28px 28px;color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 500px at 0% 0%,rgba(61,142,240,.06),transparent 60%),radial-gradient(ellipse 600px 600px at 100% 100%,rgba(30,100,200,.04),transparent 60%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .2s ease both}
 
-    nav{background:rgba(8,7,7,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    nav{background:rgba(7,8,9,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
     .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
     .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
     .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
@@ -100,11 +100,11 @@
     .qzino-cta:hover{opacity:.85}
     .qzino-cta svg{width:13px;height:13px;flex-shrink:0}
 
-    .packy-banner{border-color:rgba(160,100,230,.2) !important}
-    .packy-body{border-color:rgba(160,100,230,.2) !important;border-top-color:rgba(160,100,230,.5) !important}
-    .packy-badge{color:rgba(190,140,250,.9) !important;background:rgba(160,100,230,.08) !important;border-color:rgba(160,100,230,.2) !important}
-    .packy-prize{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,6vw,64px);font-weight:800;letter-spacing:.01em;line-height:1;color:#c084fc}
-    .packy-cta{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:8px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;transition:opacity .15s;text-decoration:none}
+    .packy-banner{border-color:rgba(0,178,245,.2) !important}
+    .packy-body{border-color:rgba(0,178,245,.2) !important;border-top-color:rgba(0,178,245,.5) !important}
+    .packy-badge{color:rgba(0,200,255,.9) !important;background:rgba(0,178,245,.08) !important;border-color:rgba(0,178,245,.2) !important}
+    .packy-prize{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,6vw,64px);font-weight:800;letter-spacing:.01em;line-height:1;color:#00b2f5}
+    .packy-cta{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:8px;background:linear-gradient(135deg,#00b2f5,#0080c8);color:#fff;transition:opacity .15s;text-decoration:none}
     .packy-cta:hover{opacity:.85}
     .packy-cta svg{width:13px;height:13px;flex-shrink:0}
 
