@@ -163,7 +163,7 @@ updateLeaderboard();
 app.get("/packy-data", async (req, res) => {
   try {
     const r = await axios.get("https://packy.gg/v1/affiliate/leaderboard/external", {
-      headers: { "X-API-Key": "64857a34b283ac5dc2564cc5edc4e9716f2a53ad5e1589f01e2b35ca5fae477c" },
+      headers: { "X-API-Key": process.env.PACKY_API_KEY },
       timeout: 8000
     });
     const leaderboards = r.data && r.data.data && r.data.data.leaderboards;
