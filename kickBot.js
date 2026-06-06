@@ -301,6 +301,7 @@ setInterval(async () => {
 
 // --- ROTATING COMMAND TIMERS -------------------------------------------
 // Cycles through !gamba, !packy, !web every 20 minutes (each fires ~every 60 min)
+// Only posts when the stream is live.
 const TIMER_INTERVAL = 20 * 60 * 1000;
 const TIMER_COMMANDS = [
   () => { const c = loadCmds(); return c['!gamba'] || null; },
@@ -308,8 +309,15 @@ const TIMER_COMMANDS = [
   () => { const c = loadCmds(); return c['!web']   || null; },
 ];
 let timerIndex = 0;
+async function isStreamLive() {
+  try {
+    const r = await axios.get(`https://kick.com/api/v2/channels/${CHANNEL}`, { timeout: 5000 });
+    return r.data && r.data.livestream !== null && r.data.livestream !== undefined;
+  } catch { return false; }
+}
 function startTimers() {
   setInterval(async () => {
+    if (!(await isStreamLive())) return;
     const getText = TIMER_COMMANDS[timerIndex % TIMER_COMMANDS.length];
     timerIndex++;
     const text = getText();
