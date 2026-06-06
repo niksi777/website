@@ -299,6 +299,24 @@ setInterval(async () => {
   } catch {}
 }, 4000);
 
+// --- ROTATING COMMAND TIMERS -------------------------------------------
+// Cycles through !gamba, !packy, !web every 20 minutes (each fires ~every 60 min)
+const TIMER_INTERVAL = 20 * 60 * 1000;
+const TIMER_COMMANDS = [
+  () => { const c = loadCmds(); return c['!gamba'] || null; },
+  () => { const c = loadCmds(); return c['!packy'] || null; },
+  () => { const c = loadCmds(); return c['!web']   || null; },
+];
+let timerIndex = 0;
+function startTimers() {
+  setInterval(async () => {
+    const getText = TIMER_COMMANDS[timerIndex % TIMER_COMMANDS.length];
+    timerIndex++;
+    const text = getText();
+    if (text) await sendMessage(text);
+  }, TIMER_INTERVAL);
+}
+
 async function start() {
   console.log(`[bot] Starting for channel: ${CHANNEL}`);
   console.log(`[bot] Mods: ${MODS.join(', ') || '(none set)'}`);
@@ -306,6 +324,7 @@ async function start() {
   // Do an initial refresh to make sure token is fresh
   await refreshToken();
   connectWebSocket(CHATROOM_ID);
+  startTimers();
 }
 
 start();
