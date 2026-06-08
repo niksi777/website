@@ -712,6 +712,13 @@ app.post('/giveaway/enter', (req, res) => {
   res.json({ ok: true });
 });
 
+app.post('/giveaway/remove-entry', (req, res) => {
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ error: 'username required' });
+  giveawayState.entries = giveawayState.entries.filter(e => e.username.toLowerCase() !== username.toLowerCase());
+  res.json({ ok: true, remaining: giveawayState.entries.length });
+});
+
 app.post('/giveaway/roll', (req, res) => {
   if (!giveawayState.giveaway || giveawayState.entries.length === 0) {
     return res.status(400).json({ error: 'No entries to roll' });
