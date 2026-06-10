@@ -362,17 +362,19 @@
             <div className="pcard-code">Use code <strong>NIKSI</strong></div>
           </div>
         </div>
-        <ul className="pcard-perks">
-          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>70% commission</strong> on all your wagers</span></li>
-          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>10-20% lossback</strong> - claim via live support</span></li>
-          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>$1,500 bi-weekly</strong> leaderboard prize</span></li>
-          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span>Wager sprints &amp; promo codes</span></li>
-          <li><span className="perk-check" style={{color:'#e8a427'}}>✓</span><span><strong style={{color:'#e8a427'}}>NiksiPoints</strong> rewards - up to 2,250 NP for 1st place</span></li>
-        </ul>
-        <div className="pcard-btns">
-          <a href="/leaderboards" className="octa"><ArrowIcon/> Leaderboard</a>
+        <div style={{textAlign:'center',padding:'12px 18px 4px'}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#22c55e',lineHeight:1}}>$1,500</div>
+          <div style={{fontSize:10,fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',color:'rgba(221,227,239,.5)',marginTop:2}}>Bi-Weekly Prize</div>
+        </div>
+        <div className="pcard-btns" style={{padding:'10px 18px 4px'}}>
+          <a href="/leaderboards" className="octa" style={{background:'#22c55e'}}><ArrowIcon/> View Leaderboard</a>
           <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="octa-sec"><ExtIcon/> Sign Up</a>
         </div>
+        <ul className="pcard-perks" style={{paddingTop:8}}>
+          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>70% commission</strong> on all your wagers</span></li>
+          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>10-20% lossback</strong> - claim via live support</span></li>
+          <li><span className="perk-check" style={{color:'#e8a427'}}>✓</span><span><strong style={{color:'#e8a427'}}>NiksiPoints</strong> - up to 2,250 NP for 1st place</span></li>
+        </ul>
       </div>
     );
   }
@@ -386,15 +388,18 @@
             <div className="pcard-code">Use code <strong>NIKSI</strong></div>
           </div>
         </div>
-        <ul className="pcard-perks">
-          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span><strong>5% bonus</strong> on your first deposit</span></li>
-          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span><strong>$1,000 bi-weekly</strong> leaderboard prize</span></li>
-          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span>Active community leaderboard</span></li>
-        </ul>
-        <div className="pcard-btns">
-          <a href="/leaderboards?tab=packy" className="octa"><ArrowIcon/> Leaderboard</a>
-          <a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" className="octa-sec"><ExtIcon/> Sign Up</a>
+        <div style={{textAlign:'center',padding:'12px 18px 4px'}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#00b2f5',lineHeight:1}}>$1,000</div>
+          <div style={{fontSize:10,fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',color:'rgba(221,227,239,.5)',marginTop:2}}>Bi-Weekly Prize</div>
         </div>
+        <div className="pcard-btns" style={{padding:'10px 18px 4px'}}>
+          <a href="/leaderboards?tab=packy" className="octa" style={{background:'#00b2f5',gridColumn:'1/-1'}}><ArrowIcon/> View Leaderboard</a>
+        </div>
+        <ul className="pcard-perks" style={{paddingTop:8}}>
+          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span><strong>5% bonus</strong> on your first deposit</span></li>
+          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span>Active community leaderboard</span></li>
+          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span><a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" style={{color:'#00b2f5'}}>Sign up here</a> to qualify</span></li>
+        </ul>
       </div>
     );
   }
@@ -432,7 +437,6 @@
           <PackyCard/>
           <QzinoCard/>
         </div>
-        <PredictorBanner/>
         <div className="f3" style={{paddingBottom:56}}>
           <div className="benefits" style={{marginBottom:8}}>
             <a href="/gamba" className="bcard bc-gold" style={{textDecoration:'none',cursor:'pointer'}}>
