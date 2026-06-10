@@ -381,6 +381,7 @@ function GambaLeaderboard() {
   const fmtPrize = (p, rank) => fmtMoney(p.reward ?? GAMBA_PRIZES[rank] ?? 0);
   const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   const fmtNP    = rank => (GAMBA_NP[rank] || 0).toLocaleString();
+  const GAMBA_END = "2026-06-28T23:59:59Z";
 
   if (players === null) return <div className="loading">Loading...</div>;
 
@@ -399,6 +400,8 @@ function GambaLeaderboard() {
         <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
         <div className="lb-meta-item">Total Wagered <strong>${players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></div>
       </div>
+
+      <Countdown endDate={GAMBA_END}/>
 
       {top3.length > 0 && (
         <div className="podium">
