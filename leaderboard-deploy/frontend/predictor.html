@@ -289,7 +289,7 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
     setBusy(true); setMsg('');
     const r = await fetch('/predictor/resolve', { method:'POST', headers, body: JSON.stringify({ endingBalance: Number(endBal.replace(/,/g,'')) }) }).then(x=>x.json());
     setBusy(false);
-    setMsg(r.ok ? `Resolved! Result: ${r.result.toUpperCase()} - Pot: ${r.totalPot?.toLocaleString()} NP - Winners: ${r.winnerCount}` : (r.error || 'Error'));
+    setMsg(r.ok ? `Resolved! Ending: $${Number(r.endingBalance).toLocaleString()} - Pot: ${r.totalPot?.toLocaleString()} NP - Winners: ${r.winnerCount}` : (r.error || 'Error'));
     if (r.ok) { setEndBal(''); onRefresh(); }
   };
 
@@ -325,28 +325,29 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
 }
 
 function PredictForm({ user, sessionId, hunt, onDone }) {
-  const [side, setSide] = React.useState(null);
-  const [amount, setAmount] = React.useState('');
+  const [guess, setGuess] = React.useState('');
+  const [wager, setWager] = React.useState('');
   const [err, setErr] = React.useState('');
   const [ok, setOk] = React.useState('');
   const [busy, setBusy] = React.useState(false);
 
-  const quicks = [100, 250, 500, 1000, 2500];
+  const quicks = [5, 10, 20, 25, 50];
 
   const submit = async () => {
     setErr(''); setOk('');
-    if (!side) { setErr('Pick profit or no profit first.'); return; }
-    const w = Math.floor(Number(amount));
+    const g = Math.floor(Number(guess));
+    if (!g || g < 1) { setErr('Enter a valid ending balance guess ($).'); return; }
+    const w = Math.floor(Number(wager));
     if (!w || w < 1) { setErr('Enter a valid wager amount.'); return; }
     setBusy(true);
     const r = await fetch('/predictor/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId },
-      body: JSON.stringify({ side, amount: w })
+      body: JSON.stringify({ guess: g, wager: w })
     }).then(x => x.json());
     setBusy(false);
     if (r.ok) {
-      setOk(`Locked in! You predicted ${side.toUpperCase()} with ${w.toLocaleString()} NP. Balance: ${r.newBalance.toLocaleString()} NP`);
+      setOk(`Locked in! Guessed $${g.toLocaleString()} with ${w.toLocaleString()} NP. Balance: ${r.newBalance.toLocaleString()} NP`);
       onDone();
     } else { setErr(r.error || 'Something went wrong.'); }
   };
@@ -354,35 +355,42 @@ function PredictForm({ user, sessionId, hunt, onDone }) {
   return (
     <div className="card f2">
       <div className="card-title">Place Your Prediction</div>
-      <div className="side-btns">
-        <button className={`side-btn ${side==='profit'?'sel-profit':''}`} onClick={()=>setSide('profit')}>
-          Profit
-          <div style={{fontSize:11,fontFamily:"'Inter',sans-serif",fontWeight:500,marginTop:4,opacity:.7}}>Hunt ends above start</div>
-        </button>
-        <button className={`side-btn ${side==='noprofit'?'sel-noprofit':''}`} onClick={()=>setSide('noprofit')}>
-          No Profit
-          <div style={{fontSize:11,fontFamily:"'Inter',sans-serif",fontWeight:500,marginTop:4,opacity:.7}}>Hunt ends below start</div>
-        </button>
+      <div style={{marginBottom:16}}>
+        <div className="admin-input-lbl" style={{marginBottom:8}}>Your Guess - Ending Balance ($)</div>
+        <div className="wager-row">
+          <input
+            className="wager-input"
+            style={{textAlign:'center'}}
+            value={guess}
+            onChange={e => setGuess(e.target.value.replace(/[^0-9]/g,''))}
+            onKeyDown={e => e.key==='Enter' && submit()}
+            disabled={busy}
+          />
+        </div>
+        {guess && Number(guess) > 0 && <div style={{fontSize:11,color:'var(--mu)',textAlign:'center',marginTop:4}}>Starting balance: ${hunt?.startingBalance?.toLocaleString()}</div>}
       </div>
-      <div className="quick-btns">
-        {quicks.map(q => (
-          <button key={q} className="quick-btn" onClick={() => setAmount(String(Math.min(q, user?.points||0)))}>{q.toLocaleString()}</button>
-        ))}
-        <button className="quick-btn" onClick={() => setAmount(String(user?.points||0))}>All In</button>
+      <div style={{marginBottom:16}}>
+        <div className="admin-input-lbl" style={{marginBottom:8}}>Wager (NP) - win and get 2x back</div>
+        <div className="quick-btns">
+          {quicks.map(q => (
+            <button key={q} className="quick-btn" onClick={() => setWager(String(Math.min(q, user?.points||0)))}>{q}</button>
+          ))}
+          <button className="quick-btn" onClick={() => setWager(String(user?.points||0))}>All In</button>
+        </div>
+        <div className="wager-row">
+          <input
+            className="wager-input"
+            style={{textAlign:'center'}}
+            value={wager}
+            onChange={e => setWager(e.target.value.replace(/[^0-9]/g,''))}
+            onKeyDown={e => e.key==='Enter' && submit()}
+            disabled={busy}
+          />
+        </div>
+        {wager && Number(wager) > 0 && <div style={{fontSize:11,color:'var(--mu)',textAlign:'center',marginTop:4}}>Balance: {(user?.points||0).toLocaleString()} NP - after wager: {Math.max(0,(user?.points||0)-Number(wager)).toLocaleString()} NP</div>}
       </div>
-      <div className="wager-row">
-        <input
-          className="wager-input"
-          placeholder="Wager amount (NP)"
-          value={amount}
-          onChange={e => setAmount(e.target.value.replace(/[^0-9]/g,''))}
-          onKeyDown={e => e.key==='Enter' && submit()}
-          disabled={busy}
-        />
-      </div>
-      {amount && Number(amount) > 0 && <div style={{fontSize:11,color:'var(--mu)',marginBottom:10,textAlign:'center'}}>Your balance: {(user?.points||0).toLocaleString()} NP - after wager: {Math.max(0,(user?.points||0)-Number(amount)).toLocaleString()} NP</div>}
-      <button className={`submit-btn ${side==='profit'?'green':''}`} onClick={submit} disabled={busy||!side||!amount}>
-        {busy ? 'Locking in...' : `Predict ${side ? side.toUpperCase() : '...'}`}
+      <button className="submit-btn" onClick={submit} disabled={busy||!guess||!wager}>
+        {busy ? 'Locking in...' : 'Lock In Prediction'}
       </button>
       {err && <div className="err">{err}</div>}
       {ok && <div className="ok">{ok}</div>}
@@ -417,8 +425,6 @@ function App() {
   const hunt = data?.hunt;
   const stats = data?.stats;
 
-  const profitPct = stats && stats.totalPot > 0 ? Math.round((stats.profitTotal / stats.totalPot) * 100) : 50;
-
   const statusBadge = () => {
     if (!hunt) return null;
     if (hunt.status === 'open')     return <span className="badge badge-open"><span className="badge-dot"/>Predictions Open</span>;
@@ -436,7 +442,7 @@ function App() {
           <div className="phead f1">
             <div className="phead-eyebrow"><span className="pdot"/>Bonus Hunt</div>
             <h1>Predictor</h1>
-            <p>Wager your NP on whether the bonus hunt ends in profit or loss. Pool-based payouts - bigger stake, bigger share.</p>
+            <p>Guess the ending balance in $ and wager your NP. Whoever is closest wins 2x their wager - ties split equally.</p>
           </div>
 
           {user?.username === 'niksi777' && (
@@ -478,22 +484,8 @@ function App() {
                 )}
               </div>
 
-              {stats && stats.totalPredictions > 0 && (
-                <div className="split-wrap">
-                  <div className="split-labels">
-                    <span className="split-lbl profit">Profit {profitPct}%</span>
-                    <span className="split-lbl noprofit">No Profit {100-profitPct}%</span>
-                  </div>
-                  <div className="split-bar"><div className="split-fill" style={{width:`${profitPct}%`}}/></div>
-                  <div className="split-counts">
-                    <span>{stats.profitCount} predictions - {stats.profitTotal.toLocaleString()} NP</span>
-                    <span>{stats.noprofitTotal.toLocaleString()} NP - {stats.noprofitCount} predictions</span>
-                  </div>
-                </div>
-              )}
-
               {stats && (
-                <div style={{display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center',textAlign:'center'}}>
+                <div style={{display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center',textAlign:'center',marginTop:8}}>
                   <div>
                     <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Total Pot</div>
                     <div className="pot-val">{stats.totalPot.toLocaleString()} NP</div>
@@ -502,16 +494,10 @@ function App() {
                     <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Predictions</div>
                     <div className="pot-val">{stats.totalPredictions}</div>
                   </div>
-                  {stats.totalPot > 0 && stats.profitTotal > 0 && (
+                  {hunt.status === 'resolved' && stats.winnerGuess != null && (
                     <div>
-                      <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Profit Odds</div>
-                      <div className="pot-val" style={{color:'var(--green)'}}>x{(stats.totalPot/Math.max(1,stats.profitTotal)).toFixed(2)}</div>
-                    </div>
-                  )}
-                  {stats.totalPot > 0 && stats.noprofitTotal > 0 && (
-                    <div>
-                      <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>No Profit Odds</div>
-                      <div className="pot-val" style={{color:'var(--red)'}}>x{(stats.totalPot/Math.max(1,stats.noprofitTotal)).toFixed(2)}</div>
+                      <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Winning Guess</div>
+                      <div className="pot-val" style={{color:'var(--green)'}}>${stats.winnerGuess.toLocaleString()}</div>
                     </div>
                   )}
                 </div>
@@ -531,8 +517,8 @@ function App() {
                 <div className="card-title">Your Prediction</div>
                 <div className="my-pred">
                   <div>
-                    <div className={`my-pred-side ${myPred.side}`}>{myPred.side === 'profit' ? 'Profit' : 'No Profit'}</div>
-                    <div className="my-pred-amt">{myPred.amount.toLocaleString()} NP wagered - predictions are locked</div>
+                    <div className="my-pred-side profit">${myPred.guess?.toLocaleString()}</div>
+                    <div className="my-pred-amt">{myPred.wager?.toLocaleString()} NP wagered - predictions are locked</div>
                   </div>
                 </div>
               </div>
@@ -546,8 +532,8 @@ function App() {
               <div className="card-title">Your Prediction</div>
               <div className="my-pred">
                 <div>
-                  <div className={`my-pred-side ${myPred.side}`}>{myPred.side === 'profit' ? 'Profit' : 'No Profit'}</div>
-                  <div className="my-pred-amt">{myPred.amount.toLocaleString()} NP wagered - waiting for result...</div>
+                  <div className="my-pred-side profit">${myPred.guess?.toLocaleString()}</div>
+                  <div className="my-pred-amt">{myPred.wager?.toLocaleString()} NP wagered - waiting for result...</div>
                 </div>
               </div>
             </div>
@@ -558,19 +544,19 @@ function App() {
               <div className="card-title">Your Prediction Result</div>
               <div className="my-pred">
                 <div>
-                  <div className={`my-pred-side ${myPred.side}`}>{myPred.side === 'profit' ? 'Profit' : 'No Profit'}</div>
-                  <div className="my-pred-amt">{myPred.amount.toLocaleString()} NP wagered</div>
+                  <div className="my-pred-side profit">${myPred.guess?.toLocaleString()}</div>
+                  <div className="my-pred-amt">{myPred.wager?.toLocaleString()} NP wagered</div>
                 </div>
                 {myPred.payout != null && (
                   <div>
                     {myPred.payout > 0 ? (
                       <>
                         <div className="my-pred-payout payout-win">+{myPred.payout.toLocaleString()} NP</div>
-                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'center'}}>Won!</div>
+                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'center'}}>Closest guess - you won!</div>
                       </>
                     ) : (
                       <>
-                        <div className="my-pred-payout payout-loss">-{myPred.amount.toLocaleString()} NP</div>
+                        <div className="my-pred-payout payout-loss">-{myPred.wager?.toLocaleString()} NP</div>
                         <div style={{fontSize:11,color:'var(--mu)',textAlign:'center'}}>Better luck next time</div>
                       </>
                     )}
@@ -589,7 +575,7 @@ function App() {
                     <th>Date</th>
                     <th>Start</th>
                     <th>End</th>
-                    <th>Result</th>
+                    <th>Winning Guess</th>
                     <th>Total Pot</th>
                     <th>Winners</th>
                     {user?.username === 'niksi777' && <th></th>}
@@ -601,7 +587,7 @@ function App() {
                       <td style={{color:'var(--mu)',fontSize:12}}>{new Date(h.resolvedAt).toLocaleDateString()}</td>
                       <td>${fmt(h.startingBalance)}</td>
                       <td>${fmt(h.endingBalance)}</td>
-                      <td><span className={h.result==='profit'?'hist-result-profit':'hist-result-noprofit'}>{h.result==='profit'?'PROFIT':'NO PROFIT'}</span></td>
+                      <td><span className="hist-result-profit">{h.winnerGuess != null ? `$${Number(h.winnerGuess).toLocaleString()}` : '-'}</span></td>
                       <td>{h.totalPot?.toLocaleString()} NP</td>
                       <td style={{color:'var(--mu)'}}>{h.winnerCount} / {h.totalPredictions}</td>
                       {user?.username === 'niksi777' && (
