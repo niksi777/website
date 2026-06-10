@@ -225,9 +225,11 @@ function Navbar({ user, sessionId, logout }) {
             <a href="/">Home</a>
             <a href="/packy">Packy</a>
             <a href="/gamba">Gamba</a>
-            <a href="/predict" className="on">Predictor</a>
+            <a href="/predict" className="on">PREDICT</a>
             <a href="/points">Points</a>
             <a href="/store">Store</a>
+            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
           <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
             {user ? (
@@ -259,9 +261,11 @@ function Navbar({ user, sessionId, logout }) {
         <a href="/">Home</a>
         <a href="/packy">Packy</a>
         <a href="/gamba">Gamba</a>
-        <a href="/predict" className="on">Predictor</a>
+        <a href="/predict" className="on">PREDICT</a>
         <a href="/points">Points</a>
         <a href="/store">Store</a>
+        {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
+        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {!user && <a href="/auth/login?redirect=/predict" style={{color:'#22c55e'}}>Login with Kick</a>}
         {user && <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a>}
       </div>
@@ -450,7 +454,7 @@ function App() {
         <div className="wrap">
           <div className="phead f1">
             <div className="phead-eyebrow"><span className="pdot"/>Bonus Hunt</div>
-            <h1>Predictor</h1>
+            <h1>Predict</h1>
             <p>Guess the ending balance in $ and wager your NP. Whoever is closest wins 2x their wager - ties split equally.</p>
           </div>
 
