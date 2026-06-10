@@ -971,6 +971,16 @@ app.get('/predictor/history', (req, res) => {
   const d = loadPredictor();
   res.json({ history: (d.history || []).map(h => ({ id: h.id, startingBalance: h.startingBalance, endingBalance: h.endingBalance, result: h.result, resolvedAt: h.resolvedAt, totalPot: h.predictions.reduce((s,p)=>s+p.amount,0), winnerCount: h.predictions.filter(p=>p.side===h.result).length, totalPredictions: h.predictions.length })) });
 });
+app.delete('/predictor/history/:id', (req, res) => {
+  const sess = sessions[req.headers['x-session-id']];
+  if (!sess || sess.username !== 'niksi777') return res.status(403).json({ error: 'Forbidden' });
+  const d = loadPredictor();
+  const before = (d.history || []).length;
+  d.history = (d.history || []).filter(h => h.id !== req.params.id);
+  if (d.history.length === before) return res.status(404).json({ error: 'Not found' });
+  savePredictor(d);
+  res.json({ ok: true });
+});
 // Clean URLs
 app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/leaderboards.html')));
 app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/points.html')));

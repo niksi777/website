@@ -298,7 +298,7 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
       <div className="admin-title">Admin Controls</div>
       {(!hunt || hunt.status === 'resolved') && (
         <div>
-          <div className="admin-input-lbl">Starting Balance</div>
+          <div className="admin-input-lbl">Starting Balance ($)</div>
           <div className="admin-row">
             <input className="admin-input" value={startBal} onChange={e=>setStartBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&create()} disabled={busy}/>
             <button className="admin-btn btn-create" onClick={create} disabled={busy||!startBal}>Create Hunt</button>
@@ -312,7 +312,7 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
       )}
       {hunt && (hunt.status === 'open' || hunt.status === 'closed') && (
         <div style={{marginTop:14}}>
-          <div className="admin-input-lbl">Ending Balance (resolves hunt)</div>
+          <div className="admin-input-lbl">Ending Balance in $ (resolves hunt)</div>
           <div className="admin-row">
             <input className="admin-input" value={endBal} onChange={e=>setEndBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&resolve()} disabled={busy}/>
             <button className="admin-btn btn-resolve" onClick={resolve} disabled={busy||!endBal}>Resolve</button>
@@ -462,12 +462,12 @@ function App() {
               <div className="hunt-meta">
                 <div>
                   <div className="hunt-bal-lbl">Starting Balance</div>
-                  <div className="hunt-bal">{fmt(hunt.startingBalance)} NP</div>
+                  <div className="hunt-bal">${fmt(hunt.startingBalance)}</div>
                 </div>
                 {hunt.status === 'resolved' && hunt.endingBalance != null && (
                   <div>
                     <div className="hunt-bal-lbl">Ending Balance</div>
-                    <div className="hunt-bal" style={{color: hunt.endingBalance > hunt.startingBalance ? 'var(--green)' : 'var(--red)'}}>{fmt(hunt.endingBalance)} NP</div>
+                    <div className="hunt-bal" style={{color: hunt.endingBalance > hunt.startingBalance ? 'var(--green)' : 'var(--red)'}}>${fmt(hunt.endingBalance)}</div>
                   </div>
                 )}
                 {hunt.status === 'resolved' && hunt.result && (
@@ -592,17 +592,21 @@ function App() {
                     <th>Result</th>
                     <th>Total Pot</th>
                     <th>Winners</th>
+                    {user?.username === 'niksi777' && <th></th>}
                   </tr>
                 </thead>
                 <tbody>
                   {history.map(h => (
                     <tr key={h.id}>
                       <td style={{color:'var(--mu)',fontSize:12}}>{new Date(h.resolvedAt).toLocaleDateString()}</td>
-                      <td>{fmt(h.startingBalance)} NP</td>
-                      <td>{fmt(h.endingBalance)} NP</td>
+                      <td>${fmt(h.startingBalance)}</td>
+                      <td>${fmt(h.endingBalance)}</td>
                       <td><span className={h.result==='profit'?'hist-result-profit':'hist-result-noprofit'}>{h.result==='profit'?'PROFIT':'NO PROFIT'}</span></td>
                       <td>{h.totalPot?.toLocaleString()} NP</td>
                       <td style={{color:'var(--mu)'}}>{h.winnerCount} / {h.totalPredictions}</td>
+                      {user?.username === 'niksi777' && (
+                        <td><button onClick={async()=>{if(!confirm('Delete this hunt from history?'))return;const r=await fetch(`/predictor/history/${h.id}`,{method:'DELETE',headers:{'x-session-id':sessionId}}).then(x=>x.json());if(r.ok)refresh();}} style={{background:'none',border:'1px solid rgba(217,79,79,.4)',borderRadius:5,color:'rgba(217,79,79,.8)',cursor:'pointer',fontSize:11,padding:'3px 8px',fontFamily:"'Inter',sans-serif"}}>Remove</button></td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
