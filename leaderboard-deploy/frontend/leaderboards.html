@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NIKSI777 - Leaderboards</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -10,22 +10,23 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#060d18;--s1:#0b1628;--s2:#101e35;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--packy:#00b2f5;--gamba:#22c55e}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 1000px 700px at 0% 0%,rgba(74,158,255,.25),transparent 60%),radial-gradient(ellipse 800px 800px at 100% 100%,rgba(30,100,220,.18),transparent 60%),radial-gradient(ellipse 600px 500px at 50% 50%,rgba(40,100,255,.06),transparent 70%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
-    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}
 
-    nav{background:rgba(6,13,26,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
-    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    nav{background:rgba(4,9,18,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:50}
+    .ni{max-width:1100px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
     .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
     .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
     .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
     .nlinks{display:flex;align-items:center;flex:1}
-    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px;white-space:nowrap}
     .nlinks a:hover{color:rgba(255,255,255,.9)}
-    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.4)}
     .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
     .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
     .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
@@ -39,199 +40,528 @@
     .ndrop-logout{color:rgba(217,79,79,.8)}
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
     .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
-    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
+    .drawer{display:none;flex-direction:column;background:rgba(4,9,18,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
     .drawer.open{display:flex}
     .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
     .drawer a:last-of-type{border-bottom:none}
     .drawer a.on,.drawer a:hover{color:#fff}
-    .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
-    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
-    .drawer-soc svg{width:15px;height:15px}
-
-    .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
-
-    .phead{padding:44px 0 36px;text-align:center}
-    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px;margin-bottom:16px}
-    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    .phead h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:#fff;line-height:.92;margin-bottom:12px}
-    .phead h1 em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
-    .phead p{font-size:13px;color:var(--mu);max-width:400px;margin:0 auto;line-height:1.7}
-
-    .lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:56px}
-
-    .lb-card{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s,border-color .2s;border:1px solid var(--b2);background:var(--s1)}
-    .lb-card:hover{transform:translateY(-3px);border-color:var(--b3)}
-    .lb-banner{height:140px;display:flex;align-items:center;justify-content:center;position:relative;background:var(--s2);border-bottom:1px solid var(--b2)}
-    .lb-banner img{max-height:70px;max-width:220px;object-fit:contain;opacity:.95}
-    .lb-live{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--rd)}
-    .lb-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--rd);animation:pu 1.5s ease-in-out infinite}
-    .lb-badge{position:absolute;top:12px;left:12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
-    .lb-body{padding:22px;display:flex;flex-direction:column;gap:14px;flex:1;text-align:center}
-    .lb-prize-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
-    .lb-prize{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:800;letter-spacing:.01em;line-height:1;color:#fff}
-    .lb-cta{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:8px;background:#fff;color:#07080c;margin-top:auto;transition:opacity .15s}
-    .lb-card:hover .lb-cta{opacity:.85}
-
-    footer{border-top:1px solid var(--b1);padding:22px 0}
-    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
-    .ftd strong{color:rgba(221,227,239,.9)}
-    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
-
-    @media(max-width:700px){
-      .nlinks,.nsoc{display:none}
-      .hamburger{display:flex}
-      .nlogo{border-right:none;margin-right:0;padding-right:0}
-      .lb-grid{grid-template-columns:1fr}
-      .ftw{flex-direction:column;align-items:flex-start}
-    }
-
-    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;flex-shrink:0}
-    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap;flex-shrink:0}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap}
     .nlogin-btn:hover{opacity:.85}
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
     .nuser:hover{border-color:var(--b3)}
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+
+    /* Platform tabs */
+    .platform-tabs{display:flex;align-items:center;justify-content:center;gap:12px;padding:32px 0 24px}
+    .ptab{display:flex;align-items:center;gap:10px;padding:10px 22px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
+    .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
+    .ptab.active-gamba{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.08);box-shadow:0 0 18px rgba(34,197,94,.12)}
+    .ptab.active-packy{border-color:rgba(0,178,245,.5);background:rgba(0,178,245,.08);box-shadow:0 0 18px rgba(0,178,245,.12)}
+    .ptab-img{height:22px;object-fit:contain}
+    .ptab-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+
+    /* Leaderboard header */
+    .lb-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+    .lb-header-left{display:flex;align-items:center;gap:16px}
+    .lb-platform-img{height:36px;object-fit:contain}
+    .lb-platform-name{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:#fff}
+    .lb-code{font-size:12px;color:var(--mu);margin-top:2px}
+    .lb-code strong{color:#fff;letter-spacing:.06em}
+    .lb-prize-big{text-align:right}
+    .lb-prize-amt{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:800;line-height:1}
+    .lb-prize-lbl{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-top:2px}
+    .lb-meta{display:flex;align-items:center;gap:18px;margin-bottom:28px;flex-wrap:wrap}
+    .live-badge{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--green)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pu 1.2s ease-in-out infinite}
+    .lb-meta-item{font-size:12px;color:var(--mu)}
+    .lb-meta-item strong{color:#fff}
+
+    /* Countdown */
+    .countdown{display:flex;align-items:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+    .countdown-lbl{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-right:4px}
+    .cd-unit{display:flex;flex-direction:column;align-items:center;min-width:52px}
+    .cd-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1;background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:8px;padding:6px 12px;min-width:52px;text-align:center}
+    .cd-label{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-top:5px}
+    .cd-sep{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:rgba(255,255,255,.2);padding-bottom:18px}
+
+    /* Podium */
+    .podium{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin-bottom:24px}
+    .podium-card{display:flex;flex-direction:column;align-items:center;padding:20px 16px;border-radius:14px;border:1px solid var(--b2);background:var(--s1);position:relative;width:220px;transition:transform .2s}
+    .podium-card:hover{transform:translateY(-3px)}
+    .podium-card.first{border-color:rgba(212,175,90,.35);background:linear-gradient(180deg,rgba(212,175,90,.07) 0%,var(--s1) 100%);width:240px;padding-bottom:24px}
+    .podium-card.second{border-color:rgba(180,180,200,.2)}
+    .podium-card.third{border-color:rgba(150,100,60,.25)}
+    .rank-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#000}
+    .rank-badge.r1{background:var(--gold);width:30px;height:30px;font-size:15px}
+    .rank-badge.r2{background:#c0c0c8}
+    .rank-badge.r3{background:#cd7f32;color:#fff}
+    .crown{font-size:22px;margin-bottom:4px}
+    .pod-avatar{width:68px;height:68px;border-radius:50%;object-fit:cover;background:var(--s2);border:2px solid var(--b2);margin-bottom:10px}
+    .pod-avatar.first{width:80px;height:80px;border-color:rgba(212,175,90,.4)}
+    .pod-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:12px;text-align:center;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .pod-name.first{font-size:20px}
+    .pod-stat{text-align:center;margin-bottom:6px}
+    .pod-stat-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-top:2px}
+    .pod-stat-val.prize{font-size:18px}
+
+    /* Table */
+    .lb-table{width:100%;border-collapse:collapse;margin-bottom:32px}
+    .lb-table th{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);padding:10px 16px;border-bottom:1px solid var(--b1);text-align:left}
+    .lb-table th:last-child{text-align:right}
+    .lb-table td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--tx);vertical-align:middle}
+    .lb-table tr:last-child td{border-bottom:none}
+    .lb-table tr:hover td{background:rgba(255,255,255,.02)}
+    .lb-table td:last-child{text-align:right}
+    .tr-rank{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--mu);min-width:36px}
+    .tr-av{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--s2)}
+    .tr-name{font-weight:600;font-size:13px;color:#fff}
+    .tr-wager{font-size:13px;color:var(--mu)}
+    .tr-prize{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
+
+    /* CTA */
+    .lb-cta-row{display:flex;justify-content:center;margin-bottom:48px}
+    .lb-cta-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 28px;border-radius:9px;text-decoration:none;transition:opacity .15s}
+    .lb-cta-btn:hover{opacity:.8}
+    .lb-cta-gamba{background:var(--green);color:#fff}
+    .lb-cta-packy{background:var(--packy);color:#fff}
+
+    /* Prize structure */
+    .prize-section{margin-bottom:48px}
+    .prize-title{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
+    .prize-tiers{display:flex;gap:10px;flex-wrap:wrap}
+    .prize-tier{display:flex;flex-direction:column;align-items:center;background:var(--s1);border:1px solid var(--b2);border-radius:10px;padding:12px 18px;min-width:80px}
+    .prize-tier-pos{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
+    .prize-tier-amt{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff}
+    .prize-tier-amt.p1{color:var(--gold)}
+    .prize-tier-amt.p2{color:#c0c0c8}
+    .prize-tier-amt.p3{color:#cd7f32}
+
+    footer{border-top:1px solid var(--b1);padding:22px 0;position:relative;z-index:1}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:11px;color:rgba(221,227,239,.35);line-height:1.6;max-width:520px}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    .loading{text-align:center;padding:60px 0;font-size:13px;color:var(--mu);letter-spacing:.06em}
+
+    @media(max-width:720px){
+      .nlinks,.nsoc{display:none}
+      .hamburger{display:flex}
+      .podium{flex-direction:column;align-items:center}
+      .podium-card,.podium-card.first{width:100%;max-width:320px}
+      .lb-header{flex-direction:column;align-items:flex-start}
+      .lb-prize-big{text-align:left}
+      .cd-num{font-size:28px;min-width:44px}
+      .countdown{gap:6px}
+    }
   </style>
 </head>
 <body>
+<canvas id="constellation"></canvas>
 <div id="root"></div>
-<script type="text/babel">
 
+<script>
+(function(){
+  const canvas = document.getElementById('constellation');
+  const ctx = canvas.getContext('2d');
+  const N = 110, DIST = 140;
+  let W, H, pts = [];
 
-  function useSession() {
-    const [user, setUser] = React.useState(null);
-    const [sessionId, setSessionId] = React.useState(null);
-    React.useEffect(() => {
-      const params = new URLSearchParams(window.location.search);
-      const sid = params.get('session') || localStorage.getItem('kick_session');
-      if (sid) {
-        localStorage.setItem('kick_session', sid);
-        setSessionId(sid);
-        fetch('/auth/me?session=' + sid)
-          .then(r => r.ok ? r.json() : null)
-          .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
-          .catch(() => {});
-        if (params.get('session')) window.history.replaceState({}, '', window.location.pathname);
-      }
-    }, []);
-    function logout() {
-      const sid = localStorage.getItem('kick_session');
-      if (sid) fetch('/auth/logout?session=' + sid);
-      localStorage.removeItem('kick_session');
-      setUser(null);
-    }
-    return { user, sessionId, logout };
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+
+  function mkPt(){
+    return { x: Math.random()*W, y: Math.random()*H,
+             vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25,
+             r: Math.random()*1.2+.4, o: Math.random()*.45+.1 };
   }
 
-  const SOCIALS = <>
+  function init(){ resize(); pts = Array.from({length:N}, mkPt); }
+
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      const a = pts[i];
+      for(let j=i+1;j<N;j++){
+        const b = pts[j];
+        const dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<DIST){
+          ctx.beginPath();
+          ctx.strokeStyle=`rgba(130,170,255,${(1-d/DIST)*.12})`;
+          ctx.lineWidth=.6;
+          ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(160,190,255,${p.o})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(tick);
+  }
+
+  init();
+  window.addEventListener('resize', resize);
+  tick();
+})();
+</script>
+
+<script type="text/babel">
+
+function useSession() {
+  const [user, setUser] = React.useState(null);
+  const [sessionId, setSessionId] = React.useState(null);
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sid = params.get('session') || localStorage.getItem('kick_session');
+    if (sid) {
+      localStorage.setItem('kick_session', sid);
+      setSessionId(sid);
+      fetch('/auth/me?session=' + sid).then(r => r.ok ? r.json() : null)
+        .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); }).catch(() => {});
+      if (params.get('session')) window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+  function logout() {
+    const sid = localStorage.getItem('kick_session');
+    if (sid) fetch('/auth/logout?session=' + sid);
+    localStorage.removeItem('kick_session'); setUser(null);
+  }
+  return { user, sessionId, logout };
+}
+
+const SOCIALS = (
+  <>
     <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg></a>
     <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg></a>
     <a href="https://x.com/code_niksi777" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg></a>
-  </>;
+  </>
+);
 
-  function Navbar(){
-    const { user, logout } = useSession();
-    const [open,setOpen]=React.useState(false);
-        return (<>
+function Navbar({ user, logout }) {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
       <nav>
         <div className="ni">
           <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
           <div className="nlinks">
-            <a href="/">HOME</a>
-            <a href="/leaderboards" className="on">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
-            <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+            <a href="/">Home</a>
+            <a href="/leaderboards" className="on">Leaderboards</a>
+            <a href="/points">Points</a>
+            <a href="/store">Store</a>
+            <a href="/cases">Cases</a>
+            <a href="/predict">Predict</a>
+            {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
+            {user && user.isAdmin && <a href="/admin">Admin</a>}
           </div>
-          <div className="nauth">
+          <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
             {user ? (
               <div className="ndrop">
-                <div className="nuser" style={{cursor:'default'}}>
-                  {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
+                <div className="nuser">
+                  <img className="nuser-avatar" src={user.avatar||'/assets/niksi.png'} alt=""/>
                   <span className="nuser-name">{user.displayName}</span>
                   <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
                     <a href="/settings" className="ndrop-item">Settings</a>
-                    <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
+                    <button className="ndrop-item ndrop-logout" onClick={logout}>Logout</button>
                   </div>
                 </div>
               </div>
             ) : (
-              <a href="/auth/login" className="nlogin-btn">
-                Login with Kick
-              </a>
+              <a href="/auth/login" className="nlogin-btn">Login with Kick</a>
             )}
           </div>
-          <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
-            <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
-            <span style={open?{opacity:0}:{}}/>
-            <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
+          <button className="hamburger" onClick={() => setOpen(o => !o)} aria-label="Menu">
+            <span/><span/><span/>
           </button>
         </div>
       </nav>
-      <div className={`drawer${open?' open':''}`}>
-        <a href="/">HOME</a>
-        <a href="/leaderboards" className="on">LEADERBOARDS</a>
-        <a href="/points">POINTS</a>
-        <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-        {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+      <div className={`drawer ${open ? 'open' : ''}`}>
+        <a href="/">Home</a>
+        <a href="/leaderboards" className="on">Leaderboards</a>
+        <a href="/points">Points</a>
+        <a href="/store">Store</a>
+        <a href="/cases">Cases</a>
+        <a href="/predict">Predict</a>
+        {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
+        {user && user.isAdmin && <a href="/admin">Admin</a>}
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
-    </>);
-  }
+    </>
+  );
+}
 
-  function App(){
-    return (<>
-      <Navbar/>
+function Countdown({ endDate }) {
+  const calc = () => {
+    const diff = Math.max(0, new Date(endDate) - Date.now());
+    return {
+      d: Math.floor(diff / 86400000),
+      h: Math.floor((diff % 86400000) / 3600000),
+      m: Math.floor((diff % 3600000) / 60000),
+      s: Math.floor((diff % 60000) / 1000)
+    };
+  };
+  const [t, setT] = React.useState(calc);
+  React.useEffect(() => {
+    const iv = setInterval(() => setT(calc()), 1000);
+    return () => clearInterval(iv);
+  }, [endDate]);
+  const pad = n => String(n).padStart(2, '0');
+  return (
+    <div className="countdown">
+      <span className="countdown-lbl">Ends in</span>
+      {[['d','Days'],['h','Hours'],['m','Mins'],['s','Secs']].map(([k,lbl],i) => (
+        <React.Fragment key={k}>
+          {i > 0 && <span className="cd-sep">:</span>}
+          <div className="cd-unit">
+            <div className="cd-num">{pad(t[k])}</div>
+            <div className="cd-label">{lbl}</div>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function Avatar({ src, className }) {
+  const [err, setErr] = React.useState(false);
+  if (err || !src) return <div className={className} style={{background:'#1a2740',borderRadius:'50%'}}/>;
+  return <img className={className} src={src} alt="" onError={() => setErr(true)}/>;
+}
+
+function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager }) {
+  const cls = rank === 1 ? 'podium-card first' : rank === 2 ? 'podium-card second' : 'podium-card third';
+  const badgeCls = `rank-badge r${rank}`;
+  return (
+    <div className={cls}>
+      <div className={badgeCls}>{rank}</div>
+      {rank === 1 && <div className="crown">👑</div>}
+      <Avatar src={player.avatar || player.image_url} className={`pod-avatar${rank===1?' first':''}`}/>
+      <div className={`pod-name${rank===1?' first':''}`} style={rank===1?{color:accentColor}:{}}>{player.username || player.display_name || 'Hidden'}</div>
+      <div className="pod-stat">
+        <div className="pod-stat-lbl">Wagered</div>
+        <div className="pod-stat-val" style={{color:accentColor}}>{fmtWager(player)}</div>
+      </div>
+      <div className="pod-stat">
+        <div className="pod-stat-lbl">Prize</div>
+        <div className="pod-stat-val prize" style={{color:accentColor}}>{fmtPrize(player, rank)}</div>
+      </div>
+    </div>
+  );
+}
+
+function GambaLeaderboard() {
+  const [players, setPlayers] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/players').then(r => r.json()).then(setPlayers).catch(() => setPlayers([]));
+  }, []);
+
+  const GAMBA_PRIZES = { 1:675.94, 2:375.52, 3:172.74, 4:75.10, 5:52.57, 6:45.06, 7:37.55, 8:30.04, 9:22.53, 10:15.02 };
+  const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
+  const fmtPrize = (p, rank) => fmtMoney(p.reward ?? GAMBA_PRIZES[rank] ?? 0);
+  const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+
+  if (players === null) return <div className="loading">Loading...</div>;
+
+  const top3 = players.slice(0, 3);
+  const rest = players.slice(3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+
+  return (
+    <div className="f2">
+      <div className="lb-header">
+        <div className="lb-header-left">
+          <img className="lb-platform-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
+          <div>
+            <div className="lb-platform-name">Gamba.com</div>
+            <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
+          </div>
+        </div>
+        <div className="lb-prize-big">
+          <div className="lb-prize-amt" style={{color:'var(--green)'}}>$1,500</div>
+          <div className="lb-prize-lbl">Monthly Prize</div>
+        </div>
+      </div>
+      <div className="lb-meta">
+        <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
+        <div className="lb-meta-item">Players <strong>{players.length}</strong></div>
+      </div>
+
+      {top3.length > 0 && (
+        <div className="podium">
+          {podiumOrder.map((p, i) => {
+            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
+            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--green)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
+          })}
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <table className="lb-table">
+          <thead><tr>
+            <th>Place</th><th></th><th>Player</th><th>Wagered</th><th>Prize</th>
+          </tr></thead>
+          <tbody>
+            {rest.map((p, i) => (
+              <tr key={p.id || i}>
+                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
+                <td><Avatar src={p.avatar} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
+                <td><span className="tr-wager">{fmtWager(p)}</span></td>
+                <td><span className="tr-prize" style={{color:'var(--green)'}}>{fmtPrize(p, p.position || i+4)}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      <div className="lb-cta-row">
+        <a href="https://gamba.com?ref=niksi777" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba">
+          Play on Gamba.com
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div className="prize-section">
+        <div className="prize-title">// Prize Structure</div>
+        <div className="prize-tiers">
+          {Object.entries(GAMBA_PRIZES).map(([pos, amt]) => (
+            <div key={pos} className="prize-tier">
+              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][pos-1]}</div>
+              <div className={`prize-tier-amt${pos==='1'?' p1':pos==='2'?' p2':pos==='3'?' p3':''}`}>{fmtMoney(amt)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PackyLeaderboard() {
+  const [data, setData] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/packy-data').then(r => r.json()).then(setData).catch(() => setData(false));
+  }, []);
+
+  if (data === null) return <div className="loading">Loading...</div>;
+  if (!data || !data.entries) return <div className="loading">No active leaderboard</div>;
+
+  const tiers = {};
+  (data.prize_tiers || []).forEach(t => { tiers[t.position] = Number(t.prize_amount_usd || 0); });
+  const prize = Number(data.total_prize_usd || 1000);
+  const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
+  const fmtPrize = (p, rank) => fmtMoney(tiers[rank] ?? 0);
+  const fmtWager = p => `$${Number(p.total_wagered_usd||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+
+  const entries = data.entries || [];
+  const top3 = entries.slice(0, 3);
+  const rest = entries.slice(3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+
+  return (
+    <div className="f2">
+      <div className="lb-header">
+        <div className="lb-header-left">
+          <img className="lb-platform-img" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
+          <div>
+            <div className="lb-platform-name" style={{color:'var(--packy)'}}>Packy.gg</div>
+            <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
+          </div>
+        </div>
+        <div className="lb-prize-big">
+          <div className="lb-prize-amt" style={{color:'var(--packy)'}}>${prize.toLocaleString('en-US')}</div>
+          <div className="lb-prize-lbl">Prize Pool</div>
+        </div>
+      </div>
+      <div className="lb-meta">
+        <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
+        <div className="lb-meta-item">Players <strong>{entries.length}</strong></div>
+        {data.title && <div className="lb-meta-item"><strong>{data.title}</strong></div>}
+      </div>
+
+      {data.end_date && <Countdown endDate={data.end_date}/>}
+
+      {top3.length > 0 && (
+        <div className="podium">
+          {podiumOrder.map((p, i) => {
+            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
+            return <PodiumCard key={rank} player={{...p, avatar: p.image_url, username: p.username}} rank={rank} accentColor="var(--packy)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
+          })}
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <table className="lb-table">
+          <thead><tr>
+            <th>Place</th><th></th><th>Player</th><th>Wagered</th><th>Prize</th>
+          </tr></thead>
+          <tbody>
+            {rest.map((p, i) => (
+              <tr key={i}>
+                <td><span className="tr-rank">#{p.rank || i + 4}</span></td>
+                <td><Avatar src={p.image_url} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
+                <td><span className="tr-wager">{fmtWager(p)}</span></td>
+                <td><span className="tr-prize" style={{color:'var(--packy)'}}>{fmtPrize(p, p.rank || i+4)}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      <div className="lb-cta-row">
+        <a href="https://packy.gg?ref=NIKSI" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-packy">
+          Play on Packy.gg
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div className="prize-section">
+        <div className="prize-title">// Prize Structure</div>
+        <div className="prize-tiers">
+          {(data.prize_tiers || []).map((t, i) => (
+            <div key={t.position} className="prize-tier">
+              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][t.position-1]||`#${t.position}`}</div>
+              <div className={`prize-tier-amt${t.position===1?' p1':t.position===2?' p2':t.position===3?' p3':''}`}>{fmtMoney(Number(t.prize_amount_usd))}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const { user, logout } = useSession();
+  const [tab, setTab] = React.useState('gamba');
+
+  return (
+    <>
+      <Navbar user={user} logout={logout}/>
       <div className="wrap">
-        <div className="phead f1">
-          <div className="phead-eyebrow"><span className="pdot"/>Active Leaderboards</div>
-          <h1>Play smarter.<br/><em>Earn more.</em></h1>
-          <p>Code <strong style={{color:'rgba(221,227,239,.9)'}}>NIKSI</strong> gets you into exclusive leaderboards with real cash prizes, a NiksiPoints shop to spend on free case openings, bonus promo codes and much more - the more you play, the more you earn.</p>
+        <div className="platform-tabs f1">
+          <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
+            <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
+            <span className="ptab-name">Gamba</span>
+          </button>
+          <button className={`ptab${tab==='packy'?' active-packy':''}`} onClick={() => setTab('packy')}>
+            <img className="ptab-img" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
+            <span className="ptab-name">Packy</span>
+          </button>
         </div>
 
-        <div className="lb-grid f2">
-          <a href="/gamba" className="lb-card">
-            <div className="lb-banner">
-              <span className="lb-badge">Gamba.com</span>
-              <span className="lb-live">LIVE</span>
-              <img src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-            </div>
-            <div className="lb-body">
-              <div>
-                <div className="lb-prize-lbl">Prize Pool</div>
-                <div className="lb-prize">$1,500</div>
-              </div>
-              <div className="lb-cta">
-                View Leaderboard
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </div>
-            </div>
-          </a>
-          <a href="/packy" className="lb-card" style={{borderColor:'rgba(0,178,245,.2)'}}>
-            <div className="lb-banner" style={{borderColor:'rgba(0,178,245,.2)'}}>
-              <span className="lb-badge" style={{color:'rgba(0,210,255,.9)',background:'rgba(0,178,245,.08)',borderColor:'rgba(0,178,245,.2)'}}>Packy.gg</span>
-              <img src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
-            </div>
-            <div className="lb-body">
-              <div>
-                <div className="lb-prize-lbl">Prize Pool</div>
-                <div className="lb-prize" style={{color:'#00b2f5'}}>$1,000</div>
-              </div>
-              <div className="lb-cta" style={{background:'linear-gradient(135deg,#00b2f5,#0080c8)',color:'#fff'}}>
-                View Leaderboard
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </div>
-            </div>
-          </a>
-        </div>
+        {tab === 'gamba' ? <GambaLeaderboard/> : <PackyLeaderboard/>}
       </div>
 
       <footer>
@@ -243,17 +573,14 @@
               <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
             </div>
           </div>
+          <div style={{textAlign:'center',marginTop:10,paddingBottom:4,fontSize:11,color:'var(--mu)',letterSpacing:'.08em',fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:'var(--ac)'}}>@niksiii</strong> on Discord</div>
         </div>
-              <div style={{textAlign:"center",marginTop:10,paddingBottom:4,fontSize:11,color:"var(--mu)",letterSpacing:".08em",fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:"var(--ac)"}}>@niksiii</strong> on Discord</div>
       </footer>
-    </>);
-  }
+    </>
+  );
+}
 
-  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
 </html>
-
-
-
-
