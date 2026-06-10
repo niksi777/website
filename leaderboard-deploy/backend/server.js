@@ -858,9 +858,18 @@ app.get('/predictor/current', (req, res) => {
     const minDist = Math.min(...preds.map(p => Math.abs(p.guess - ending)));
     winnerGuess = preds.filter(p => Math.abs(p.guess - ending) === minDist)[0]?.guess;
   }
+  const ending = d.hunt.endingBalance;
+  const predList = preds.map(p => ({
+    username: p.username,
+    guess: p.guess,
+    wager: p.wager,
+    payout: p.payout,
+    isWinner: d.hunt.status === 'resolved' && ending != null && winnerGuess != null && p.guess === winnerGuess
+  }));
   res.json({
     hunt: d.hunt.status === 'resolved' ? d.hunt : { ...d.hunt, endingBalance: undefined },
-    stats: { totalPot, totalPredictions: preds.length, winnerGuess }
+    stats: { totalPot, totalPredictions: preds.length, winnerGuess },
+    predictions: predList
   });
 });
 
@@ -1008,6 +1017,7 @@ app.get('/packy', (req, res) => res.sendFile(path.join(__dirname, '../frontend/p
 app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/giveaway.html')));
 app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, '../frontend/settings.html')));
 app.get('/predictor', (req, res) => res.sendFile(path.join(__dirname, '../frontend/predictor.html')));
+app.get('/predict',   (req, res) => res.sendFile(path.join(__dirname, '../frontend/predictor.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../frontend/admin.html')));
 app.get('/overlay-giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/overlay-giveaway.html')));
 app.get('/stream-overlay', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay.html')));

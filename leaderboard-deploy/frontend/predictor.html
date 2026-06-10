@@ -138,6 +138,14 @@
     .btn-close{background:#fbbf24;color:#000}
     .btn-resolve{background:var(--ac);color:#fff}
 
+    /* Predictions list */
+    .pred-list{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+    .pred-list th{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left}
+    .pred-list td{padding:9px 12px;border-bottom:1px solid var(--b1);color:var(--tx)}
+    .pred-list tr:last-child td{border-bottom:none}
+    .pred-list tr.winner-row td{background:rgba(34,197,94,.06)}
+    .pred-winner-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--green);background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);border-radius:100px;padding:1px 7px;margin-left:6px}
+
     /* History */
     .hist-table{width:100%;border-collapse:collapse;font-size:13px}
     .hist-table th{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left}
@@ -194,7 +202,7 @@ function useSession() {
         .then(d => { if (d && d.username) setUser(d); else localStorage.removeItem('kick_session'); })
         .catch(() => {})
         .finally(() => setLoading(false));
-      if (params.get('session')) window.history.replaceState({}, '', '/predictor');
+      if (params.get('session')) window.history.replaceState({}, '', '/predict');
     } else { setLoading(false); }
   }, []);
   const logout = () => {
@@ -217,7 +225,7 @@ function Navbar({ user, sessionId, logout }) {
             <a href="/">Home</a>
             <a href="/packy">Packy</a>
             <a href="/gamba">Gamba</a>
-            <a href="/predictor" className="on">Predictor</a>
+            <a href="/predict" className="on">Predictor</a>
             <a href="/points">Points</a>
             <a href="/store">Store</a>
           </div>
@@ -236,7 +244,7 @@ function Navbar({ user, sessionId, logout }) {
                 </div>
               </div>
             ) : (
-              <a href="/auth/login?redirect=/predictor" className="nlogin-btn">
+              <a href="/auth/login?redirect=/predict" className="nlogin-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
                 Login with Kick
               </a>
@@ -251,10 +259,10 @@ function Navbar({ user, sessionId, logout }) {
         <a href="/">Home</a>
         <a href="/packy">Packy</a>
         <a href="/gamba">Gamba</a>
-        <a href="/predictor" className="on">Predictor</a>
+        <a href="/predict" className="on">Predictor</a>
         <a href="/points">Points</a>
         <a href="/store">Store</a>
-        {!user && <a href="/auth/login?redirect=/predictor" style={{color:'#22c55e'}}>Login with Kick</a>}
+        {!user && <a href="/auth/login?redirect=/predict" style={{color:'#22c55e'}}>Login with Kick</a>}
         {user && <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a>}
       </div>
     </>
@@ -424,6 +432,7 @@ function App() {
 
   const hunt = data?.hunt;
   const stats = data?.stats;
+  const predictions = data?.predictions || [];
 
   const statusBadge = () => {
     if (!hunt) return null;
@@ -505,12 +514,45 @@ function App() {
             </div>
           )}
 
+          {hunt && predictions.length > 0 && (
+            <div className="card f3">
+              <div className="card-title">All Predictions ({predictions.length})</div>
+              <table className="pred-list">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Guess</th>
+                    <th>Wager</th>
+                    {hunt.status === 'resolved' && <th>Result</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {predictions.slice().sort((a,b) => a.guess - b.guess).map((p,i) => (
+                    <tr key={i} className={p.isWinner ? 'winner-row' : ''}>
+                      <td style={{color:'var(--mu)'}}>{p.username}{p.isWinner && <span className="pred-winner-badge">Winner</span>}</td>
+                      <td style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:15}}>${p.guess?.toLocaleString()}</td>
+                      <td style={{color:'var(--mu)'}}>{p.wager?.toLocaleString()} NP</td>
+                      {hunt.status === 'resolved' && (
+                        <td>
+                          {p.isWinner
+                            ? <span style={{color:'var(--green)',fontWeight:700}}>+{p.payout?.toLocaleString()} NP</span>
+                            : <span style={{color:'var(--red)'}}>-{p.wager?.toLocaleString()} NP</span>
+                          }
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           {/* My prediction or prediction form */}
           {hunt && hunt.status === 'open' && !loading && (
             !user ? (
               <div className="login-prompt f3">
                 <p>Login with your Kick account to place a prediction and wager your NP.</p>
-                <a href="/auth/login?redirect=/predictor" className="nlogin-btn" style={{display:'inline-flex'}}>Login with Kick</a>
+                <a href="/auth/login?redirect=/predict" className="nlogin-btn" style={{display:'inline-flex'}}>Login with Kick</a>
               </div>
             ) : myPred ? (
               <div className="card f3">

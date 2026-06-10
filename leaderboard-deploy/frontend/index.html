@@ -278,7 +278,7 @@
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
-            <a href="/predictor">PREDICT</a>
+            <a href="/predict">PREDICT</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
@@ -315,7 +315,7 @@
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a>
-        <a href="/predictor">PREDICT</a>
+        <a href="/predict">PREDICT</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
@@ -331,7 +331,7 @@
     }, []);
     const profitPct = stats && stats.totalPot > 0 ? Math.round((stats.profitTotal/stats.totalPot)*100) : 50;
     return (
-      <a href="/predictor" className="pred-banner">
+      <a href="/predict" className="pred-banner">
         <div className="pred-banner-icon">🎯</div>
         <div className="pred-banner-info">
           {hunt && hunt.status === 'open' && <div className="pred-badge-open"><span className="pred-badge-dot"/>Predictions Open</div>}

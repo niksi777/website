@@ -217,7 +217,7 @@ async function handleCommand(username, message, isBadgeMod = false) {
         { headers: { "x-bot-secret": process.env.BOT_API_SECRET, "Content-Type": "application/json" } }
       );
       if (r.data.ok) {
-        await sendMessage("@" + username + " Guessed $" + guess.toLocaleString() + " with " + wager.toLocaleString() + " NP! Win and get " + (wager * 2).toLocaleString() + " NP back. Balance: " + r.data.newBalance.toLocaleString() + " NP");
+        await sendMessage("Prediction accepted! @" + username + " guessed $" + guess.toLocaleString() + " wagering " + wager.toLocaleString() + " NP - closest guess wins 2x back!");
       } else {
         await sendMessage("@" + username + ": " + r.data.error);
       }
