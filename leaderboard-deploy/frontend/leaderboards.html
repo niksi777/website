@@ -388,7 +388,7 @@ function GambaLeaderboard() {
       </div>
       <div className="lb-meta">
         <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
-        <div className="lb-meta-item">Players <strong>{players.length}</strong></div>
+        <div className="lb-meta-item">Total Wagered <strong>${players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></div>
       </div>
 
       {top3.length > 0 && (
