@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NIKSI777 - Bonus Hunt Predictor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--s3:#141f3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--red:#ef4444}
+    html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 1000px 700px at 0% 0%,rgba(74,158,255,.25),transparent 60%),radial-gradient(ellipse 800px 800px at 100% 100%,rgba(30,100,220,.18),transparent 60%),radial-gradient(ellipse 600px 500px at 50% 50%,rgba(40,100,255,.06),transparent 70%)}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
+    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}
+
+    nav{background:rgba(6,13,26,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px;white-space:nowrap}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
+    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
+    .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
+    .nsoc svg{width:15px;height:15px}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap}
+    .nlogin-btn:hover{opacity:.85}
+    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
+    .nuser:hover{border-color:var(--b3)}
+    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+    .ndrop{position:relative}
+    .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
+    .ndrop:hover .ndrop-menu{display:block}
+    .ndrop-box{background:rgba(7,8,12,.97);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+    .ndrop-item{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(221,227,239,.75);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:6px;transition:background .1s;box-sizing:border-box}
+    .ndrop-item:hover{background:rgba(255,255,255,.06)}
+    .ndrop-logout{color:rgba(217,79,79,.8)}
+    .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
+    .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px}
+    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
+    .drawer.open{display:flex}
+    .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
+    .drawer a:last-of-type{border-bottom:none}
+    .drawer a.on,.drawer a:hover{color:#fff}
+
+    .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+
+    footer{border-top:1px solid var(--b1);padding:22px 0}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:11px;color:rgba(221,227,239,.35);line-height:1.6;max-width:520px}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    /* ── PAGE ── */
+    .phead{padding:44px 0 32px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
+    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
+    .phead h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:#fff;line-height:.92}
+    .phead p{font-size:13px;color:var(--mu);max-width:440px;line-height:1.7}
+
+    .card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;padding:24px;margin-bottom:16px}
+    .card-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-bottom:18px}
+
+    /* Status badge */
+    .badge{display:inline-flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;border-radius:100px}
+    .badge-open{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e}
+    .badge-closed{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:#fbbf24}
+    .badge-resolved{background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.2);color:var(--ac)}
+    .badge-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:pu 1.2s ease-in-out infinite}
+
+    /* Hunt info */
+    .hunt-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+    .hunt-bal{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1}
+    .hunt-bal-lbl{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
+
+    /* Split bar */
+    .split-wrap{margin-bottom:20px}
+    .split-labels{display:flex;justify-content:space-between;margin-bottom:8px}
+    .split-lbl{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+    .split-lbl.profit{color:var(--green)}
+    .split-lbl.noprofit{color:var(--red)}
+    .split-bar{height:10px;border-radius:99px;background:rgba(239,68,68,.25);overflow:hidden;position:relative}
+    .split-fill{height:100%;border-radius:99px;background:var(--green);transition:width .6s ease}
+    .split-counts{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mu)}
+
+    /* Pot stat */
+    .pot-stat{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mu);margin-bottom:4px}
+    .pot-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:#fff}
+
+    /* Prediction form */
+    .side-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .side-btn{padding:16px 12px;border-radius:10px;border:2px solid var(--b2);background:transparent;cursor:pointer;transition:all .15s;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+    .side-btn:hover{border-color:var(--b3);color:#fff}
+    .side-btn.sel-profit{border-color:var(--green);background:rgba(34,197,94,.1);color:var(--green)}
+    .side-btn.sel-noprofit{border-color:var(--red);background:rgba(239,68,68,.1);color:var(--red)}
+    .wager-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
+    .wager-input{flex:1;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:10px 14px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#fff;outline:none;transition:border-color .15s}
+    .wager-input:focus{border-color:var(--ac)}
+    .quick-btns{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+    .quick-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--b2);background:transparent;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--mu);cursor:pointer;transition:all .15s}
+    .quick-btn:hover{border-color:var(--b3);color:#fff;background:rgba(255,255,255,.04)}
+    .submit-btn{width:100%;padding:13px;border-radius:9px;border:none;background:var(--ac);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .15s}
+    .submit-btn:hover:not(:disabled){opacity:.85}
+    .submit-btn:disabled{opacity:.4;cursor:not-allowed}
+    .submit-btn.green{background:var(--green)}
+    .err{font-size:12px;color:var(--red);margin-top:8px;text-align:center}
+    .ok{font-size:12px;color:var(--green);margin-top:8px;text-align:center}
+
+    /* My prediction */
+    .my-pred{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .my-pred-side{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase}
+    .my-pred-side.profit{color:var(--green)}
+    .my-pred-side.noprofit{color:var(--red)}
+    .my-pred-amt{font-size:13px;color:var(--mu)}
+    .my-pred-payout{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-align:right}
+    .payout-win{color:var(--green)}
+    .payout-loss{color:var(--red)}
+
+    /* Admin panel */
+    .admin-panel{background:rgba(217,79,79,.04);border:1px solid rgba(217,79,79,.15);border-radius:14px;padding:24px;margin-bottom:16px}
+    .admin-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(217,79,79,.8);margin-bottom:18px}
+    .admin-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+    .admin-input{flex:1;min-width:140px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 13px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;outline:none;transition:border-color .15s}
+    .admin-input:focus{border-color:var(--ac)}
+    .admin-input-lbl{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+    .admin-btn{padding:9px 18px;border-radius:8px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+    .admin-btn:hover:not(:disabled){opacity:.8}
+    .admin-btn:disabled{opacity:.35;cursor:not-allowed}
+    .btn-create{background:var(--green);color:#fff}
+    .btn-close{background:#fbbf24;color:#000}
+    .btn-resolve{background:var(--ac);color:#fff}
+
+    /* History */
+    .hist-table{width:100%;border-collapse:collapse;font-size:13px}
+    .hist-table th{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);padding:8px 12px;border-bottom:1px solid var(--b1);text-align:left}
+    .hist-table td{padding:10px 12px;border-bottom:1px solid var(--b1);color:var(--tx)}
+    .hist-table tr:last-child td{border-bottom:none}
+    .hist-result-profit{color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:15px}
+    .hist-result-noprofit{color:var(--red);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:15px}
+
+    .no-hunt{text-align:center;padding:56px 0;color:var(--mu);font-size:13px;letter-spacing:.06em}
+    .no-hunt strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:rgba(221,227,239,.4);text-transform:uppercase;margin-bottom:6px}
+
+    .login-prompt{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:22px;text-align:center;margin-bottom:16px}
+    .login-prompt p{font-size:13px;color:var(--mu);margin-bottom:14px;line-height:1.6}
+
+    @media(max-width:640px){
+      .hunt-meta{gap:12px}
+      .ftw{flex-direction:column;align-items:flex-start}
+      .hamburger{display:flex}
+      .nlinks,.nsoc{display:none}
+      .hist-table th:nth-child(3),.hist-table td:nth-child(3){display:none}
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const SOCIALS = (
+  <>
+    <a href="https://kick.com/niksi777" target="_blank" rel="noopener" title="Kick" aria-label="Kick">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H2v20h13l7-10L15 2zm-2 15H6v-3h7v3zm0-5H6V9h7v3zm2-5H6V4h9l4 3h-2z"/></svg>
+    </a>
+    <a href="https://x.com/niksi777" target="_blank" rel="noopener" title="X" aria-label="X">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a href="https://discord.gg/niksi777" target="_blank" rel="noopener" title="Discord" aria-label="Discord">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+    </a>
+  </>
+);
+
+function useSession() {
+  const [user, setUser] = React.useState(null);
+  const [sessionId, setSessionId] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sid = params.get('session') || localStorage.getItem('kick_session');
+    if (sid) {
+      localStorage.setItem('kick_session', sid);
+      setSessionId(sid);
+      fetch(`/auth/me?session=${sid}`)
+        .then(r => r.json())
+        .then(d => { if (d && d.username) setUser(d); else localStorage.removeItem('kick_session'); })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+      if (params.get('session')) window.history.replaceState({}, '', '/predictor');
+    } else { setLoading(false); }
+  }, []);
+  const logout = () => {
+    const sid = localStorage.getItem('kick_session');
+    if (sid) fetch(`/auth/logout?session=${sid}`);
+    localStorage.removeItem('kick_session');
+    setUser(null); setSessionId(null);
+  };
+  return { user, sessionId, loading, logout };
+}
+
+function Navbar({ user, sessionId, logout }) {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <nav>
+        <div className="ni">
+          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
+          <div className="nlinks">
+            <a href="/">Home</a>
+            <a href="/packy">Packy</a>
+            <a href="/gamba">Gamba</a>
+            <a href="/predictor" className="on">Predictor</a>
+            <a href="/points">Points</a>
+            <a href="/store">Store</a>
+          </div>
+          <div className="nsoc" style={{gap:6}}>
+            {SOCIALS}
+            <div style={{width:1,height:20,background:'var(--b2)',margin:'0 6px'}}/>
+            {user ? (
+              <div className="ndrop">
+                <div className="nuser">
+                  <img className="nuser-avatar" src={user.avatar||'/assets/niksi.png'} alt=""/>
+                  <span className="nuser-name">{user.displayName}</span>
+                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
+                </div>
+                <div className="ndrop-menu">
+                  <div className="ndrop-box">
+                    <button className="ndrop-item ndrop-logout" onClick={logout}>Logout</button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a href="/auth/login?redirect=/predictor" className="nlogin-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Login with Kick
+              </a>
+            )}
+          </div>
+          <button className="hamburger" onClick={() => setOpen(o => !o)} aria-label="Menu">
+            <span/><span/><span/>
+          </button>
+        </div>
+      </nav>
+      <div className={`drawer ${open ? 'open' : ''}`}>
+        <a href="/">Home</a>
+        <a href="/packy">Packy</a>
+        <a href="/gamba">Gamba</a>
+        <a href="/predictor" className="on">Predictor</a>
+        <a href="/points">Points</a>
+        <a href="/store">Store</a>
+        {!user && <a href="/auth/login?redirect=/predictor" style={{color:'#22c55e'}}>Login with Kick</a>}
+        {user && <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a>}
+      </div>
+    </>
+  );
+}
+
+function AdminPanel({ sessionId, hunt, onRefresh }) {
+  const [startBal, setStartBal] = React.useState('');
+  const [endBal, setEndBal] = React.useState('');
+  const [msg, setMsg] = React.useState('');
+  const [busy, setBusy] = React.useState(false);
+
+  const headers = { 'Content-Type': 'application/json', 'x-session-id': sessionId };
+
+  const create = async () => {
+    if (!startBal) return;
+    setBusy(true); setMsg('');
+    const r = await fetch('/predictor/create', { method:'POST', headers, body: JSON.stringify({ startingBalance: Number(startBal.replace(/,/g,'')) }) }).then(x=>x.json());
+    setBusy(false);
+    setMsg(r.ok ? 'Hunt created - predictions open!' : (r.error || 'Error'));
+    if (r.ok) { setStartBal(''); onRefresh(); }
+  };
+  const close = async () => {
+    setBusy(true); setMsg('');
+    const r = await fetch('/predictor/close', { method:'POST', headers, body: '{}' }).then(x=>x.json());
+    setBusy(false);
+    setMsg(r.ok ? 'Predictions closed.' : (r.error || 'Error'));
+    if (r.ok) onRefresh();
+  };
+  const resolve = async () => {
+    if (!endBal) return;
+    setBusy(true); setMsg('');
+    const r = await fetch('/predictor/resolve', { method:'POST', headers, body: JSON.stringify({ endingBalance: Number(endBal.replace(/,/g,'')) }) }).then(x=>x.json());
+    setBusy(false);
+    setMsg(r.ok ? `Resolved! Result: ${r.result.toUpperCase()} - Pot: ${r.totalPot?.toLocaleString()} NP - Winners: ${r.winnerCount}` : (r.error || 'Error'));
+    if (r.ok) { setEndBal(''); onRefresh(); }
+  };
+
+  return (
+    <div className="admin-panel">
+      <div className="admin-title">Admin Controls</div>
+      {(!hunt || hunt.status === 'resolved') && (
+        <div>
+          <div className="admin-input-lbl">Starting Balance</div>
+          <div className="admin-row">
+            <input className="admin-input" placeholder="e.g. 5000" value={startBal} onChange={e=>setStartBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&create()} disabled={busy}/>
+            <button className="admin-btn btn-create" onClick={create} disabled={busy||!startBal}>Create Hunt</button>
+          </div>
+        </div>
+      )}
+      {hunt && hunt.status === 'open' && (
+        <div className="admin-row">
+          <button className="admin-btn btn-close" onClick={close} disabled={busy}>Lock Predictions</button>
+        </div>
+      )}
+      {hunt && (hunt.status === 'open' || hunt.status === 'closed') && (
+        <div style={{marginTop:14}}>
+          <div className="admin-input-lbl">Ending Balance (resolves hunt)</div>
+          <div className="admin-row">
+            <input className="admin-input" placeholder="e.g. 7500" value={endBal} onChange={e=>setEndBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&resolve()} disabled={busy}/>
+            <button className="admin-btn btn-resolve" onClick={resolve} disabled={busy||!endBal}>Resolve</button>
+          </div>
+        </div>
+      )}
+      {msg && <div style={{marginTop:12,fontSize:12,color:'var(--mu)'}}>{msg}</div>}
+    </div>
+  );
+}
+
+function PredictForm({ user, sessionId, hunt, onDone }) {
+  const [side, setSide] = React.useState(null);
+  const [amount, setAmount] = React.useState('');
+  const [err, setErr] = React.useState('');
+  const [ok, setOk] = React.useState('');
+  const [busy, setBusy] = React.useState(false);
+
+  const quicks = [100, 250, 500, 1000, 2500];
+
+  const submit = async () => {
+    setErr(''); setOk('');
+    if (!side) { setErr('Pick profit or no profit first.'); return; }
+    const w = Math.floor(Number(amount));
+    if (!w || w < 1) { setErr('Enter a valid wager amount.'); return; }
+    setBusy(true);
+    const r = await fetch('/predictor/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId },
+      body: JSON.stringify({ side, amount: w })
+    }).then(x => x.json());
+    setBusy(false);
+    if (r.ok) {
+      setOk(`Locked in! You predicted ${side.toUpperCase()} with ${w.toLocaleString()} NP. Balance: ${r.newBalance.toLocaleString()} NP`);
+      onDone();
+    } else { setErr(r.error || 'Something went wrong.'); }
+  };
+
+  return (
+    <div className="card f2">
+      <div className="card-title">Place Your Prediction</div>
+      <div className="side-btns">
+        <button className={`side-btn ${side==='profit'?'sel-profit':''}`} onClick={()=>setSide('profit')}>
+          Profit
+          <div style={{fontSize:11,fontFamily:"'Inter',sans-serif",fontWeight:500,marginTop:4,opacity:.7}}>Hunt ends above start</div>
+        </button>
+        <button className={`side-btn ${side==='noprofit'?'sel-noprofit':''}`} onClick={()=>setSide('noprofit')}>
+          No Profit
+          <div style={{fontSize:11,fontFamily:"'Inter',sans-serif",fontWeight:500,marginTop:4,opacity:.7}}>Hunt ends below start</div>
+        </button>
+      </div>
+      <div className="quick-btns">
+        {quicks.map(q => (
+          <button key={q} className="quick-btn" onClick={() => setAmount(String(Math.min(q, user?.points||0)))}>{q.toLocaleString()}</button>
+        ))}
+        <button className="quick-btn" onClick={() => setAmount(String(user?.points||0))}>All In</button>
+      </div>
+      <div className="wager-row">
+        <input
+          className="wager-input"
+          placeholder="Wager amount (NP)"
+          value={amount}
+          onChange={e => setAmount(e.target.value.replace(/[^0-9]/g,''))}
+          onKeyDown={e => e.key==='Enter' && submit()}
+          disabled={busy}
+        />
+      </div>
+      {amount && Number(amount) > 0 && <div style={{fontSize:11,color:'var(--mu)',marginBottom:10,textAlign:'center'}}>Your balance: {(user?.points||0).toLocaleString()} NP - after wager: {Math.max(0,(user?.points||0)-Number(amount)).toLocaleString()} NP</div>}
+      <button className={`submit-btn ${side==='profit'?'green':''}`} onClick={submit} disabled={busy||!side||!amount}>
+        {busy ? 'Locking in...' : `Predict ${side ? side.toUpperCase() : '...'}`}
+      </button>
+      {err && <div className="err">{err}</div>}
+      {ok && <div className="ok">{ok}</div>}
+    </div>
+  );
+}
+
+function App() {
+  const { user, sessionId, loading, logout } = useSession();
+  const [data, setData] = React.useState(null);
+  const [myPred, setMyPred] = React.useState(null);
+  const [history, setHistory] = React.useState([]);
+
+  const refresh = React.useCallback(async () => {
+    const [cur, hist] = await Promise.all([
+      fetch('/predictor/current').then(r=>r.json()).catch(()=>null),
+      fetch('/predictor/history').then(r=>r.json()).catch(()=>({history:[]}))
+    ]);
+    if (cur) setData(cur);
+    setHistory(hist.history || []);
+  }, []);
+
+  const refreshMyPred = React.useCallback(async () => {
+    if (!sessionId) { setMyPred(null); return; }
+    const r = await fetch(`/predictor/my`, { headers: { 'x-session-id': sessionId } }).then(x=>x.json()).catch(()=>({prediction:null}));
+    setMyPred(r.prediction || null);
+  }, [sessionId]);
+
+  React.useEffect(() => { refresh(); const iv = setInterval(refresh, 5000); return () => clearInterval(iv); }, [refresh]);
+  React.useEffect(() => { refreshMyPred(); }, [refreshMyPred]);
+
+  const hunt = data?.hunt;
+  const stats = data?.stats;
+
+  const profitPct = stats && stats.totalPot > 0 ? Math.round((stats.profitTotal / stats.totalPot) * 100) : 50;
+
+  const statusBadge = () => {
+    if (!hunt) return null;
+    if (hunt.status === 'open')     return <span className="badge badge-open"><span className="badge-dot"/>Predictions Open</span>;
+    if (hunt.status === 'closed')   return <span className="badge badge-closed">Locked - Hunt In Progress</span>;
+    if (hunt.status === 'resolved') return <span className="badge badge-resolved">Resolved</span>;
+  };
+
+  const fmt = n => n != null ? `${Number(n).toLocaleString('en-US',{minimumFractionDigits:0})}` : '-';
+
+  return (
+    <>
+      <Navbar user={user} sessionId={sessionId} logout={logout}/>
+      <main>
+        <div className="wrap">
+          <div className="phead f1">
+            <div className="phead-eyebrow"><span className="pdot"/>Bonus Hunt</div>
+            <h1>Predictor</h1>
+            <p>Wager your NP on whether the bonus hunt ends in profit or loss. Pool-based payouts - bigger stake, bigger share.</p>
+          </div>
+
+          {user?.isAdmin && (
+            <AdminPanel sessionId={sessionId} hunt={hunt} onRefresh={() => { refresh(); refreshMyPred(); }}/>
+          )}
+
+          {!hunt && (
+            <div className="card f2">
+              <div className="no-hunt">
+                <strong>No Active Hunt</strong>
+                Check back when the next bonus hunt is announced!
+              </div>
+            </div>
+          )}
+
+          {hunt && (
+            <div className="card f2">
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,flexWrap:'wrap',marginBottom:20}}>
+                <div className="card-title" style={{margin:0}}>Current Hunt</div>
+                {statusBadge()}
+              </div>
+
+              <div className="hunt-meta">
+                <div>
+                  <div className="hunt-bal-lbl">Starting Balance</div>
+                  <div className="hunt-bal">{fmt(hunt.startingBalance)} NP</div>
+                </div>
+                {hunt.status === 'resolved' && hunt.endingBalance != null && (
+                  <div>
+                    <div className="hunt-bal-lbl">Ending Balance</div>
+                    <div className="hunt-bal" style={{color: hunt.endingBalance > hunt.startingBalance ? 'var(--green)' : 'var(--red)'}}>{fmt(hunt.endingBalance)} NP</div>
+                  </div>
+                )}
+                {hunt.status === 'resolved' && hunt.result && (
+                  <div>
+                    <div className="hunt-bal-lbl">Result</div>
+                    <div className="hunt-bal" style={{fontSize:24,color: hunt.result==='profit' ? 'var(--green)' : 'var(--red)'}}>{hunt.result === 'profit' ? 'PROFIT' : 'NO PROFIT'}</div>
+                  </div>
+                )}
+              </div>
+
+              {stats && stats.totalPredictions > 0 && (
+                <div className="split-wrap">
+                  <div className="split-labels">
+                    <span className="split-lbl profit">Profit {profitPct}%</span>
+                    <span className="split-lbl noprofit">No Profit {100-profitPct}%</span>
+                  </div>
+                  <div className="split-bar"><div className="split-fill" style={{width:`${profitPct}%`}}/></div>
+                  <div className="split-counts">
+                    <span>{stats.profitCount} predictions - {stats.profitTotal.toLocaleString()} NP</span>
+                    <span>{stats.noprofitTotal.toLocaleString()} NP - {stats.noprofitCount} predictions</span>
+                  </div>
+                </div>
+              )}
+
+              {stats && (
+                <div style={{display:'flex',gap:24,flexWrap:'wrap'}}>
+                  <div>
+                    <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Total Pot</div>
+                    <div className="pot-val">{stats.totalPot.toLocaleString()} NP</div>
+                  </div>
+                  <div>
+                    <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Predictions</div>
+                    <div className="pot-val">{stats.totalPredictions}</div>
+                  </div>
+                  {stats.totalPot > 0 && stats.profitTotal > 0 && (
+                    <div>
+                      <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Profit Odds</div>
+                      <div className="pot-val" style={{color:'var(--green)'}}>x{(stats.totalPot/Math.max(1,stats.profitTotal)).toFixed(2)}</div>
+                    </div>
+                  )}
+                  {stats.totalPot > 0 && stats.noprofitTotal > 0 && (
+                    <div>
+                      <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>No Profit Odds</div>
+                      <div className="pot-val" style={{color:'var(--red)'}}>x{(stats.totalPot/Math.max(1,stats.noprofitTotal)).toFixed(2)}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* My prediction or prediction form */}
+          {hunt && hunt.status === 'open' && !loading && (
+            !user ? (
+              <div className="login-prompt f3">
+                <p>Login with your Kick account to place a prediction and wager your NP.</p>
+                <a href="/auth/login?redirect=/predictor" className="nlogin-btn" style={{display:'inline-flex'}}>Login with Kick</a>
+              </div>
+            ) : myPred ? (
+              <div className="card f3">
+                <div className="card-title">Your Prediction</div>
+                <div className="my-pred">
+                  <div>
+                    <div className={`my-pred-side ${myPred.side}`}>{myPred.side === 'profit' ? 'Profit' : 'No Profit'}</div>
+                    <div className="my-pred-amt">{myPred.amount.toLocaleString()} NP wagered - predictions are locked</div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <PredictForm user={user} sessionId={sessionId} hunt={hunt} onDone={() => { refreshMyPred(); refresh(); }}/>
+            )
+          )}
+
+          {hunt && hunt.status === 'closed' && myPred && (
+            <div className="card f3">
+              <div className="card-title">Your Prediction</div>
+              <div className="my-pred">
+                <div>
+                  <div className={`my-pred-side ${myPred.side}`}>{myPred.side === 'profit' ? 'Profit' : 'No Profit'}</div>
+                  <div className="my-pred-amt">{myPred.amount.toLocaleString()} NP wagered - waiting for result...</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {hunt && hunt.status === 'resolved' && myPred && (
+            <div className="card f3">
+              <div className="card-title">Your Prediction Result</div>
+              <div className="my-pred">
+                <div>
+                  <div className={`my-pred-side ${myPred.side}`}>{myPred.side === 'profit' ? 'Profit' : 'No Profit'}</div>
+                  <div className="my-pred-amt">{myPred.amount.toLocaleString()} NP wagered</div>
+                </div>
+                {myPred.payout != null && (
+                  <div>
+                    {myPred.payout > 0 ? (
+                      <>
+                        <div className="my-pred-payout payout-win">+{myPred.payout.toLocaleString()} NP</div>
+                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'right'}}>Won!</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="my-pred-payout payout-loss">-{myPred.amount.toLocaleString()} NP</div>
+                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'right'}}>Better luck next time</div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {history.length > 0 && (
+            <div className="card f3" style={{marginTop:8}}>
+              <div className="card-title">Past Hunts</div>
+              <table className="hist-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Result</th>
+                    <th>Total Pot</th>
+                    <th>Winners</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {history.map(h => (
+                    <tr key={h.id}>
+                      <td style={{color:'var(--mu)',fontSize:12}}>{new Date(h.resolvedAt).toLocaleDateString()}</td>
+                      <td>{fmt(h.startingBalance)} NP</td>
+                      <td>{fmt(h.endingBalance)} NP</td>
+                      <td><span className={h.result==='profit'?'hist-result-profit':'hist-result-noprofit'}>{h.result==='profit'?'PROFIT':'NO PROFIT'}</span></td>
+                      <td>{h.totalPot?.toLocaleString()} NP</td>
+                      <td style={{color:'var(--mu)'}}>{h.winnerCount} / {h.totalPredictions}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <footer>
+            <div className="wrap">
+              <div className="ftw">
+                <p className="ftd"><strong>18+</strong> - We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
+                <div style={{display:'flex',alignItems:'center',gap:4}}>
+                  <div className="nsoc" style={{border:'none',padding:0}}>{SOCIALS}</div>
+                  <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
+                </div>
+              </div>
+              <div style={{textAlign:"center",marginTop:10,paddingBottom:4,fontSize:11,color:"var(--mu)",letterSpacing:".08em",fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:"var(--ac)"}}>@niksiii</strong> on Discord</div>
+            </div>
+          </footer>
+        </div>
+      </main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
