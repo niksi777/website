@@ -221,9 +221,7 @@ function Navbar({ user, sessionId, logout }) {
             <a href="/points">Points</a>
             <a href="/store">Store</a>
           </div>
-          <div className="nsoc" style={{gap:6}}>
-            {SOCIALS}
-            <div style={{width:1,height:20,background:'var(--b2)',margin:'0 6px'}}/>
+          <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
             {user ? (
               <div className="ndrop">
                 <div className="nuser">
