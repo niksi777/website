@@ -124,10 +124,12 @@
     .tr-prize{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
 
     /* CTA */
-    .lb-cta-row{display:flex;justify-content:center;margin-bottom:48px}
+    .lb-cta-row{display:flex;justify-content:center;gap:10px;margin-bottom:48px;flex-wrap:wrap}
     .lb-cta-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 28px;border-radius:9px;text-decoration:none;transition:opacity .15s}
     .lb-cta-btn:hover{opacity:.8}
     .lb-cta-gamba{background:var(--ac);color:#fff}
+    .lb-cta-gamba-sec{background:transparent;border:1px solid rgba(74,158,255,.4);color:var(--ac)}
+    .lb-cta-gamba-sec:hover{background:rgba(74,158,255,.08);opacity:1}
     .lb-cta-packy{background:var(--packy);color:#fff}
 
     /* Prize structure */
@@ -438,8 +440,12 @@ function GambaLeaderboard() {
       )}
 
       <div className="lb-cta-row">
-        <a href="https://gamba.com?ref=niksi777" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba">
-          Play on Gamba.com
+        <a href="https://gamba.com/promotions/exclusive-leaderboards/13300" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba-sec">
+          View Leaderboard on Gamba
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+        </a>
+        <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba">
+          Sign Up with NIKSI
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -528,8 +534,8 @@ function PackyLeaderboard() {
       )}
 
       <div className="lb-cta-row">
-        <a href="https://packy.gg?ref=NIKSI" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-packy">
-          Play on Packy.gg
+        <a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-packy">
+          Sign Up with NIKSI
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
