@@ -476,8 +476,6 @@ function PackyLeaderboard() {
       </div>
       <div className="lb-meta">
         <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
-        <div className="lb-meta-item">Players <strong>{entries.length}</strong></div>
-        {data.title && <div className="lb-meta-item"><strong>{data.title}</strong></div>}
       </div>
 
       {data.end_date && <Countdown endDate={data.end_date}/>}
