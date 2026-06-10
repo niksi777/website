@@ -913,7 +913,7 @@ app.post('/predictor/bot-predict', (req, res) => {
 app.post('/predictor/create', (req, res) => {
   const sid = req.headers['x-session-id'] || req.body.session;
   const sess = sessions[sid];
-  if (!sess || !isAdminUser(sess.username)) return res.status(403).json({ error: 'Forbidden' });
+  if (!sess || sess.username !== 'niksi777') return res.status(403).json({ error: 'Forbidden' });
   const { startingBalance } = req.body;
   if (!startingBalance) return res.status(400).json({ error: 'Starting balance required' });
   const d = loadPredictor();
@@ -927,7 +927,7 @@ app.post('/predictor/create', (req, res) => {
 app.post('/predictor/close', (req, res) => {
   const sid = req.headers['x-session-id'] || req.body.session;
   const sess = sessions[sid];
-  if (!sess || !isAdminUser(sess.username)) return res.status(403).json({ error: 'Forbidden' });
+  if (!sess || sess.username !== 'niksi777') return res.status(403).json({ error: 'Forbidden' });
   const d = loadPredictor();
   if (!d.hunt || d.hunt.status !== 'open') return res.status(400).json({ error: 'No open hunt' });
   d.hunt.status = 'closed'; d.hunt.closedAt = new Date().toISOString();
@@ -938,7 +938,7 @@ app.post('/predictor/close', (req, res) => {
 app.post('/predictor/resolve', (req, res) => {
   const sid = req.headers['x-session-id'] || req.body.session;
   const sess = sessions[sid];
-  if (!sess || !isAdminUser(sess.username)) return res.status(403).json({ error: 'Forbidden' });
+  if (!sess || sess.username !== 'niksi777') return res.status(403).json({ error: 'Forbidden' });
   const { endingBalance } = req.body;
   if (endingBalance == null) return res.status(400).json({ error: 'Ending balance required' });
   const d = loadPredictor();

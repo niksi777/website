@@ -439,7 +439,7 @@ function App() {
             <p>Wager your NP on whether the bonus hunt ends in profit or loss. Pool-based payouts - bigger stake, bigger share.</p>
           </div>
 
-          {user?.isAdmin && (
+          {user?.username === 'niksi777' && (
             <AdminPanel sessionId={sessionId} hunt={hunt} onRefresh={() => { refresh(); refreshMyPred(); }}/>
           )}
 
