@@ -108,9 +108,24 @@
     .packy-cta:hover{opacity:.85}
     .packy-cta svg{width:13px;height:13px;flex-shrink:0}
 
-    .offers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding-bottom:40px}
+    .offers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding-bottom:20px}
     @media(max-width:900px){.offers{grid-template-columns:1fr 1fr}}
     @media(max-width:600px){.offers{grid-template-columns:1fr}}
+    .pred-banner{background:var(--s1);border:1px solid rgba(74,158,255,.2);border-top:2px solid rgba(74,158,255,.4);border-radius:14px;padding:22px 26px;margin-bottom:28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;text-decoration:none;transition:border-color .2s,transform .15s}
+    .pred-banner:hover{border-color:rgba(74,158,255,.4);transform:translateY(-2px)}
+    .pred-banner-icon{width:48px;height:48px;border-radius:12px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+    .pred-banner-info{flex:1;min-width:0}
+    .pred-banner-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:3px}
+    .pred-banner-sub{font-size:12px;color:var(--mu);line-height:1.5}
+    .pred-split{flex:1;min-width:180px;max-width:280px}
+    .pred-split-bar{height:8px;border-radius:99px;background:rgba(239,68,68,.2);overflow:hidden;margin:6px 0}
+    .pred-split-fill{height:100%;border-radius:99px;background:#22c55e;transition:width .6s ease}
+    .pred-split-lbl{display:flex;justify-content:space-between;font-size:11px}
+    .pred-cta{display:flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;background:var(--ac);color:#fff;text-decoration:none;transition:opacity .15s;white-space:nowrap;flex-shrink:0}
+    .pred-cta:hover{opacity:.85}
+    .pred-badge-open{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:100px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e;margin-bottom:4px}
+    .pred-badge-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:pu 1.2s ease-in-out infinite}
+    @media(max-width:600px){.pred-split{display:none}}
 
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -263,6 +278,7 @@
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a>
+            <a href="/predictor">PREDICTOR</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
           </div>
@@ -299,11 +315,50 @@
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a>
+        <a href="/predictor">PREDICTOR</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>);
+  }
+
+  function PredictorBanner() {
+    const [hunt, setHunt] = React.useState(null);
+    const [stats, setStats] = React.useState(null);
+    React.useEffect(() => {
+      fetch('/predictor/current').then(r=>r.json()).then(d=>{setHunt(d.hunt||null);setStats(d.stats||null);}).catch(()=>{});
+    }, []);
+    const profitPct = stats && stats.totalPot > 0 ? Math.round((stats.profitTotal/stats.totalPot)*100) : 50;
+    return (
+      <a href="/predictor" className="pred-banner">
+        <div className="pred-banner-icon">🎯</div>
+        <div className="pred-banner-info">
+          {hunt && hunt.status === 'open' && <div className="pred-badge-open"><span className="pred-badge-dot"/>Predictions Open</div>}
+          <div className="pred-banner-title">Bonus Hunt Predictor</div>
+          <div className="pred-banner-sub">
+            {!hunt && "No active hunt right now - check back soon!"}
+            {hunt && hunt.status === 'open' && `Starting balance: ${hunt.startingBalance.toLocaleString()} NP - wager your points on the outcome`}
+            {hunt && hunt.status === 'closed' && `Hunt in progress - starting balance: ${hunt.startingBalance.toLocaleString()} NP`}
+            {hunt && hunt.status === 'resolved' && `Result: ${hunt.result === 'profit' ? 'PROFIT' : 'NO PROFIT'} - ${hunt.startingBalance.toLocaleString()} NP start`}
+          </div>
+        </div>
+        {hunt && stats && stats.totalPredictions > 0 && (
+          <div className="pred-split">
+            <div className="pred-split-lbl">
+              <span style={{color:'#22c55e',fontWeight:600,fontFamily:"'Barlow Condensed',sans-serif"}}>PROFIT {profitPct}%</span>
+              <span style={{color:'#ef4444',fontWeight:600,fontFamily:"'Barlow Condensed',sans-serif"}}>{100-profitPct}% NO PROFIT</span>
+            </div>
+            <div className="pred-split-bar"><div className="pred-split-fill" style={{width:`${profitPct}%`}}/></div>
+            <div style={{fontSize:11,color:'var(--mu)',textAlign:'center'}}>{stats.totalPredictions} predictions - {stats.totalPot.toLocaleString()} NP pot</div>
+          </div>
+        )}
+        <div className="pred-cta">
+          {hunt && hunt.status === 'open' ? 'Place Bet' : 'View Predictor'}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+    );
   }
 
   function GambaCard(){
@@ -421,6 +476,7 @@
           <PackyCard/>
           <QzinoCard/>
         </div>
+        <PredictorBanner/>
         <div className="f3" style={{paddingBottom:56}}>
           <div className="benefits" style={{marginBottom:8}}>
             <a href="/gamba" className="bcard bc-gold" style={{textDecoration:'none',cursor:'pointer'}}>
