@@ -102,10 +102,12 @@
     .pod-avatar.first{width:80px;height:80px;border-color:rgba(212,175,90,.4)}
     .pod-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:12px;text-align:center;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .pod-name.first{font-size:20px}
-    .pod-stat{text-align:center;margin-bottom:6px}
+    .pod-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;margin-bottom:6px}
+    .pod-stat{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:7px 8px}
+    .pod-stat.full{grid-column:1/-1}
     .pod-stat-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
     .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-top:2px}
-    .pod-stat-val.prize{font-size:18px}
+    .pod-stat-val.prize{font-size:16px}
 
     /* Table */
     .lb-table{width:100%;border-collapse:collapse;margin-bottom:32px}
@@ -349,18 +351,20 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP }) {
       {rank === 1 && <div className="crown">👑</div>}
       <Avatar src={player.avatar || player.image_url} className={`pod-avatar${rank===1?' first':''}`}/>
       <div className={`pod-name${rank===1?' first':''}`} style={rank===1?{color:accentColor}:{}}>{player.username || player.display_name || 'Hidden'}</div>
-      <div className="pod-stat">
-        <div className="pod-stat-lbl">Wagered</div>
-        <div className="pod-stat-val" style={{color:accentColor}}>{fmtWager(player)}</div>
+      <div className="pod-stats-row">
+        <div className="pod-stat">
+          <div className="pod-stat-lbl">Wagered</div>
+          <div className="pod-stat-val" style={{color:accentColor}}>{fmtWager(player)}</div>
+        </div>
+        <div className="pod-stat">
+          <div className="pod-stat-lbl">Prize</div>
+          <div className="pod-stat-val prize" style={{color:'var(--green)'}}>{fmtPrize(player, rank)}</div>
+        </div>
+        {fmtNP && <div className="pod-stat full">
+          <div className="pod-stat-lbl">NiksiPoints</div>
+          <div className="pod-stat-val" style={{color:'#e8a427',fontSize:14}}>+{fmtNP(rank)} NP</div>
+        </div>}
       </div>
-      <div className="pod-stat">
-        <div className="pod-stat-lbl">Prize</div>
-        <div className="pod-stat-val prize" style={{color:'var(--green)'}}>{fmtPrize(player, rank)}</div>
-      </div>
-      {fmtNP && <div className="pod-stat">
-        <div className="pod-stat-lbl">NiksiPoints</div>
-        <div className="pod-stat-val" style={{color:'#e8a427',fontSize:14}}>+{fmtNP(rank)} NP</div>
-      </div>}
     </div>
   );
 }
