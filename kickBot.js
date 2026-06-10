@@ -82,6 +82,20 @@ async function sendMessage(text) {
 }
 
 // â”€â”€â”€ PERMISSIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Internal announce endpoint - server.js calls this to send chat messages
+const http = require('http');
+const announceServer = http.createServer((req, res) => {
+  if (req.method !== 'POST' || req.url !== '/announce') { res.writeHead(404); res.end(); return; }
+  if (req.headers['x-bot-secret'] !== process.env.BOT_API_SECRET) { res.writeHead(403); res.end(); return; }
+  let body = '';
+  req.on('data', chunk => body += chunk);
+  req.on('end', () => {
+    try { const { message } = JSON.parse(body); if (message) sendMessage(message).catch(() => {}); } catch {}
+    res.writeHead(200); res.end();
+  });
+});
+announceServer.listen(4002, '127.0.0.1');
+
 function isBroadcaster(username) {
   const u = username.toLowerCase();
   return u === CHANNEL.toLowerCase() || MODS.includes(u);

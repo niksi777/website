@@ -929,6 +929,8 @@ app.post('/predictor/create', (req, res) => {
   d.hunt = { id: Date.now().toString(), status: 'open', startingBalance: Number(startingBalance), endingBalance: null, result: null, createdAt: new Date().toISOString(), closedAt: null, resolvedAt: null };
   d.predictions = [];
   savePredictor(d);
+  const announceMsg = `A $${Number(startingBalance).toLocaleString()} bonus hunt has started - Predict the ending balance to win 2x your wager! Type: !predict [your guess] [wager] e.g. !predict 1200 50 or visit: https://niksi777.com/predictor`;
+  require('http').request({ hostname: '127.0.0.1', port: 4002, path: '/announce', method: 'POST', headers: { 'Content-Type': 'application/json', 'x-bot-secret': process.env.BOT_API_SECRET } }, () => {}).on('error', () => {}).end(JSON.stringify({ message: announceMsg }));
   res.json({ ok: true, hunt: d.hunt });
 });
 
