@@ -120,7 +120,7 @@
     .tr-rank{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--mu);min-width:36px}
     .tr-av{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .tr-name{font-weight:600;font-size:13px;color:#fff}
-    .tr-wager{font-size:13px;color:var(--mu)}
+    .tr-wager{font-size:13px;color:#fff}
     .tr-prize{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
 
     /* CTA */
@@ -354,7 +354,7 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP }) {
       <div className="pod-stats-row">
         <div className="pod-stat">
           <div className="pod-stat-lbl">Wagered</div>
-          <div className="pod-stat-val" style={{color:'var(--mu)'}}>{fmtWager(player)}</div>
+          <div className="pod-stat-val" style={{color:'#fff'}}>{fmtWager(player)}</div>
         </div>
         <div className="pod-stat">
           <div className="pod-stat-lbl">Prize</div>
@@ -362,7 +362,7 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP }) {
         </div>
         {fmtNP && <div className="pod-stat full">
           <div className="pod-stat-lbl">NiksiPoints</div>
-          <div className="pod-stat-val" style={{color:'#e8a427',fontSize:14}}>+{fmtNP(rank)} NP</div>
+          <div className="pod-stat-val" style={{color:'#fff',fontSize:14}}>+{fmtNP(rank)} NP</div>
         </div>}
       </div>
     </div>
@@ -427,7 +427,7 @@ function GambaLeaderboard() {
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
                 <td><span className="tr-wager">{fmtWager(p)}</span></td>
                 <td><span className="tr-prize" style={{color:'var(--green)'}}>{fmtPrize(p, p.position || i+4)}</span></td>
-                <td style={{textAlign:'right'}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#e8a427'}}>+{fmtNP(p.position || i+4)} NP</span></td>
+                <td style={{textAlign:'right'}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#fff'}}>+{fmtNP(p.position || i+4)} NP</span></td>
               </tr>
             ))}
           </tbody>
@@ -448,7 +448,7 @@ function GambaLeaderboard() {
             <div key={pos} className="prize-tier">
               <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][pos-1]}</div>
               <div className={`prize-tier-amt${pos==='1'?' p1':pos==='2'?' p2':pos==='3'?' p3':''}`}>{fmtMoney(amt)}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,color:'#e8a427',marginTop:4}}>+{fmtNP(Number(pos))} NP</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,color:'#fff',marginTop:4}}>+{fmtNP(Number(pos))} NP</div>
             </div>
           ))}
         </div>
