@@ -296,6 +296,14 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
     setMsg(r.ok ? 'Predictions closed.' : (r.error || 'Error'));
     if (r.ok) onRefresh();
   };
+  const cancel = async () => {
+    if (!confirm('Cancel this hunt? All wagers will be refunded.')) return;
+    setBusy(true); setMsg('');
+    const r = await fetch('/predictor/cancel', { method:'POST', headers, body: '{}' }).then(x=>x.json());
+    setBusy(false);
+    setMsg(r.ok ? `Hunt cancelled - ${r.refundCount} wager(s) refunded.` : (r.error || 'Error'));
+    if (r.ok) onRefresh();
+  };
   const resolve = async () => {
     if (!endBal) return;
     setBusy(true); setMsg('');
@@ -329,6 +337,11 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
             <input className="admin-input" value={endBal} onChange={e=>setEndBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&resolve()} disabled={busy}/>
             <button className="admin-btn btn-resolve" onClick={resolve} disabled={busy||!endBal}>Resolve</button>
           </div>
+        </div>
+      )}
+      {hunt && (hunt.status === 'open' || hunt.status === 'closed') && (
+        <div className="admin-row" style={{marginTop:14}}>
+          <button className="admin-btn" style={{background:'rgba(217,79,79,.15)',border:'1px solid rgba(217,79,79,.3)',color:'rgba(217,79,79,.9)'}} onClick={cancel} disabled={busy}>Cancel Hunt &amp; Refund</button>
         </div>
       )}
       {msg && <div style={{marginTop:12,fontSize:12,color:'var(--mu)'}}>{msg}</div>}
