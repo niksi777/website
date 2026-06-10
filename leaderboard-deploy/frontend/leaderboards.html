@@ -536,7 +536,7 @@ function PackyLeaderboard() {
 
 function App() {
   const { user, logout } = useSession();
-  const [tab, setTab] = React.useState('gamba');
+  const [tab, setTab] = React.useState(() => new URLSearchParams(window.location.search).get('tab') === 'packy' ? 'packy' : 'gamba');
 
   return (
     <>
