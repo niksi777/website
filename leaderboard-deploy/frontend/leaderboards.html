@@ -132,8 +132,10 @@
     .prize-section{margin-bottom:48px}
     .prize-title{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
     .prize-tiers{display:flex;gap:10px;flex-wrap:wrap}
-    .announce-bar{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(0,178,245,.1);border:1px solid rgba(0,178,245,.3);border-radius:10px;padding:12px 20px;margin-bottom:24px;font-size:13px;font-weight:600;color:var(--packy);letter-spacing:.04em}
+    .announce-bar{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:10px;padding:12px 20px;margin-bottom:24px;font-size:13px;font-weight:600;letter-spacing:.04em}
     .announce-bar svg{flex-shrink:0}
+    .announce-bar.blue{background:rgba(0,178,245,.1);border:1px solid rgba(0,178,245,.3);color:var(--packy)}
+    .announce-bar.green{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)}
     .prize-tier{display:flex;flex-direction:column;align-items:center;background:var(--s1);border:1px solid var(--b2);border-radius:10px;padding:12px 18px;min-width:80px}
     .prize-tier-pos{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
     .prize-tier-amt{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff}
@@ -397,6 +399,11 @@ function GambaLeaderboard() {
         </div>
       )}
 
+      <div className="announce-bar green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        70% commission + 10-20% lossback - claim via live support
+      </div>
+
       {rest.length > 0 && (
         <table className="lb-table">
           <thead><tr>
@@ -481,9 +488,9 @@ function PackyLeaderboard() {
         </div>
       )}
 
-      <div className="announce-bar">
+      <div className="announce-bar blue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Get a 5% bonus on your first deposit - use code <strong style={{color:'#fff',marginLeft:4}}>NIKSI</strong>
+        Get a 5% bonus on your first deposit
       </div>
 
       {rest.length > 0 && (
