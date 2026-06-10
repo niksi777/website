@@ -376,14 +376,10 @@ function GambaLeaderboard() {
 
   return (
     <div className="f2">
-      <div className="lb-header">
-        <div className="lb-header-left">
-          <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
-        </div>
-        <div className="lb-prize-big">
-          <div className="lb-prize-amt" style={{color:'var(--green)'}}>$1,500</div>
-          <div className="lb-prize-lbl">Bi-Weekly Prize</div>
-        </div>
+      <div style={{textAlign:'center',marginBottom:24}}>
+        <div className="lb-prize-amt" style={{color:'var(--green)'}}>$1,500</div>
+        <div className="lb-prize-lbl">Bi-Weekly Prize</div>
+        <div className="lb-code" style={{marginTop:8}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
       <div className="lb-meta">
         <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
@@ -463,15 +459,10 @@ function PackyLeaderboard() {
 
   return (
     <div className="f2">
-      <div className="lb-header">
-        <div className="lb-header-left">
-          <img className="lb-platform-img" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
-          <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
-        </div>
-        <div className="lb-prize-big">
-          <div className="lb-prize-amt" style={{color:'var(--packy)'}}>${prize.toLocaleString('en-US')}</div>
-          <div className="lb-prize-lbl">Bi-Weekly Prize</div>
-        </div>
+      <div style={{textAlign:'center',marginBottom:24}}>
+        <div className="lb-prize-amt" style={{color:'var(--packy)'}}>${prize.toLocaleString('en-US')}</div>
+        <div className="lb-prize-lbl">Bi-Weekly Prize</div>
+        <div className="lb-code" style={{marginTop:8}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
       <div className="lb-meta">
         <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
