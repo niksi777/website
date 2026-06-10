@@ -11,6 +11,8 @@
 </head>
 
 <body class="bg-[#0f172a] text-white">
+<canvas id="constellation"></canvas>
+
 <div id="root"></div>
 
 <script type="text/babel">
@@ -247,6 +249,36 @@ React.useEffect(() => {
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 
+</script>
+
+<script>
+(function(){
+  var canvas = document.getElementById('constellation');
+  var ctx = canvas.getContext('2d');
+  var N = 110, DIST = 140;
+  var W, H, pts = [];
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function mkPt(){ return { x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:Math.random()*1.2+.4, o:Math.random()*.45+.1 }; }
+  function init(){ resize(); pts=[]; for(var i=0;i<N;i++) pts.push(mkPt()); }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<N;i++){
+      var a=pts[i];
+      for(var j=i+1;j<N;j++){
+        var b=pts[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<DIST){ ctx.beginPath(); ctx.strokeStyle='rgba(130,170,255,'+((1-d/DIST)*.12)+')'; ctx.lineWidth=.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+      }
+    }
+    for(var i=0;i<N;i++){
+      var p=pts[i]; p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(160,190,255,'+p.o+')'; ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  init(); window.addEventListener('resize', resize); tick();
+})();
 </script>
 </body>
 

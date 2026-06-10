@@ -12,7 +12,6 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--s3:#141f3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 1000px 700px at 0% 0%,rgba(74,158,255,.25),transparent 60%),radial-gradient(ellipse 800px 800px at 100% 100%,rgba(30,100,220,.18),transparent 60%),radial-gradient(ellipse 600px 500px at 50% 50%,rgba(40,100,255,.06),transparent 70%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}.f4{animation:fu .5s .34s ease both}
@@ -48,7 +47,7 @@
     .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
     .drawer-soc svg{width:15px;height:15px}
 
-    .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+    .wrap{max-width:1020px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
     .phead{padding:44px 0 32px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
     .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
@@ -127,9 +126,13 @@
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
     .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
+  
+    #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
   </style>
 </head>
 <body>
+<canvas id="constellation"></canvas>
+
 <div id="root"></div>
 <script type="text/babel">
 
@@ -328,6 +331,36 @@
   }
 
   ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+<script>
+(function(){
+  var canvas = document.getElementById('constellation');
+  var ctx = canvas.getContext('2d');
+  var N = 110, DIST = 140;
+  var W, H, pts = [];
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function mkPt(){ return { x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:Math.random()*1.2+.4, o:Math.random()*.45+.1 }; }
+  function init(){ resize(); pts=[]; for(var i=0;i<N;i++) pts.push(mkPt()); }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<N;i++){
+      var a=pts[i];
+      for(var j=i+1;j<N;j++){
+        var b=pts[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<DIST){ ctx.beginPath(); ctx.strokeStyle='rgba(130,170,255,'+((1-d/DIST)*.12)+')'; ctx.lineWidth=.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+      }
+    }
+    for(var i=0;i<N;i++){
+      var p=pts[i]; p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(160,190,255,'+p.o+')'; ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  init(); window.addEventListener('resize', resize); tick();
+})();
 </script>
 </body>
 </html>

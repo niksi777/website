@@ -57,31 +57,29 @@
 
     /* Platform tabs */
     .platform-tabs{display:flex;align-items:center;justify-content:center;gap:12px;padding:32px 0 24px}
-    .ptab{display:flex;align-items:center;gap:10px;padding:10px 22px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
+    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
     .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
     .ptab.active-gamba{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.08);box-shadow:0 0 18px rgba(34,197,94,.12)}
     .ptab.active-packy{border-color:rgba(0,178,245,.5);background:rgba(0,178,245,.08);box-shadow:0 0 18px rgba(0,178,245,.12)}
     .ptab-img{height:22px;object-fit:contain}
-    .ptab-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
 
     /* Leaderboard header */
-    .lb-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
-    .lb-header-left{display:flex;align-items:center;gap:16px}
-    .lb-platform-img{height:36px;object-fit:contain}
-    .lb-platform-name{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:#fff}
-    .lb-code{font-size:12px;color:var(--mu);margin-top:2px}
+    .lb-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:32px;margin-bottom:24px;text-align:center}
+    .lb-header-left{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .lb-platform-img{height:40px;object-fit:contain}
+    .lb-code{font-size:12px;color:var(--mu)}
     .lb-code strong{color:#fff;letter-spacing:.06em}
-    .lb-prize-big{text-align:right}
+    .lb-prize-big{text-align:center}
     .lb-prize-amt{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:800;line-height:1}
     .lb-prize-lbl{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-top:2px}
-    .lb-meta{display:flex;align-items:center;gap:18px;margin-bottom:28px;flex-wrap:wrap}
+    .lb-meta{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:28px;flex-wrap:wrap}
     .live-badge{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--green)}
     .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pu 1.2s ease-in-out infinite}
     .lb-meta-item{font-size:12px;color:var(--mu)}
     .lb-meta-item strong{color:#fff}
 
     /* Countdown */
-    .countdown{display:flex;align-items:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+    .countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
     .countdown-lbl{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-right:4px}
     .cd-unit{display:flex;flex-direction:column;align-items:center;min-width:52px}
     .cd-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1;background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:8px;padding:6px 12px;min-width:52px;text-align:center}
@@ -153,8 +151,6 @@
       .hamburger{display:flex}
       .podium{flex-direction:column;align-items:center}
       .podium-card,.podium-card.first{width:100%;max-width:320px}
-      .lb-header{flex-direction:column;align-items:flex-start}
-      .lb-prize-big{text-align:left}
       .cd-num{font-size:28px;min-width:44px}
       .countdown{gap:6px}
     }
@@ -383,14 +379,11 @@ function GambaLeaderboard() {
       <div className="lb-header">
         <div className="lb-header-left">
           <img className="lb-platform-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-          <div>
-            <div className="lb-platform-name">Gamba.com</div>
-            <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
-          </div>
+          <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
         </div>
         <div className="lb-prize-big">
           <div className="lb-prize-amt" style={{color:'var(--green)'}}>$1,500</div>
-          <div className="lb-prize-lbl">Monthly Prize</div>
+          <div className="lb-prize-lbl">Bi-Weekly Prize</div>
         </div>
       </div>
       <div className="lb-meta">
@@ -474,14 +467,11 @@ function PackyLeaderboard() {
       <div className="lb-header">
         <div className="lb-header-left">
           <img className="lb-platform-img" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
-          <div>
-            <div className="lb-platform-name" style={{color:'var(--packy)'}}>Packy.gg</div>
-            <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
-          </div>
+          <div className="lb-code">Use code <strong>NIKSI</strong> to qualify</div>
         </div>
         <div className="lb-prize-big">
           <div className="lb-prize-amt" style={{color:'var(--packy)'}}>${prize.toLocaleString('en-US')}</div>
-          <div className="lb-prize-lbl">Prize Pool</div>
+          <div className="lb-prize-lbl">Bi-Weekly Prize</div>
         </div>
       </div>
       <div className="lb-meta">
@@ -553,11 +543,9 @@ function App() {
         <div className="platform-tabs f1">
           <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-            <span className="ptab-name">Gamba</span>
           </button>
           <button className={`ptab${tab==='packy'?' active-packy':''}`} onClick={() => setTab('packy')}>
             <img className="ptab-img" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
-            <span className="ptab-name">Packy</span>
           </button>
         </div>
 

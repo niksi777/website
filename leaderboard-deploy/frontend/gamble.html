@@ -12,7 +12,6 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.7);--ac:#4a9eff;--gold:#d4af5a}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 1200px 600px at 50% 0%,rgba(20,30,50,.6),transparent 70%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     @keyframes winnerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,164,39,0)}40%{box-shadow:0 0 24px 4px rgba(232,164,39,.4)}}
@@ -164,9 +163,13 @@
     @media(max-width:360px){
       .cases-grid{grid-template-columns:1fr}
     }
+  
+    #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
   </style>
 </head>
 <body>
+<canvas id="constellation"></canvas>
+
 <div id="root"></div>
 <script type="text/babel">
 
@@ -874,6 +877,36 @@
   }
 
   ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+<script>
+(function(){
+  var canvas = document.getElementById('constellation');
+  var ctx = canvas.getContext('2d');
+  var N = 110, DIST = 140;
+  var W, H, pts = [];
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function mkPt(){ return { x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:Math.random()*1.2+.4, o:Math.random()*.45+.1 }; }
+  function init(){ resize(); pts=[]; for(var i=0;i<N;i++) pts.push(mkPt()); }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<N;i++){
+      var a=pts[i];
+      for(var j=i+1;j<N;j++){
+        var b=pts[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<DIST){ ctx.beginPath(); ctx.strokeStyle='rgba(130,170,255,'+((1-d/DIST)*.12)+')'; ctx.lineWidth=.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+      }
+    }
+    for(var i=0;i<N;i++){
+      var p=pts[i]; p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(160,190,255,'+p.o+')'; ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  init(); window.addEventListener('resize', resize); tick();
+})();
 </script>
 </body>
 </html>
