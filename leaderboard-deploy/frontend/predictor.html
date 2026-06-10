@@ -77,7 +77,7 @@
     .badge-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:pu 1.2s ease-in-out infinite}
 
     /* Hunt info */
-    .hunt-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+    .hunt-meta{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:24px;text-align:center}
     .hunt-bal{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1}
     .hunt-bal-lbl{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
 
@@ -104,7 +104,7 @@
     .wager-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
     .wager-input{flex:1;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:10px 14px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#fff;outline:none;transition:border-color .15s}
     .wager-input:focus{border-color:var(--ac)}
-    .quick-btns{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+    .quick-btns{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}
     .quick-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--b2);background:transparent;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--mu);cursor:pointer;transition:all .15s}
     .quick-btn:hover{border-color:var(--b3);color:#fff;background:rgba(255,255,255,.04)}
     .submit-btn{width:100%;padding:13px;border-radius:9px;border:none;background:var(--ac);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .15s}
@@ -115,22 +115,22 @@
     .ok{font-size:12px;color:var(--green);margin-top:8px;text-align:center}
 
     /* My prediction */
-    .my-pred{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .my-pred{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;text-align:center}
     .my-pred-side{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;text-transform:uppercase}
     .my-pred-side.profit{color:var(--green)}
     .my-pred-side.noprofit{color:var(--red)}
     .my-pred-amt{font-size:13px;color:var(--mu)}
-    .my-pred-payout{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-align:right}
+    .my-pred-payout{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-align:center}
     .payout-win{color:var(--green)}
     .payout-loss{color:var(--red)}
 
     /* Admin panel */
-    .admin-panel{background:rgba(217,79,79,.04);border:1px solid rgba(217,79,79,.15);border-radius:14px;padding:24px;margin-bottom:16px}
+    .admin-panel{background:rgba(217,79,79,.04);border:1px solid rgba(217,79,79,.15);border-radius:14px;padding:24px;margin-bottom:16px;text-align:center}
     .admin-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(217,79,79,.8);margin-bottom:18px}
-    .admin-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-    .admin-input{flex:1;min-width:140px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 13px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;outline:none;transition:border-color .15s}
+    .admin-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+    .admin-input{width:200px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 13px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;outline:none;transition:border-color .15s;text-align:center}
     .admin-input:focus{border-color:var(--ac)}
-    .admin-input-lbl{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+    .admin-input-lbl{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
     .admin-btn{padding:9px 18px;border-radius:8px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .15s;white-space:nowrap}
     .admin-btn:hover:not(:disabled){opacity:.8}
     .admin-btn:disabled{opacity:.35;cursor:not-allowed}
@@ -300,7 +300,7 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
         <div>
           <div className="admin-input-lbl">Starting Balance</div>
           <div className="admin-row">
-            <input className="admin-input" placeholder="e.g. 5000" value={startBal} onChange={e=>setStartBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&create()} disabled={busy}/>
+            <input className="admin-input" value={startBal} onChange={e=>setStartBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&create()} disabled={busy}/>
             <button className="admin-btn btn-create" onClick={create} disabled={busy||!startBal}>Create Hunt</button>
           </div>
         </div>
@@ -314,7 +314,7 @@ function AdminPanel({ sessionId, hunt, onRefresh }) {
         <div style={{marginTop:14}}>
           <div className="admin-input-lbl">Ending Balance (resolves hunt)</div>
           <div className="admin-row">
-            <input className="admin-input" placeholder="e.g. 7500" value={endBal} onChange={e=>setEndBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&resolve()} disabled={busy}/>
+            <input className="admin-input" value={endBal} onChange={e=>setEndBal(e.target.value)} onKeyDown={e=>e.key==='Enter'&&resolve()} disabled={busy}/>
             <button className="admin-btn btn-resolve" onClick={resolve} disabled={busy||!endBal}>Resolve</button>
           </div>
         </div>
@@ -454,7 +454,7 @@ function App() {
 
           {hunt && (
             <div className="card f2">
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,flexWrap:'wrap',marginBottom:20}}>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap',marginBottom:20}}>
                 <div className="card-title" style={{margin:0}}>Current Hunt</div>
                 {statusBadge()}
               </div>
@@ -493,7 +493,7 @@ function App() {
               )}
 
               {stats && (
-                <div style={{display:'flex',gap:24,flexWrap:'wrap'}}>
+                <div style={{display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center',textAlign:'center'}}>
                   <div>
                     <div style={{fontSize:11,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--mu)',marginBottom:3}}>Total Pot</div>
                     <div className="pot-val">{stats.totalPot.toLocaleString()} NP</div>
@@ -566,12 +566,12 @@ function App() {
                     {myPred.payout > 0 ? (
                       <>
                         <div className="my-pred-payout payout-win">+{myPred.payout.toLocaleString()} NP</div>
-                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'right'}}>Won!</div>
+                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'center'}}>Won!</div>
                       </>
                     ) : (
                       <>
                         <div className="my-pred-payout payout-loss">-{myPred.amount.toLocaleString()} NP</div>
-                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'right'}}>Better luck next time</div>
+                        <div style={{fontSize:11,color:'var(--mu)',textAlign:'center'}}>Better luck next time</div>
                       </>
                     )}
                   </div>
