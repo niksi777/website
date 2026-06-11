@@ -122,6 +122,7 @@
     .tr-name{font-weight:600;font-size:13px;color:#fff}
     .tr-wager{font-size:13px;color:#fff}
     .tr-prize{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
+    .np-mobile{display:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-top:1px}
 
     /* CTA */
     .lb-cta-row{display:flex;justify-content:center;gap:10px;margin-bottom:48px;flex-wrap:wrap}
@@ -161,8 +162,9 @@
       .podium-card,.podium-card.first{width:100%;max-width:320px}
       .cd-num{font-size:28px;min-width:44px}
       .countdown{gap:6px}
-      .lb-table .col-av{display:none}
-      .lb-table td,.lb-table th{padding:10px 10px}
+      .lb-table .col-av,.lb-table .col-np{display:none}
+      .lb-table td,.lb-table th{padding:10px 8px}
+      .np-mobile{display:block}
     }
   </style>
 </head>
@@ -434,7 +436,7 @@ function GambaLeaderboard() {
       {rest.length > 0 && (
         <table className="lb-table">
           <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th><th style={{textAlign:'right'}}>NiksiPoints</th>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th><th className="col-np" style={{textAlign:'right'}}>NiksiPoints</th>
           </tr></thead>
           <tbody>
             {rest.map((p, i) => (
@@ -443,8 +445,11 @@ function GambaLeaderboard() {
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
                 <td><span className="tr-wager">{fmtWager(p)}</span></td>
-                <td><span className="tr-prize" style={{color:'var(--green)'}}>{fmtPrize(p, p.position || i+4)}</span></td>
-                <td style={{textAlign:'right'}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#fff'}}>+{fmtNP(p.position || i+4)} NP</span></td>
+                <td>
+                  <span className="tr-prize" style={{color:'var(--green)'}}>{fmtPrize(p, p.position || i+4)}</span>
+                  <div className="np-mobile">+{fmtNP(p.position || i+4)} NP</div>
+                </td>
+                <td className="col-np" style={{textAlign:'right'}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#fff'}}>+{fmtNP(p.position || i+4)} NP</span></td>
               </tr>
             ))}
           </tbody>
