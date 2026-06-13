@@ -1,4 +1,4 @@
-﻿require("dotenv").config({path:"/root/website/.env"});
+require("dotenv").config({path:"/root/website/.env"});
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
@@ -27,6 +27,8 @@ db.serialize(() => {
     )
   `);
 });
+
+let lastUpdatedMs = null;
 
 function normalizeChancerRows(payload) {
   const list = Array.isArray(payload)
@@ -178,6 +180,25 @@ app.get("/packy-data", async (req, res) => {
 });
 
 // Existing Gamba endpoint
+﻿const fs_lb = require("fs");
+const LB_HISTORY_PATH = require("path").join(__dirname, "gamba-history.json");
+
+app.get("/lb-meta", (req, res) => {
+  res.json({ lastUpdated: lastUpdatedMs });
+});
+
+app.get("/lb-history", (req, res) => {
+  try {
+    const data = fs_lb.existsSync(LB_HISTORY_PATH)
+      ? JSON.parse(fs_lb.readFileSync(LB_HISTORY_PATH, "utf-8"))
+      : [];
+    res.json(data);
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+
 app.get("/players", (req, res) => {
   db.all(
     "SELECT * FROM players ORDER BY position ASC",
