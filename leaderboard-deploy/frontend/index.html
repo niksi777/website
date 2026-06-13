@@ -11,13 +11,13 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
-    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .2s ease both}
+    @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .15s ease both}.f3{animation:fu .5s .3s ease both}
 
-    nav{background:rgba(6,13,26,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    nav{background:rgba(6,7,13,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
     .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
     .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
     .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
@@ -32,107 +32,16 @@
     .nsoc svg{width:15px;height:15px}
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
     .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
-    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
+    .drawer{display:none;flex-direction:column;background:rgba(6,7,13,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
     .drawer.open{display:flex}
     .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
     .drawer a:last-of-type{border-bottom:none}
     .drawer a.on,.drawer a:hover{color:#fff}
-    .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
-    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
-    .drawer-soc svg{width:15px;height:15px}
-
-    .page{max-width:1020px;margin:0 auto;padding:0 28px}
-
-    .hero{padding:56px 0 44px;text-align:center}
-    .htag{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 14px;border-radius:100px;margin-bottom:20px}
-    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    .benefits{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto 1fr;gap:10px;margin-bottom:8px;align-items:stretch}
-    .bcard{border-radius:12px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;background:var(--s1);border:1px solid rgba(255,255,255,.06);border-top:2px solid var(--bc-accent,rgba(255,255,255,.15));transition:transform .18s,border-color .18s}
-    .bcard:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.1)}
-    .bcard-val{font-family:'Barlow Condensed',sans-serif;font-size:clamp(22px,2.8vw,32px);font-weight:800;letter-spacing:.02em;line-height:1;text-align:center;color:var(--bc-color,#fff)}
-    .bcard-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(221,227,239,.45);text-align:center;line-height:1.5;margin-top:1px}
-    .benefits-arrow{display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,.2);flex-shrink:0}
-    .bfeature{display:flex;align-items:center;gap:24px;border-radius:12px;padding:20px 24px;background:var(--s1);border:1px solid rgba(255,255,255,.06);border-left:3px solid #e8a427;text-decoration:none;color:inherit;transition:transform .18s,border-color .18s;margin-bottom:0}
-    .bfeature:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.1)}
-    .bfeature-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(20px,2.5vw,28px);font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#e8a427;white-space:nowrap}
-    .bfeature-desc{font-family:'Inter',sans-serif;font-size:12px;color:rgba(221,227,239,.5);line-height:1.6;flex:1}
-    .bfeature-cta{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;white-space:nowrap;display:flex;align-items:center;gap:6px;opacity:.7}
-    @media(max-width:600px){.bfeature{flex-direction:column;align-items:flex-start;gap:10px}.bfeature-title,.bfeature-cta{white-space:normal}}
-    .bc-gold{--bc-accent:#e8a427;--bc-color:#e8a427}
-    .bc-green{--bc-accent:#22c55e;--bc-color:#22c55e}
-    .bc-blue{--bc-accent:#4a90d9;--bc-color:#4a90d9}
-    .bc-purple{--bc-accent:#9b59d9;--bc-color:#b07ee0}
-    .bc-white{--bc-accent:rgba(255,255,255,.5);--bc-color:#fff;border-top-width:2px}
-    .bc-white .bcard-val{font-size:clamp(16px,2vw,22px);letter-spacing:.12em}
-    @media(max-width:800px){.benefits{grid-template-columns:1fr 1fr 1fr}.benefits-arrow{display:none}.bc-white{grid-column:1/-1}}
-    @media(max-width:500px){.benefits{grid-template-columns:1fr 1fr}}
-
-    /* Compact platform cards */
-    .pcard{display:flex;flex-direction:column;border-radius:14px;background:var(--s1);border:1px solid var(--b2);transition:transform .18s,border-color .18s;overflow:hidden}
-    .pcard:hover{transform:translateY(-2px);border-color:var(--b3)}
-    .pcard-head{display:flex;align-items:center;gap:14px;padding:18px 18px 14px;border-bottom:1px solid var(--b1)}
-    .pcard-logo{height:32px;object-fit:contain;flex-shrink:0}
-    .pcard-meta{flex:1;min-width:0}
-    .pcard-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;line-height:1}
-    .pcard-code{font-size:11px;color:var(--mu);margin-top:2px}
-    .pcard-code strong{color:#fff}
-    .pcard-live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.1em;flex-shrink:0}
-    .pcard-live::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;animation:pu 1.5s ease-in-out infinite}
-    .pcard-perks{list-style:none;padding:14px 18px;display:flex;flex-direction:column;gap:9px;flex:1}
-    .pcard-perks li{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--mu);line-height:1.4}
-    .pcard-perks li strong{color:rgba(221,227,239,.9)}
-    .perk-check{font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-    .pcard-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 18px 18px}
-    .octa{display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 10px;border-radius:8px;background:#fff;color:#07080c;transition:opacity .15s;text-decoration:none}
-    .octa:hover{opacity:.82}
-    .octa svg{width:12px;height:12px;flex-shrink:0}
-    .octa-sec{display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 10px;border-radius:8px;background:transparent;color:var(--mu);border:1px solid var(--b2);transition:all .15s;text-decoration:none}
-    .octa-sec:hover{color:#fff;border-color:var(--b3)}
-    .octa-sec svg{width:12px;height:12px;flex-shrink:0}
-    .pcard-accent-gamba{border-top:2px solid #22c55e}
-    .pcard-accent-packy{border-top:2px solid #00b2f5}
-    .pcard-accent-qzino{border-top:2px solid #7ac832}
-
-    .offers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding-bottom:20px}
-    @media(max-width:900px){.offers{grid-template-columns:1fr 1fr}}
-    @media(max-width:600px){.offers{grid-template-columns:1fr}}
-    .pred-banner{background:var(--s1);border:1px solid rgba(74,158,255,.2);border-top:2px solid rgba(74,158,255,.4);border-radius:14px;padding:22px 26px;margin-bottom:28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;text-decoration:none;transition:border-color .2s,transform .15s}
-    .pred-banner:hover{border-color:rgba(74,158,255,.4);transform:translateY(-2px)}
-    .pred-banner-icon{width:48px;height:48px;border-radius:12px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
-    .pred-banner-info{flex:1;min-width:0}
-    .pred-banner-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:3px}
-    .pred-banner-sub{font-size:12px;color:var(--mu);line-height:1.5}
-    .pred-split{flex:1;min-width:180px;max-width:280px}
-    .pred-split-bar{height:8px;border-radius:99px;background:rgba(239,68,68,.2);overflow:hidden;margin:6px 0}
-    .pred-split-fill{height:100%;border-radius:99px;background:#22c55e;transition:width .6s ease}
-    .pred-split-lbl{display:flex;justify-content:space-between;font-size:11px}
-    .pred-cta{display:flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;background:var(--ac);color:#fff;text-decoration:none;transition:opacity .15s;white-space:nowrap;flex-shrink:0}
-    .pred-cta:hover{opacity:.85}
-    .pred-badge-open{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:100px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e;margin-bottom:4px}
-    .pred-badge-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:pu 1.2s ease-in-out infinite}
-    @media(max-width:600px){.pred-split{display:none}}
-
-    footer{border-top:1px solid var(--b1);padding:22px 0}
-    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
-    .ftd strong{color:rgba(221,227,239,.9)}
-    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
-
-    @media(max-width:680px){
-      .nlinks,.nsoc{display:none}
-      .hamburger{display:flex}
-      .nlogo{border-right:none;margin-right:0;padding-right:0}
-      .hero{padding:36px 0 28px}
-      .offers{grid-template-columns:1fr}
-      .oprize{font-size:52px}
-      .ftw{flex-direction:column;align-items:flex-start}
-    }
-
     .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;flex-shrink:0}
     .ndrop{position:relative}
     .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
     .ndrop:hover .ndrop-menu{display:block}
-    .ndrop-box{background:rgba(7,8,12,.97);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+    .ndrop-box{background:rgba(6,7,13,.97);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
     .ndrop-item{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(221,227,239,.75);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:6px;transition:background .1s;box-sizing:border-box}
     .ndrop-item:hover{background:rgba(255,255,255,.06)}
     .ndrop-logout{color:rgba(217,79,79,.8)}
@@ -143,96 +52,89 @@
     .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
     .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
     .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
-  
+
+    .page{max-width:1020px;margin:0 auto;padding:0 28px}
+
+    /* Carousel */
+    .carousel-wrap{position:relative;border-radius:16px;overflow:hidden;height:290px;margin:28px 0 10px}
+    .c-slide{position:absolute;inset:0;display:flex;align-items:center;padding:40px 52px;opacity:0;transition:opacity .55s ease;pointer-events:none}
+    .c-slide.on{opacity:1;pointer-events:auto}
+    .c-dots{display:flex;justify-content:center;gap:8px;margin-bottom:32px}
+    .c-dot{border:none;cursor:pointer;border-radius:3px;height:5px;width:8px;padding:0;transition:all .3s ease;background:rgba(255,255,255,.2)}
+    .c-dot.on{background:rgba(255,255,255,.82);width:22px}
+
+    /* Feature cards */
+    .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+    .feat-card{background:rgba(255,255,255,.03);border:1px solid var(--b2);border-radius:14px;padding:30px 16px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;color:var(--tx);transition:background .15s,border-color .15s,transform .18s}
+    .feat-card:hover{background:rgba(255,255,255,.058);border-color:var(--b3);transform:translateY(-3px)}
+    .feat-label{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.82);text-align:center}
+
+    /* Predictor banner */
+    .pred-banner{background:rgba(255,255,255,.03);border:1px solid rgba(74,158,255,.18);border-top:2px solid rgba(74,158,255,.35);border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;text-decoration:none;transition:border-color .2s,transform .15s}
+    .pred-banner:hover{border-color:rgba(74,158,255,.35);transform:translateY(-2px)}
+    .pred-banner-icon{width:44px;height:44px;border-radius:10px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+    .pred-banner-info{flex:1;min-width:0}
+    .pred-banner-title{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:3px}
+    .pred-banner-sub{font-size:12px;color:var(--mu);line-height:1.5}
+    .pred-split{flex:1;min-width:180px;max-width:260px}
+    .pred-split-bar{height:7px;border-radius:99px;background:rgba(239,68,68,.2);overflow:hidden;margin:5px 0}
+    .pred-split-fill{height:100%;border-radius:99px;background:#22c55e;transition:width .6s ease}
+    .pred-split-lbl{display:flex;justify-content:space-between;font-size:11px}
+    .pred-cta{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:8px;background:var(--ac);color:#fff;white-space:nowrap;flex-shrink:0;text-decoration:none}
+    .pred-badge-open{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:100px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e;margin-bottom:4px}
+    .pred-badge-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:pu 1.2s ease-in-out infinite}
+    @media(max-width:600px){.pred-split{display:none}}
+
+    /* Platform rows */
+    .plat-section{margin-bottom:56px}
+    .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
+    .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:22px}
+    .plat-row{display:flex;align-items:center;gap:24px;padding:20px 26px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;margin-bottom:10px;transition:background .15s,border-color .15s}
+    .plat-row:hover{background:rgba(255,255,255,.048);border-color:var(--b3)}
+    .plat-logo-wrap{width:88px;flex-shrink:0}
+    .plat-logo{height:26px;object-fit:contain;max-width:88px}
+    .plat-perks{flex:1;display:flex;gap:28px;flex-wrap:wrap;align-items:center}
+    .plat-perk{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(221,227,239,.62)}
+    .plat-btns{display:flex;gap:8px;flex-shrink:0}
+    .plat-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;white-space:nowrap;text-decoration:none;transition:opacity .15s;border:none;cursor:pointer}
+    .plat-btn:hover{opacity:.8}
+    .plat-btn-ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(221,227,239,.7)}
+
+    footer{border-top:1px solid var(--b1);padding:22px 0}
+    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
+    .ftd strong{color:rgba(221,227,239,.9)}
+    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
     #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    @media(max-width:680px){
+      .nlinks,.nsoc{display:none}
+      .hamburger{display:flex}
+      .nlogo{border-right:none;margin-right:0;padding-right:0}
+      .carousel-wrap{height:230px}
+      .c-slide{padding:28px 24px}
+      .feat-grid{grid-template-columns:repeat(2,1fr)}
+      .plat-row{flex-wrap:wrap;gap:14px}
+      .plat-perks{gap:14px}
+      .plat-btns{width:100%}
+      .plat-btn{flex:1;justify-content:center}
+      .ftw{flex-direction:column;align-items:flex-start}
+    }
   </style>
 </head>
 <body>
 <canvas id="constellation"></canvas>
-
 <div id="root"></div>
 <script type="text/babel">
 
-  const CASE_THEMES={
-    starter:{lid:'#1a3a6a',body:'#0d1e38',accent:'#4a90d9',glow:'rgba(74,144,217,.5)',stars:1,stripe:'rgba(74,144,217,.15)'},
-    mega:   {lid:'#3a2000',body:'#1e1000',accent:'#e8a427',glow:'rgba(232,164,39,.6)',stars:4,stripe:'rgba(232,164,39,.15)'},
-  };
-  function CaseGraphic({id,size=80}){
-    const t=CASE_THEMES[id]||CASE_THEMES.mega;
-    const FW=84,FH=70,LID=24,DX=26,DY=16,VW=FW+DX,VH=FH+DY;
-    const cx=FW/2,lidY=DY+LID,logoR=13,logoCX=cx,logoCY=lidY+(FH-LID)/2,a=t.accent;
-    
-    function rr(ctx,x,y,w,h,r){return `M${x+r},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h-r} Q${x+w},${y+h} ${x+w-r},${y+h} L${x+r},${y+h} Q${x},${y+h} ${x},${y+h-r} L${x},${y+r} Q${x},${y} ${x+r},${y} Z`;}
-    return(
-      <svg viewBox={`0 0 ${VW} ${VH}`} width={size} height={Math.round(size*VH/VW)} style={{display:'block',filter:`drop-shadow(0 8px 20px ${t.glow})`}}>
-        <defs>
-          <linearGradient id={`gfi-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid}/><stop offset="100%" stopColor={t.body}/></linearGradient>
-          <linearGradient id={`gli-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.lid} stopOpacity=".9"/><stop offset="100%" stopColor={t.lid} stopOpacity=".6"/></linearGradient>
-          <clipPath id={`lci-${id}`}><circle cx={logoCX} cy={logoCY} r={logoR}/></clipPath>
-        </defs>
-        <polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill={t.lid}/><polygon points={`0,${DY} ${DX},0 ${VW},0 ${FW},${DY}`} fill="rgba(255,255,255,.13)"/>
-        <polygon points={`${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}`} fill={t.body}/><polygon points={`${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}`} fill="rgba(0,0,0,.4)"/>
-        <polygon points={`${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}`} fill={t.body}/><polygon points={`${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}`} fill="rgba(0,0,0,.55)"/>
-        <rect x="0" y={DY} width={FW} height={LID} fill={`url(#gli-${id})`}/>
-        <rect x="0" y={lidY} width={FW} height={FH-LID} fill={`url(#gfi-${id})`}/>
-        <rect x="0" y={lidY} width={FW} height={FH-LID} fill={t.stripe} opacity=".5"/>
-        <line x1="0" y1={lidY} x2={FW} y2={lidY} stroke={a} strokeWidth="2" strokeOpacity=".8"/>
-        <line x1={FW} y1={lidY} x2={VW} y2={LID} stroke={a} strokeWidth="1.5" strokeOpacity=".6"/>
-        <polyline points={`0,${DY+11} 0,${DY} 11,${DY}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
-        <polyline points={`${FW-11},${DY} ${FW},${DY} ${FW},${DY+11}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
-        <polyline points={`0,${FH+DY-11} 0,${FH+DY} 11,${FH+DY}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
-        <polyline points={`${FW-11},${FH+DY} ${FW},${FH+DY} ${FW},${FH+DY-11}`} fill="none" stroke={a} strokeWidth="3" strokeLinecap="square" strokeOpacity=".85"/>
-        <line x1={FW} y1={DY} x2={VW} y2="0" stroke={a} strokeWidth="2.5" strokeLinecap="round" strokeOpacity=".7"/>
-        <line x1={FW} y1={FH+DY} x2={VW} y2={FH} stroke={a} strokeWidth="2.5" strokeLinecap="round" strokeOpacity=".6"/>
-        <rect x={cx-9} y={lidY-7} width="18" height="13" rx="3" fill={t.body} stroke={a} strokeWidth="1.5"/>
-        <path d={`M ${cx-5} ${lidY-7} a5 5 0 0 1 10 0`} fill="none" stroke={a} strokeWidth="1.8" strokeLinecap="round"/>
-        <circle cx={cx} cy={lidY} r="2.5" fill={a} opacity=".9"/>
-        <circle cx={logoCX} cy={logoCY} r={logoR+3} fill="rgba(0,0,0,.3)" stroke={a} strokeWidth="1.5" strokeOpacity=".7"/>
-        <image href="/assets/niksi.png" x={logoCX-logoR} y={logoCY-logoR} width={logoR*2} height={logoR*2} clipPath={`url(#lci-${id})`}/>
-      </svg>
-    );
-  }
-
-  const RACES = {
-    gamba:   { prize:1500, start:new Date("2026-05-31T00:00:00Z"), end:new Date("2026-06-14T23:59:59Z"), visible:true  },
-    chancer: { prize:2000, start:new Date("2026-04-23T14:00:00Z"), end:new Date("2026-05-13T14:00:00Z"), visible:false },
-  };
-  const VISIBLE = Object.entries(RACES).filter(([,r])=>r.visible).map(([k])=>k);
-  const PACKY_PRIZE = 1000;
-  const PACKY_START = new Date("2026-06-06T00:00:00Z");
-  const PACKY_END   = new Date("2026-06-20T00:00:00Z");
-
-  function fmtCD(target){
-    const ms=target-Date.now(); if(ms<=0)return"Ended";
-    const d=Math.floor(ms/86400000),h=Math.floor(ms/3600000%24),m=Math.floor(ms/60000%60),s=Math.floor(ms/1000%60);
-    return d>0?`${d}d ${h}h ${m}m ${s}s`:`${h}h ${m}m ${s}s`;
-  }
-  function racePct(s,e){return Math.min(100,Math.max(0,Math.round((Date.now()-s)/(e-s)*100)))}
-  function useCountdown(target){
-    const [v,setV]=React.useState(()=>fmtCD(target));
-    React.useEffect(()=>{const id=setInterval(()=>setV(fmtCD(target)),1000);return()=>clearInterval(id);},[]);
-    return v;
-  }
-  function useAnimNum(target,dur=1400){
-    const [v,setV]=React.useState(0);
-    React.useEffect(()=>{
-      const t0=Date.now();
-      const id=setInterval(()=>{const p=Math.min((Date.now()-t0)/dur,1);setV(Math.floor((1-Math.pow(1-p,3))*target));if(p>=1)clearInterval(id);},16);
-      return()=>clearInterval(id);
-    },[target]);
-    return v;
-  }
-
-
   function useSession() {
     const [user, setUser] = React.useState(null);
-    const [sessionId, setSessionId] = React.useState(null);
     React.useEffect(() => {
       const params = new URLSearchParams(window.location.search);
       const sid = params.get('session') || localStorage.getItem('kick_session');
       if (sid) {
         localStorage.setItem('kick_session', sid);
-        setSessionId(sid);
         fetch('/auth/me?session=' + sid)
           .then(r => r.ok ? r.json() : null)
           .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); })
@@ -246,7 +148,7 @@
       localStorage.removeItem('kick_session');
       setUser(null);
     }
-    return { user, sessionId, logout };
+    return { user, logout };
   }
 
   const SOCIALS = <>
@@ -257,7 +159,7 @@
 
   function Navbar(){
     const { user, logout } = useSession();
-    const [open,setOpen]=React.useState(false);
+    const [open, setOpen] = React.useState(false);
     return (<>
       <nav>
         <div className="ni">
@@ -266,7 +168,8 @@
             <a href="/" className="on">HOME</a>
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
-            <a href="/store">STORE</a><a href="/cases">CASES</a>
+            <a href="/store">STORE</a>
+            <a href="/cases">CASES</a>
             <a href="/predict">PREDICT</a>
             {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
             {user && user.isAdmin && <a href="/admin">ADMIN</a>}
@@ -274,7 +177,7 @@
           <div className="nauth">
             {user ? (
               <div className="ndrop">
-                <div className="nuser" style={{cursor:'default'}}>
+                <div className="nuser">
                   {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
                   <span className="nuser-name">{user.displayName}</span>
                   <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
@@ -287,9 +190,7 @@
                 </div>
               </div>
             ) : (
-              <a href="/auth/login" className="nlogin-btn">
-                Login with Kick
-              </a>
+              <a href="/auth/login" className="nlogin-btn">Login with Kick</a>
             )}
           </div>
           <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
@@ -303,13 +204,143 @@
         <a href="/" className="on">HOME</a>
         <a href="/leaderboards">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
-        <a href="/store">STORE</a><a href="/cases">CASES</a>
+        <a href="/store">STORE</a>
+        <a href="/cases">CASES</a>
         <a href="/predict">PREDICT</a>
         {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
         {user && user.isAdmin && <a href="/admin">ADMIN</a>}
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>);
+  }
+
+  function HeroCarousel() {
+    const [slide, setSlide] = React.useState(0);
+    const total = 3;
+    React.useEffect(() => {
+      const t = setInterval(() => setSlide(s => (s + 1) % total), 5500);
+      return () => clearInterval(t);
+    }, []);
+
+    const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
+
+    return (
+      <div className="f1" style={{margin:'28px 0 8px'}}>
+        <div className="carousel-wrap">
+
+          {/* Slide 0 - USE CODE NIKSI */}
+          <div className={`c-slide${slide===0?' on':''}`} style={{background:'linear-gradient(120deg,#030609 0%,#050c18 55%,#060d1c 100%)'}}>
+            <img src="/assets/niksi.png" aria-hidden="true" style={{position:'absolute',right:60,top:'50%',transform:'translateY(-50%)',width:200,height:200,borderRadius:'50%',objectFit:'cover',opacity:.12,filter:'blur(2px)',pointerEvents:'none'}}/>
+            <div style={{position:'absolute',right:60,top:'50%',transform:'translateY(-50%)',width:210,height:210,borderRadius:'50%',background:'radial-gradient(circle,rgba(74,158,255,.18) 0%,transparent 70%)',pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,letterSpacing:'.32em',textTransform:'uppercase',color:'rgba(255,255,255,.45)',lineHeight:1,marginBottom:10}}>USE CODE</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(62px,8.5vw,96px)',fontWeight:800,letterSpacing:'.05em',textTransform:'uppercase',lineHeight:.88,color:'#fff',textShadow:'0 0 80px rgba(74,158,255,.28)',marginBottom:18}}>NIKSI</div>
+              <div style={{fontSize:13,color:'rgba(221,227,239,.45)',lineHeight:1.6}}>Exclusive bonuses, leaderboards &amp; rewards on Gamba and Packy</div>
+            </div>
+          </div>
+
+          {/* Slide 1 - GAMBA RACE */}
+          <div className={`c-slide${slide===1?' on':''}`} style={{background:'linear-gradient(120deg,#020904 0%,#041208 55%,#051008 100%)'}}>
+            <img src="/assets/gamba2.png" aria-hidden="true" style={{position:'absolute',right:52,top:'50%',transform:'translateY(-50%)',height:130,objectFit:'contain',opacity:.2,filter:'blur(.5px)',pointerEvents:'none'}} onError={e=>e.target.style.display='none'}/>
+            <div style={{position:'absolute',right:40,top:'50%',transform:'translateY(-50%)',width:180,height:180,borderRadius:'50%',background:'radial-gradient(circle,rgba(34,197,94,.14) 0%,transparent 70%)',pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(44px,6vw,68px)',fontWeight:800,letterSpacing:'.03em',textTransform:'uppercase',lineHeight:.88,color:'#22c55e',marginBottom:6}}>$1,500 RACE</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(22px,3vw,38px)',fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',color:'#fff',marginBottom:14}}>BI-WEEKLY ON GAMBA</div>
+              <div style={{fontSize:13,color:'rgba(221,227,239,.45)',marginBottom:22}}>Start wagering &amp; climbing the ladder!</div>
+              <a href="/leaderboards" style={{display:'inline-flex',alignItems:'center',gap:8,padding:'10px 22px',background:'#22c55e',color:'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none'}}>VIEW LEADERBOARD <Arr/></a>
+            </div>
+          </div>
+
+          {/* Slide 2 - JOIN DISCORD */}
+          <div className={`c-slide${slide===2?' on':''}`} style={{background:'linear-gradient(120deg,#030310 0%,#06071c 55%,#080921 100%)'}}>
+            <div aria-hidden="true" style={{position:'absolute',right:48,top:'50%',transform:'translateY(-50%)',opacity:.08,pointerEvents:'none'}}>
+              <svg viewBox="0 0 24 24" width="180" height="180" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+            </div>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(44px,6vw,68px)',fontWeight:800,letterSpacing:'.04em',textTransform:'uppercase',lineHeight:.88,color:'#fff',marginBottom:0}}>JOIN THE</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(44px,6vw,68px)',fontWeight:800,letterSpacing:'.04em',textTransform:'uppercase',lineHeight:.92,color:'#5865F2',marginBottom:14}}>COMMUNITY</div>
+              <div style={{fontSize:13,color:'rgba(221,227,239,.45)',marginBottom:22}}>Exclusive giveaways, content &amp; much more</div>
+              <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer" style={{display:'inline-flex',alignItems:'center',gap:8,padding:'10px 22px',background:'#5865F2',color:'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none'}}>JOIN DISCORD <Arr/></a>
+            </div>
+          </div>
+        </div>
+
+        {/* Dots */}
+        <div className="c-dots">
+          {[0,1,2].map(i => (
+            <button key={i} className={`c-dot${slide===i?' on':''}`} onClick={()=>setSlide(i)} aria-label={`Slide ${i+1}`}/>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function FeatureCards() {
+    const cards = [
+      {
+        href:'/leaderboards',
+        label:'Leaderboards',
+        icon:(
+          <svg viewBox="0 0 52 52" width="56" height="56" fill="none">
+            <rect x="20" y="10" width="12" height="30" rx="2" fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.24)" strokeWidth="1.4"/>
+            <rect x="5" y="22" width="12" height="18" rx="2" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.17)" strokeWidth="1.4"/>
+            <rect x="35" y="16" width="12" height="24" rx="2" fill="rgba(255,255,255,.09)" stroke="rgba(255,255,255,.2)" strokeWidth="1.4"/>
+            <circle cx="26" cy="7" r="3" fill="rgba(255,255,255,.45)"/>
+          </svg>
+        )
+      },
+      {
+        href:'/predict',
+        label:'Predict',
+        icon:(
+          <svg viewBox="0 0 52 52" width="56" height="56" fill="none">
+            <circle cx="26" cy="26" r="19" stroke="rgba(255,255,255,.18)" strokeWidth="1.4"/>
+            <circle cx="26" cy="26" r="13" stroke="rgba(255,255,255,.2)" strokeWidth="1.4"/>
+            <circle cx="26" cy="26" r="7" stroke="rgba(255,255,255,.23)" strokeWidth="1.4"/>
+            <circle cx="26" cy="26" r="2.8" fill="rgba(255,255,255,.7)"/>
+            <line x1="26" y1="7" x2="26" y2="11" stroke="rgba(255,255,255,.35)" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="26" y1="41" x2="26" y2="45" stroke="rgba(255,255,255,.35)" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="7" y1="26" x2="11" y2="26" stroke="rgba(255,255,255,.35)" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="41" y1="26" x2="45" y2="26" stroke="rgba(255,255,255,.35)" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        )
+      },
+      {
+        href:'/cases',
+        label:'Cases',
+        icon:(
+          <svg viewBox="0 0 52 52" width="56" height="56" fill="none">
+            <rect x="6" y="20" width="40" height="26" rx="3" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.2)" strokeWidth="1.4"/>
+            <rect x="6" y="11" width="40" height="11" rx="3" fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.24)" strokeWidth="1.4"/>
+            <line x1="6" y1="27" x2="46" y2="27" stroke="rgba(255,255,255,.18)" strokeWidth="1.4"/>
+            <rect x="21" y="24" width="10" height="6" rx="2" fill="rgba(255,255,255,.28)" stroke="rgba(255,255,255,.48)" strokeWidth="1"/>
+          </svg>
+        )
+      },
+      {
+        href:'/points',
+        label:'Points',
+        icon:(
+          <svg viewBox="0 0 52 52" width="56" height="56" fill="none">
+            <circle cx="24" cy="28" r="16" fill="rgba(212,175,90,.1)" stroke="rgba(212,175,90,.32)" strokeWidth="1.4"/>
+            <circle cx="24" cy="28" r="10" fill="rgba(212,175,90,.07)" stroke="rgba(212,175,90,.22)" strokeWidth="1"/>
+            <text x="24" y="33" textAnchor="middle" fill="rgba(212,175,90,.82)" fontSize="13" fontWeight="800" fontFamily="'Barlow Condensed',sans-serif" letterSpacing=".04em">NP</text>
+            <circle cx="36" cy="16" r="7" fill="rgba(212,175,90,.1)" stroke="rgba(212,175,90,.28)" strokeWidth="1.2"/>
+            <circle cx="40" cy="30" r="5" fill="rgba(212,175,90,.07)" stroke="rgba(212,175,90,.2)" strokeWidth="1"/>
+          </svg>
+        )
+      }
+    ];
+    return (
+      <div className="feat-grid f2">
+        {cards.map(c => (
+          <a key={c.href} href={c.href} className="feat-card">
+            {c.icon}
+            <div className="feat-label">{c.label}</div>
+          </a>
+        ))}
+      </div>
+    );
   }
 
   function PredictorBanner() {
@@ -350,72 +381,59 @@
     );
   }
 
-  const ArrowIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
-  const ExtIcon   = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
+  function PartneredPlatforms() {
+    const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
+    const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
-  function GambaCard(){
-    return (
-      <div className="pcard pcard-accent-gamba">
-        <div className="pcard-head">
-          <img className="pcard-logo" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-        </div>
-        <div style={{textAlign:'center',padding:'12px 18px 4px'}}>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#22c55e',lineHeight:1}}>$1,500</div>
-          <div style={{fontSize:10,fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',color:'rgba(221,227,239,.5)',marginTop:2}}>Bi-Weekly Prize</div>
-        </div>
-        <div className="pcard-btns" style={{padding:'10px 18px 4px'}}>
-          <a href="/leaderboards" className="octa" style={{background:'#22c55e'}}><ArrowIcon/> View Leaderboard</a>
-          <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="octa-sec"><ExtIcon/> Sign Up</a>
-        </div>
-        <ul className="pcard-perks" style={{paddingTop:8}}>
-          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>70% commission</strong> on all your wagers</span></li>
-          <li><span className="perk-check" style={{color:'#22c55e'}}>✓</span><span><strong>10-20% lossback</strong> - claim via live support</span></li>
-          <li><span className="perk-check" style={{color:'#e8a427'}}>✓</span><span><strong style={{color:'#e8a427'}}>NiksiPoints</strong> - up to 2,250 NP for 1st place</span></li>
-        </ul>
-      </div>
-    );
-  }
+    const platforms = [
+      {
+        logo:'/assets/gamba2.png', color:'#22c55e',
+        perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
+        primary:{label:'VIEW LEADERBOARD', href:'/leaderboards', ext:false},
+        secondary:{label:'SIGN UP', href:'https://gamba.com?c=niksi', ext:true},
+      },
+      {
+        logo:'/assets/packy.png', color:'#00b2f5',
+        perks:['5% DEPOSIT BONUS','WEEKLY LEADERBOARD'],
+        primary:{label:'VIEW LEADERBOARD', href:'/leaderboards?tab=packy', ext:false},
+        secondary:{label:'SIGN UP', href:'https://packy.gg/r/niksi', ext:true},
+      },
+      {
+        logo:'/assets/qzino.png', color:'#7ac832',
+        perks:['EXCLUSIVE BONUSES','AFFILIATE PERKS'],
+        primary:{label:'SIGN UP', href:'https://qzino-partners.com/tijrhrss5', ext:true},
+      },
+    ];
 
-  function PackyCard(){
     return (
-      <div className="pcard pcard-accent-packy">
-        <div className="pcard-head">
-          <img className="pcard-logo" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
-        </div>
-        <div style={{textAlign:'center',padding:'12px 18px 4px'}}>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#00b2f5',lineHeight:1}}>$1,000</div>
-          <div style={{fontSize:10,fontWeight:600,letterSpacing:'.16em',textTransform:'uppercase',color:'rgba(221,227,239,.5)',marginTop:2}}>Bi-Weekly Prize</div>
-        </div>
-        <div className="pcard-btns" style={{padding:'10px 18px 4px'}}>
-          <a href="/leaderboards?tab=packy" className="octa" style={{background:'#00b2f5',gridColumn:'1/-1'}}><ArrowIcon/> View Leaderboard</a>
-        </div>
-        <ul className="pcard-perks" style={{paddingTop:8}}>
-          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span><strong>5% bonus</strong> on your first deposit</span></li>
-          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span>Active community leaderboard</span></li>
-          <li><span className="perk-check" style={{color:'#00b2f5'}}>✓</span><span><a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" style={{color:'#00b2f5'}}>Sign up here</a> to qualify</span></li>
-        </ul>
-      </div>
-    );
-  }
-
-  function QzinoCard(){
-    return (
-      <div className="pcard pcard-accent-qzino">
-        <div className="pcard-head">
-          <img className="pcard-logo" src="/assets/qzino.png" alt="Qzino" onError={e=>e.target.style.display='none'}/>
-          <div className="pcard-meta">
-            <div className="pcard-name">Qzino.com</div>
-            <div className="pcard-code">Use code <strong>NIKSI</strong></div>
+      <div className="plat-section f3">
+        <div className="plat-title">PARTNERED PLATFORMS</div>
+        <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
+        {platforms.map((p,i) => (
+          <div key={i} className="plat-row" style={{borderBottom:`2px solid ${p.color}40`}}>
+            <div className="plat-logo-wrap">
+              <img src={p.logo} className="plat-logo" alt="" onError={e=>e.target.style.display='none'}/>
+            </div>
+            <div className="plat-perks">
+              {p.perks.map(pk => (
+                <div key={pk} className="plat-perk">
+                  <span style={{color:p.color,fontSize:13,fontWeight:800}}>✓</span>
+                  <span>{pk}</span>
+                </div>
+              ))}
+            </div>
+            <div className="plat-btns">
+              {p.secondary && (
+                <a href={p.secondary.href} target="_blank" rel="noreferrer" className="plat-btn plat-btn-ghost">
+                  {p.secondary.label} <Ext/>
+                </a>
+              )}
+              <a href={p.primary.href} target={p.primary.ext?'_blank':undefined} rel={p.primary.ext?'noreferrer':undefined} className="plat-btn" style={{background:p.color}}>
+                {p.primary.label} {p.primary.ext?<Ext/>:<Arr/>}
+              </a>
+            </div>
           </div>
-        </div>
-        <ul className="pcard-perks">
-          <li><span className="perk-check" style={{color:'#7ac832'}}>✓</span><span>Exclusive <strong>deposit bonuses</strong> via Discord</span></li>
-          <li><span className="perk-check" style={{color:'#7ac832'}}>✓</span><span>Affiliate perks for active players</span></li>
-          <li><span className="perk-check" style={{color:'#7ac832'}}>✓</span><span>Community giveaways &amp; rewards</span></li>
-        </ul>
-        <div className="pcard-btns" style={{gridTemplateColumns:'1fr'}}>
-          <a href="https://qzino-partners.com/tijrhrss5" target="_blank" rel="noreferrer" className="octa" style={{background:'linear-gradient(135deg,#7ac832,#4a9e1a)',color:'#fff'}}><ExtIcon/> Sign Up Now</a>
-        </div>
+        ))}
       </div>
     );
   }
@@ -424,56 +442,10 @@
     return (<>
       <Navbar/>
       <div className="page">
-        <div style={{textAlign:'center',padding:'72px 0 64px',position:'relative',zIndex:1}}>
-          <img src="/assets/niksi.png" alt="" aria-hidden="true" style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:'clamp(180px,30vw,320px)',height:'clamp(180px,30vw,320px)',borderRadius:'50%',objectFit:'cover',opacity:.07,pointerEvents:'none',userSelect:'none',zIndex:0}}/>
-          <div style={{position:'relative',zIndex:1}}>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(28px,5vw,52px)',fontWeight:800,letterSpacing:'.22em',textTransform:'uppercase',color:'#fff',lineHeight:1,marginBottom:6}}>USE CODE</div>
-            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:'clamp(72px,12vw,120px)',fontWeight:800,letterSpacing:'.06em',textTransform:'uppercase',lineHeight:.9,color:'#fff',textShadow:'0 0 60px rgba(74,158,255,.25)'}}>NIKSI</div>
-          </div>
-        </div>
-
-        <div className="offers f2">
-          <GambaCard/>
-          <PackyCard/>
-          <QzinoCard/>
-        </div>
-        <div className="f3" style={{paddingBottom:56}}>
-          <div className="benefits" style={{marginBottom:8}}>
-            <a href="/leaderboards" className="bcard bc-gold" style={{textDecoration:'none',cursor:'pointer'}}>
-              <div className="bcard-val">$3,000</div>
-              <div className="bcard-lbl">Monthly Leaderboard</div>
-            </a>
-            <div className="bcard bc-green">
-              <div className="bcard-val">70%</div>
-              <div className="bcard-lbl">Commission on all your wager</div>
-            </div>
-            <div className="bcard bc-blue">
-              <div className="bcard-val">10-20%</div>
-              <div className="bcard-lbl">Lossback</div>
-            </div>
-            <div className="bcard bc-purple">
-              <div className="bcard-val">Promos?</div>
-              <div className="bcard-lbl">Wager Sprints & Promo Codes</div>
-            </div>
-            <div className="benefits-arrow">→</div>
-            <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="bcard bc-white" style={{textDecoration:'none',cursor:'pointer'}}>
-              <div className="bcard-val">CODE "NIKSI"</div>
-              <div className="bcard-lbl">on Gamba!</div>
-            </a>
-          </div>
-          <a href="/cases" className="bfeature">
-            <CaseGraphic id="mega" size={100}/>
-            <div style={{flex:1,minWidth:0,textAlign:'center'}}>
-              <div className="bfeature-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
-                <img src="/assets/np-coin.svg" style={{width:28,height:28,objectFit:'contain',filter:'drop-shadow(0 2px 5px rgba(232,164,39,.6))'}}/>
-                Points & Cases
-                <img src="/assets/np-coin.svg" style={{width:28,height:28,objectFit:'contain',filter:'drop-shadow(0 2px 5px rgba(232,164,39,.6))'}}/>
-              </div>
-              <div className="bfeature-desc">Earn NiksiPoints <img src="/assets/np-coin.svg" style={{width:16,height:16,verticalAlign:'middle',display:'inline-block',margin:'0 2px'}}/> by watching, joining giveaways and being active on stream - then claim real money prizes or open cases for a shot at big rewards!</div>
-            </div>
-            <CaseGraphic id="starter" size={100}/>
-          </a>
-        </div>
+        <HeroCarousel/>
+        <FeatureCards/>
+        <PredictorBanner/>
+        <PartneredPlatforms/>
       </div>
       <footer>
         <div className="page">
@@ -485,7 +457,7 @@
             </div>
           </div>
         </div>
-              <div style={{textAlign:"center",marginTop:10,paddingBottom:4,fontSize:11,color:"var(--mu)",letterSpacing:".08em",fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:"var(--ac)"}}>@niksiii</strong> on Discord</div>
+        <div style={{textAlign:"center",marginTop:10,paddingBottom:4,fontSize:11,color:"var(--mu)",letterSpacing:".08em",fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:"var(--ac)"}}>@niksiii</strong> on Discord</div>
       </footer>
     </>);
   }
@@ -495,35 +467,20 @@
 
 <script>
 (function(){
-  var canvas = document.getElementById('constellation');
-  var ctx = canvas.getContext('2d');
-  var N = 110, DIST = 140;
-  var W, H, pts = [];
-  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  function mkPt(){ return { x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:Math.random()*1.2+.4, o:Math.random()*.45+.1 }; }
-  function init(){ resize(); pts=[]; for(var i=0;i<N;i++) pts.push(mkPt()); }
+  var canvas=document.getElementById('constellation');
+  var ctx=canvas.getContext('2d');
+  var N=110,DIST=140,W,H,pts=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  function mkPt(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.2+.4,o:Math.random()*.45+.1};}
+  function init(){resize();pts=[];for(var i=0;i<N;i++)pts.push(mkPt());}
   function tick(){
     ctx.clearRect(0,0,W,H);
-    for(var i=0;i<N;i++){
-      var a=pts[i];
-      for(var j=i+1;j<N;j++){
-        var b=pts[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
-        if(d<DIST){ ctx.beginPath(); ctx.strokeStyle='rgba(130,170,255,'+((1-d/DIST)*.12)+')'; ctx.lineWidth=.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
-      }
-    }
-    for(var i=0;i<N;i++){
-      var p=pts[i]; p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0||p.x>W) p.vx*=-1;
-      if(p.y<0||p.y>H) p.vy*=-1;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(160,190,255,'+p.o+')'; ctx.fill();
-    }
+    for(var i=0;i<N;i++){var a=pts[i];for(var j=i+1;j<N;j++){var b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<DIST){ctx.beginPath();ctx.strokeStyle='rgba(130,170,255,'+((1-d/DIST)*.12)+')';ctx.lineWidth=.6;ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}
+    for(var i=0;i<N;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(160,190,255,'+p.o+')';ctx.fill();}
     requestAnimationFrame(tick);
   }
-  init(); window.addEventListener('resize', resize); tick();
+  init();window.addEventListener('resize',resize);tick();
 })();
 </script>
 </body>
 </html>
-
-
-
