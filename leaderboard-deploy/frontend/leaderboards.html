@@ -353,6 +353,11 @@ function Countdown({ endDate }) {
   );
 }
 
+function Amt({ s }) {
+  if (!s || s[0] !== '$') return <span>{s}</span>;
+  return <><span style={{color:'var(--green)'}}>$</span><span style={{color:'#fff'}}>{s.slice(1)}</span></>;
+}
+
 function Avatar({ src, className }) {
   const [err, setErr] = React.useState(false);
   if (err || !src) return <div className={className} style={{background:'#1a2740',borderRadius:'50%'}}/>;
@@ -371,11 +376,11 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP }) {
       <div className="pod-stats-row">
         <div className="pod-stat">
           <div className="pod-stat-lbl">Wagered</div>
-          <div className="pod-stat-val" style={{color:'#fff'}}>{fmtWager(player)}</div>
+          <div className="pod-stat-val"><Amt s={fmtWager(player)}/></div>
         </div>
         <div className="pod-stat">
           <div className="pod-stat-lbl">Prize</div>
-          <div className="pod-stat-val prize" style={{color:'var(--green)'}}>{fmtPrize(player, rank)}</div>
+          <div className="pod-stat-val prize"><Amt s={fmtPrize(player, rank)}/></div>
         </div>
         {fmtNP && <div className="pod-stat full">
           <div className="pod-stat-lbl">NiksiPoints</div>
@@ -453,9 +458,9 @@ function GambaLeaderboard() {
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager">{fmtWager(p)}</span></td>
+                <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
                 <td>
-                  <span className="tr-prize" style={{color:'var(--green)'}}>{fmtPrize(p, p.position || i+4)}</span>
+                  <span className="tr-prize"><Amt s={fmtPrize(p, p.position || i+4)}/></span>
                   <div className="np-mobile">+{fmtNP(p.position || i+4)} NP</div>
                 </td>
                 <td className="col-np" style={{textAlign:'right'}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#fff'}}>+{fmtNP(p.position || i+4)} NP</span></td>
@@ -478,7 +483,7 @@ function GambaLeaderboard() {
         </div>
       </div>
       <div style={{textAlign:'center',padding:'20px 0 4px',borderTop:'1px solid var(--b1)',marginTop:8,fontSize:13,color:'var(--mu)'}}>
-        Total Wagered -<strong style={{color:'#fff'}}>${players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
+        Total Wagered - <span style={{color:'var(--green)'}}>$</span><strong style={{color:'#fff'}}>{players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
       </div>
     </div>
   );
@@ -548,8 +553,8 @@ function PackyLeaderboard() {
                 <td><span className="tr-rank">#{p.rank || i + 4}</span></td>
                 <td><Avatar src={p.image_url} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager">{fmtWager(p)}</span></td>
-                <td><span className="tr-prize" style={{color:'var(--packy)'}}>{fmtPrize(p, p.rank || i+4)}</span></td>
+                <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
+                <td><span className="tr-prize"><Amt s={fmtPrize(p, p.rank || i+4)}/></span></td>
               </tr>
             ))}
           </tbody>
@@ -568,7 +573,7 @@ function PackyLeaderboard() {
         </div>
       </div>
       <div style={{textAlign:'center',padding:'20px 0 4px',borderTop:'1px solid var(--b1)',marginTop:8,fontSize:13,color:'var(--mu)'}}>
-        Total Wagered -<strong style={{color:'#fff'}}>${entries.reduce((s,p)=>s+Number(p.total_wagered_usd||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
+        Total Wagered - <span style={{color:'var(--green)'}}>$</span><strong style={{color:'#fff'}}>{entries.reduce((s,p)=>s+Number(p.total_wagered_usd||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
       </div>
     </div>
   );
