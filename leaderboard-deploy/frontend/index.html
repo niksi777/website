@@ -60,9 +60,9 @@
     .c-track{display:flex;height:100%;transition:transform .52s cubic-bezier(.4,0,.2,1)}
     .c-slide{min-width:100%;height:100%;flex-shrink:0;position:relative;display:flex;align-items:center;padding:40px 52px}
     .c-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px}
-    .c-dot{border:none;cursor:pointer;border-radius:2px;height:3px;width:64px;padding:0;background:rgba(255,255,255,.18);background-image:linear-gradient(to right,rgba(255,255,255,.82),rgba(255,255,255,.82));background-repeat:no-repeat;background-size:0% 100%;transition:background-color .3s}
-    .c-dot.on{background-color:rgba(255,255,255,.18);animation:dot-drain 5.5s linear forwards}
-    @keyframes dot-drain{from{background-size:100% 100%}to{background-size:0% 100%}}
+    .c-dot{border:none;cursor:pointer;border-radius:2px;height:3px;width:64px;padding:0;background:rgba(255,255,255,.18);background-image:linear-gradient(to right,rgba(255,255,255,.82),rgba(255,255,255,.82));background-repeat:no-repeat;background-size:0% 100%;background-position:left center;transition:background-color .3s}
+    .c-dot.on{background-color:rgba(255,255,255,.18);animation:dot-fill 5.5s linear forwards}
+    @keyframes dot-fill{from{background-size:0% 100%}to{background-size:100% 100%}}
 
     /* Feature cards */
     .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
