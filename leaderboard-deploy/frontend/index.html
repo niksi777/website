@@ -90,15 +90,15 @@
     .plat-section{margin-top:44px;margin-bottom:56px}
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
     .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:22px}
-    .plat-row{display:flex;align-items:center;gap:24px;padding:20px 26px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;margin-bottom:10px;transition:background .15s,border-color .15s}
+    .plat-row{display:flex;align-items:center;gap:24px;padding:20px 26px;min-height:84px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;margin-bottom:10px;transition:background .15s,border-color .15s;text-decoration:none;color:inherit;cursor:pointer}
     .plat-row:hover{background:rgba(255,255,255,.048);border-color:var(--b3)}
-    .plat-logo-wrap{width:88px;flex-shrink:0}
-    .plat-logo{height:26px;object-fit:contain;max-width:88px}
+    .plat-logo-wrap{width:100px;flex-shrink:0;display:flex;align-items:center}
+    .plat-logo{height:28px;object-fit:contain;max-width:100px}
+    .plat-logo.lg{height:42px;max-width:100px}
     .plat-perks{flex:1;display:flex;gap:28px;flex-wrap:wrap;align-items:center}
     .plat-perk{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(221,227,239,.62)}
     .plat-btns{display:flex;gap:8px;flex-shrink:0}
-    .plat-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;white-space:nowrap;text-decoration:none;transition:opacity .15s;border:none;cursor:pointer}
-    .plat-btn:hover{opacity:.8}
+    .plat-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;white-space:nowrap;pointer-events:none}
     .plat-btn-ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(221,227,239,.7)}
 
     footer{border-top:1px solid var(--b1);padding:22px 0}
@@ -412,19 +412,17 @@
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
-        primary:{label:'VIEW LEADERBOARD', href:'/leaderboards', ext:false},
-        secondary:{label:'SIGN UP', href:'https://gamba.com?c=niksi', ext:true},
+        cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
       },
       {
         logo:'/assets/packy.png', color:'#00b2f5',
-        perks:['5% DEPOSIT BONUS','WEEKLY LEADERBOARD'],
-        primary:{label:'VIEW LEADERBOARD', href:'/leaderboards?tab=packy', ext:false},
-        secondary:{label:'SIGN UP', href:'https://packy.gg/r/niksi', ext:true},
+        perks:['5% DEPOSIT BONUS','BI-WEEKLY LEADERBOARD'],
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=packy', ext:false,
       },
       {
-        logo:'/assets/qzino.png', color:'#7ac832',
+        logo:'/assets/qzino.png', color:'#7ac832', bigLogo:true,
         perks:['EXCLUSIVE BONUSES','AFFILIATE PERKS'],
-        primary:{label:'SIGN UP', href:'https://qzino-partners.com/tijrhrss5', ext:true},
+        cta:'SIGN UP', href:'https://qzino-partners.com/tijrhrss5', ext:true,
       },
     ];
 
@@ -433,9 +431,9 @@
         <div className="plat-title">PARTNERED PLATFORMS</div>
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         {platforms.map((p,i) => (
-          <div key={i} className="plat-row" style={{borderBottom:`2px solid ${p.color}40`}}>
+          <a key={i} className="plat-row" href={p.href} target={p.ext?'_blank':undefined} rel={p.ext?'noreferrer':undefined} style={{borderBottom:`2px solid ${p.color}40`}}>
             <div className="plat-logo-wrap">
-              <img src={p.logo} className="plat-logo" alt="" onError={e=>e.target.style.display='none'}/>
+              <img src={p.logo} className={`plat-logo${p.bigLogo?' lg':''}`} alt="" onError={e=>e.target.style.display='none'}/>
             </div>
             <div className="plat-perks">
               {p.perks.map(pk => (
@@ -446,16 +444,11 @@
               ))}
             </div>
             <div className="plat-btns">
-              {p.secondary && (
-                <a href={p.secondary.href} target="_blank" rel="noreferrer" className="plat-btn plat-btn-ghost">
-                  {p.secondary.label} <Ext/>
-                </a>
-              )}
-              <a href={p.primary.href} target={p.primary.ext?'_blank':undefined} rel={p.primary.ext?'noreferrer':undefined} className="plat-btn" style={{background:p.color}}>
-                {p.primary.label} {p.primary.ext?<Ext/>:<Arr/>}
-              </a>
+              <span className="plat-btn" style={{background:p.color}}>
+                {p.cta} {p.ext?<Ext/>:<Arr/>}
+              </span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     );
