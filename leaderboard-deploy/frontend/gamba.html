@@ -11,7 +11,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--s3:#141f3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--rd:#e03535}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--rd:#e03535}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 1000px 700px at 0% 0%,rgba(74,158,255,.25),transparent 60%),radial-gradient(ellipse 800px 800px at 100% 100%,rgba(30,100,220,.18),transparent 60%),radial-gradient(ellipse 600px 500px at 50% 50%,rgba(40,100,255,.06),transparent 70%)}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
@@ -259,8 +259,8 @@
             <a href="/leaderboards" className="on">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+            
+            
           </div>
           <div className="nauth">
             {user ? (
@@ -272,7 +272,7 @@
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
-                    <a href="/settings" className="ndrop-item">Settings</a>
+                    {user.isAdmin && <a href="/giveaway" className="ndrop-item">Giveaway</a>}{user.isAdmin && <a href="/admin" className="ndrop-item">Admin</a>}{user.isAdmin && <hr style={{margin:"4px 0",border:"none",borderTop:"1px solid rgba(255,255,255,.07)"}}/>}<a href="/settings" className="ndrop-item">Settings</a>
                     <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
                   </div>
                 </div>
@@ -296,8 +296,8 @@
         <a href="/leaderboards" className="on">LEADERBOARDS</a>
         <a href="/points">POINTS</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-        {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+        
+        
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>);

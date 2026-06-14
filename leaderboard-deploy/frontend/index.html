@@ -172,8 +172,8 @@
             <a href="/store">STORE</a>
             <a href="/cases">CASES</a>
             <a href="/predict">PREDICT</a>
-            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+            
+            
           </div>
           <div className="nauth">
             {user ? (
@@ -185,7 +185,7 @@
                 </div>
                 <div className="ndrop-menu">
                   <div className="ndrop-box">
-                    <a href="/settings" className="ndrop-item">Settings</a>
+                    {user.isAdmin && <a href="/giveaway" className="ndrop-item">Giveaway</a>}{user.isAdmin && <a href="/admin" className="ndrop-item">Admin</a>}{user.isAdmin && <hr style={{margin:"4px 0",border:"none",borderTop:"1px solid rgba(255,255,255,.07)"}}/>}<a href="/settings" className="ndrop-item">Settings</a>
                     <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
                   </div>
                 </div>
@@ -208,8 +208,8 @@
         <a href="/store">STORE</a>
         <a href="/cases">CASES</a>
         <a href="/predict">PREDICT</a>
-        {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+        
+        
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>);

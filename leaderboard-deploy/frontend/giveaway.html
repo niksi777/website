@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#4a9eff;--rd:#e03535}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -225,7 +225,7 @@
           <a href="/points">POINTS</a>
           <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
           {user && user.isAdmin && <a href="/giveaway" className="on">GIVEAWAY</a>}
-          {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+          
         </div>
         <div className="nauth">
           {user ? (
@@ -237,7 +237,7 @@
               </div>
                         <div className="ndrop-menu">
                 <div className="ndrop-box">
-                  <a href="/settings" className="ndrop-item">Settings</a>
+                  {user.isAdmin && <a href="/giveaway" className="ndrop-item">Giveaway</a>}{user.isAdmin && <a href="/admin" className="ndrop-item">Admin</a>}{user.isAdmin && <hr style={{margin:"4px 0",border:"none",borderTop:"1px solid rgba(255,255,255,.07)"}}/>}<a href="/settings" className="ndrop-item">Settings</a>
                   <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
                 </div>
               </div>
@@ -261,7 +261,7 @@
         <a href="/points">POINTS</a>
         <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
         {user && user.isAdmin && <a href="/giveaway" className="on">GIVEAWAY</a>}
-        {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+        
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>);

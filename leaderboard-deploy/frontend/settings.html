@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#060f20;--s1:#0c1830;--s2:#101e3a;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.16);--tx:#dde3ef;--mu:rgba(221,227,239,.75);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}
@@ -104,8 +104,8 @@
             <a href="/leaderboards">LEADERBOARDS</a>
             <a href="/points">POINTS</a>
             <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-            {user && user.isAdmin && <a href="/giveaway">GIVEAWAY</a>}
-            {user && user.isAdmin && <a href="/admin">ADMIN</a>}
+            
+            
             <a href="/settings" className="on">SETTINGS</a>
           </div>
           <div className="nauth">
