@@ -273,10 +273,10 @@ function Navbar({ user, logout }) {
             <a href="/leaderboards" className="on">Leaderboards</a>
             <a href="/points">Points</a>
             <a href="/store">Store</a>
-            <a href="/cases">Cases</a>
+            
             <a href="/predict">Predict</a>
-            {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
-            {user && user.isAdmin && <a href="/admin">Admin</a>}
+            
+            
           </div>
           <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
             {user ? (
@@ -307,10 +307,10 @@ function Navbar({ user, logout }) {
         <a href="/leaderboards" className="on">Leaderboards</a>
         <a href="/points">Points</a>
         <a href="/store">Store</a>
-        <a href="/cases">Cases</a>
+        
         <a href="/predict">Predict</a>
-        {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
-        {user && user.isAdmin && <a href="/admin">Admin</a>}
+        
+        
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>
