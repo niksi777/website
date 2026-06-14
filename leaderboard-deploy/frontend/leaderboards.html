@@ -79,8 +79,9 @@
     .lb-meta-item strong{color:#fff}
 
     /* Countdown */
-    .countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:32px;margin-bottom:40px;flex-wrap:wrap}
-    .countdown-lbl{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-right:4px}
+    .countdown{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-top:32px;margin-bottom:40px}
+    .countdown-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
+    .countdown-lbl{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
     .cd-unit{display:flex;flex-direction:column;align-items:center;min-width:52px}
     .cd-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1;background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:8px;padding:6px 12px;min-width:52px;text-align:center}
     .cd-label{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-top:5px}
@@ -336,16 +337,18 @@ function Countdown({ endDate }) {
   const pad = n => String(n).padStart(2, '0');
   return (
     <div className="countdown">
-      <span className="countdown-lbl">Ends in</span>
-      {[['d','Days'],['h','Hours'],['m','Mins'],['s','Secs']].map(([k,lbl],i) => (
-        <React.Fragment key={k}>
-          {i > 0 && <span className="cd-sep">:</span>}
-          <div className="cd-unit">
-            <div className="cd-num">{pad(t[k])}</div>
-            <div className="cd-label">{lbl}</div>
-          </div>
-        </React.Fragment>
-      ))}
+      <div className="countdown-lbl">Ends in</div>
+      <div className="countdown-row">
+        {[['d','Days'],['h','Hours'],['m','Mins'],['s','Secs']].map(([k,lbl],i) => (
+          <React.Fragment key={k}>
+            {i > 0 && <span className="cd-sep">:</span>}
+            <div className="cd-unit">
+              <div className="cd-num">{pad(t[k])}</div>
+              <div className="cd-label">{lbl}</div>
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 }
@@ -406,7 +409,7 @@ function GambaLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt" style={{color:'var(--green)'}}>$1,500</div>
+        <div className="lb-prize-amt"><span style={{color:'var(--green)'}}>$</span><span style={{color:'#fff'}}>1,500</span></div>
         <div className="lb-prize-lbl">Bi-Weekly Prize</div>
         <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
@@ -502,7 +505,7 @@ function PackyLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt" style={{color:'var(--packy)'}}>${prize.toLocaleString('en-US')}</div>
+        <div className="lb-prize-amt"><span style={{color:'var(--packy)'}}>$</span><span style={{color:'#fff'}}>{prize.toLocaleString('en-US')}</span></div>
         <div className="lb-prize-lbl">Bi-Weekly Prize</div>
         <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
