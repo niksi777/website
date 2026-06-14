@@ -70,7 +70,7 @@
     .lb-code{font-size:12px;color:var(--mu)}
     .lb-code strong{color:#fff;letter-spacing:.06em}
     .lb-prize-big{text-align:center}
-    .lb-prize-amt{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:800;line-height:1}
+    .lb-prize-amt{font-family:'Barlow Condensed',sans-serif;font-size:80px;font-weight:800;line-height:1}
     .lb-prize-lbl{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-top:2px}
     .lb-meta{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:28px;flex-wrap:wrap}
     .live-badge{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--ac)}
@@ -79,7 +79,7 @@
     .lb-meta-item strong{color:#fff}
 
     /* Countdown */
-    .countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+    .countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:32px;margin-bottom:40px;flex-wrap:wrap}
     .countdown-lbl{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-right:4px}
     .cd-unit{display:flex;flex-direction:column;align-items:center;min-width:52px}
     .cd-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1;background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:8px;padding:6px 12px;min-width:52px;text-align:center}
@@ -87,27 +87,27 @@
     .cd-sep{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:rgba(255,255,255,.2);padding-bottom:18px}
 
     /* Podium */
-    .podium{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin-bottom:24px}
-    .podium-card{display:flex;flex-direction:column;align-items:center;padding:20px 16px;border-radius:14px;border:1px solid var(--b2);background:var(--s1);position:relative;width:220px;transition:transform .2s}
-    .podium-card:hover{transform:translateY(-3px)}
-    .podium-card.first{border-color:rgba(212,175,90,.35);background:linear-gradient(180deg,rgba(212,175,90,.07) 0%,var(--s1) 100%);width:240px;padding-bottom:24px}
-    .podium-card.second{border-color:rgba(180,180,200,.2)}
-    .podium-card.third{border-color:rgba(150,100,60,.25)}
-    .rank-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#000}
-    .rank-badge.r1{background:var(--gold);width:30px;height:30px;font-size:15px}
+    .podium{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin-bottom:0}
+    .podium-card{display:flex;flex-direction:column;align-items:center;padding:36px 28px;border-radius:18px;border:1px solid var(--b2);background:var(--s1);position:relative;width:268px;transition:transform .2s}
+    .podium-card:hover{transform:translateY(-4px)}
+    .podium-card.first{border-color:rgba(212,175,90,.35);background:linear-gradient(180deg,rgba(212,175,90,.08) 0%,var(--s1) 100%);width:300px;padding-bottom:40px}
+    .podium-card.second{border-color:rgba(180,180,200,.18)}
+    .podium-card.third{border-color:rgba(150,100,60,.22)}
+    .rank-badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#000}
+    .rank-badge.r1{background:var(--gold);width:38px;height:38px;font-size:19px}
     .rank-badge.r2{background:#c0c0c8}
     .rank-badge.r3{background:#cd7f32;color:#fff}
-    .crown{font-size:22px;margin-bottom:4px}
-    .pod-avatar{width:68px;height:68px;border-radius:50%;object-fit:cover;background:var(--s2);border:2px solid var(--b2);margin-bottom:10px}
-    .pod-avatar.first{width:80px;height:80px;border-color:rgba(212,175,90,.4)}
-    .pod-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:12px;text-align:center;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .pod-name.first{font-size:20px}
-    .pod-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;margin-bottom:6px}
-    .pod-stat{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:7px 8px}
+    .crown{font-size:26px;margin-bottom:8px}
+    .pod-avatar{width:92px;height:92px;border-radius:50%;object-fit:cover;background:var(--s2);border:3px solid var(--b2);margin-bottom:16px}
+    .pod-avatar.first{width:118px;height:118px;border-color:rgba(212,175,90,.45)}
+    .pod-name{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:700;color:#fff;margin-bottom:18px;text-align:center;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .pod-name.first{font-size:26px}
+    .pod-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:6px}
+    .pod-stat{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 10px}
     .pod-stat.full{grid-column:1/-1}
     .pod-stat-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-top:2px}
-    .pod-stat-val.prize{font-size:16px}
+    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-top:3px}
+    .pod-stat-val.prize{font-size:19px}
 
     /* Table */
     .lb-table{width:100%;border-collapse:collapse;margin-bottom:32px}
@@ -166,7 +166,8 @@
       .nlinks,.nsoc{display:none}
       .hamburger{display:flex}
       .podium{flex-direction:column;align-items:center}
-      .podium-card,.podium-card.first{width:100%;max-width:320px}
+      .podium-card,.podium-card.first{width:100%;max-width:360px}
+      .lb-prize-amt{font-size:56px}
       .cd-num{font-size:28px;min-width:44px}
       .countdown{gap:6px}
       .lb-table .col-av,.lb-table .col-np{display:none}
@@ -273,10 +274,10 @@ function Navbar({ user, logout }) {
             <a href="/leaderboards" className="on">Leaderboards</a>
             <a href="/points">Points</a>
             <a href="/store">Store</a>
-            
-            <a href="/cases">CASES</a><a href="/predict">Predict</a>
-            
-            
+            <a href="/cases">Cases</a>
+            <a href="/predict">Predict</a>
+            {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
+            {user && user.isAdmin && <a href="/admin">Admin</a>}
           </div>
           <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
             {user ? (
@@ -307,10 +308,10 @@ function Navbar({ user, logout }) {
         <a href="/leaderboards" className="on">Leaderboards</a>
         <a href="/points">Points</a>
         <a href="/store">Store</a>
-        
-        <a href="/cases">CASES</a><a href="/predict">Predict</a>
-        
-        
+        <a href="/cases">Cases</a>
+        <a href="/predict">Predict</a>
+        {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
+        {user && user.isAdmin && <a href="/admin">Admin</a>}
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>
@@ -404,27 +405,11 @@ function GambaLeaderboard() {
 
   return (
     <div className="f2">
-      <div style={{textAlign:'center',marginBottom:16}}>
+      <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt" style={{color:'var(--green)'}}>$1,500</div>
         <div className="lb-prize-lbl">Bi-Weekly Prize</div>
-        <div className="lb-code" style={{marginTop:8}}>Use code <strong>NIKSI</strong> to qualify</div>
+        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
-      <div className="lb-cta-row" style={{marginBottom:20}}>
-        <a href="https://gamba.com/promotions/exclusive-leaderboards/13300" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba-sec">
-          View Leaderboard on Gamba
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        </a>
-        <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba">
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div className="lb-meta">
-        <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
-        <div className="lb-meta-item">Total Wagered <strong>${players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></div>
-      </div>
-
-      <Countdown endDate={GAMBA_END}/>
 
       {top3.length > 0 && (
         <div className="podium">
@@ -434,6 +419,19 @@ function GambaLeaderboard() {
           })}
         </div>
       )}
+
+      <Countdown endDate={GAMBA_END}/>
+
+      <div className="lb-cta-row" style={{marginBottom:28}}>
+        <a href="https://gamba.com/promotions/exclusive-leaderboards/13300" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba-sec">
+          View Leaderboard on Gamba
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+        </a>
+        <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba">
+          Sign Up Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
 
       <div className="announce-bar blue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -503,22 +501,11 @@ function PackyLeaderboard() {
 
   return (
     <div className="f2">
-      <div style={{textAlign:'center',marginBottom:16}}>
+      <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt" style={{color:'var(--packy)'}}>${prize.toLocaleString('en-US')}</div>
         <div className="lb-prize-lbl">Bi-Weekly Prize</div>
-        <div className="lb-code" style={{marginTop:8}}>Use code <strong>NIKSI</strong> to qualify</div>
+        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
-      <div className="lb-cta-row" style={{marginBottom:20}}>
-        <a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-packy">
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div className="lb-meta">
-        <div className="live-badge"><span className="live-dot"/>&nbsp;LIVE</div>
-      </div>
-
-      {data.end_date && <Countdown endDate={data.end_date}/>}
 
       {top3.length > 0 && (
         <div className="podium">
@@ -528,6 +515,15 @@ function PackyLeaderboard() {
           })}
         </div>
       )}
+
+      {data.end_date && <Countdown endDate={data.end_date}/>}
+
+      <div className="lb-cta-row" style={{marginBottom:28}}>
+        <a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-packy">
+          Sign Up Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
 
       <div className="announce-bar blue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
