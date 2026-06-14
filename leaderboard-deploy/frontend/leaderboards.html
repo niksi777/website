@@ -477,6 +477,9 @@ function GambaLeaderboard() {
           ))}
         </div>
       </div>
+      <div style={{textAlign:'center',padding:'20px 0 4px',borderTop:'1px solid var(--b1)',marginTop:8,fontSize:13,color:'var(--mu)'}}>
+        Total Wagered — <strong style={{color:'#fff'}}>${players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
+      </div>
     </div>
   );
 }
@@ -564,6 +567,9 @@ function PackyLeaderboard() {
           ))}
         </div>
       </div>
+      <div style={{textAlign:'center',padding:'20px 0 4px',borderTop:'1px solid var(--b1)',marginTop:8,fontSize:13,color:'var(--mu)'}}>
+        Total Wagered — <strong style={{color:'#fff'}}>${entries.reduce((s,p)=>s+Number(p.total_wagered_usd||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
+      </div>
     </div>
   );
 }
@@ -614,7 +620,8 @@ function App() {
           </button>
         </div>
 
-        {tab === 'gamba' ? <GambaLeaderboard/> : <PackyLeaderboard/>}
+        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+        <div style={{display: tab === 'packy' ? 'block' : 'none'}}><PackyLeaderboard/></div>
       </div>
 
       <footer>
