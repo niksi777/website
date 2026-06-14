@@ -56,7 +56,7 @@
     .page{max-width:1020px;margin:0 auto;padding:0 28px}
 
     /* Carousel */
-    .carousel-wrap{position:relative;border-radius:16px;overflow:hidden;height:290px;margin:28px 0 10px}
+    .carousel-wrap{position:relative;border-radius:16px;overflow:hidden;height:290px;margin:28px 0 10px;box-shadow:0 8px 48px rgba(0,0,0,.55),0 2px 12px rgba(0,0,0,.35)}
     .c-slide{position:absolute;inset:0;display:flex;align-items:center;padding:40px 52px;opacity:0;transition:opacity .55s ease;pointer-events:none}
     .c-slide.on{opacity:1;pointer-events:auto}
     .c-dots{display:flex;justify-content:center;gap:8px;margin-bottom:32px}
@@ -235,56 +235,80 @@
     const sub = {fontSize:13,color:'rgba(221,227,239,.45)',lineHeight:1.6};
     const btn = (color,shadow) => ({display:'inline-flex',alignItems:'center',gap:8,marginTop:20,padding:'10px 22px',background:color,color:'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none',boxShadow:`0 4px 24px ${shadow}`});
     /* logos: fixed position from right, never touching edge */
-    const logo = (src,op=.48) => <img src={src} aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'36%',objectFit:'contain',opacity:op,pointerEvents:'none'}}/>;
+    const logo = (src,op=.55,glow=null) => <img src={src} aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'36%',objectFit:'contain',opacity:op,pointerEvents:'none',filter:glow?`drop-shadow(0 0 28px ${glow})`:'none'}}/>;
 
     return (
       <div className="f1" style={{margin:'28px 0 8px'}}>
         <div className="carousel-wrap">
 
           {/* Slide 0 - USE CODE NIKSI */}
-          <div className={`c-slide${slide===0?' on':''}`} style={{background:'linear-gradient(135deg,#070a14 0%,#0b1020 60%,#090e1c 100%)',borderTop:'2px solid rgba(74,158,255,.28)'}}>
-            <img src="/assets/niksi.png" aria-hidden="true" style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',width:164,height:164,borderRadius:'50%',objectFit:'cover',opacity:.45,pointerEvents:'none',boxShadow:'0 0 0 2px rgba(74,158,255,.18),0 0 40px rgba(74,158,255,.12)'}}/>
-            <div style={{position:'absolute',inset:0,background:fade(7,10,20),pointerEvents:'none'}}/>
+          <div className={`c-slide${slide===0?' on':''}`} style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(74,158,255,.38) 0%, rgba(74,158,255,.08) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(74,158,255,.16) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(74,158,255,.1) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#080c1c 0%,#060a16 55%,#07091a 100%)'
+          ].join(','),borderTop:'3px solid rgba(74,158,255,.7)'}}>
+            <img src="/assets/niksi.png" aria-hidden="true" style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',width:164,height:164,borderRadius:'50%',objectFit:'cover',opacity:.55,pointerEvents:'none',boxShadow:'0 0 0 2px rgba(74,158,255,.45),0 0 55px rgba(74,158,255,.35),0 0 110px rgba(74,158,255,.14)',filter:'drop-shadow(0 0 24px rgba(74,158,255,.45))'}}/>
+            <div style={{position:'absolute',inset:0,background:fade(8,12,28),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
               <div style={txt('rgba(255,255,255,.38)',14,1,10,{letterSpacing:'.32em',fontWeight:700})}>USE CODE</div>
-              <div style={txt('#fff','clamp(62px,8.5vw,96px)',.88,16,{textShadow:'0 2px 60px rgba(74,158,255,.3)'})}>NIKSI</div>
+              <div style={txt('#fff','clamp(62px,8.5vw,96px)',.88,16,{textShadow:'0 2px 60px rgba(74,158,255,.45)'})}>NIKSI</div>
               <div style={sub}>Exclusive bonuses, leaderboards &amp; rewards on Gamba and Packy</div>
             </div>
           </div>
 
           {/* Slide 1 - GAMBA */}
-          <div className={`c-slide${slide===1?' on':''}`} style={{background:'#060c07',borderTop:'2px solid rgba(34,197,94,.28)'}}>
-            {logo('/assets/gamba2.png')}
-            <div style={{position:'absolute',inset:0,background:fade(6,12,7),pointerEvents:'none'}}/>
+          <div className={`c-slide${slide===1?' on':''}`} style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(34,197,94,.34) 0%, rgba(34,197,94,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(34,197,94,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(34,197,94,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#060e08 0%,#050c06 55%,#060e07 100%)'
+          ].join(','),borderTop:'3px solid rgba(34,197,94,.68)'}}>
+            {logo('/assets/gamba2.png',.58,'rgba(34,197,94,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(6,14,8),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
               <div style={txt('#22c55e','clamp(44px,6vw,68px)',.88,6)}>$1,500 RACE</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON GAMBA</div>
               <div style={sub}>Start wagering &amp; climbing the ladder!</div>
-              <a href="/leaderboards" style={btn('#22c55e','rgba(34,197,94,.3)')}>VIEW LEADERBOARD <Arr/></a>
+              <a href="/leaderboards" style={btn('#22c55e','rgba(34,197,94,.4)')}>VIEW LEADERBOARD <Arr/></a>
             </div>
           </div>
 
           {/* Slide 2 - PACKY */}
-          <div className={`c-slide${slide===2?' on':''}`} style={{background:'#060a10',borderTop:'2px solid rgba(0,178,245,.28)'}}>
-            {logo('/assets/packy.png')}
-            <div style={{position:'absolute',inset:0,background:fade(6,10,16),pointerEvents:'none'}}/>
+          <div className={`c-slide${slide===2?' on':''}`} style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(0,178,245,.34) 0%, rgba(0,178,245,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(0,178,245,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(0,178,245,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#060a12 0%,#050810 55%,#060912 100%)'
+          ].join(','),borderTop:'3px solid rgba(0,178,245,.68)'}}>
+            {logo('/assets/packy.png',.58,'rgba(0,178,245,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(6,10,18),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
               <div style={txt('#00b2f5','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON PACKY.GG</div>
               <div style={sub}>Sign up with code NIKSI &amp; join the leaderboard!</div>
-              <a href="/leaderboards?tab=packy" style={btn('#00b2f5','rgba(0,178,245,.3)')}>VIEW LEADERBOARD <Arr/></a>
+              <a href="/leaderboards?tab=packy" style={btn('#00b2f5','rgba(0,178,245,.4)')}>VIEW LEADERBOARD <Arr/></a>
             </div>
           </div>
 
           {/* Slide 3 - QZINO */}
-          <div className={`c-slide${slide===3?' on':''}`} style={{background:'#070c06',borderTop:'2px solid rgba(122,200,50,.28)'}}>
-            {logo('/assets/qzino.png')}
-            <div style={{position:'absolute',inset:0,background:fade(7,12,6),pointerEvents:'none'}}/>
+          <div className={`c-slide${slide===3?' on':''}`} style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(122,200,50,.32) 0%, rgba(122,200,50,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(122,200,50,.13) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(122,200,50,.07) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#070e04 0%,#060c04 55%,#070e05 100%)'
+          ].join(','),borderTop:'3px solid rgba(122,200,50,.62)'}}>
+            {logo('/assets/qzino.png',.58,'rgba(122,200,50,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(7,14,4),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
               <div style={txt('#7ac832','clamp(44px,6vw,68px)',.88,6)}>EXCLUSIVE BONUSES</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>OVER AT QZINO</div>
               <div style={sub}>Deposit bonuses &amp; affiliate perks for active players</div>
-              <a href="https://qzino-partners.com/tijrhrss5" target="_blank" rel="noreferrer" style={btn('#7ac832','rgba(122,200,50,.3)')}>SIGN UP <Arr/></a>
+              <a href="https://qzino-partners.com/tijrhrss5" target="_blank" rel="noreferrer" style={btn('#7ac832','rgba(122,200,50,.4)')}>SIGN UP <Arr/></a>
             </div>
           </div>
         </div>
