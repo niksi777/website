@@ -3634,6 +3634,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     var href = el.getAttribute('href');
     if (!href) return;
     if (href.indexOf('http')===0||href.indexOf('//')===0||href.indexOf('mailto:')===0||href.indexOf('tel:')===0||href.indexOf('#')===0) return;
+    if (href.indexOf('/auth')===0) return;
     if (el.target && el.target !== '_self') return;
     e.preventDefault();
     window.__spaNavigate(href);
