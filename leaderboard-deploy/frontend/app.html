@@ -1474,62 +1474,6 @@ function HeroCarousel() {
   }
 
 // ==================== LEADERBOARDSPAGE ====================
-) {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <>
-      <nav>
-        <div className="ni">
-          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
-          <div className="nlinks">
-            <a href="/">Home</a>
-            <a href="/leaderboards" className="on">Leaderboards</a>
-            <a href="/points">Points</a>
-            <a href="/store">Store</a>
-            <a href="/cases">Cases</a>
-            <a href="/predict">Predict</a>
-            {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
-            {user && user.isAdmin && <a href="/admin">Admin</a>}
-          </div>
-          <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
-            {user ? (
-              <div className="ndrop">
-                <div className="nuser">
-                  <img className="nuser-avatar" src={user.avatar||'/assets/niksi.png'} alt=""/>
-                  <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
-                </div>
-                <div className="ndrop-menu">
-                  <div className="ndrop-box">
-                    {user.isAdmin && <a href="/giveaway" className="ndrop-item">Giveaway</a>}{user.isAdmin && <a href="/admin" className="ndrop-item">Admin</a>}{user.isAdmin && <hr style={{margin:"4px 0",border:"none",borderTop:"1px solid rgba(255,255,255,.07)"}}/>}<a href="/settings" className="ndrop-item">Settings</a>
-                    <button className="ndrop-item ndrop-logout" onClick={logout}>Logout</button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <a href="/auth/login" className="nlogin-btn">Login with Kick</a>
-            )}
-          </div>
-          <button className="hamburger" onClick={() => setOpen(o => !o)} aria-label="Menu">
-            <span/><span/><span/>
-          </button>
-        </div>
-      </nav>
-      <div className={`drawer ${open ? 'open' : ''}`}>
-        <a href="/">Home</a>
-        <a href="/leaderboards" className="on">Leaderboards</a>
-        <a href="/points">Points</a>
-        <a href="/store">Store</a>
-        <a href="/cases">Cases</a>
-        <a href="/predict">Predict</a>
-        {user && user.isAdmin && <a href="/giveaway">Giveaway</a>}
-        {user && user.isAdmin && <a href="/admin">Admin</a>}
-        {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
-      </div>
-    </>
-  );
-}
-
 function Countdown({ endDate }) {
   const calc = () => {
     const diff = Math.max(0, new Date(endDate) - Date.now());
@@ -1972,64 +1916,7 @@ const STORE_ITEMS = [
     { id:4, icon:"🎯", iconBg:"rgba(217,79,79,.08)", title:"$40 Bonus Buy", desc:"Niksi buys a $40 bonus on a slot of your choice on stream. You keep 100% of the winnings.", cost:2000 },
     { id:5, icon:"👑", iconBg:"rgba(212,175,90,.08)", title:"$100 Bonus Buy", desc:"Niksi buys a $100 bonus on a slot of your choice. Profits are split 50/50.", cost:5000 },
   ];
-) {
-    const [open,setOpen]=React.useState(false);
-        return (<>
-      <nav>
-        <div className="ni">
-          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
-          <div className="nlinks">
-            <a href="/">HOME</a>
-            <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
-            <a href="/store" className="on">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-            
-            
-          </div>
-          <div className="nauth">
-            {user ? (
-              <div className="ndrop">
-                <div className="nuser" style={{cursor:'default'}}>
-                  {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
-                  <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
-                </div>
-                <div className="ndrop-menu">
-                  <div className="ndrop-box">
-                    {user.isAdmin && <a href="/giveaway" className="ndrop-item">Giveaway</a>}{user.isAdmin && <a href="/admin" className="ndrop-item">Admin</a>}{user.isAdmin && <hr style={{margin:"4px 0",border:"none",borderTop:"1px solid rgba(255,255,255,.07)"}}/>}<a href="/settings" className="ndrop-item">Settings</a>
-                    <button onClick={logout} className="ndrop-item ndrop-logout">Logout</button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <a href="/auth/login" className="nlogin-btn">
-                <svg viewBox="0 0 24 24" fill="none" style={{width:13,height:13}}><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#fff"/></svg>
-                Login with Kick
-              </a>
-            )}
-          </div>
-
-          <button className="hamburger" onClick={()=>setOpen(o=>!o)}>
-            <span style={open?{transform:'rotate(45deg) translate(5px,5px)'}:{}}/>
-            <span style={open?{opacity:0}:{}}/>
-            <span style={open?{transform:'rotate(-45deg) translate(5px,-5px)'}:{}}/>
-          </button>
-        </div>
-      </nav>
-      <div className={`drawer${open?' open':''}`}>
-        <a href="/">HOME</a>
-        <a href="/leaderboards">LEADERBOARDS</a>
-        <a href="/points">POINTS</a>
-        <a href="/store" className="on">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-        
-        
-        {user ? <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a> : <a href="/auth/login">Login with Kick</a>}
-
-      </div>
-    </>);
-  }
-
-  function Modal({item, user, sessionId, onClose, onSuccess}){
+function Modal({item, user, sessionId, onClose, onSuccess}){
     const [note, setNote] = React.useState('');
 
     const [done, setDone] = React.useState(false);
@@ -2224,35 +2111,7 @@ const STORE_ITEMS = [
   }
 
 // ==================== SETTINGSPAGE ====================
-) {
-    return (
-      <nav>
-        <div className="ni">
-          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
-          <div className="nlinks">
-            <a href="/">HOME</a>
-            <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
-            <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-            
-            
-            <a href="/settings" className="on">SETTINGS</a>
-          </div>
-          <div className="nauth">
-            {user && (
-              <div className="nuser">
-                {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
-                <span className="nuser-name">{user.displayName}</span>
-                <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
-    );
-  }
-
-  function SettingsPage() {
+function SettingsPage() {
     const { user, sessionId, loading, logout } = useUser();
 
     if (loading) return null;
@@ -2343,65 +2202,6 @@ const STORE_ITEMS = [
   }
 
 // ==================== PREDICTORPAGE ====================
-) {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <>
-      <nav>
-        <div className="ni">
-          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
-          <div className="nlinks">
-            <a href="/">Home</a>
-            <a href="/leaderboards?tab=packy">Leaderboards</a>
-            <a href="/leaderboards">Leaderboards</a>
-            <a href="/predict" className="on">PREDICT</a>
-            <a href="/points">Points</a>
-            <a href="/store">Store</a>
-            
-            
-          </div>
-          <div className="nsoc" style={{gap:6,borderLeft:'none',paddingLeft:0}}>
-            {user ? (
-              <div className="ndrop">
-                <div className="nuser">
-                  <img className="nuser-avatar" src={user.avatar||'/assets/niksi.png'} alt=""/>
-                  <span className="nuser-name">{user.displayName}</span>
-                  <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
-                </div>
-                <div className="ndrop-menu">
-                  <div className="ndrop-box">
-                    <button className="ndrop-item ndrop-logout" onClick={logout}>Logout</button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <a href="/auth/login?redirect=/predict" className="nlogin-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-                Login with Kick
-              </a>
-            )}
-          </div>
-          <button className="hamburger" onClick={() => setOpen(o => !o)} aria-label="Menu">
-            <span/><span/><span/>
-          </button>
-        </div>
-      </nav>
-      <div className={`drawer ${open ? 'open' : ''}`}>
-        <a href="/">Home</a>
-        <a href="/leaderboards?tab=packy">Leaderboards</a>
-        <a href="/leaderboards">Leaderboards</a>
-        <a href="/predict" className="on">PREDICT</a>
-        <a href="/points">Points</a>
-        <a href="/store">Store</a>
-        
-        
-        {!user && <a href="/auth/login?redirect=/predict" style={{color:'#22c55e'}}>Login with Kick</a>}
-        {user && <a href="#" onClick={e=>{e.preventDefault();logout()}}>Logout ({user.displayName})</a>}
-      </div>
-    </>
-  );
-}
-
 function AdminPanel({ sessionId, hunt, onRefresh }) {
   const [startBal, setStartBal] = React.useState('');
   const [endBal, setEndBal] = React.useState('');
@@ -2807,35 +2607,7 @@ function PredictorPage() {
 }
 
 // ==================== ADMINPAGE ====================
-) {
-    return (
-      <nav>
-        <div className="ni">
-          <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
-          <div className="nlinks">
-            <a href="/">HOME</a>
-            <a href="/leaderboards">LEADERBOARDS</a>
-            <a href="/points">POINTS</a>
-            <a href="/store">STORE</a><a href="/cases">CASES</a><a href="/predict">PREDICT</a>
-            
-            {user && user.isAdmin && <a href="/admin" className="on">ADMIN</a>}
-            <a href="/settings">SETTINGS</a>
-          </div>
-          <div className="nauth">
-            {user && (
-              <div className="nuser">
-                {user.avatar && <img className="nuser-avatar" src={user.avatar} alt={user.displayName}/>}
-                <span className="nuser-name">{user.displayName}</span>
-                <span className="nuser-NP">{(user.points||0).toLocaleString()} NP</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
-    );
-  }
-
-  function fmtDate(iso) {
+function fmtDate(iso) {
     if (!iso) return '-';
     return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
   }
