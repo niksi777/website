@@ -187,11 +187,11 @@
       const sid=params.get('session')||localStorage.getItem('kick_session');
       if(sid){
         localStorage.setItem('kick_session',sid);setSessionId(sid);
-        fetch(`/auth/me?session=${sid}`).then(r=>r.ok?r.json():null).then(d=>{if(d)setUser(d);else localStorage.removeItem('kick_session');}).finally(()=>setLoading(false));
+        fetch(`/auth/me?session=${sid}`).then(r=>r.ok?r.json():null).then(d=>{if(d){setUser(d);localStorage.setItem('kick_user',JSON.stringify(d));}else{localStorage.removeItem('kick_session');localStorage.removeItem('kick_user');setUser(null);}}).finally(()=>setLoading(false));
         if(params.get('session'))window.history.replaceState({},'',window.location.pathname);
       }else setLoading(false);
     },[]);
-    function logout(){const sid=localStorage.getItem('kick_session');if(sid)fetch(`/auth/logout?session=${sid}`);localStorage.removeItem('kick_session');setUser(null);setSessionId(null);}
+    function logout(){const sid=localStorage.getItem('kick_session');if(sid)fetch(`/auth/logout?session=${sid}`);localStorage.removeItem('kick_session');localStorage.removeItem('kick_user');setUser(null);setSessionId(null);}
     return{user,setUser,sessionId,loading,logout};
   }
 

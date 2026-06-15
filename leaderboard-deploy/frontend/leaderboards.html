@@ -234,7 +234,9 @@
 <script type="text/babel">
 
 function useSession() {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState(() => {
+    try { const c = localStorage.getItem('kick_user'); return c ? JSON.parse(c) : null; } catch { return null; }
+  });
   const [sessionId, setSessionId] = React.useState(null);
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -243,14 +245,14 @@ function useSession() {
       localStorage.setItem('kick_session', sid);
       setSessionId(sid);
       fetch('/auth/me?session=' + sid).then(r => r.ok ? r.json() : null)
-        .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); }).catch(() => {});
+        .then(d => { if (d) { setUser(d); localStorage.setItem('kick_user', JSON.stringify(d)); } else { localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); setUser(null); } }).catch(() => {});
       if (params.get('session')) window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
   function logout() {
     const sid = localStorage.getItem('kick_session');
     if (sid) fetch('/auth/logout?session=' + sid);
-    localStorage.removeItem('kick_session'); setUser(null);
+    localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); setUser(null);
   }
   return { user, sessionId, logout };
 }

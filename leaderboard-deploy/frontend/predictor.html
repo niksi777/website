@@ -196,7 +196,7 @@ const SOCIALS = (
 );
 
 function useSession() {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState(() => { try { const c = localStorage.getItem('kick_user'); return c ? JSON.parse(c) : null; } catch { return null; } });
   const [sessionId, setSessionId] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
@@ -217,6 +217,7 @@ function useSession() {
     const sid = localStorage.getItem('kick_session');
     if (sid) fetch(`/auth/logout?session=${sid}`);
     localStorage.removeItem('kick_session');
+    localStorage.removeItem('kick_user');
     setUser(null); setSessionId(null);
   };
   return { user, sessionId, loading, logout };
