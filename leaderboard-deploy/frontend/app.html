@@ -1045,6 +1045,7 @@
     
     
   
+@keyframes _spa{from{opacity:0}}._spa{animation:_spa 120ms ease;}
   </style>
 </head>
 <body>
@@ -3611,7 +3612,7 @@ function AppInner() {
   return (
     <SessionCtx.Provider value={session}>
       <Navbar/>
-      <div key={path}>{Page}</div>
+      <div key={path} className="_spa">{Page}</div>
     </SessionCtx.Provider>
   );
 }
