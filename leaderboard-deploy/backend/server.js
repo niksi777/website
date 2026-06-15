@@ -9,6 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// SPA root route
+app.get('/', (req,res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+
 // Serve frontend files correctly
 app.use(express.static(path.join(__dirname, "../frontend")));
 
@@ -1056,16 +1059,16 @@ app.delete('/predictor/history/:id', (req, res) => {
   res.json({ ok: true });
 });
 // Clean URLs
-app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/leaderboards.html')));
-app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/points.html')));
-app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/store.html')));
-app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba.html')));
-app.get('/packy', (req, res) => res.sendFile(path.join(__dirname, '../frontend/packy.html')));
-app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/giveaway.html')));
-app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, '../frontend/settings.html')));
-app.get('/predictor', (req, res) => res.sendFile(path.join(__dirname, '../frontend/predictor.html')));
-app.get('/predict',   (req, res) => res.sendFile(path.join(__dirname, '../frontend/predictor.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../frontend/admin.html')));
+app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/packy', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/predictor', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/predict',   (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/overlay-giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/overlay-giveaway.html')));
 app.get('/stream-overlay', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay.html')));
 app.get('/stream-bg', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-bg.html')));
