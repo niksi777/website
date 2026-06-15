@@ -175,6 +175,11 @@
       .lb-table td,.lb-table th{padding:10px 8px}
       .np-mobile{display:block}
     }
+  
+    @view-transition{navigation:auto}
+    @keyframes vt-out{to{opacity:0}}@keyframes vt-in{from{opacity:0}}
+    ::view-transition-old(root){animation:180ms ease vt-out}
+    ::view-transition-new(root){animation:180ms ease vt-in}
   </style>
 </head>
 <body>
