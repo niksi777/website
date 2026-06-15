@@ -89,9 +89,10 @@ async function updateAcebet() {
 }
 
 // Fetch Gamba leaderboard
+let gambaMeta = { endDate: null, prizePool: null };
 async function updateLeaderboard() {
   try {
-    const raceId = 13300;
+    const raceId = 14422;
 
     const gql = JSON.stringify({
       query: `query { getRaceById(raceId: ${raceId}) { id prize_pool start_date end_date race_name competitors { id display_name total_wagered position avatar vip_level_name } prize_distribution { position percentage amount } } }`
@@ -122,6 +123,8 @@ try {
 }
 
     const race = json.data.getRaceById;
+    gambaMeta.endDate = race.end_date || null;
+    gambaMeta.prizePool = race.prize_pool || null;
     const competitors = race.competitors;
     const prizes = race.prize_distribution;
 
@@ -212,6 +215,9 @@ app.get("/players", (req, res) => {
     }
   );
 });
+
+app.get("/gamba-meta", (req, res) => res.json(gambaMeta));
+
 
 app.get("/chancer-players", async (req, res) => {
   const apiUrl = "https://admin.chancer.bet/external/activities/leaderboard";

@@ -234,9 +234,7 @@
 <script type="text/babel">
 
 function useSession() {
-  const [user, setUser] = React.useState(() => {
-    try { const c = localStorage.getItem('kick_user'); return c ? JSON.parse(c) : null; } catch { return null; }
-  });
+  const [user, setUser] = React.useState(null);
   const [sessionId, setSessionId] = React.useState(null);
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -245,14 +243,14 @@ function useSession() {
       localStorage.setItem('kick_session', sid);
       setSessionId(sid);
       fetch('/auth/me?session=' + sid).then(r => r.ok ? r.json() : null)
-        .then(d => { if (d) { setUser(d); localStorage.setItem('kick_user', JSON.stringify(d)); } else { localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); setUser(null); } }).catch(() => {});
+        .then(d => { if (d) setUser(d); else localStorage.removeItem('kick_session'); }).catch(() => {});
       if (params.get('session')) window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
   function logout() {
     const sid = localStorage.getItem('kick_session');
     if (sid) fetch('/auth/logout?session=' + sid);
-    localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); setUser(null);
+    localStorage.removeItem('kick_session'); setUser(null);
   }
   return { user, sessionId, logout };
 }
@@ -395,17 +393,17 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP }) {
 
 function GambaLeaderboard() {
   const [players, setPlayers] = React.useState(null);
+  const [gambaMeta, setGambaMeta] = React.useState(null);
   React.useEffect(() => {
     fetch('/players').then(r => r.json()).then(setPlayers).catch(() => setPlayers([]));
+    fetch('/gamba-meta').then(r => r.json()).then(setGambaMeta).catch(() => {});
   }, []);
 
-  const GAMBA_PRIZES = { 1:675.94, 2:375.52, 3:172.74, 4:75.10, 5:52.57, 6:45.06, 7:37.55, 8:30.04, 9:22.53, 10:15.02 };
-  const GAMBA_NP     = { 1:2250,   2:1250,   3:575,    4:250,   5:175,   6:150,   7:125,   8:100,   9:75,    10:50    };
+  const GAMBA_NP = { 1:2250, 2:1250, 3:575, 4:250, 5:175, 6:150, 7:125, 8:100, 9:75, 10:50 };
   const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
-  const fmtPrize = (p, rank) => fmtMoney(p.reward ?? GAMBA_PRIZES[rank] ?? 0);
+  const fmtPrize = (p, rank) => fmtMoney(p.reward ?? 0);
   const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   const fmtNP    = rank => (GAMBA_NP[rank] || 0).toLocaleString();
-  const GAMBA_END = "2026-06-14T23:59:59Z";
 
   if (players === null) return <div className="loading">Loading...</div>;
 
@@ -416,7 +414,7 @@ function GambaLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'var(--green)'}}>$</span><span style={{color:'#fff'}}>1,500</span></div>
+        <div className="lb-prize-amt"><span style={{color:'var(--green)'}}>$</span><span style={{color:'#fff'}}>{gambaMeta ? Math.round(gambaMeta.prizePool).toLocaleString('en-US') : '...'}</span></div>
         <div className="lb-prize-lbl">Bi-Weekly Prize</div>
         <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
@@ -430,7 +428,7 @@ function GambaLeaderboard() {
         </div>
       )}
 
-      <Countdown endDate={GAMBA_END}/>
+      {gambaMeta && gambaMeta.endDate && <Countdown endDate={gambaMeta.endDate}/>}
 
       <div className="lb-cta-row" style={{marginBottom:28}}>
         <a href="https://gamba.com/promotions/exclusive-leaderboards/14422" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba-sec">
@@ -475,11 +473,11 @@ function GambaLeaderboard() {
       <div className="prize-section">
         <div className="prize-title">// Prize Structure</div>
         <div className="prize-tiers">
-          {Object.entries(GAMBA_PRIZES).map(([pos, amt]) => (
-            <div key={pos} className="prize-tier">
-              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][pos-1]}</div>
-              <div className={`prize-tier-amt${pos==='1'?' p1':pos==='2'?' p2':pos==='3'?' p3':''}`}>{fmtMoney(amt)}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,color:'#fff',marginTop:4}}>+{fmtNP(Number(pos))} NP</div>
+          {players.filter(p => p.reward > 0).map(p => (
+            <div key={p.position} className="prize-tier">
+              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][p.position-1]||`#${p.position}`}</div>
+              <div className={`prize-tier-amt${p.position===1?' p1':p.position===2?' p2':p.position===3?' p3':''}`}>{fmtMoney(p.reward)}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,color:'#fff',marginTop:4}}>+{fmtNP(p.position)} NP</div>
             </div>
           ))}
         </div>
