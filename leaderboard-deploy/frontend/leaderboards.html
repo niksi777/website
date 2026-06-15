@@ -166,8 +166,14 @@
     @media(max-width:720px){
       .nlinks,.nsoc{display:none}
       .hamburger{display:flex}
-      .podium{flex-direction:column;align-items:center}
-      .podium-card,.podium-card.first{width:100%;max-width:360px}
+      .podium{flex-direction:column;align-items:center;gap:10px}
+      .podium-card,.podium-card.first{width:100%;max-width:420px;padding:16px 14px}
+      .podium-card.first{order:-1}
+      .pod-avatar{width:56px;height:56px}
+      .pod-avatar.first{width:72px;height:72px}
+      .pod-name{font-size:17px;margin-bottom:10px}
+      .pod-name.first{font-size:19px}
+      .pod-rank{font-size:13px}
       .lb-prize-amt{font-size:56px}
       .cd-num{font-size:28px;min-width:44px}
       .countdown{gap:6px}
