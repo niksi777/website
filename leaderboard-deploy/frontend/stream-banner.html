@@ -180,43 +180,37 @@
       color: #ffffff;
     }
 
-    /* ── Progress bar ── */
-    .progress-track {
+    /* ── Progress pills ── */
+    .nav-dots {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 0 0 18px 18px;
-      overflow: hidden;
+      bottom: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      z-index: 5;
     }
 
-    .progress-fill {
+    .nav-dot {
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.14);
+      width: 18px;
+      overflow: hidden;
+      transition: width 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-dot.on {
+      width: 38px;
+    }
+
+    .dot-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    }
-
-    /* ── Dots ── */
-    .dots {
-      position: absolute;
-      bottom: 12px;
-      right: 15px;
-      display: flex;
-      gap: 5px;
-      z-index: 1;
-    }
-
-    .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .dot.on {
-      background: #4d9aff;
-      transform: scale(1.3);
+      border-radius: 2px;
     }
   </style>
 </head>
@@ -270,24 +264,20 @@
     <div class="brand-code">NIKSI</div>
   </div>
 
-  <div class="progress-track">
-    <div class="progress-fill" id="pbar"></div>
-  </div>
-
-  <div class="dots">
-    <div class="dot on"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+  <div class="nav-dots">
+    <div class="nav-dot on"><div class="dot-fill"></div></div>
+    <div class="nav-dot"><div class="dot-fill"></div></div>
+    <div class="nav-dot"><div class="dot-fill"></div></div>
+    <div class="nav-dot"><div class="dot-fill"></div></div>
+    <div class="nav-dot"><div class="dot-fill"></div></div>
   </div>
 
 </div>
 <script>
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  const dots   = Array.from(document.querySelectorAll('.dot'));
-  const pbar   = document.getElementById('pbar');
-  const flash  = document.getElementById('flash');
+  const slides   = Array.from(document.querySelectorAll('.slide'));
+  const navDots  = Array.from(document.querySelectorAll('.nav-dot'));
+  const fills    = Array.from(document.querySelectorAll('.dot-fill'));
+  const flash    = document.getElementById('flash');
   const DURATION = 5500;
   let cur = 0, t0 = null, raf = null, busy = false;
 
@@ -307,23 +297,22 @@
     const outIdx = cur;
     const inIdx  = next % slides.length;
 
-    // Phase 1: flip current slide away (0 → -72deg), 280ms
     slides[outIdx].classList.remove('active');
     slides[outIdx].classList.add('exit');
-    dots[outIdx].classList.remove('on');
+    navDots[outIdx].classList.remove('on');
+    fills[outIdx].style.transition = 'none';
+    fills[outIdx].style.width = '0%';
 
-    // Glow flash at the midpoint of the exit (~140ms in)
     setTimeout(glowFlash, 140);
 
-    // Phase 2: after exit, flip new slide in (72 → 0deg), 360ms
     setTimeout(() => {
       slides[outIdx].classList.remove('exit');
       cur = inIdx;
-      dots[inIdx].classList.add('on');
+      navDots[inIdx].classList.add('on');
+      fills[inIdx].style.transition = 'none';
+      fills[inIdx].style.width = '0%';
       slides[inIdx].classList.add('active');
 
-      pbar.style.transition = 'none';
-      pbar.style.width = '0%';
       t0 = null;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(tick);
@@ -335,7 +324,7 @@
   function tick(ts) {
     if (!t0) t0 = ts;
     const pct = Math.min((ts - t0) / DURATION * 100, 100);
-    pbar.style.width = pct + '%';
+    fills[cur].style.width = pct + '%';
     if (pct < 100) {
       raf = requestAnimationFrame(tick);
     } else {
