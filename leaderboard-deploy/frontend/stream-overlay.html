@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{
@@ -11,170 +11,142 @@
       font-family:'Inter',sans-serif;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       LAYOUT
-       Top bar:   x=0    y=0    w=1920  h=64
-       Gap:       18px on all outer edges
-       Game:      x=18   y=100  w=1412  h=944   (64+18=82 top, ends y=1044, 18 bottom gap but game is 964 tall)
-       V-gap:     x=1430 y=82   w=18    gap between game+sidebar
-       Sidebar:   x=1466 y=82   w=436   h=962   (down to y=1044)
-       Bottom:    18px at base
-    ═══════════════════════════════════════════════════════ */
-
-    /* ── Top bar ─────────────────────────────────────────── */
+    /* ══════════════════════════════════════════
+       TOP BAR  —  full width, 58px tall
+    ══════════════════════════════════════════ */
     .topbar{
-      position:fixed;top:0;left:0;right:0;height:64px;
-      background:linear-gradient(180deg,#080e1d 0%,#060b18 100%);
-      border-bottom:1px solid rgba(56,120,220,0.28);
+      position:fixed;top:0;left:0;right:0;
+      height:58px;
+      background:#07101f;
+      border-bottom:1px solid rgba(56,120,220,0.3);
       display:flex;align-items:center;
-      z-index:20;
+      z-index:30;
     }
-    /* Inner glow on top bar bottom edge */
     .topbar::after{
-      content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(80,140,255,0.45),rgba(100,80,255,0.3),transparent);
+      content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(70,130,255,0.5),rgba(100,70,255,0.35),transparent);
     }
 
-    /* Left section */
+    /* Left third */
     .tb-left{
-      width:340px;flex-shrink:0;
-      display:flex;align-items:center;gap:14px;
-      padding:0 22px;
-    }
-    .live-badge{
-      display:flex;align-items:center;gap:5px;
-      background:rgba(220,50,50,0.12);
-      border:1px solid rgba(220,50,50,0.25);
-      border-radius:100px;padding:4px 9px;flex-shrink:0;
-    }
-    .live-dot{width:6px;height:6px;border-radius:50%;background:#e05555;animation:pulse 1.3s ease-in-out infinite;flex-shrink:0}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
-    .live-txt{font-size:9px;font-weight:600;letter-spacing:.14em;color:#e05555;text-transform:uppercase}
-
-    .tb-logo{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(70,130,255,0.4))}
-
-    .tb-vsep{width:1px;height:28px;background:rgba(80,140,255,0.2);flex-shrink:0}
-
-    .tb-social{display:flex;align-items:center;gap:7px}
-    .tb-social svg{width:14px;height:14px;flex-shrink:0;opacity:.75}
-    .tb-social-text{font-size:11px;font-weight:500;color:rgba(200,220,255,0.6);letter-spacing:.03em;white-space:nowrap}
-
-    /* Center section */
-    .tb-center{
-      flex:1;
-      display:flex;align-items:center;justify-content:center;gap:18px;
-    }
-    .tb-line{flex:1;max-width:160px;height:1px;background:linear-gradient(90deg,transparent,rgba(80,140,255,0.35))}
-    .tb-line.r{background:linear-gradient(90deg,rgba(80,140,255,0.35),transparent)}
-    .tb-name{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:28px;font-weight:800;
-      letter-spacing:.16em;text-transform:uppercase;
-      color:#fff;white-space:nowrap;
-    }
-
-    /* Right section */
-    .tb-right{
-      width:340px;flex-shrink:0;
-      display:flex;align-items:center;justify-content:flex-end;gap:14px;
-      padding:0 22px;
-    }
-
-    /* ── Dark edge fills (below top bar) ─────────────────── */
-    .e{position:fixed;background:#060b18}
-    .e-left {top:64px;left:0;width:18px;bottom:0}
-    .e-right{top:64px;right:0;width:18px;bottom:0}
-    .e-bottom{bottom:0;left:0;right:0;height:18px}
-    .e-vgap{top:64px;left:1448px;width:18px;bottom:0}
-
-    /* ── Game frame ──────────────────────────────────────── */
-    .game-frame{
-      position:fixed;left:18px;top:82px;
-      width:1430px;height:962px;
-      border:1px solid rgba(255,255,255,.07);
-      background:transparent;
-      pointer-events:none;z-index:10;
-    }
-    /* Corner accents */
-    .c{position:absolute;width:20px;height:20px}
-    .c-tl{top:-1px;left:-1px;border-top:2px solid rgba(60,120,255,.45);border-left:2px solid rgba(60,120,255,.45);border-radius:10px 0 0 0}
-    .c-tr{top:-1px;right:-1px;border-top:2px solid rgba(60,120,255,.45);border-right:2px solid rgba(60,120,255,.45);border-radius:0 10px 0 0}
-    .c-bl{bottom:-1px;left:-1px;border-bottom:2px solid rgba(60,120,255,.45);border-left:2px solid rgba(60,120,255,.45);border-radius:0 0 0 10px}
-    .c-br{bottom:-1px;right:-1px;border-bottom:2px solid rgba(60,120,255,.45);border-right:2px solid rgba(60,120,255,.45);border-radius:0 0 10px 0}
-
-    /* ── Right sidebar ───────────────────────────────────── */
-    .sidebar{
-      position:fixed;left:1466px;top:82px;
-      width:436px;height:962px;
-      background:#080e1d;
-      border:1px solid rgba(56,120,220,0.16);
-      border-top:2px solid rgba(60,120,255,0.4);
-      display:flex;flex-direction:column;
-      overflow:hidden;
-    }
-
-    /* Branding strip */
-    .sb-brand{
-      height:72px;flex-shrink:0;
-      display:flex;align-items:center;justify-content:center;gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.05);
+      flex:1;display:flex;align-items:center;gap:12px;
       padding:0 20px;
     }
-    .sb-logo{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(70,130,255,0.35))}
-    .sb-name{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff}
-
-    /* Section label */
-    .sec-lbl{
-      padding:7px 16px;
-      font-size:8.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-      color:rgba(180,210,255,0.22);text-align:center;
-      border-bottom:1px solid rgba(255,255,255,.04);flex-shrink:0;
+    /* Center */
+    .tb-center{
+      display:flex;align-items:center;gap:16px;
+      flex-shrink:0;
+    }
+    /* Right third */
+    .tb-right{
+      flex:1;display:flex;align-items:center;justify-content:flex-end;gap:16px;
+      padding:0 20px;
     }
 
-    /* Chat */
-    .sb-chat{flex:1;display:flex;flex-direction:column;min-height:0;border-bottom:1px solid rgba(255,255,255,.05)}
-    .sb-chat-inner{flex:1}
+    /* LIVE badge */
+    .live-badge{
+      display:flex;align-items:center;gap:5px;
+      background:rgba(220,50,50,0.13);
+      border:1px solid rgba(220,50,50,0.28);
+      border-radius:100px;padding:4px 10px;
+      flex-shrink:0;
+    }
+    .live-dot{width:6px;height:6px;border-radius:50%;background:#e05555;animation:blink 1.3s ease-in-out infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+    .live-txt{font-size:9px;font-weight:600;letter-spacing:.13em;color:#e05555;text-transform:uppercase}
 
-    /* Webcam */
-    .sb-webcam{
-      height:258px;flex-shrink:0;
-      display:flex;flex-direction:column;
-      position:relative;overflow:hidden;
-    }
-    .sb-webcam::after{
-      content:'';position:absolute;inset:0;pointer-events:none;
-      box-shadow:inset 0 0 30px 16px #060b18;z-index:2;
-    }
-    .sb-webcam-inner{flex:1;display:flex;align-items:center;justify-content:center}
-    .sb-hint{font-size:8.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,220,255,0.12);text-align:center;position:relative;z-index:3}
+    /* Logo */
+    .tb-logo{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(70,130,255,0.4))}
 
-    /* Giveaway strip at bottom of sidebar */
-    .sb-giveaway{
-      flex-shrink:0;border-top:1px solid rgba(255,255,255,.05);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      min-height:56px;padding:12px 20px;
+    /* Vertical pipe */
+    .pipe{
+      width:1px;height:28px;
+      background:rgba(80,130,255,0.25);
+      flex-shrink:0;
     }
-    .gw-idle-txt{font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(180,210,255,0.18);text-align:center}
-    .gw-active{display:none;flex-direction:column;align-items:center;gap:4px;width:100%}
-    .gw-lbl{font-size:8.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(180,210,255,0.35)}
-    .gw-kw{
+
+    /* Social row */
+    .tb-soc{display:flex;align-items:center;gap:7px}
+    .tb-soc svg{width:13px;height:13px;flex-shrink:0;opacity:.8}
+    .tb-soc span{font-size:11px;font-weight:500;color:rgba(190,215,255,0.6);letter-spacing:.02em;white-space:nowrap}
+
+    /* Center name */
+    .tb-name{
       font-family:'Barlow Condensed',sans-serif;
-      font-size:38px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-      color:#3b82f6;line-height:1;
+      font-size:26px;font-weight:800;
+      letter-spacing:.18em;text-transform:uppercase;
+      color:#fff;white-space:nowrap;
     }
-    .gw-entries{font-size:10px;color:rgba(180,210,255,0.35);letter-spacing:.05em}
-    .gw-entries span{color:rgba(180,210,255,0.6);font-weight:600}
-    .gw-bar-track{height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;width:100%;margin-top:4px}
-    .gw-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);transition:width .9s linear;width:100%}
-    .gw-bar-fill.urgent{background:linear-gradient(90deg,#7a0000,#e05555)}
+    /* Decorative pipes beside name */
+    .tb-deco{
+      font-size:22px;font-weight:300;
+      color:rgba(80,130,255,0.4);
+      line-height:1;
+    }
 
-    #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
+    /* ══════════════════════════════════════════
+       RIGHT SIDEBAR  —  420px, starts below top bar
+    ══════════════════════════════════════════ */
+    .sidebar{
+      position:fixed;
+      top:58px;right:0;
+      width:420px;bottom:0;
+      background:#07101f;
+      border-left:1px solid rgba(56,120,220,0.2);
+      display:flex;flex-direction:column;
+      z-index:20;
+    }
+
+    /* ── Giveaway / timer section ── */
+    .gw-section{
+      flex-shrink:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:22px 16px 20px;
+      border-bottom:1px solid rgba(56,120,220,0.18);
+      gap:4px;
+    }
+    .gw-label{
+      font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+      color:rgba(150,190,255,0.4);
+    }
+    .gw-timer{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:74px;font-weight:800;letter-spacing:.03em;
+      color:#fff;line-height:1;
+    }
+
+    /* ── Chat section ── */
+    .chat-section{
+      flex:1;display:flex;flex-direction:column;min-height:0;
+    }
+    .chat-label{
+      flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      padding:9px 16px;
+      border-bottom:1px solid rgba(56,120,220,0.12);
+      font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(150,190,255,0.38);
+    }
+    /* Chat dot indicator */
+    .chat-dot{width:5px;height:5px;border-radius:50%;background:#3b82f6;opacity:.6}
+    .chat-inner{flex:1}
+
+    /* ══════════════════════════════════════════
+       GAME AREA — transparent, thin border
+    ══════════════════════════════════════════ */
+    .game-border{
+      position:fixed;
+      top:58px;left:0;
+      right:420px;bottom:0;
+      border-right:1px solid rgba(56,120,220,0.14);
+      pointer-events:none;
+      z-index:10;
+    }
   </style>
 </head>
 <body>
-<canvas id="constellation"></canvas>
 
-<!-- ── Top bar ──────────────────────────────────────────────── -->
+<!-- ══ TOP BAR ═══════════════════════════════════════════════ -->
 <div class="topbar">
 
   <div class="tb-left">
@@ -183,136 +155,101 @@
       <span class="live-txt">Live</span>
     </div>
     <img class="tb-logo" src="/assets/niksi.png" alt="NIKSI777"/>
-    <div class="tb-vsep"></div>
-    <div class="tb-social">
-      <!-- Discord -->
+    <div class="pipe"></div>
+    <div class="tb-soc">
       <svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
-      <span class="tb-social-text">discord.gg/Gnyv25SHg7</span>
+      <span>discord.gg/Gnyv25SHg7</span>
     </div>
   </div>
 
   <div class="tb-center">
-    <div class="tb-line"></div>
+    <span class="tb-deco">|</span>
     <span class="tb-name">NIKSI777</span>
-    <div class="tb-line r"></div>
+    <span class="tb-deco">|</span>
   </div>
 
   <div class="tb-right">
-    <div class="tb-social">
-      <!-- Kick -->
+    <div class="tb-soc">
       <svg viewBox="0 0 24 24" fill="none"><path d="M3 3h4v5.5L11 3h5l-5.5 6.5L16 15h-5l-4-4.5V15H3V3z" fill="#22c55e"/></svg>
-      <span class="tb-social-text">kick.com/niksi777</span>
+      <span>kick.com/niksi777</span>
     </div>
-    <div class="tb-vsep"></div>
-    <div class="tb-social">
-      <!-- X / Twitter -->
-      <svg viewBox="0 0 24 24" fill="rgba(200,220,255,0.7)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg>
-      <span class="tb-social-text">@code_niksi777</span>
+    <div class="pipe"></div>
+    <div class="tb-soc">
+      <svg viewBox="0 0 24 24" fill="rgba(200,220,255,0.75)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg>
+      <span>@code_niksi777</span>
     </div>
   </div>
 
 </div>
 
-<!-- ── Edge fills ───────────────────────────────────────────── -->
-<div class="e e-left"></div>
-<div class="e e-right"></div>
-<div class="e e-bottom"></div>
-<div class="e e-vgap"></div>
-
-<!-- ── Game frame ──────────────────────────────────────────── -->
-<div class="game-frame">
-  <div class="c c-tl"></div><div class="c c-tr"></div>
-  <div class="c c-bl"></div><div class="c c-br"></div>
-</div>
-
-<!-- ── Right sidebar ────────────────────────────────────────── -->
+<!-- ══ RIGHT SIDEBAR ══════════════════════════════════════════ -->
 <div class="sidebar">
-  <div class="sb-brand">
-    <img class="sb-logo" src="/assets/niksi.png" alt=""/>
-    <div class="sb-name">Niksi777</div>
-    <div class="live-badge" style="margin-left:4px">
-      <div class="live-dot"></div>
-      <span class="live-txt">Live</span>
-    </div>
+
+  <div class="gw-section">
+    <div class="gw-label" id="gw-label">Giveaway In</div>
+    <div class="gw-timer" id="gw-timer">--:--</div>
   </div>
 
-  <div class="sb-chat">
-    <div class="sec-lbl">Live Chat</div>
-    <div class="sb-chat-inner"></div>
+  <div class="chat-section">
+    <div class="chat-label">
+      <div class="chat-dot"></div>
+      Niksi Chat
+      <div class="chat-dot"></div>
+    </div>
+    <div class="chat-inner"></div>
   </div>
 
-  <div class="sb-webcam">
-    <div class="sec-lbl">Webcam</div>
-    <div class="sb-webcam-inner">
-      <div class="sb-hint">Position webcam<br/>source here</div>
-    </div>
-  </div>
-
-  <div class="sb-giveaway">
-    <div class="gw-idle-txt" id="gw-idle">No active giveaway</div>
-    <div class="gw-active" id="gw-active">
-      <div class="gw-lbl">Type to enter</div>
-      <div class="gw-kw" id="gw-keyword">!</div>
-      <div class="gw-entries">Entries: <span id="gw-entries">0</span></div>
-      <div class="gw-bar-track"><div class="gw-bar-fill" id="gw-bar"></div></div>
-    </div>
-  </div>
 </div>
 
-<script>
-  let DURATION=60,secondsLeft=60,timerInterval=null;
-  function startTimer(dur){
-    DURATION=dur;secondsLeft=dur;clearInterval(timerInterval);
-    timerInterval=setInterval(()=>{
-      secondsLeft=Math.max(0,secondsLeft-1);
-      const pct=(secondsLeft/DURATION)*100;
-      const bar=document.getElementById('gw-bar');
-      bar.style.width=pct+'%';
-      bar.className='gw-bar-fill'+(secondsLeft<=10?' urgent':'');
-      if(secondsLeft===0)clearInterval(timerInterval);
-    },1000);
-  }
-  function stopTimer(){clearInterval(timerInterval);const b=document.getElementById('gw-bar');b.style.width='100%';b.className='gw-bar-fill';}
-  async function pollTimer(){
-    try{const d=await fetch('/giveaway/timer').then(r=>r.json());
-      if(d.signal==='start')startTimer(d.duration||60);
-      else if(d.signal==='stop')stopTimer();
-    }catch(e){}
-  }
-  async function pollState(){
-    try{const d=await fetch('/giveaway/state').then(r=>r.json());
-      if(d.giveaway&&!d.giveaway.winner){
-        document.getElementById('gw-idle').style.display='none';
-        const a=document.getElementById('gw-active');a.style.display='flex';
-        document.getElementById('gw-keyword').textContent=d.giveaway.keyword;
-        document.getElementById('gw-entries').textContent=d.entries?d.entries.length:0;
-      }else{
-        document.getElementById('gw-idle').style.display='block';
-        document.getElementById('gw-active').style.display='none';
-        stopTimer();
-      }
-    }catch(e){}
-  }
-  pollState();pollTimer();
-  setInterval(pollState,2000);setInterval(pollTimer,1000);
-</script>
+<!-- ══ GAME AREA BORDER ═══════════════════════════════════════ -->
+<div class="game-border"></div>
 
 <script>
-(function(){
-  var canvas=document.getElementById('constellation');
-  var ctx=canvas.getContext('2d');
-  var N=80,DIST=130,W,H,pts=[];
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-  function mkPt(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.1+.3,o:Math.random()*.35+.08};}
-  function init(){resize();pts=[];for(var i=0;i<N;i++)pts.push(mkPt());}
-  function tick(){
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<N;i++){var a=pts[i];for(var j=i+1;j<N;j++){var b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<DIST){ctx.beginPath();ctx.strokeStyle='rgba(80,140,255,'+((1-d/DIST)*.1)+')';ctx.lineWidth=.5;ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}
-    for(var i=0;i<N;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(120,170,255,'+p.o+')';ctx.fill();}
-    requestAnimationFrame(tick);
+  let DURATION = 60, secondsLeft = 60, timerInterval = null;
+
+  function fmt(s) {
+    const m = Math.floor(s / 60), sec = s % 60;
+    return m + ':' + String(sec).padStart(2, '0');
   }
-  init();window.addEventListener('resize',resize);tick();
-})();
+
+  function startTimer(dur) {
+    DURATION = dur; secondsLeft = dur;
+    clearInterval(timerInterval);
+    document.getElementById('gw-label').textContent = 'Giveaway In';
+    timerInterval = setInterval(() => {
+      secondsLeft = Math.max(0, secondsLeft - 1);
+      document.getElementById('gw-timer').textContent = fmt(secondsLeft);
+      if (secondsLeft === 0) clearInterval(timerInterval);
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    document.getElementById('gw-timer').textContent = '--:--';
+  }
+
+  async function pollTimer() {
+    try {
+      const d = await fetch('/giveaway/timer').then(r => r.json());
+      if (d.signal === 'start') startTimer(d.duration || 60);
+      else if (d.signal === 'stop') stopTimer();
+    } catch(e) {}
+  }
+
+  async function pollState() {
+    try {
+      const d = await fetch('/giveaway/state').then(r => r.json());
+      if (d.giveaway && !d.giveaway.winner) {
+        document.getElementById('gw-label').textContent = 'Type to Enter';
+        document.getElementById('gw-timer').textContent = d.giveaway.keyword || '!';
+      }
+    } catch(e) {}
+  }
+
+  pollState(); pollTimer();
+  setInterval(pollState, 2000);
+  setInterval(pollTimer, 1000);
 </script>
+
 </body>
 </html>
