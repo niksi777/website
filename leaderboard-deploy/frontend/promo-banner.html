@@ -79,9 +79,8 @@
     }
     .pod.first::before{background:linear-gradient(180deg,rgba(212,175,90,.08),transparent)}
 
-    .crown{font-size:28px;line-height:1;display:block;margin-bottom:4px;filter:drop-shadow(0 0 8px rgba(212,175,90,.6))}
-    .pod.first .crown{font-size:36px;filter:drop-shadow(0 0 12px rgba(212,175,90,.8))}
-    .pod.second .crown,.pod.third .crown{filter:drop-shadow(0 0 6px rgba(180,190,210,.4))}
+    .crown{display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+    .crown svg{filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
 
     .pod-amount{
       font-family:'Barlow Condensed',sans-serif;
@@ -184,17 +183,67 @@
   <!-- PODIUM -->
   <div class="podium">
     <div class="pod second">
-      <span class="crown">🥈</span>
+      <div class="crown">
+        <svg width="38" height="30" viewBox="0 0 60 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#dce8f4"/>
+              <stop offset="50%" stop-color="#a8bece"/>
+              <stop offset="100%" stop-color="#7090a8"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 40 L4 26 L16 34 L30 6 L44 34 L56 26 L56 40 Q30 44 4 40Z" fill="url(#sg)" stroke="#c0d4e4" stroke-width="1.2"/>
+          <circle cx="4"  cy="25" r="4" fill="#c8dcea" stroke="#a0bcd0" stroke-width="1"/>
+          <circle cx="30" cy="5"  r="4" fill="#c8dcea" stroke="#a0bcd0" stroke-width="1"/>
+          <circle cx="56" cy="25" r="4" fill="#c8dcea" stroke="#a0bcd0" stroke-width="1"/>
+          <rect x="4" y="40" width="52" height="5" rx="2" fill="#8090a8"/>
+        </svg>
+      </div>
       <div class="pod-amount">$375</div>
       <div class="pod-rank">2</div>
     </div>
     <div class="pod first">
-      <span class="crown">👑</span>
+      <div class="crown">
+        <svg width="50" height="40" viewBox="0 0 60 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fff5c0"/>
+              <stop offset="40%" stop-color="#f0c030"/>
+              <stop offset="100%" stop-color="#b8840a"/>
+            </linearGradient>
+            <linearGradient id="gg2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f8e080"/>
+              <stop offset="100%" stop-color="#c89010"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 40 L4 26 L16 34 L30 4 L44 34 L56 26 L56 40 Q30 45 4 40Z" fill="url(#gg)" stroke="#e8b820" stroke-width="1.4"/>
+          <circle cx="4"  cy="25" r="4.5" fill="#ffe060" stroke="#d4a010" stroke-width="1.2"/>
+          <circle cx="30" cy="3.5" r="5"   fill="#ffe060" stroke="#d4a010" stroke-width="1.2"/>
+          <circle cx="56" cy="25" r="4.5" fill="#ffe060" stroke="#d4a010" stroke-width="1.2"/>
+          <circle cx="30" cy="3.5" r="2.5" fill="#fff4a0"/>
+          <rect x="4" y="40" width="52" height="5" rx="2" fill="url(#gg2)"/>
+        </svg>
+      </div>
       <div class="pod-amount">$750</div>
       <div class="pod-rank">1</div>
     </div>
     <div class="pod third">
-      <span class="crown">🥉</span>
+      <div class="crown">
+        <svg width="38" height="30" viewBox="0 0 60 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0b080"/>
+              <stop offset="50%" stop-color="#c87840"/>
+              <stop offset="100%" stop-color="#8a4e20"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 40 L4 26 L16 34 L30 6 L44 34 L56 26 L56 40 Q30 44 4 40Z" fill="url(#bg)" stroke="#d48840" stroke-width="1.2"/>
+          <circle cx="4"  cy="25" r="4" fill="#e89050" stroke="#b86820" stroke-width="1"/>
+          <circle cx="30" cy="5"  r="4" fill="#e89050" stroke="#b86820" stroke-width="1"/>
+          <circle cx="56" cy="25" r="4" fill="#e89050" stroke="#b86820" stroke-width="1"/>
+          <rect x="4" y="40" width="52" height="5" rx="2" fill="#9a5828"/>
+        </svg>
+      </div>
       <div class="pod-amount">$150</div>
       <div class="pod-rank">3</div>
     </div>
@@ -202,10 +251,9 @@
 
   <!-- INFO BOX -->
   <div class="info-box">
-    <div class="info-row gold">$1,500 BI-WEEKLY LEADERBOARD RACE</div>
-    <div class="info-row blue">EXCLUSIVE RAKEBACK + VIP PERKS</div>
-    <div class="info-row">2X WEEKLIE'S + WAGER REWARDS</div>
-    <div class="info-row small">(SIGN UP WITH CODE NIKSI TO QUALIFY)</div>
+    <div class="info-row gold">EXCLUSIVE LEADERBOARDS</div>
+    <div class="info-row blue">RAKEBACK + 70% AFFILIATE COMMISSION</div>
+    <div class="info-row">WAGER REWARDS + PROMOTION CODES</div>
   </div>
 
   <!-- BOTTOM BAR -->
