@@ -199,7 +199,7 @@
       const kwText = document.getElementById('kw-text');
       const kwIdle = document.getElementById('kw-idle');
       const kwLabel = document.getElementById('kw-label');
-      if (d.giveaway && !d.giveaway.winner && d.giveaway.keyword) {
+      if (d.giveaway && d.giveaway.keyword) {
         kwText.textContent = d.giveaway.keyword;
         kwText.style.display = 'block';
         kwIdle.style.display = 'none';
