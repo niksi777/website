@@ -11,144 +11,120 @@
       font-family:'Inter',sans-serif;
     }
 
-    /* ══════════════════════════════════════════
-       TOP BAR  —  full width, 58px tall
-    ══════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════
+       LAYOUT
+       Top bar:    y=0      h=58
+       Game area:  y=58     h=892  w=1494  (transparent)
+       Sidebar:    y=58     h=892  x=1496  w=424
+       Bottom gap: y=950    h=130  (empty — place stream-banner here)
+    ═══════════════════════════════════════════════ */
+
+    /* ── Top bar ──────────────────────────────── */
     .topbar{
-      position:fixed;top:0;left:0;right:0;
-      height:58px;
+      position:fixed;top:0;left:0;right:0;height:58px;
       background:#07101f;
-      border-bottom:1px solid rgba(56,120,220,0.3);
+      border-bottom:1px solid rgba(56,120,220,0.32);
       display:flex;align-items:center;
       z-index:30;
     }
     .topbar::after{
       content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(70,130,255,0.5),rgba(100,70,255,0.35),transparent);
+      background:linear-gradient(90deg,transparent,rgba(70,130,255,0.55),rgba(100,70,255,0.38),transparent);
     }
 
-    /* Left third */
-    .tb-left{
-      flex:1;display:flex;align-items:center;gap:12px;
-      padding:0 20px;
-    }
-    /* Center */
-    .tb-center{
-      display:flex;align-items:center;gap:16px;
-      flex-shrink:0;
-    }
-    /* Right third */
-    .tb-right{
-      flex:1;display:flex;align-items:center;justify-content:flex-end;gap:16px;
-      padding:0 20px;
-    }
+    .tb-left{flex:1;display:flex;align-items:center;gap:12px;padding:0 20px}
+    .tb-center{display:flex;align-items:center;gap:14px;flex-shrink:0}
+    .tb-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:0 20px}
 
-    /* LIVE badge */
-    .live-badge{
-      display:flex;align-items:center;gap:5px;
-      background:rgba(220,50,50,0.13);
-      border:1px solid rgba(220,50,50,0.28);
-      border-radius:100px;padding:4px 10px;
-      flex-shrink:0;
-    }
+    .live-badge{display:flex;align-items:center;gap:5px;background:rgba(220,50,50,0.12);border:1px solid rgba(220,50,50,0.26);border-radius:100px;padding:4px 10px;flex-shrink:0}
     .live-dot{width:6px;height:6px;border-radius:50%;background:#e05555;animation:blink 1.3s ease-in-out infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
     .live-txt{font-size:9px;font-weight:600;letter-spacing:.13em;color:#e05555;text-transform:uppercase}
 
-    /* Logo */
-    .tb-logo{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(70,130,255,0.4))}
+    .tb-logo{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(70,130,255,0.4))}
+    .pipe{width:1px;height:26px;background:rgba(80,130,255,0.22);flex-shrink:0}
 
-    /* Vertical pipe */
-    .pipe{
-      width:1px;height:28px;
-      background:rgba(80,130,255,0.25);
-      flex-shrink:0;
-    }
-
-    /* Social row */
     .tb-soc{display:flex;align-items:center;gap:7px}
     .tb-soc svg{width:13px;height:13px;flex-shrink:0;opacity:.8}
-    .tb-soc span{font-size:11px;font-weight:500;color:rgba(190,215,255,0.6);letter-spacing:.02em;white-space:nowrap}
+    .tb-soc span{font-size:11px;font-weight:500;color:rgba(185,210,255,0.58);letter-spacing:.02em;white-space:nowrap}
 
-    /* Center name */
-    .tb-name{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:26px;font-weight:800;
-      letter-spacing:.18em;text-transform:uppercase;
-      color:#fff;white-space:nowrap;
-    }
-    /* Decorative pipes beside name */
-    .tb-deco{
-      font-size:22px;font-weight:300;
-      color:rgba(80,130,255,0.4);
-      line-height:1;
+    .tb-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#fff;white-space:nowrap}
+    .tb-deco{font-size:20px;font-weight:300;color:rgba(80,130,255,0.38);line-height:1}
+
+    /* ── Thin left edge dark strip ────────────── */
+    .edge-left{
+      position:fixed;top:58px;left:0;width:6px;height:892px;
+      background:#07101f;z-index:10;
     }
 
-    /* ══════════════════════════════════════════
-       RIGHT SIDEBAR  —  420px, starts below top bar
-    ══════════════════════════════════════════ */
+    /* ── Right sidebar ────────────────────────── */
     .sidebar{
       position:fixed;
       top:58px;right:0;
-      width:420px;bottom:0;
+      width:424px;height:892px;
       background:#07101f;
       border-left:1px solid rgba(56,120,220,0.2);
       display:flex;flex-direction:column;
       z-index:20;
     }
 
-    /* ── Giveaway / timer section ── */
-    .gw-section{
+    /* Panel shared styles */
+    .panel{
+      margin:10px 12px 0;
+      border:1px solid rgba(56,120,220,0.2);
+      border-radius:8px;
+      background:rgba(10,18,38,0.6);
+      display:flex;flex-direction:column;
+      overflow:hidden;
+    }
+    .panel-header{
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      padding:8px 14px;
+      border-bottom:1px solid rgba(56,120,220,0.14);
+      background:rgba(56,120,220,0.05);
       flex-shrink:0;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:22px 16px 20px;
-      border-bottom:1px solid rgba(56,120,220,0.18);
-      gap:4px;
     }
-    .gw-label{
-      font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
-      color:rgba(150,190,255,0.4);
-    }
-    .gw-timer{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:74px;font-weight:800;letter-spacing:.03em;
-      color:#fff;line-height:1;
-    }
-
-    /* ── Chat section ── */
-    .chat-section{
-      flex:1;display:flex;flex-direction:column;min-height:0;
-    }
-    .chat-label{
-      flex-shrink:0;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      padding:9px 16px;
-      border-bottom:1px solid rgba(56,120,220,0.12);
-      font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+    .panel-label{
+      font-size:8.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
       color:rgba(150,190,255,0.38);
     }
-    /* Chat dot indicator */
-    .chat-dot{width:5px;height:5px;border-radius:50%;background:#3b82f6;opacity:.6}
-    .chat-inner{flex:1}
+    .panel-dot{width:5px;height:5px;border-radius:50%;background:#3b82f6;opacity:.55;flex-shrink:0}
 
-    /* ══════════════════════════════════════════
-       GAME AREA — transparent, thin border
-    ══════════════════════════════════════════ */
-    .game-border{
-      position:fixed;
-      top:58px;left:0;
-      right:420px;bottom:0;
-      border-right:1px solid rgba(56,120,220,0.14);
-      pointer-events:none;
-      z-index:10;
+    /* ── Keyword panel ────────────────────────── */
+    .kw-panel{
+      flex-shrink:0;
     }
+    .kw-body{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:18px 14px 20px;gap:3px;
+    }
+    .kw-sublabel{
+      font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(150,190,255,0.3);
+    }
+    .kw-text{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:64px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+      color:#fff;line-height:1;
+    }
+    .kw-idle{
+      font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+      color:rgba(150,190,255,0.22);
+    }
+
+    /* ── Chat panel ───────────────────────────── */
+    .chat-panel{
+      flex:1;
+      margin-bottom:12px;
+    }
+    .chat-body{flex:1}
+
   </style>
 </head>
 <body>
 
-<!-- ══ TOP BAR ═══════════════════════════════════════════════ -->
+<!-- TOP BAR -->
 <div class="topbar">
-
   <div class="tb-left">
     <div class="live-badge">
       <div class="live-dot"></div>
@@ -179,76 +155,60 @@
       <span>@code_niksi777</span>
     </div>
   </div>
-
 </div>
 
-<!-- ══ RIGHT SIDEBAR ══════════════════════════════════════════ -->
+<!-- Thin left edge strip -->
+<div class="edge-left"></div>
+
+<!-- RIGHT SIDEBAR -->
 <div class="sidebar">
 
-  <div class="gw-section">
-    <div class="gw-label" id="gw-label">Giveaway In</div>
-    <div class="gw-timer" id="gw-timer">--:--</div>
+  <!-- Keyword / giveaway panel -->
+  <div class="panel kw-panel">
+    <div class="panel-header">
+      <div class="panel-dot"></div>
+      <div class="panel-label" id="kw-label">Giveaway Keyword</div>
+      <div class="panel-dot"></div>
+    </div>
+    <div class="kw-body">
+      <div class="kw-text" id="kw-text" style="display:none"></div>
+      <div class="kw-idle" id="kw-idle">No active giveaway</div>
+    </div>
   </div>
 
-  <div class="chat-section">
-    <div class="chat-label">
-      <div class="chat-dot"></div>
-      Niksi Chat
-      <div class="chat-dot"></div>
+  <!-- Chat panel -->
+  <div class="panel chat-panel">
+    <div class="panel-header">
+      <div class="panel-dot"></div>
+      <div class="panel-label">Niksi Chat</div>
+      <div class="panel-dot"></div>
     </div>
-    <div class="chat-inner"></div>
+    <div class="chat-body"></div>
   </div>
 
 </div>
 
-<!-- ══ GAME AREA BORDER ═══════════════════════════════════════ -->
-<div class="game-border"></div>
-
 <script>
-  let DURATION = 60, secondsLeft = 60, timerInterval = null;
-
-  function fmt(s) {
-    const m = Math.floor(s / 60), sec = s % 60;
-    return m + ':' + String(sec).padStart(2, '0');
-  }
-
-  function startTimer(dur) {
-    DURATION = dur; secondsLeft = dur;
-    clearInterval(timerInterval);
-    document.getElementById('gw-label').textContent = 'Giveaway In';
-    timerInterval = setInterval(() => {
-      secondsLeft = Math.max(0, secondsLeft - 1);
-      document.getElementById('gw-timer').textContent = fmt(secondsLeft);
-      if (secondsLeft === 0) clearInterval(timerInterval);
-    }, 1000);
-  }
-
-  function stopTimer() {
-    clearInterval(timerInterval);
-    document.getElementById('gw-timer').textContent = '--:--';
-  }
-
-  async function pollTimer() {
-    try {
-      const d = await fetch('/giveaway/timer').then(r => r.json());
-      if (d.signal === 'start') startTimer(d.duration || 60);
-      else if (d.signal === 'stop') stopTimer();
-    } catch(e) {}
-  }
-
   async function pollState() {
     try {
       const d = await fetch('/giveaway/state').then(r => r.json());
-      if (d.giveaway && !d.giveaway.winner) {
-        document.getElementById('gw-label').textContent = 'Type to Enter';
-        document.getElementById('gw-timer').textContent = d.giveaway.keyword || '!';
+      const kwText = document.getElementById('kw-text');
+      const kwIdle = document.getElementById('kw-idle');
+      const kwLabel = document.getElementById('kw-label');
+      if (d.giveaway && !d.giveaway.winner && d.giveaway.keyword) {
+        kwText.textContent = d.giveaway.keyword;
+        kwText.style.display = 'block';
+        kwIdle.style.display = 'none';
+        kwLabel.textContent = 'Type to Enter';
+      } else {
+        kwText.style.display = 'none';
+        kwIdle.style.display = 'block';
+        kwLabel.textContent = 'Giveaway Keyword';
       }
     } catch(e) {}
   }
-
-  pollState(); pollTimer();
+  pollState();
   setInterval(pollState, 2000);
-  setInterval(pollTimer, 1000);
 </script>
 
 </body>
