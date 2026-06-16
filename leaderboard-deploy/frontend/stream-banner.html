@@ -32,18 +32,18 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(99,160,255,0.4), rgba(139,100,255,0.3), transparent);
       pointer-events: none;
+      z-index: 2;
     }
 
-    /* ── Shimmer sweep on transition ── */
-    .shimmer {
+    /* ── Flip glow flash at midpoint ── */
+    .flash {
       position: absolute;
-      top: 0; bottom: 0;
-      width: 90px;
-      background: linear-gradient(90deg, transparent 0%, rgba(100,180,255,0.18) 50%, transparent 100%);
-      transform: translateX(-90px);
+      inset: 0;
+      border-radius: 18px;
+      background: radial-gradient(ellipse at center, rgba(80,140,255,0.18) 0%, transparent 70%);
+      opacity: 0;
       pointer-events: none;
-      z-index: 10;
-      will-change: transform;
+      z-index: 6;
     }
 
     /* ── Logo ── */
@@ -53,6 +53,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      z-index: 1;
     }
 
     .logo-wrap img {
@@ -68,6 +69,7 @@
       height: 60px;
       background: linear-gradient(to bottom, transparent, rgba(80,140,255,0.25), transparent);
       flex-shrink: 0;
+      z-index: 1;
     }
 
     /* ── Slide area ── */
@@ -77,6 +79,8 @@
       height: 100%;
       position: relative;
       overflow: hidden;
+      perspective: 520px;
+      perspective-origin: center center;
     }
 
     .slide {
@@ -87,24 +91,29 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      /* Default state: waiting below, hidden */
+      transform: rotateX(72deg);
       opacity: 0;
-      transform: translateY(14px);
-      filter: blur(3px);
-      transition: opacity 0.42s ease, transform 0.42s ease, filter 0.42s ease;
+      transition: none;
       pointer-events: none;
     }
 
+    /* Entering: rolls up from below into flat */
     .slide.active {
+      transform: rotateX(0deg);
       opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
+      transition: transform 0.36s cubic-bezier(0.0, 0.6, 0.4, 1.0),
+                  opacity 0.12s ease;
     }
 
-    .slide.out {
+    /* Exiting: flips away upward */
+    .slide.exit {
+      transform: rotateX(-72deg);
       opacity: 0;
-      transform: translateY(-10px);
-      filter: blur(2px);
-      transition: opacity 0.28s ease, transform 0.28s ease, filter 0.28s ease;
+      transition: transform 0.28s cubic-bezier(0.6, 0.0, 1.0, 0.4),
+                  opacity 0.28s ease;
     }
 
     .slide-label {
@@ -136,10 +145,8 @@
       letter-spacing: 0.02em;
     }
 
-    .green  { color: #22c55e; }
-    .blue   { color: #3b82f6; }
-    .gold   { color: #f5c842; }
-    .white  { color: #ffffff; }
+    .green { color: #22c55e; }
+    .blue  { color: #3b82f6; }
 
     /* ── Right code section ── */
     .brand {
@@ -152,6 +159,7 @@
       gap: 1px;
       border-left: 1px solid rgba(56, 120, 220, 0.14);
       padding: 0 16px;
+      z-index: 1;
     }
 
     .brand-label {
@@ -195,6 +203,7 @@
       right: 15px;
       display: flex;
       gap: 5px;
+      z-index: 1;
     }
 
     .dot {
@@ -214,7 +223,7 @@
 <body>
 <div class="banner">
 
-  <div class="shimmer" id="shimmer"></div>
+  <div class="flash" id="flash"></div>
 
   <div class="logo-wrap">
     <img src="/assets/niksi.png" alt="NIKSI777"/>
@@ -265,7 +274,7 @@
     <div class="progress-fill" id="pbar"></div>
   </div>
 
-  <div class="dots" id="dots">
+  <div class="dots">
     <div class="dot on"></div>
     <div class="dot"></div>
     <div class="dot"></div>
@@ -275,49 +284,52 @@
 
 </div>
 <script>
-  const slides  = Array.from(document.querySelectorAll('.slide'));
-  const dots    = Array.from(document.querySelectorAll('.dot'));
-  const pbar    = document.getElementById('pbar');
-  const shimmer = document.getElementById('shimmer');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dots   = Array.from(document.querySelectorAll('.dot'));
+  const pbar   = document.getElementById('pbar');
+  const flash  = document.getElementById('flash');
   const DURATION = 5500;
   let cur = 0, t0 = null, raf = null, busy = false;
 
-  function sweepShimmer() {
-    shimmer.style.transition = 'none';
-    shimmer.style.transform = 'translateX(-90px)';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      shimmer.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.4, 1)';
-      shimmer.style.transform = 'translateX(890px)';
-    }));
+  function glowFlash() {
+    flash.style.transition = 'opacity 0.06s ease';
+    flash.style.opacity = '1';
+    setTimeout(() => {
+      flash.style.transition = 'opacity 0.22s ease';
+      flash.style.opacity = '0';
+    }, 60);
   }
 
   function goTo(next) {
     if (busy) return;
     busy = true;
 
-    sweepShimmer();
+    const outIdx = cur;
+    const inIdx  = next % slides.length;
 
-    // Exit current
-    slides[cur].classList.remove('active');
-    slides[cur].classList.add('out');
-    dots[cur].classList.remove('on');
+    // Phase 1: flip current slide away (0 → -72deg), 280ms
+    slides[outIdx].classList.remove('active');
+    slides[outIdx].classList.add('exit');
+    dots[outIdx].classList.remove('on');
 
-    const prev = cur;
-    cur = next % slides.length;
+    // Glow flash at the midpoint of the exit (~140ms in)
+    setTimeout(glowFlash, 140);
 
-    // Enter next after exit finishes
+    // Phase 2: after exit, flip new slide in (72 → 0deg), 360ms
     setTimeout(() => {
-      slides[prev].classList.remove('out');
-      dots[cur].classList.add('on');
-      slides[cur].classList.add('active');
+      slides[outIdx].classList.remove('exit');
+      cur = inIdx;
+      dots[inIdx].classList.add('on');
+      slides[inIdx].classList.add('active');
 
       pbar.style.transition = 'none';
       pbar.style.width = '0%';
       t0 = null;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(tick);
-      busy = false;
-    }, 320);
+
+      setTimeout(() => { busy = false; }, 380);
+    }, 290);
   }
 
   function tick(ts) {
