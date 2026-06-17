@@ -1,12 +1,83 @@
-﻿[
+[
   {
     "id": 1,
-    "label": "Leaderboard #1",
-    "start": "2026-05-17",
-    "end": "2026-05-30",
-    "prizePool": 1500,
-    "totalWagered": 0,
-    "totalUsers": 0,
-    "entries": []
+    "label": "https://gamba.com/promotions/exclusive-leaderboards/13300",
+    "start": "2026-05-31",
+    "end": "2026-06-14",
+    "prizePool": 1502.092864601,
+    "totalWagered": 626574.2557340399,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "username": "Hidden",
+        "wager": 237915.51222049,
+        "position": 1,
+        "avatar": null,
+        "reward": 675.94178907045
+      },
+      {
+        "username": "Hidden",
+        "wager": 219939.34820312,
+        "position": 2,
+        "avatar": null,
+        "reward": 375.52321615025
+      },
+      {
+        "username": "Hidden",
+        "wager": 99781.93406372,
+        "position": 3,
+        "avatar": null,
+        "reward": 172.740679429115
+      },
+      {
+        "username": "niktiddy",
+        "wager": 29665.15698033,
+        "position": 4,
+        "avatar": "https://imagedelivery.net/ud0nKgC6_aGi3aA3QSI9OA/pfp-placeholder/1.png/pfp",
+        "reward": 75.10464323005
+      },
+      {
+        "username": "Hidden",
+        "wager": 24771.70481126,
+        "position": 5,
+        "avatar": null,
+        "reward": 52.57325026103501
+      },
+      {
+        "username": "Speecy",
+        "wager": 7170.77289944,
+        "position": 6,
+        "avatar": "https://imagedelivery.net/ud0nKgC6_aGi3aA3QSI9OA/pfp-placeholder/3.png/pfp",
+        "reward": 45.06278593803
+      },
+      {
+        "username": "Hidden",
+        "wager": 2840.92342912,
+        "position": 7,
+        "avatar": null,
+        "reward": 37.552321615025
+      },
+      {
+        "username": "Hidden",
+        "wager": 2140.56052099,
+        "position": 8,
+        "avatar": null,
+        "reward": 30.04185729202
+      },
+      {
+        "username": "sirNicholas",
+        "wager": 1524.44373192,
+        "position": 9,
+        "avatar": "https://imagedelivery.net/ud0nKgC6_aGi3aA3QSI9OA/pfp-placeholder/7.png/pfp",
+        "reward": 22.531392969015
+      },
+      {
+        "username": "Hidden",
+        "wager": 823.89887365,
+        "position": 10,
+        "avatar": null,
+        "reward": 15.02092864601
+      }
+    ]
   }
 ]

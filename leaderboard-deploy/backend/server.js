@@ -204,12 +204,51 @@ app.get("/lb-history", (req, res) => {
   }
 });
 
-app.post("/admin/leaderboard/snapshot", (req, res) => {
+app.post("/admin/leaderboard/snapshot", async (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
   const session = sessions[sessionId];
   if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
-  db.all("SELECT username, wager, position, avatar, reward FROM players ORDER BY position ASC", [], (err, rows) => {
-    if (err) return res.status(500).json({ error: "db error" });
+
+  try {
+    const label = (req.body && req.body.label) || '';
+    const raceIdMatch = label.match(/exclusive-leaderboards\/(\d+)/) || label.match(/(\d+)\s*$/);
+    let rows, prizePool;
+
+    if (raceIdMatch) {
+      const raceId = raceIdMatch[1];
+      const gql = JSON.stringify({
+        query: `query { getRaceById(raceId: ${raceId}) { id prize_pool start_date end_date race_name competitors { id display_name total_wagered position avatar vip_level_name } prize_distribution { position percentage amount } } }`
+      });
+      const response = await fetch("https://gamba.com/_api/@", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "Mozilla/5.0",
+          "Referer": `https://gamba.com/promotions/exclusive-leaderboards/${raceId}`,
+          "Origin": "https://gamba.com",
+        },
+        body: gql,
+      });
+      const json = await response.json();
+      const race = json.data && json.data.getRaceById;
+      if (!race || !race.competitors || race.competitors.length === 0) {
+        return res.status(400).json({ error: `No data found for race ${raceId} on Gamba` });
+      }
+      const prizes = race.prize_distribution || [];
+      rows = race.competitors
+        .map(c => {
+          const prize = prizes.find(p => p.position === c.position);
+          return { username: c.display_name, wager: c.total_wagered, position: c.position, avatar: c.avatar, reward: prize ? prize.amount : 0 };
+        })
+        .sort((a, b) => a.position - b.position);
+      prizePool = race.prize_pool || 0;
+    } else {
+      rows = await new Promise((resolve, reject) => {
+        db.all("SELECT username, wager, position, avatar, reward FROM players ORDER BY position ASC", [], (err, r) => err ? reject(err) : resolve(r));
+      });
+      prizePool = gambaMeta.prizePool || 0;
+    }
+
     let history = [];
     try {
       history = fs_lb.existsSync(LB_HISTORY_PATH) ? JSON.parse(fs_lb.readFileSync(LB_HISTORY_PATH, "utf-8")) : [];
@@ -219,10 +258,10 @@ app.post("/admin/leaderboard/snapshot", (req, res) => {
     const totalWagered = rows.reduce((s, p) => s + Number(p.wager || 0), 0);
     const entry = {
       id: nextId,
-      label: (req.body && req.body.label) || `Leaderboard #${nextId}`,
+      label: label || `Leaderboard #${nextId}`,
       start: prevEnd || (req.body && req.body.start) || null,
       end: new Date().toISOString().slice(0, 10),
-      prizePool: gambaMeta.prizePool || 0,
+      prizePool,
       totalWagered,
       totalUsers: rows.length,
       entries: rows
@@ -230,7 +269,10 @@ app.post("/admin/leaderboard/snapshot", (req, res) => {
     history.push(entry);
     fs_lb.writeFileSync(LB_HISTORY_PATH, JSON.stringify(history, null, 2));
     res.json({ ok: true, entry });
-  });
+  } catch (e) {
+    console.log("Snapshot error:", e);
+    res.status(500).json({ error: "Failed to snapshot leaderboard" });
+  }
 });
 
 
