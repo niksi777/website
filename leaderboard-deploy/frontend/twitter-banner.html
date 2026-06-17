@@ -62,17 +62,18 @@
     }
     .perks span{color:#d4af5a}
 
-    .pill-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:22px}
-    .code-pill{
-      display:flex;align-items:center;gap:10px;
-      border:1.5px dashed rgba(74,140,255,.5);border-radius:10px;
-      padding:9px 22px;background:rgba(10,22,55,.4);
+    .code-box{margin-top:26px;text-align:center}
+    .code-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:14px;font-weight:700;letter-spacing:.22em;
+      color:rgba(255,255,255,.55);text-transform:uppercase;margin-bottom:4px;
     }
-    .code-pill-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,215,240,.6)}
-    .code-pill-val{
-      font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:.14em;
-      background:linear-gradient(90deg,#4a9eff,#a0d0ff);
+    .code-value{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:34px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;
+      background:linear-gradient(90deg,#4a9eff,#a0d0ff,#4a9eff);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      filter:drop-shadow(0 0 10px rgba(74,158,255,.45));
     }
 
     .bottom-line{position:absolute;bottom:0;left:0;right:0;height:5px;background:linear-gradient(90deg,transparent,#4a9eff,#22c55e,#d4af5a,transparent);z-index:2}
@@ -92,16 +93,14 @@
     </div>
 
     <div class="prize-amount">$4,000</div>
-    <div class="prize-label">Monthly <span>Leaderboard</span></div>
+    <div class="prize-label">Monthly <span>Leaderboards</span></div>
 
     <div class="tagline">Gambling streams - <span>exclusive</span> leaderboards - giveaways</div>
     <div class="perks">VIP Perks - <span>70% Commission</span> - Promo Codes!</div>
 
-    <div class="pill-row">
-      <div class="code-pill">
-        <div class="code-pill-lbl">Use Code</div>
-        <div class="code-pill-val">NIKSI</div>
-      </div>
+    <div class="code-box">
+      <div class="code-label">Code</div>
+      <div class="code-value">NIKSI</div>
     </div>
   </div>
 
