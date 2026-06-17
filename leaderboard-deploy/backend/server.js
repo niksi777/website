@@ -204,6 +204,35 @@ app.get("/lb-history", (req, res) => {
   }
 });
 
+app.post("/admin/leaderboard/snapshot", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  db.all("SELECT username, wager, position, avatar, reward FROM players ORDER BY position ASC", [], (err, rows) => {
+    if (err) return res.status(500).json({ error: "db error" });
+    let history = [];
+    try {
+      history = fs_lb.existsSync(LB_HISTORY_PATH) ? JSON.parse(fs_lb.readFileSync(LB_HISTORY_PATH, "utf-8")) : [];
+    } catch (e) {}
+    const nextId = history.length ? Math.max(...history.map(h => h.id || 0)) + 1 : 1;
+    const prevEnd = history.length ? history[history.length - 1].end : null;
+    const totalWagered = rows.reduce((s, p) => s + Number(p.wager || 0), 0);
+    const entry = {
+      id: nextId,
+      label: (req.body && req.body.label) || `Leaderboard #${nextId}`,
+      start: prevEnd || (req.body && req.body.start) || null,
+      end: new Date().toISOString().slice(0, 10),
+      prizePool: gambaMeta.prizePool || 0,
+      totalWagered,
+      totalUsers: rows.length,
+      entries: rows
+    };
+    history.push(entry);
+    fs_lb.writeFileSync(LB_HISTORY_PATH, JSON.stringify(history, null, 2));
+    res.json({ ok: true, entry });
+  });
+});
+
 
 app.get("/players", (req, res) => {
   db.all(
