@@ -622,9 +622,6 @@ function HistoryDetail({ entry }) {
   const fmtPrize = p => fmtMoney(p.reward ?? 0);
   const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   const players = entry.entries || [];
-  const top3 = players.slice(0, 3);
-  const rest = players.slice(3);
-  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
     <div>
@@ -634,26 +631,17 @@ function HistoryDetail({ entry }) {
         <div className="lb-code" style={{marginTop:8}}>{entry.start||'?'} → {entry.end||'?'}</div>
       </div>
 
-      {top3.length > 0 && (
-        <div className="lb-podium" style={{flexWrap:'wrap'}}>
-          {podiumOrder.map((p, i) => {
-            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
-            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--ac)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
-          })}
-        </div>
-      )}
-
-      {rest.length === 0 && players.length === 0 ? (
+      {players.length === 0 ? (
         <div className="lb-hist-empty">No detailed entries were saved for this period.</div>
-      ) : rest.length > 0 && (
-        <table className="lb-table" style={{marginTop:24}}>
+      ) : (
+        <table className="lb-table">
           <thead><tr>
             <th>Place</th><th></th><th>Player</th><th>Wagered</th><th>Prize</th>
           </tr></thead>
           <tbody>
-            {rest.map((p, i) => (
+            {players.map((p, i) => (
               <tr key={p.id || i}>
-                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
+                <td><span className="tr-rank">#{p.position || i + 1}</span></td>
                 <td><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
                 <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
