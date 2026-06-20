@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--gamba:#22c55e}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -55,10 +55,67 @@
 
     .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-    /* Platform badge */
+    /* Platform tabs */
     .platform-tabs{display:flex;align-items:center;justify-content:center;gap:12px;padding:32px 0 24px}
-    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
+    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
+    .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
+    .ptab.active-gamba{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
+    .ptab.active-points{border-color:rgba(212,175,90,.5);background:rgba(212,175,90,.08);box-shadow:0 0 18px rgba(212,175,90,.12)}
     .ptab-img{height:22px;object-fit:contain}
+    .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+
+    /* NiksiPoints leaderboard */
+    .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
+    .stat{padding:20px 24px;border-right:1px solid var(--b1);text-align:center}
+    .stat:last-child{border-right:none}
+    .stat-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+    .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:.01em;color:#fff;line-height:1}
+
+    .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end}
+    .pcard{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;position:relative;overflow:hidden}
+    .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--pline)}
+    .pcard.p1{--pline:rgba(212,175,90,.6);border-color:rgba(212,175,90,.2);padding-top:24px;padding-bottom:24px}
+    .pcard.p2{--pline:rgba(154,170,184,.4);border-color:rgba(154,170,184,.15)}
+    .pcard.p3{--pline:rgba(160,113,74,.4);border-color:rgba(160,113,74,.15)}
+    .prank{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+    .p1 .prank{color:var(--gold)}.p2 .prank{color:var(--silver)}.p3 .prank{color:var(--bronze)}
+    .pavatar{width:48px;height:48px;border-radius:50%;background:var(--s3);border:2px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--mu);text-transform:uppercase}
+    .p1 .pavatar{width:64px;height:64px;font-size:16px}
+    .puname{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ppts{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;line-height:1}
+    .p1 .ppts{color:var(--gold);font-size:24px}.p2 .ppts{color:var(--silver)}.p3 .ppts{color:var(--bronze)}
+    .ppts-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+
+    .sdiv{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
+    .sdl{flex:1;height:1px;background:var(--b2)}
+    .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    .lbtable{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:56px}
+    .lbhead{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
+    .lbh{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .lbrow{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
+    .lbrow:last-child{border-bottom:none}
+    .lbrow:hover{background:var(--s2)}
+    .lbrk{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-align:center;color:var(--mu)}
+    .lbnm{font-size:13px;font-weight:500;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lbpts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold);text-align:right;white-space:nowrap}
+
+    .check-section{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .check-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);flex-shrink:0}
+    .check-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+    .check-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;flex:1;transition:border-color .15s}
+    .check-input:focus{border-color:var(--b3)}
+    .check-input::placeholder{color:var(--mu)}
+    .check-btn{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+    .check-btn:hover{opacity:.82}
+    .check-result{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+    @media(max-width:700px){
+      .statsbar{grid-template-columns:1fr}
+      .stat{border-right:none;border-bottom:1px solid var(--b1)}
+      .stat:last-child{border-bottom:none}
+      .podium{gap:8px}
+    }
 
     /* Leaderboard header */
     .lb-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:32px;margin-bottom:24px;text-align:center}
@@ -294,7 +351,6 @@ function Navbar({ user, logout }) {
           <div className="nlinks">
             <a href="/">Home</a>
             <a href="/leaderboards" className="on">Leaderboards</a>
-            <a href="/points">Points</a>
             <a href="/store">Store</a>
             <a href="/cases">Cases</a>
             <a href="/predict">Predict</a>
@@ -328,7 +384,6 @@ function Navbar({ user, logout }) {
       <div className={`drawer ${open ? 'open' : ''}`}>
         <a href="/">Home</a>
         <a href="/leaderboards" className="on">Leaderboards</a>
-        <a href="/points">Points</a>
         <a href="/store">Store</a>
         <a href="/cases">Cases</a>
         <a href="/predict">Predict</a>
@@ -621,6 +676,93 @@ function HistoryModal({ onClose }) {
   );
 }
 
+function useLeaderboard() {
+  const [lb, setLb] = React.useState([]);
+  React.useEffect(() => {
+    const go = async () => { try { const r = await fetch('/api/leaderboard?limit=20'); const d = await r.json(); setLb(d.leaderboard || []); } catch {} };
+    go(); const id = setInterval(go, 30000); return () => clearInterval(id);
+  }, []);
+  return lb;
+}
+
+function NiksiPointsLeaderboard() {
+  const lb = useLeaderboard();
+  const top3 = lb.slice(0, 3);
+  const rest = lb.slice(3);
+  const podiumOrder = [1, 0, 2].map(i => top3[i] ? { ...top3[i] } : null).filter(Boolean);
+  const rankCls = { 1: 'p1', 2: 'p2', 3: 'p3' };
+  const rankLbls = ['1st Place', '2nd Place', '3rd Place'];
+  const totalPts = lb.reduce((s, p) => s + p.points, 0);
+
+  const [username, setUsername] = React.useState('');
+  const [NP, setPts] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  async function check() {
+    if (!username.trim()) return;
+    setLoading(true);
+    try { const r = await fetch(`/api/points/${username.trim().toLowerCase()}`); const d = await r.json(); setPts(d.points ?? 0); } catch { setPts(0); }
+    setLoading(false);
+  }
+
+  return (
+    <div className="f2">
+      <div className="statsbar">
+        <div className="stat"><div className="stat-lbl">Total Players</div><div className="stat-val">{lb.length}</div></div>
+        <div className="stat"><div className="stat-lbl">Points Given</div><div className="stat-val">{totalPts.toLocaleString()}</div></div>
+        <div className="stat"><div className="stat-lbl">Top Balance</div><div className="stat-val">{top3[0]?.points?.toLocaleString() ?? '-'}</div></div>
+      </div>
+
+      <div className="check-section">
+        <span className="check-label">Check Balance</span>
+        <div className="check-row">
+          <input className="check-input" placeholder="Your Kick username" value={username} onChange={e => setUsername(e.target.value)} onKeyDown={e => e.key === 'Enter' && check()}/>
+          <button className="check-btn" onClick={check}>{loading ? '...' : 'Check'}</button>
+        </div>
+        {NP !== null && <div className="check-result">{NP.toLocaleString()} NP</div>}
+      </div>
+
+      {podiumOrder.length > 0 && (
+        <div className="podium">
+          {podiumOrder.map(p => (
+            <div key={p.username} className={`pcard ${rankCls[p.rank]}`}>
+              <div className="prank">{rankLbls[p.rank - 1]}</div>
+              <div className="pavatar">{(p.username || '?').slice(0, 2).toUpperCase()}</div>
+              <div className="puname">{p.username}</div>
+              <div className="ppts-lbl">NiksiPoints</div>
+              <div className="ppts">{p.points.toLocaleString()}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {rest.length > 0 && (<>
+        <div className="sdiv"><div className="sdl"/><span className="sdlbl">Positions 4-20</span><div className="sdl"/></div>
+        <div className="lbtable">
+          <div className="lbhead">
+            <div className="lbh" style={{textAlign:'center'}}>#</div>
+            <div className="lbh">Player</div>
+            <div className="lbh" style={{textAlign:'right'}}>NiksiPoints</div>
+          </div>
+          {rest.map(p => (
+            <div key={p.username} className="lbrow">
+              <div className="lbrk">#{p.rank}</div>
+              <div className="lbnm">{p.username}</div>
+              <div className="lbpts">{p.points.toLocaleString()}</div>
+            </div>
+          ))}
+        </div>
+      </>)}
+
+      {lb.length === 0 && (
+        <div style={{textAlign:'center',padding:'64px 0',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
+          No points data yet - win a raffle to get started!
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LbMetaBar() {
   const updated = useLastUpdated();
   const [open, setOpen] = React.useState(false);
@@ -641,18 +783,23 @@ function LbMetaBar() {
 
 function App() {
   const { user, logout } = useSession();
+  const [tab, setTab] = React.useState(() => new URLSearchParams(window.location.search).get('tab') === 'points' ? 'points' : 'gamba');
 
   return (
     <>
       <Navbar user={user} logout={logout}/>
       <div className="wrap">
         <div className="platform-tabs f1">
-          <div className="ptab active-gamba">
+          <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-          </div>
+          </button>
+          <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
+            <span className="ptab-label">NiksiPoints</span>
+          </button>
         </div>
 
-        <GambaLeaderboard/>
+        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+        <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
       <footer>

@@ -225,7 +225,7 @@
 
   function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
-    const total = 3;
+    const total = 4;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -263,7 +263,7 @@
             <div style={{position:'relative',zIndex:1}}>
               <div style={txt('rgba(255,255,255,.38)',14,1,10,{letterSpacing:'.32em',fontWeight:700})}>USE CODE</div>
               <div style={txt('#fff','clamp(62px,8.5vw,96px)',.88,16,{textShadow:'0 2px 60px rgba(74,158,255,.45)'})}>NIKSI</div>
-              <div style={sub}>Exclusive bonuses, leaderboards &amp; rewards on Gamba</div>
+              <div style={sub}>Exclusive bonuses, leaderboards &amp; rewards on Gamba and Packy</div>
             </div>
           </div>
 
@@ -285,7 +285,25 @@
             </div>
           </div>
 
-          {/* Slide 2 - KICK */}
+          {/* Slide 2 - PACKY */}
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(0,178,245,.34) 0%, rgba(0,178,245,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(0,178,245,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(0,178,245,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#060a12 0%,#050810 55%,#060912 100%)'
+          ].join(','),borderTop:'3px solid rgba(0,178,245,.68)'}}>
+            {logo('/assets/packy.png',.58,'rgba(0,178,245,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(6,10,18),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={txt('#00b2f5','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON PACKY.GG</div>
+              <div style={sub}>Sign up with code NIKSI &amp; join the leaderboard!</div>
+              <a href="/leaderboards?tab=packy" style={btn('#00b2f5','rgba(0,178,245,.4)')}>VIEW LEADERBOARD <Arr/></a>
+            </div>
+          </div>
+
+          {/* Slide 3 - KICK */}
           <div className="c-slide" style={{background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(83,252,24,.3) 0%, rgba(83,252,24,.06) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(83,252,24,.12) 0%, transparent 58%)',
@@ -357,7 +375,7 @@
         )
       },
       {
-        href:'/points',
+        href:'/leaderboards?tab=points',
         label:'Points',
         icon:(
           <svg viewBox="0 0 52 52" width="56" height="56" fill="none">
@@ -429,6 +447,11 @@
         logo:'/assets/gamba2.png', color:'#22c55e',
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
+      },
+      {
+        logo:'/assets/packy.png', color:'#00b2f5',
+        perks:['5% DEPOSIT BONUS','BI-WEEKLY LEADERBOARD'],
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=packy', ext:false,
       },
     ];
 

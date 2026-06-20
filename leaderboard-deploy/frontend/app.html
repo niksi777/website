@@ -132,7 +132,7 @@
 /* ---- LeaderboardsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--gamba:#22c55e}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -177,10 +177,67 @@
 
     .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-    /* Platform badge */
+    /* Platform tabs */
     .platform-tabs{display:flex;align-items:center;justify-content:center;gap:12px;padding:32px 0 24px}
-    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
+    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
+    .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
+    .ptab.active-gamba{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
+    .ptab.active-points{border-color:rgba(212,175,90,.5);background:rgba(212,175,90,.08);box-shadow:0 0 18px rgba(212,175,90,.12)}
     .ptab-img{height:22px;object-fit:contain}
+    .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+
+    /* NiksiPoints leaderboard */
+    .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
+    .stat{padding:20px 24px;border-right:1px solid var(--b1);text-align:center}
+    .stat:last-child{border-right:none}
+    .stat-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+    .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:.01em;color:#fff;line-height:1}
+
+    .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end}
+    .pcard{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;position:relative;overflow:hidden}
+    .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--pline)}
+    .pcard.p1{--pline:rgba(212,175,90,.6);border-color:rgba(212,175,90,.2);padding-top:24px;padding-bottom:24px}
+    .pcard.p2{--pline:rgba(154,170,184,.4);border-color:rgba(154,170,184,.15)}
+    .pcard.p3{--pline:rgba(160,113,74,.4);border-color:rgba(160,113,74,.15)}
+    .prank{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+    .p1 .prank{color:var(--gold)}.p2 .prank{color:var(--silver)}.p3 .prank{color:var(--bronze)}
+    .pavatar{width:48px;height:48px;border-radius:50%;background:var(--s3);border:2px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--mu);text-transform:uppercase}
+    .p1 .pavatar{width:64px;height:64px;font-size:16px}
+    .puname{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ppts{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;line-height:1}
+    .p1 .ppts{color:var(--gold);font-size:24px}.p2 .ppts{color:var(--silver)}.p3 .ppts{color:var(--bronze)}
+    .ppts-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+
+    .sdiv{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
+    .sdl{flex:1;height:1px;background:var(--b2)}
+    .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+
+    .lbtable{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:56px}
+    .lbhead{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
+    .lbh{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+    .lbrow{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
+    .lbrow:last-child{border-bottom:none}
+    .lbrow:hover{background:var(--s2)}
+    .lbrk{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-align:center;color:var(--mu)}
+    .lbnm{font-size:13px;font-weight:500;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lbpts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold);text-align:right;white-space:nowrap}
+
+    .check-section{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .check-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);flex-shrink:0}
+    .check-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+    .check-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;flex:1;transition:border-color .15s}
+    .check-input:focus{border-color:var(--b3)}
+    .check-input::placeholder{color:var(--mu)}
+    .check-btn{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+    .check-btn:hover{opacity:.82}
+    .check-result{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+    @media(max-width:700px){
+      .statsbar{grid-template-columns:1fr}
+      .stat{border-right:none;border-bottom:1px solid var(--b1)}
+      .stat:last-child{border-bottom:none}
+      .podium{gap:8px}
+    }
 
     /* Leaderboard header */
     .lb-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:32px;margin-bottom:24px;text-align:center}
@@ -318,133 +375,6 @@
       .lb-table td,.lb-table th{padding:10px 8px}
       .np-mobile{display:block}
     }
-  
-/* ---- PointsPage ---- */
-
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a}
-    html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
-    @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
-    @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}.f3{animation:fu .5s .22s ease both}.f4{animation:fu .5s .34s ease both}
-
-    nav{background:rgba(6,13,26,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
-    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
-    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
-    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
-    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
-    .nlinks{display:flex;align-items:center;flex:1}
-    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
-    .nlinks a:hover{color:rgba(255,255,255,.9)}
-    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
-    .nsoc{margin-left:auto;display:flex;align-items:center;gap:2px;padding-left:16px;border-left:1px solid var(--b2)}
-    .nsoc a{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s}
-    .nsoc a:hover{opacity:1;background:rgba(255,255,255,.05)}
-    .nsoc svg{width:15px;height:15px}
-    .ndrop{position:relative}
-    .ndrop-menu{display:none;position:absolute;top:100%;right:0;padding-top:6px;z-index:200;min-width:150px}
-    .ndrop:hover .ndrop-menu{display:block}
-    .ndrop-box{background:rgba(7,8,12,.97);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
-    .ndrop-item{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(221,227,239,.75);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:6px;transition:background .1s;box-sizing:border-box}
-    .ndrop-item:hover{background:rgba(255,255,255,.06)}
-    .ndrop-logout{color:rgba(217,79,79,.8)}
-    .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;cursor:pointer;margin-left:auto;padding:4px;background:none;border:none}
-    .hamburger span{display:block;height:1.5px;background:rgba(255,255,255,.6);border-radius:2px;transition:all .2s}
-    .drawer{display:none;flex-direction:column;background:rgba(7,8,12,.99);border-bottom:1px solid var(--b2);padding:10px 28px 18px}
-    .drawer.open{display:flex}
-    .drawer a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--b1);transition:color .15s}
-    .drawer a:last-of-type{border-bottom:none}
-    .drawer a.on,.drawer a:hover{color:#fff}
-    .drawer-soc{display:flex;align-items:center;gap:8px;padding-top:14px}
-    .drawer-soc a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--s1);border:1px solid var(--b2);opacity:.7}
-    .drawer-soc svg{width:15px;height:15px}
-
-    .wrap{max-width:1020px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
-
-    .phead{padding:44px 0 32px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
-    .phead-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(184,204,232,.15);padding:4px 12px;border-radius:100px}
-    .pdot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pu 2s ease-in-out infinite;flex-shrink:0}
-    .phead h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:#fff;line-height:.92}
-    .phead h1 em{font-style:normal;font-weight:300;color:rgba(255,255,255,.35)}
-    .phead p{font-size:13px;color:var(--mu);max-width:400px;line-height:1.7}
-
-    .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
-    .stat{padding:20px 24px;border-right:1px solid var(--b1);text-align:center}
-    .stat:last-child{border-right:none}
-    .stat-lbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
-    .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:.01em;color:#fff;line-height:1}
-
-    .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end}
-    .pcard{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;position:relative;overflow:hidden}
-    .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--pline)}
-    .pcard.p1{--pline:rgba(212,175,90,.6);border-color:rgba(212,175,90,.2);padding-top:24px;padding-bottom:24px}
-    .pcard.p2{--pline:rgba(154,170,184,.4);border-color:rgba(154,170,184,.15)}
-    .pcard.p3{--pline:rgba(160,113,74,.4);border-color:rgba(160,113,74,.15)}
-    .prank{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
-    .p1 .prank{color:var(--gold)}.p2 .prank{color:var(--silver)}.p3 .prank{color:var(--bronze)}
-    .pavatar{width:48px;height:48px;border-radius:50%;background:var(--s3);border:2px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--mu);text-transform:uppercase}
-    .p1 .pavatar{width:64px;height:64px;font-size:16px}
-    .puname{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .ppts{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;line-height:1}
-    .p1 .ppts{color:var(--gold);font-size:24px}.p2 .ppts{color:var(--silver)}.p3 .ppts{color:var(--bronze)}
-    .ppts-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
-
-    .sdiv{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
-    .sdl{flex:1;height:1px;background:var(--b2)}
-    .sdlbl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
-
-    .lbtable{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:56px}
-    .lbhead{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:10px 20px;background:var(--s2);border-bottom:1px solid var(--b1)}
-    .lbh{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
-    .lbrow{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:14px 20px;background:var(--s1);border-bottom:1px solid var(--b1);transition:background .15s}
-    .lbrow:last-child{border-bottom:none}
-    .lbrow:hover{background:var(--s2)}
-    .lbrk{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.04em;text-align:center;color:var(--mu)}
-    .lbnm{font-size:13px;font-weight:500;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .lbpts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold);text-align:right;white-space:nowrap}
-
-    .check-section{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-    .check-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);flex-shrink:0}
-    .check-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
-    .check-input{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#fff;outline:none;flex:1;transition:border-color .15s}
-    .check-input:focus{border-color:var(--b3)}
-    .check-input::placeholder{color:var(--mu)}
-    .check-btn{background:#fff;color:#07080c;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
-    .check-btn:hover{opacity:.82}
-    .check-result{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);flex-shrink:0}
-
-    footer{border-top:1px solid var(--b1);padding:22px 0}
-    .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
-    .ftd strong{color:rgba(221,227,239,.9)}
-    .ftc{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
-
-    @media(max-width:700px){
-      .nlinks,.nsoc{display:none}
-      .hamburger{display:flex}
-      .nlogo{border-right:none;margin-right:0;padding-right:0}
-      .statsbar{grid-template-columns:1fr}
-      .stat{border-right:none;border-bottom:1px solid var(--b1)}
-      .stat:last-child{border-bottom:none}
-      .podium{gap:8px}
-      .ftw{flex-direction:column;align-items:flex-start}
-    }
-
-    .nauth{display:flex;align-items:center;gap:8px;padding-left:12px;flex-shrink:0}
-    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap;flex-shrink:0}
-    .nlogin-btn:hover{opacity:.85}
-    .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
-    .nuser:hover{border-color:var(--b3)}
-    .nuser-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--s2)}
-    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
-    .nuser-NP{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#d4af5a}
-  
-    #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
-  
-    
-    }}
-    
-    
   
 /* ---- StorePage ---- */
 
@@ -1162,7 +1092,6 @@ function Navbar() {
           <div className="nlinks">
             <a href="/" className={isOn('/') ? 'on' : ''}>HOME</a>
             <a href="/leaderboards" className={isOn('/leaderboards') ? 'on' : ''}>LEADERBOARDS</a>
-            <a href="/points" className={isOn('/points') ? 'on' : ''}>POINTS</a>
             <a href="/store" className={isOn('/store') ? 'on' : ''}>STORE</a>
             <a href="/cases" className={isOn('/cases') ? 'on' : ''}>CASES</a>
             <a href="/predict" className={isOn('/predict') ? 'on' : ''}>PREDICT</a>
@@ -1199,7 +1128,6 @@ function Navbar() {
       <div className={'drawer' + (open ? ' open' : '')}>
         <a href="/" className={isOn('/') ? 'on' : ''}>HOME</a>
         <a href="/leaderboards" className={isOn('/leaderboards') ? 'on' : ''}>LEADERBOARDS</a>
-        <a href="/points" className={isOn('/points') ? 'on' : ''}>POINTS</a>
         <a href="/store" className={isOn('/store') ? 'on' : ''}>STORE</a>
         <a href="/cases" className={isOn('/cases') ? 'on' : ''}>CASES</a>
         <a href="/predict" className={isOn('/predict') ? 'on' : ''}>PREDICT</a>
@@ -1213,7 +1141,7 @@ function Navbar() {
 // ==================== HOMEPAGE ====================
 function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
-    const total = 3;
+    const total = 4;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1251,7 +1179,7 @@ function HeroCarousel() {
             <div style={{position:'relative',zIndex:1}}>
               <div style={txt('rgba(255,255,255,.38)',14,1,10,{letterSpacing:'.32em',fontWeight:700})}>USE CODE</div>
               <div style={txt('#fff','clamp(62px,8.5vw,96px)',.88,16,{textShadow:'0 2px 60px rgba(74,158,255,.45)'})}>NIKSI</div>
-              <div style={sub}>Exclusive bonuses, leaderboards &amp; rewards on Gamba</div>
+              <div style={sub}>Exclusive bonuses, leaderboards &amp; rewards on Gamba and Packy</div>
             </div>
           </div>
 
@@ -1273,7 +1201,25 @@ function HeroCarousel() {
             </div>
           </div>
 
-          {/* Slide 2 - KICK */}
+          {/* Slide 2 - PACKY */}
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(0,178,245,.34) 0%, rgba(0,178,245,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(0,178,245,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(0,178,245,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#060a12 0%,#050810 55%,#060912 100%)'
+          ].join(','),borderTop:'3px solid rgba(0,178,245,.68)'}}>
+            {logo('/assets/packy.png',.58,'rgba(0,178,245,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(6,10,18),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={txt('#00b2f5','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON PACKY.GG</div>
+              <div style={sub}>Sign up with code NIKSI &amp; join the leaderboard!</div>
+              <a href="/leaderboards?tab=packy" style={btn('#00b2f5','rgba(0,178,245,.4)')}>VIEW LEADERBOARD <Arr/></a>
+            </div>
+          </div>
+
+          {/* Slide 3 - KICK */}
           <div className="c-slide" style={{background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(83,252,24,.3) 0%, rgba(83,252,24,.06) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(83,252,24,.12) 0%, transparent 58%)',
@@ -1345,7 +1291,7 @@ function HeroCarousel() {
         )
       },
       {
-        href:'/points',
+        href:'/leaderboards?tab=points',
         label:'Points',
         icon:(
           <svg viewBox="0 0 52 52" width="56" height="56" fill="none">
@@ -1417,6 +1363,11 @@ function HeroCarousel() {
         logo:'/assets/gamba2.png', color:'#22c55e',
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
+      },
+      {
+        logo:'/assets/packy.png', color:'#00b2f5',
+        perks:['5% DEPOSIT BONUS','BI-WEEKLY LEADERBOARD'],
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=packy', ext:false,
       },
     ];
 
@@ -1753,6 +1704,93 @@ function HistoryModal({ onClose }) {
   );
 }
 
+function useLeaderboard() {
+  const [lb, setLb] = React.useState([]);
+  React.useEffect(() => {
+    const go = async () => { try { const r = await fetch('/api/leaderboard?limit=20'); const d = await r.json(); setLb(d.leaderboard || []); } catch {} };
+    go(); const id = setInterval(go, 30000); return () => clearInterval(id);
+  }, []);
+  return lb;
+}
+
+function NiksiPointsLeaderboard() {
+  const lb = useLeaderboard();
+  const top3 = lb.slice(0, 3);
+  const rest = lb.slice(3);
+  const podiumOrder = [1, 0, 2].map(i => top3[i] ? { ...top3[i] } : null).filter(Boolean);
+  const rankCls = { 1: 'p1', 2: 'p2', 3: 'p3' };
+  const rankLbls = ['1st Place', '2nd Place', '3rd Place'];
+  const totalPts = lb.reduce((s, p) => s + p.points, 0);
+
+  const [username, setUsername] = React.useState('');
+  const [NP, setPts] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  async function check() {
+    if (!username.trim()) return;
+    setLoading(true);
+    try { const r = await fetch(`/api/points/${username.trim().toLowerCase()}`); const d = await r.json(); setPts(d.points ?? 0); } catch { setPts(0); }
+    setLoading(false);
+  }
+
+  return (
+    <div className="f2">
+      <div className="statsbar">
+        <div className="stat"><div className="stat-lbl">Total Players</div><div className="stat-val">{lb.length}</div></div>
+        <div className="stat"><div className="stat-lbl">Points Given</div><div className="stat-val">{totalPts.toLocaleString()}</div></div>
+        <div className="stat"><div className="stat-lbl">Top Balance</div><div className="stat-val">{top3[0]?.points?.toLocaleString() ?? '-'}</div></div>
+      </div>
+
+      <div className="check-section">
+        <span className="check-label">Check Balance</span>
+        <div className="check-row">
+          <input className="check-input" placeholder="Your Kick username" value={username} onChange={e => setUsername(e.target.value)} onKeyDown={e => e.key === 'Enter' && check()}/>
+          <button className="check-btn" onClick={check}>{loading ? '...' : 'Check'}</button>
+        </div>
+        {NP !== null && <div className="check-result">{NP.toLocaleString()} NP</div>}
+      </div>
+
+      {podiumOrder.length > 0 && (
+        <div className="podium">
+          {podiumOrder.map(p => (
+            <div key={p.username} className={`pcard ${rankCls[p.rank]}`}>
+              <div className="prank">{rankLbls[p.rank - 1]}</div>
+              <div className="pavatar">{(p.username || '?').slice(0, 2).toUpperCase()}</div>
+              <div className="puname">{p.username}</div>
+              <div className="ppts-lbl">NiksiPoints</div>
+              <div className="ppts">{p.points.toLocaleString()}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {rest.length > 0 && (<>
+        <div className="sdiv"><div className="sdl"/><span className="sdlbl">Positions 4-20</span><div className="sdl"/></div>
+        <div className="lbtable">
+          <div className="lbhead">
+            <div className="lbh" style={{textAlign:'center'}}>#</div>
+            <div className="lbh">Player</div>
+            <div className="lbh" style={{textAlign:'right'}}>NiksiPoints</div>
+          </div>
+          {rest.map(p => (
+            <div key={p.username} className="lbrow">
+              <div className="lbrk">#{p.rank}</div>
+              <div className="lbnm">{p.username}</div>
+              <div className="lbpts">{p.points.toLocaleString()}</div>
+            </div>
+          ))}
+        </div>
+      </>)}
+
+      {lb.length === 0 && (
+        <div style={{textAlign:'center',padding:'64px 0',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
+          No points data yet - win a raffle to get started!
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LbMetaBar() {
   const updated = useLastUpdated();
   const [open, setOpen] = React.useState(false);
@@ -1773,18 +1811,23 @@ function LbMetaBar() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
+  const [tab, setTab] = React.useState(() => new URLSearchParams(window.location.search).get('tab') === 'points' ? 'points' : 'gamba');
 
   return (
     <>
       
       <div className="wrap">
         <div className="platform-tabs f1">
-          <div className="ptab active-gamba">
+          <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-          </div>
+          </button>
+          <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
+            <span className="ptab-label">NiksiPoints</span>
+          </button>
         </div>
 
-        <GambaLeaderboard/>
+        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+        <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
       <footer>
@@ -1802,114 +1845,6 @@ function LeaderboardsPage() {
     </>
   );
 }
-
-// ==================== POINTSPAGE ====================
-function useLeaderboard(){
-    const [lb,setLb]=React.useState([]);
-    React.useEffect(()=>{
-      const go=async()=>{try{const r=await fetch('/api/leaderboard?limit=20');const d=await r.json();setLb(d.leaderboard||[]);}catch{}};
-      go(); const id=setInterval(go,30000); return()=>clearInterval(id);
-    },[]);
-    return lb;
-  }
-
-  function PointsPage(){
-    const lb = useLeaderboard();
-    const top3 = lb.slice(0,3);
-    const rest = lb.slice(3);
-    const podiumOrder = [1,0,2].map(i=>top3[i]?{...top3[i]}:null).filter(Boolean);
-    const rankCls = {1:'p1',2:'p2',3:'p3'};
-    const rankLbls = ['1st Place','2nd Place','3rd Place'];
-    const totalPts = lb.reduce((s,p)=>s+p.points,0);
-
-    const [username,setUsername]=React.useState('');
-    const [NP,setPts]=React.useState(null);
-    const [loading,setLoading]=React.useState(false);
-
-    async function check(){
-      if (!username.trim()) return;
-      setLoading(true);
-      try{const r=await fetch(`/api/points/${username.trim().toLowerCase()}`);const d=await r.json();setPts(d.points??0);}catch{setPts(0);}
-      setLoading(false);
-    }
-
-    return (<>
-      
-      <div className="wrap">
-        <div className="phead f1">
-          <div className="phead-eyebrow"><span className="pdot"/>Chat Points - Live</div>
-          <h1>NiksiPoints<br/><em>Leaderboard</em></h1>
-          <p>Win raffles in Kick chat to earn points. Spend them in the store for real rewards.</p>
-        </div>
-
-        <div className="statsbar f2">
-          <div className="stat"><div className="stat-lbl">Total Players</div><div className="stat-val">{lb.length}</div></div>
-          <div className="stat"><div className="stat-lbl">Points Given</div><div className="stat-val">{totalPts.toLocaleString()}</div></div>
-          <div className="stat"><div className="stat-lbl">Top Balance</div><div className="stat-val">{top3[0]?.points?.toLocaleString()??'-'}</div></div>
-        </div>
-
-        <div className="check-section f2">
-          <span className="check-label">Check Balance</span>
-          <div className="check-row">
-            <input className="check-input" placeholder="Your Kick username" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={e=>e.key==='Enter'&&check()}/>
-            <button className="check-btn" onClick={check}>{loading?'...':'Check'}</button>
-          </div>
-          {NP !== null && <div className="check-result">{NP.toLocaleString()} NP</div>}
-        </div>
-
-        {podiumOrder.length > 0 && (
-          <div className="podium f3">
-            {podiumOrder.map(p=>(
-              <div key={p.username} className={`pcard ${rankCls[p.rank]}`}>
-                <div className="prank">{rankLbls[p.rank-1]}</div>
-                <div className="pavatar">{(p.username||'?').slice(0,2).toUpperCase()}</div>
-                <div className="puname">{p.username}</div>
-                <div className="ppts-lbl">NiksiPoints</div>
-                <div className="ppts">{p.points.toLocaleString()}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {rest.length > 0 && (<>
-          <div className="sdiv f4"><div className="sdl"/><span className="sdlbl">Positions 4–20</span><div className="sdl"/></div>
-          <div className="lbtable f4">
-            <div className="lbhead">
-              <div className="lbh" style={{textAlign:'center'}}>#</div>
-              <div className="lbh">Player</div>
-              <div className="lbh" style={{textAlign:'right'}}>NiksiPoints</div>
-            </div>
-            {rest.map(p=>(
-              <div key={p.username} className="lbrow">
-                <div className="lbrk">#{p.rank}</div>
-                <div className="lbnm">{p.username}</div>
-                <div className="lbpts">{p.points.toLocaleString()}</div>
-              </div>
-            ))}
-          </div>
-        </>)}
-
-        {lb.length === 0 && (
-          <div className="f3" style={{textAlign:'center',padding:'64px 0',fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:500,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)'}}>
-            No points data yet - win a raffle to get started!
-          </div>
-        )}
-      </div>
-
-      <footer>
-        <div className="wrap">
-          <div className="ftw">
-            <p className="ftd"><strong>18+</strong> - We are not responsible for any losses incurred from gambling on casino or betting platforms linked or promoted on this site. All users participate at their own risk.</p>
-            <div style={{display:'flex',alignItems:'center',gap:4}}>
-              <div className="nsoc" style={{border:'none',padding:0}}>{SOCIALS}</div>
-              <span className="ftc" style={{marginLeft:8}}>© 2026 NIKSI777</span>
-            </div>
-          </div>
-        </div>
-              <div style={{textAlign:"center",marginTop:10,paddingBottom:4,fontSize:11,color:"var(--mu)",letterSpacing:".08em",fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:"var(--ac)"}}>@niksiii</strong> on Discord</div>
-      </footer>
-    </>);
-  }
 
 // ==================== STOREPAGE ====================
 const STORE_ITEMS = [
@@ -3686,7 +3621,6 @@ function AppInner() {
   let Page;
   if      (path === '/')                                 Page = <HomePage/>;
   else if (path === '/leaderboards')                     Page = <LeaderboardsPage/>;
-  else if (path === '/points')                           Page = <PointsPage/>;
   else if (path === '/store')                            Page = <StorePage/>;
   else if (path === '/predict' || path === '/predictor') Page = <PredictorPage/>;
   else if (path === '/settings')                         Page = <SettingsPage/>;

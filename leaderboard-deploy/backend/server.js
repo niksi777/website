@@ -1113,7 +1113,7 @@ app.delete('/predictor/history/:id', (req, res) => {
 });
 // Clean URLs
 app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
-app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
+app.get('/points', (req, res) => res.redirect(301, '/leaderboards?tab=points'));
 app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
