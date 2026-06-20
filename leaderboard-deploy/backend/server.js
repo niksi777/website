@@ -167,24 +167,6 @@ try {
 setInterval(updateLeaderboard, 160000);
 updateLeaderboard();
 
-// Packy.gg leaderboard endpoint
-app.get("/packy-data", async (req, res) => {
-  try {
-    const r = await axios.get("https://packy.gg/v1/affiliate/leaderboard/external", {
-      headers: { "X-API-Key": process.env.PACKY_API_KEY, "x-custom-key": process.env.PACKY_CUSTOM_KEY },
-      timeout: 8000
-    });
-    const leaderboards = r.data && r.data.data && r.data.data.leaderboards;
-    if (!leaderboards || leaderboards.length === 0) return res.json(null);
-    const active = leaderboards.find(l => l.time_status === "active")
-                || leaderboards.find(l => l.time_status === "upcoming")
-                || leaderboards[0];
-    res.json(active);
-  } catch (e) {
-    res.json(null);
-  }
-});
-
 // Existing Gamba endpoint
 ﻿const fs_lb = require("fs");
 const LB_HISTORY_PATH = require("path").join(__dirname, "gamba-history.json");
@@ -1134,7 +1116,6 @@ app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../fro
 app.get('/points', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
-app.get('/packy', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/giveaway', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/predictor', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));

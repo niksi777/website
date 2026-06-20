@@ -336,12 +336,11 @@ setInterval(async () => {
 }, 4000);
 
 // --- ROTATING COMMAND TIMERS -------------------------------------------
-// Cycles through !gamba, !packy, !web every 20 minutes (each fires ~every 60 min)
+// Cycles through !gamba, !web every 20 minutes (each fires ~every 60 min)
 // Only posts when the stream is live.
 const TIMER_INTERVAL = 20 * 60 * 1000;
 const TIMER_COMMANDS = [
   () => { const c = loadCmds(); return c['!gamba'] || null; },
-  () => { const c = loadCmds(); return c['!packy'] || null; },
   () => { const c = loadCmds(); return c['!web']   || null; },
 ];
 let timerIndex = 0;
