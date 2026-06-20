@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--packy:#00b2f5;--gamba:#22c55e}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--gamba:#22c55e}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -55,12 +55,9 @@
 
     .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-    /* Platform tabs */
+    /* Platform badge */
     .platform-tabs{display:flex;align-items:center;justify-content:center;gap:12px;padding:32px 0 24px}
-    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
-    .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
-    .ptab.active-gamba{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
-    .ptab.active-packy{border-color:rgba(0,178,245,.5);background:rgba(0,178,245,.08);box-shadow:0 0 18px rgba(0,178,245,.12)}
+    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
     .ptab-img{height:22px;object-fit:contain}
 
     /* Leaderboard header */
@@ -132,7 +129,6 @@
     .lb-cta-gamba{background:var(--ac);color:#fff}
     .lb-cta-gamba-sec{background:transparent;border:1px solid rgba(74,158,255,.4);color:var(--ac)}
     .lb-cta-gamba-sec:hover{background:rgba(74,158,255,.08);opacity:1}
-    .lb-cta-packy{background:var(--packy);color:#fff}
 
     /* Prize structure */
     .prize-section{margin-bottom:48px}
@@ -140,7 +136,7 @@
     .prize-tiers{display:flex;gap:10px;flex-wrap:wrap}
     .announce-bar{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:10px;padding:12px 20px;margin-bottom:10px;font-size:13px;font-weight:600;letter-spacing:.04em}
     .announce-bar svg{flex-shrink:0}
-    .announce-bar.blue{background:rgba(0,178,245,.1);border:1px solid rgba(0,178,245,.3);color:var(--packy)}
+    .announce-bar.blue{background:rgba(0,178,245,.1);border:1px solid rgba(0,178,245,.3);color:#00b2f5}
     .announce-bar.green{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)}
     .prize-tier{display:flex;flex-direction:column;align-items:center;background:var(--s1);border:1px solid var(--b2);border-radius:10px;padding:12px 18px;min-width:80px}
     .prize-tier-pos{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
@@ -514,95 +510,6 @@ function GambaLeaderboard() {
   );
 }
 
-function PackyLeaderboard() {
-  const [data, setData] = React.useState(null);
-  React.useEffect(() => {
-    fetch('/packy-data').then(r => r.json()).then(setData).catch(() => setData(false));
-  }, []);
-
-  if (data === null) return <div className="loading">Loading...</div>;
-  if (!data || !data.entries) return <div className="loading">No active leaderboard</div>;
-
-  const tiers = {};
-  (data.prize_tiers || []).forEach(t => { tiers[t.position] = Number(t.prize_amount_usd || 0); });
-  const prize = Number(data.total_prize_usd || 1000);
-  const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
-  const fmtPrize = (p, rank) => fmtMoney(tiers[rank] ?? 0);
-  const fmtWager = p => `$${Number(p.total_wagered_usd||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-
-  const entries = data.entries || [];
-  const top3 = entries.slice(0, 3);
-  const rest = entries.slice(3);
-  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
-
-  return (
-    <div className="f2">
-      <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'var(--packy)'}}>$</span><span style={{color:'#fff'}}>{prize.toLocaleString('en-US')}</span></div>
-        <div className="lb-prize-lbl">Bi-Weekly Prize</div>
-        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
-      </div>
-
-      {top3.length > 0 && (
-        <div className="lb-podium">
-          {podiumOrder.map((p, i) => {
-            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
-            return <PodiumCard key={rank} player={{...p, avatar: p.image_url, username: p.username}} rank={rank} accentColor="var(--packy)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
-          })}
-        </div>
-      )}
-
-      {data.end_date && <Countdown endDate={data.end_date}/>}
-
-      <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://packy.gg/r/niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-packy">
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <div className="announce-bar blue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Get a 5% bonus on your first deposit
-      </div>
-      <LbMetaBar/>
-
-      {rest.length > 0 && (
-        <table className="lb-table">
-          <thead><tr>
-            <th>Place</th><th></th><th>Player</th><th>Wagered</th><th>Prize</th>
-          </tr></thead>
-          <tbody>
-            {rest.map((p, i) => (
-              <tr key={i}>
-                <td><span className="tr-rank">#{p.rank || i + 4}</span></td>
-                <td><Avatar src={p.image_url} className="tr-av"/></td>
-                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
-                <td><span className="tr-prize"><Amt s={fmtPrize(p, p.rank || i+4)}/></span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      <div className="prize-section">
-        <div className="prize-title">// Prize Structure</div>
-        <div className="prize-tiers">
-          {(data.prize_tiers || []).map((t, i) => (
-            <div key={t.position} className="prize-tier">
-              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][t.position-1]||`#${t.position}`}</div>
-              <div className={`prize-tier-amt${t.position===1?' p1':t.position===2?' p2':t.position===3?' p3':''}`}>{fmtMoney(Number(t.prize_amount_usd))}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{textAlign:'center',padding:'20px 0 4px',borderTop:'1px solid var(--b1)',marginTop:8,fontSize:13,color:'var(--mu)'}}>
-        Total Wagered - <span style={{color:'var(--green)'}}>$</span><strong style={{color:'#fff'}}>{entries.reduce((s,p)=>s+Number(p.total_wagered_usd||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
-      </div>
-    </div>
-  );
-}
 
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
@@ -734,23 +641,18 @@ function LbMetaBar() {
 
 function App() {
   const { user, logout } = useSession();
-  const [tab, setTab] = React.useState(() => new URLSearchParams(window.location.search).get('tab') === 'packy' ? 'packy' : 'gamba');
 
   return (
     <>
       <Navbar user={user} logout={logout}/>
       <div className="wrap">
         <div className="platform-tabs f1">
-          <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
+          <div className="ptab active-gamba">
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-          </button>
-          <button className={`ptab${tab==='packy'?' active-packy':''}`} onClick={() => setTab('packy')}>
-            <img className="ptab-img" src="/assets/packy.png" alt="Packy" onError={e=>e.target.style.display='none'}/>
-          </button>
+          </div>
         </div>
 
-        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
-        <div style={{display: tab === 'packy' ? 'block' : 'none'}}><PackyLeaderboard/></div>
+        <GambaLeaderboard/>
       </div>
 
       <footer>

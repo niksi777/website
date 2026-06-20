@@ -177,6 +177,11 @@
 
     .wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
+    /* Platform badge */
+    .platform-tabs{display:flex;align-items:center;justify-content:center;gap:12px;padding:32px 0 24px}
+    .ptab{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:10px;border:1px solid rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
+    .ptab-img{height:22px;object-fit:contain}
+
     /* Leaderboard header */
     .lb-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:32px;margin-bottom:24px;text-align:center}
     .lb-header-left{display:flex;flex-direction:column;align-items:center;gap:8px}
@@ -1637,6 +1642,7 @@ function GambaLeaderboard() {
   );
 }
 
+
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
   React.useEffect(() => {
@@ -1770,8 +1776,14 @@ function LeaderboardsPage() {
 
   return (
     <>
-
+      
       <div className="wrap">
+        <div className="platform-tabs f1">
+          <div className="ptab active-gamba">
+            <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
+          </div>
+        </div>
+
         <GambaLeaderboard/>
       </div>
 
