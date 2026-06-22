@@ -132,7 +132,7 @@
 /* ---- LeaderboardsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -183,6 +183,7 @@
     .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
     .ptab.active-gamba{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
     .ptab.active-points{border-color:rgba(212,175,90,.5);background:rgba(212,175,90,.08);box-shadow:0 0 18px rgba(212,175,90,.12)}
+    .ptab.active-chicken{border-color:rgba(242,169,59,.5);background:rgba(242,169,59,.08);box-shadow:0 0 18px rgba(242,169,59,.12)}
     .ptab-img{height:22px;object-fit:contain}
     .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
 
@@ -308,6 +309,7 @@
     .lb-cta-gamba{background:var(--ac);color:#fff}
     .lb-cta-gamba-sec{background:transparent;border:1px solid rgba(74,158,255,.4);color:var(--ac)}
     .lb-cta-gamba-sec:hover{background:rgba(74,158,255,.08);opacity:1}
+    .lb-cta-chicken{background:var(--chicken);color:#1a1100}
 
     /* Prize structure */
     .prize-section{margin-bottom:48px}
@@ -1346,6 +1348,11 @@ function HeroCarousel() {
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
       },
+      {
+        logo:'/assets/chicken.png', color:'#f2a93b',
+        perks:['REFERRAL LEADERBOARD','AFFILIATE PERKS'],
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=chicken', ext:false,
+      },
     ];
 
     return (
@@ -1571,6 +1578,60 @@ function GambaLeaderboard() {
 }
 
 
+function ChickenLeaderboard() {
+  const [rows, setRows] = React.useState(null);
+  const [meta, setMeta] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/chicken-leaderboard?limit=20').then(r => r.json()).then(d => setRows(d.leaderboard || [])).catch(() => setRows([]));
+    fetch('/chicken-meta').then(r => r.json()).then(setMeta).catch(() => {});
+  }, []);
+
+  const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
+
+  if (rows === null) return <div className="loading">Loading...</div>;
+
+  return (
+    <div className="f2">
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div className="lb-prize-amt"><span style={{color:'var(--chicken)'}}>$</span><span style={{color:'#fff'}}>{meta ? Math.round(meta.totalWagered).toLocaleString('en-US') : '...'}</span></div>
+        <div className="lb-prize-lbl">Total Wagered by Referrals</div>
+        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
+      </div>
+
+      <div className="lb-cta-row" style={{marginBottom:16}}>
+        <a href="https://chicken.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-chicken">
+          Sign Up Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div style={{textAlign:'center',marginBottom:28,fontSize:12,color:'var(--mu)'}}>
+        {meta && meta.lastUpdated ? `Updated ${Math.max(1,Math.floor((Date.now()-meta.lastUpdated)/60000))}m ago` : ''}
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="lb-hist-empty">No referrals tracked yet.</div>
+      ) : (
+        <table className="lb-table">
+          <thead><tr>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Deposited</th>
+          </tr></thead>
+          <tbody>
+            {rows.map((p, i) => (
+              <tr key={p.position || i}>
+                <td><span className="tr-rank">#{p.position || i + 1}</span></td>
+                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
+                <td><span className="tr-wager"><Amt s={fmtMoney(p.wager)}/></span></td>
+                <td><span className="tr-prize"><Amt s={fmtMoney(p.deposit)}/></span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
+
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
   React.useEffect(() => {
@@ -1788,7 +1849,10 @@ function LbMetaBar() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
-  const [tab, setTab] = React.useState(() => new URLSearchParams(window.location.search).get('tab') === 'points' ? 'points' : 'gamba');
+  const [tab, setTab] = React.useState(() => {
+    const t = new URLSearchParams(window.location.search).get('tab');
+    return (t === 'points' || t === 'chicken') ? t : 'gamba';
+  });
 
   return (
     <>
@@ -1798,12 +1862,17 @@ function LeaderboardsPage() {
           <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
           </button>
+          <button className={`ptab${tab==='chicken'?' active-chicken':''}`} onClick={() => setTab('chicken')}>
+            <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
+            <span className="ptab-label">Chicken.gg</span>
+          </button>
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
             <span className="ptab-label">NiksiPoints</span>
           </button>
         </div>
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+        <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 

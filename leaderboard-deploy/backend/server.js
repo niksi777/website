@@ -274,6 +274,75 @@ app.get("/players", (req, res) => {
 
 app.get("/gamba-meta", (req, res) => res.json(gambaMeta));
 
+// ── Chicken.gg affiliate referrals ──────────────────────────────────────────
+const CHICKEN_CACHE_PATH = require("path").join(__dirname, "../../chicken-cache.json");
+let chickenReferrals = [];
+let chickenLastUpdated = null;
+try {
+  if (fs_lb.existsSync(CHICKEN_CACHE_PATH)) {
+    const cached = JSON.parse(fs_lb.readFileSync(CHICKEN_CACHE_PATH, "utf-8"));
+    chickenReferrals = cached.referrals || [];
+    chickenLastUpdated = cached.lastUpdated || null;
+  }
+} catch (e) {}
+
+async function updateChickenLeaderboard() {
+  try {
+    if (!process.env.CHICKEN_API_KEY) {
+      console.log("Chicken.gg: no CHICKEN_API_KEY set, skipping sync");
+      return;
+    }
+    const response = await fetch(
+      `https://api.chicken.gg/affiliate/v1/referrals?key=${process.env.CHICKEN_API_KEY}`
+    );
+    const json = await response.json();
+    if (!json || !Array.isArray(json.referrals)) {
+      console.log("Chicken.gg: unexpected response, keeping existing data");
+      return;
+    }
+    chickenReferrals = json.referrals;
+    chickenLastUpdated = Date.now();
+    fs_lb.writeFileSync(
+      CHICKEN_CACHE_PATH,
+      JSON.stringify({ referrals: chickenReferrals, lastUpdated: chickenLastUpdated }, null, 2)
+    );
+    console.log("Chicken.gg leaderboard updated:", chickenReferrals.length, "referrals");
+  } catch (err) {
+    console.log("Chicken.gg update error:", err.message);
+  }
+}
+
+// Poll conservatively (every 15 min) until chicken.gg confirms an exact rate limit
+setInterval(updateChickenLeaderboard, 15 * 60 * 1000);
+updateChickenLeaderboard();
+
+app.get("/chicken-leaderboard", (req, res) => {
+  const limit = parseInt(req.query.limit) || 20;
+  const rows = chickenReferrals
+    .slice()
+    .sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))
+    .slice(0, limit)
+    .map((r, i) => ({
+      position: i + 1,
+      username: r.displayName || "Hidden",
+      avatar: r.imageUrl || null,
+      wager: Number(r.wagerAmount || 0),
+      deposit: Number(r.depositAmount || 0),
+      commission: Number(r.commissionAmount || 0),
+    }));
+  res.json({ leaderboard: rows });
+});
+
+app.get("/chicken-meta", (req, res) => {
+  const totalWagered = chickenReferrals.reduce((s, r) => s + Number(r.wagerAmount || 0), 0);
+  const totalCommission = chickenReferrals.reduce((s, r) => s + Number(r.commissionAmount || 0), 0);
+  res.json({
+    totalReferrals: chickenReferrals.length,
+    totalWagered,
+    totalCommission,
+    lastUpdated: chickenLastUpdated,
+  });
+});
 
 app.get("/chancer-players", async (req, res) => {
   const apiUrl = "https://admin.chancer.bet/external/activities/leaderboard";
