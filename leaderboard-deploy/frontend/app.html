@@ -132,7 +132,7 @@
 /* ---- LeaderboardsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -184,6 +184,7 @@
     .ptab.active-gamba{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
     .ptab.active-points{border-color:rgba(212,175,90,.5);background:rgba(212,175,90,.08);box-shadow:0 0 18px rgba(212,175,90,.12)}
     .ptab.active-chicken{border-color:rgba(242,169,59,.5);background:rgba(242,169,59,.08);box-shadow:0 0 18px rgba(242,169,59,.12)}
+    .ptab.active-krush{border-color:rgba(155,92,255,.5);background:rgba(155,92,255,.08);box-shadow:0 0 18px rgba(155,92,255,.12)}
     .ptab-img{height:22px;object-fit:contain}
     .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
 
@@ -310,6 +311,7 @@
     .lb-cta-gamba-sec{background:transparent;border:1px solid rgba(74,158,255,.4);color:var(--ac)}
     .lb-cta-gamba-sec:hover{background:rgba(74,158,255,.08);opacity:1}
     .lb-cta-chicken{background:var(--chicken);color:#1a1100}
+    .lb-cta-krush{background:var(--krush);color:#fff}
 
     /* Prize structure */
     .prize-section{margin-bottom:48px}
@@ -1348,6 +1350,11 @@ function HeroCarousel() {
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
       },
+      {
+        logo:'/assets/krush.png', color:'#9b5cff',
+        perks:['$1,000 PRIZE POOL','30-DAY WAGER RACE'],
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=krush', ext:false,
+      },
     ];
 
     return (
@@ -1627,6 +1634,94 @@ function ChickenLeaderboard() {
   );
 }
 
+function KrushLeaderboard() {
+  const [players, setPlayers] = React.useState(null);
+  const [meta, setMeta] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/krush-leaderboard?limit=10').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
+    fetch('/krush-meta').then(r => r.json()).then(setMeta).catch(() => {});
+  }, []);
+
+  const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
+  const fmtPrize = p => fmtMoney(p.prize ?? 0);
+  const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+
+  if (players === null || meta === null) return <div className="loading">Loading...</div>;
+
+  if (!meta.active) {
+    return (
+      <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
+        <div className="lb-prize-amt"><span style={{color:'var(--krush)'}}>$</span><span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-lbl">30-Day Wager Race</div>
+        <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
+      </div>
+    );
+  }
+
+  const top3 = players.slice(0, 3);
+  const rest = players.slice(3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+
+  return (
+    <div className="f2">
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div className="lb-prize-amt"><span style={{color:'var(--krush)'}}>$</span><span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-lbl">30-Day Wager Race</div>
+        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
+      </div>
+
+      {top3.length > 0 && (
+        <div className="lb-podium">
+          {podiumOrder.map((p, i) => {
+            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
+            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--krush)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
+          })}
+        </div>
+      )}
+
+      {meta.end && <Countdown endDate={meta.end}/>}
+
+      <div className="lb-cta-row" style={{marginBottom:28}}>
+        <a href="https://krush.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-krush">
+          Sign Up Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      {rest.length > 0 && (
+        <table className="lb-table">
+          <thead><tr>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
+          </tr></thead>
+          <tbody>
+            {rest.map((p, i) => (
+              <tr key={p.position || i}>
+                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
+                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
+                <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
+                <td><span className="tr-prize"><Amt s={fmtPrize(p)}/></span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      <div className="prize-section">
+        <div className="prize-title">// Prize Structure</div>
+        <div className="prize-tiers">
+          {[500,200,100,60,40,30,25,20,15,10].map((amt, i) => (
+            <div key={i} className="prize-tier">
+              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][i]}</div>
+              <div className={`prize-tier-amt${i===0?' p1':i===1?' p2':i===2?' p3':''}`}>{fmtMoney(amt)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
   React.useEffect(() => {
@@ -1844,7 +1939,10 @@ function LbMetaBar() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
-  const [tab, setTab] = React.useState(() => new URLSearchParams(window.location.search).get('tab') === 'points' ? 'points' : 'gamba');
+  const [tab, setTab] = React.useState(() => {
+    const t = new URLSearchParams(window.location.search).get('tab');
+    return (t === 'points' || t === 'krush') ? t : 'gamba';
+  });
 
   return (
     <>
@@ -1854,12 +1952,17 @@ function LeaderboardsPage() {
           <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
           </button>
+          <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => setTab('krush')}>
+            <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
+            <span className="ptab-label">Krush.gg</span>
+          </button>
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
             <span className="ptab-label">NiksiPoints</span>
           </button>
         </div>
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+        <div style={{display: tab === 'krush' ? 'block' : 'none'}}><KrushLeaderboard/></div>
         <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
@@ -3028,6 +3131,31 @@ function fmtDate(iso) {
     const [msg,setMsg]=React.useState('');
     const [err,setErr]=React.useState('');
 
+    const [krushMeta,setKrushMeta]=React.useState(null);
+    const [krushLoading,setKrushLoading]=React.useState(false);
+    const [krushMsg,setKrushMsg]=React.useState('');
+
+    function loadKrushMeta(){
+      fetch('/krush-meta').then(r=>r.json()).then(setKrushMeta).catch(()=>{});
+    }
+    React.useEffect(()=>{ loadKrushMeta(); },[]);
+
+    async function startKrush(){
+      if(krushMeta && krushMeta.active && !window.confirm('A Krush.gg race is already active. Start a new 30-day race now? This resets the current standings.')) return;
+      setKrushLoading(true);setKrushMsg('');
+      try{
+        const r=await fetch(`/admin/krush/start?session=${sessionId}`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-session-id':sessionId},
+          body:JSON.stringify({session:sessionId})
+        });
+        const d=await r.json();
+        if(!r.ok){setKrushMsg(d.error||'Error');}
+        else{setKrushMsg(`Race started! Ends ${new Date(d.end).toLocaleDateString()}`);loadKrushMeta();}
+      }catch{setKrushMsg('Connection error');}
+      setKrushLoading(false);
+    }
+
     function loadHistory(){
       setFetching(true);
       fetch('/lb-history').then(r=>r.json()).then(d=>setHistory(Array.isArray(d)?d.slice().reverse():[])).finally(()=>setFetching(false));
@@ -3051,6 +3179,23 @@ function fmtDate(iso) {
 
     return(
       <div>
+        <div style={{background:'var(--s1)',border:'1px solid rgba(155,92,255,.3)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
+          <div style={{fontSize:13,color:'var(--mu)',marginBottom:12,lineHeight:1.5}}>
+            Krush.gg 30-day wager race - $1,000 prize pool (50/20/10/6/4/3/2.5/2/1.5/1%). Starting it locks in "now" as day 1; it'll auto-stop accepting new data after 30 days.
+          </div>
+          {krushMeta && krushMeta.active ? (
+            <div style={{fontSize:13,color:'#9b5cff',marginBottom:12}}>
+              Active - started {new Date(krushMeta.start).toLocaleDateString()}, ends {new Date(krushMeta.end).toLocaleDateString()}
+            </div>
+          ) : (
+            <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Not started yet.</div>
+          )}
+          <button onClick={startKrush} disabled={krushLoading} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#9b5cff',color:'#fff',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase',opacity:krushLoading?0.4:1}}>
+            {krushLoading?'Starting...':(krushMeta&&krushMeta.active?'Restart 30-Day Race':'Start 30-Day Race')}
+          </button>
+          {krushMsg&&<div style={{fontSize:12,color:'#9b5cff',marginTop:10}}>{krushMsg}</div>}
+        </div>
+
         <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
           <div style={{fontSize:13,color:'var(--mu)',marginBottom:12,lineHeight:1.5}}>
             Paste a Gamba leaderboard URL (e.g. gamba.com/promotions/exclusive-leaderboards/13300) to pull that exact race's players, wagers and prizes straight from Gamba and archive it. Leave it blank to just snapshot whatever's currently live. The "Previous Leaderboards" popup on the site pulls from every entry saved here.

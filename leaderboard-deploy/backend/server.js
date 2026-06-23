@@ -344,6 +344,99 @@ app.get("/chicken-meta", (req, res) => {
   });
 });
 
+// ── Krush.gg affiliate wager-leader (30-day race, admin-started) ───────────
+const KRUSH_PERIOD_PATH = require("path").join(__dirname, "../../krush-period.json");
+const KRUSH_CACHE_PATH = require("path").join(__dirname, "../../krush-cache.json");
+const KRUSH_PRIZES = [500, 200, 100, 60, 40, 30, 25, 20, 15, 10];
+const KRUSH_POOL_TOTAL = KRUSH_PRIZES.reduce((s, p) => s + p, 0);
+const KRUSH_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+
+let krushPeriod = { start: null, end: null };
+let krushReferrals = [];
+let krushLastUpdated = null;
+try {
+  if (fs_lb.existsSync(KRUSH_PERIOD_PATH)) {
+    krushPeriod = JSON.parse(fs_lb.readFileSync(KRUSH_PERIOD_PATH, "utf-8"));
+  }
+} catch (e) {}
+try {
+  if (fs_lb.existsSync(KRUSH_CACHE_PATH)) {
+    const cached = JSON.parse(fs_lb.readFileSync(KRUSH_CACHE_PATH, "utf-8"));
+    krushReferrals = cached.referrals || [];
+    krushLastUpdated = cached.lastUpdated || null;
+  }
+} catch (e) {}
+
+async function updateKrushLeaderboard() {
+  try {
+    if (!process.env.KRUSH_API_KEY || !krushPeriod.start) return;
+    const startTimestamp = Math.floor(krushPeriod.start / 1000);
+    const response = await fetch(
+      `https://api.krush.gg/api/affiliate/wager-leader?startTimestamp=${startTimestamp}`,
+      { headers: { "X-API-Key": process.env.KRUSH_API_KEY } }
+    );
+    const json = await response.json();
+    if (!json || json.code !== 200 || !Array.isArray(json.data)) {
+      console.log("Krush.gg: unexpected response, keeping existing data");
+      return;
+    }
+    krushReferrals = json.data;
+    krushLastUpdated = Date.now();
+    fs_lb.writeFileSync(
+      KRUSH_CACHE_PATH,
+      JSON.stringify({ referrals: krushReferrals, lastUpdated: krushLastUpdated }, null, 2)
+    );
+    console.log("Krush.gg leaderboard updated:", krushReferrals.length, "referrals");
+  } catch (err) {
+    console.log("Krush.gg update error:", err.message);
+  }
+}
+
+setInterval(updateKrushLeaderboard, 15 * 60 * 1000);
+updateKrushLeaderboard();
+
+app.get("/krush-leaderboard", (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  const rows = krushReferrals
+    .slice()
+    .sort((a, b) => Number(b.wagered || 0) - Number(a.wagered || 0))
+    .slice(0, limit)
+    .map((r, i) => ({
+      position: i + 1,
+      username: r.username || "Hidden",
+      avatar: r.avatarUrl || null,
+      wager: Number(r.wagered || 0),
+      prize: KRUSH_PRIZES[i] || 0,
+    }));
+  res.json({ leaderboard: rows });
+});
+
+app.get("/krush-meta", (req, res) => {
+  const now = Date.now();
+  res.json({
+    start: krushPeriod.start,
+    end: krushPeriod.end,
+    active: !!(krushPeriod.start && krushPeriod.end && now < krushPeriod.end),
+    totalPool: KRUSH_POOL_TOTAL,
+    prizes: KRUSH_PRIZES,
+    lastUpdated: krushLastUpdated,
+  });
+});
+
+app.post("/admin/krush/start", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+
+  const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
+  const end = start + KRUSH_DURATION_MS;
+  krushPeriod = { start, end };
+  fs_lb.writeFileSync(KRUSH_PERIOD_PATH, JSON.stringify(krushPeriod, null, 2));
+  krushReferrals = [];
+  updateKrushLeaderboard();
+  res.json({ ok: true, start, end });
+});
+
 app.get("/chancer-players", async (req, res) => {
   const apiUrl = "https://admin.chancer.bet/external/activities/leaderboard";
   const token = "fYDQGOG7YncwMZZnGffJzkozjz5XcxbP";

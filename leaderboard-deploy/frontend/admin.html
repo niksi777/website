@@ -589,6 +589,31 @@
     const [msg,setMsg]=React.useState('');
     const [err,setErr]=React.useState('');
 
+    const [krushMeta,setKrushMeta]=React.useState(null);
+    const [krushLoading,setKrushLoading]=React.useState(false);
+    const [krushMsg,setKrushMsg]=React.useState('');
+
+    function loadKrushMeta(){
+      fetch('/krush-meta').then(r=>r.json()).then(setKrushMeta).catch(()=>{});
+    }
+    React.useEffect(()=>{ loadKrushMeta(); },[]);
+
+    async function startKrush(){
+      if(krushMeta && krushMeta.active && !window.confirm('A Krush.gg race is already active. Start a new 30-day race now? This resets the current standings.')) return;
+      setKrushLoading(true);setKrushMsg('');
+      try{
+        const r=await fetch(`/admin/krush/start?session=${sessionId}`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-session-id':sessionId},
+          body:JSON.stringify({session:sessionId})
+        });
+        const d=await r.json();
+        if(!r.ok){setKrushMsg(d.error||'Error');}
+        else{setKrushMsg(`Race started! Ends ${new Date(d.end).toLocaleDateString()}`);loadKrushMeta();}
+      }catch{setKrushMsg('Connection error');}
+      setKrushLoading(false);
+    }
+
     function loadHistory(){
       setFetching(true);
       fetch('/lb-history').then(r=>r.json()).then(d=>setHistory(Array.isArray(d)?d.slice().reverse():[])).finally(()=>setFetching(false));
@@ -612,6 +637,23 @@
 
     return(
       <div>
+        <div style={{background:'var(--s1)',border:'1px solid rgba(155,92,255,.3)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
+          <div style={{fontSize:13,color:'var(--mu)',marginBottom:12,lineHeight:1.5}}>
+            Krush.gg 30-day wager race - $1,000 prize pool (50/20/10/6/4/3/2.5/2/1.5/1%). Starting it locks in "now" as day 1; it'll auto-stop accepting new data after 30 days.
+          </div>
+          {krushMeta && krushMeta.active ? (
+            <div style={{fontSize:13,color:'#9b5cff',marginBottom:12}}>
+              Active - started {new Date(krushMeta.start).toLocaleDateString()}, ends {new Date(krushMeta.end).toLocaleDateString()}
+            </div>
+          ) : (
+            <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Not started yet.</div>
+          )}
+          <button onClick={startKrush} disabled={krushLoading} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#9b5cff',color:'#fff',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase',opacity:krushLoading?0.4:1}}>
+            {krushLoading?'Starting...':(krushMeta&&krushMeta.active?'Restart 30-Day Race':'Start 30-Day Race')}
+          </button>
+          {krushMsg&&<div style={{fontSize:12,color:'#9b5cff',marginTop:10}}>{krushMsg}</div>}
+        </div>
+
         <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
           <div style={{fontSize:13,color:'var(--mu)',marginBottom:12,lineHeight:1.5}}>
             Paste a Gamba leaderboard URL (e.g. gamba.com/promotions/exclusive-leaderboards/13300) to pull that exact race's players, wagers and prizes straight from Gamba and archive it. Leave it blank to just snapshot whatever's currently live. The "Previous Leaderboards" popup on the site pulls from every entry saved here.
