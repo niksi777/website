@@ -1613,7 +1613,7 @@ function ChickenLeaderboard() {
 
   if (rows === null) return <div className="loading">Loading...</div>;
 
-  const prizes = (meta && meta.prizes) || [500,200,100,60,40,30,25,20,15,10];
+  const prizes = (meta && meta.prizes) || [600,160,80,48,32,24,20,16,12,8];
   const displayRows = prizes.map((amt, i) => {
     const existing = rows.find(r => r.position === i + 1);
     return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
