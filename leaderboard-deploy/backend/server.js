@@ -276,13 +276,21 @@ app.get("/gamba-meta", (req, res) => res.json(gambaMeta));
 
 // ── Chicken.gg affiliate referrals ──────────────────────────────────────────
 const CHICKEN_CACHE_PATH = require("path").join(__dirname, "../../chicken-cache.json");
+const CHICKEN_PERIOD_PATH = require("path").join(__dirname, "../../chicken-period.json");
+const CHICKEN_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
 let chickenReferrals = [];
 let chickenLastUpdated = null;
+let chickenPeriod = { start: null, end: null };
 try {
   if (fs_lb.existsSync(CHICKEN_CACHE_PATH)) {
     const cached = JSON.parse(fs_lb.readFileSync(CHICKEN_CACHE_PATH, "utf-8"));
     chickenReferrals = cached.referrals || [];
     chickenLastUpdated = cached.lastUpdated || null;
+  }
+} catch (e) {}
+try {
+  if (fs_lb.existsSync(CHICKEN_PERIOD_PATH)) {
+    chickenPeriod = JSON.parse(fs_lb.readFileSync(CHICKEN_PERIOD_PATH, "utf-8"));
   }
 } catch (e) {}
 
@@ -292,9 +300,10 @@ async function updateChickenLeaderboard() {
       console.log("Chicken.gg: no CHICKEN_API_KEY set, skipping sync");
       return;
     }
-    const response = await fetch(
-      `https://api.chicken.gg/affiliate/v1/referrals?key=${process.env.CHICKEN_API_KEY}`
-    );
+    let url = `https://api.chicken.gg/affiliate/v1/referrals?key=${process.env.CHICKEN_API_KEY}`;
+    if (chickenPeriod.start) url += `&minTime=${chickenPeriod.start}`;
+    if (chickenPeriod.end) url += `&maxTime=${chickenPeriod.end}`;
+    const response = await fetch(url);
     const json = await response.json();
     if (!json || !Array.isArray(json.referrals)) {
       console.log("Chicken.gg: unexpected response, keeping existing data");
@@ -319,6 +328,7 @@ updateChickenLeaderboard();
 app.get("/chicken-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 20;
   const rows = chickenReferrals
+    .filter(r => Number(r.wagerAmount || 0) > 0)
     .slice()
     .sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))
     .slice(0, limit)
@@ -336,12 +346,30 @@ app.get("/chicken-leaderboard", (req, res) => {
 app.get("/chicken-meta", (req, res) => {
   const totalWagered = chickenReferrals.reduce((s, r) => s + Number(r.wagerAmount || 0), 0);
   const totalCommission = chickenReferrals.reduce((s, r) => s + Number(r.commissionAmount || 0), 0);
+  const now = Date.now();
   res.json({
     totalReferrals: chickenReferrals.length,
     totalWagered,
     totalCommission,
     lastUpdated: chickenLastUpdated,
+    start: chickenPeriod.start,
+    end: chickenPeriod.end,
+    active: !!(chickenPeriod.start && chickenPeriod.end && now < chickenPeriod.end),
   });
+});
+
+app.post("/admin/chicken/start", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+
+  const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
+  const end = (req.body && req.body.end) ? new Date(req.body.end).getTime() : start + CHICKEN_DURATION_MS;
+  chickenPeriod = { start, end };
+  fs_lb.writeFileSync(CHICKEN_PERIOD_PATH, JSON.stringify(chickenPeriod, null, 2));
+  chickenReferrals = [];
+  updateChickenLeaderboard();
+  res.json({ ok: true, start, end });
 });
 
 // ── Krush.gg affiliate wager-leader (30-day race, admin-started) ───────────

@@ -931,13 +931,18 @@ function App() {
   const { user, logout } = useSession();
   const [tab, setTab] = React.useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
-    return (t === 'points' || t === 'krush') ? t : 'gamba';
+    return (t === 'points' || t === 'krush' || t === 'chicken') ? t : 'gamba';
   });
   const [krushActive, setKrushActive] = React.useState(false);
+  const [chickenActive, setChickenActive] = React.useState(false);
   React.useEffect(() => {
     fetch('/krush-meta').then(r => r.json()).then(d => {
       setKrushActive(!!d.active);
       if (!d.active && tab === 'krush') setTab('gamba');
+    }).catch(() => {});
+    fetch('/chicken-meta').then(r => r.json()).then(d => {
+      setChickenActive(!!d.active);
+      if (!d.active && tab === 'chicken') setTab('gamba');
     }).catch(() => {});
   }, []);
 
@@ -955,6 +960,12 @@ function App() {
               <span className="ptab-label">Krush.gg</span>
             </button>
           )}
+          {chickenActive && (
+            <button className={`ptab${tab==='chicken'?' active-chicken':''}`} onClick={() => setTab('chicken')}>
+              <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
+              <span className="ptab-label">Chicken.gg</span>
+            </button>
+          )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
             <span className="ptab-label">NiksiPoints</span>
           </button>
@@ -962,6 +973,7 @@ function App() {
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
         <div style={{display: tab === 'krush' ? 'block' : 'none'}}><KrushLeaderboard/></div>
+        <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
