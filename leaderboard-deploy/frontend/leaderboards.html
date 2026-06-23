@@ -591,8 +591,14 @@ function ChickenLeaderboard() {
 
   if (rows === null) return <div className="loading">Loading...</div>;
 
-  const top3 = rows.slice(0, 3);
-  const rest = rows.slice(3);
+  const prizes = (meta && meta.prizes) || [500,200,100,60,40,30,25,20,15,10];
+  const displayRows = prizes.map((amt, i) => {
+    const existing = rows.find(r => r.position === i + 1);
+    return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
+  });
+
+  const top3 = displayRows.slice(0, 3);
+  const rest = displayRows.slice(3);
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
@@ -610,7 +616,11 @@ function ChickenLeaderboard() {
         <div className="lb-podium">
           {podiumOrder.map((p, i) => {
             const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
-            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--chicken)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/coin.png"/>;
+            return (
+              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
+                <PodiumCard player={p} rank={rank} accentColor="var(--chicken)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/coin.png"/>
+              </div>
+            );
           })}
         </div>
       )}
@@ -635,7 +645,7 @@ function ChickenLeaderboard() {
           </tr></thead>
           <tbody>
             {rest.map((p, i) => (
-              <tr key={p.position || i}>
+              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>

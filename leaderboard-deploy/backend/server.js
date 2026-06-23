@@ -357,6 +357,7 @@ app.get("/chicken-meta", (req, res) => {
     totalWagered,
     totalCommission,
     totalPool: CHICKEN_POOL_TOTAL,
+    prizes: CHICKEN_PRIZES,
     lastUpdated: chickenLastUpdated,
     start: chickenPeriod.start,
     end: chickenPeriod.end,
