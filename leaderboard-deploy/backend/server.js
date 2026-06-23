@@ -351,10 +351,10 @@ const CHICKEN_POOL_TOTAL = 1000; // coins - fixed prize pool, not derived from w
 
 // ── Chicken.gg wager race (first to hit the goal wins) ──────────────────────
 const CHICKEN_RACE_PATH = require("path").join(__dirname, "../../chicken-race.json");
-let chickenRace = { goal: 10000, winner: null };
+let chickenRace = { goal: 10000, prize: 100, winner: null };
 try {
   if (fs_lb.existsSync(CHICKEN_RACE_PATH)) {
-    chickenRace = { goal: 10000, winner: null, ...JSON.parse(fs_lb.readFileSync(CHICKEN_RACE_PATH, "utf-8")) };
+    chickenRace = { goal: 10000, prize: 100, winner: null, ...JSON.parse(fs_lb.readFileSync(CHICKEN_RACE_PATH, "utf-8")) };
   }
 } catch (e) {}
 
@@ -383,7 +383,7 @@ app.get("/chicken-wager-race", (req, res) => {
       progress: Math.min(1, Number(r.wagerAmount || 0) / chickenRace.goal),
     }))
     .sort((a, b) => b.wager - a.wager);
-  res.json({ goal: chickenRace.goal, winner: chickenRace.winner, referrals: rows });
+  res.json({ goal: chickenRace.goal, prize: chickenRace.prize, winner: chickenRace.winner, referrals: rows });
 });
 
 app.post("/admin/chicken/race/start", (req, res) => {
@@ -392,9 +392,10 @@ app.post("/admin/chicken/race/start", (req, res) => {
   if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
 
   const goal = Number(req.body && req.body.goal) || 10000;
-  chickenRace = { goal, winner: null };
+  const prize = Number(req.body && req.body.prize) || 100;
+  chickenRace = { goal, prize, winner: null };
   fs_lb.writeFileSync(CHICKEN_RACE_PATH, JSON.stringify(chickenRace, null, 2));
-  res.json({ ok: true, goal });
+  res.json({ ok: true, goal, prize });
 });
 
 app.get("/chicken-meta", (req, res) => {

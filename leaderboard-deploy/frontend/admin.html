@@ -600,6 +600,7 @@
 
     const [chickenRace,setChickenRace]=React.useState(null);
     const [chickenGoal,setChickenGoal]=React.useState('10000');
+    const [chickenPrize,setChickenPrize]=React.useState('100');
     const [chickenRaceLoading,setChickenRaceLoading]=React.useState(false);
     const [chickenRaceMsg,setChickenRaceMsg]=React.useState('');
 
@@ -615,11 +616,11 @@
         const r=await fetch(`/admin/chicken/race/start?session=${sessionId}`,{
           method:'POST',
           headers:{'Content-Type':'application/json','x-session-id':sessionId},
-          body:JSON.stringify({session:sessionId, goal:Number(chickenGoal)||10000})
+          body:JSON.stringify({session:sessionId, goal:Number(chickenGoal)||10000, prize:Number(chickenPrize)||100})
         });
         const d=await r.json();
         if(!r.ok){setChickenRaceMsg(d.error||'Error');}
-        else{setChickenRaceMsg(`Race started! Goal: ${d.goal.toLocaleString('en-US')} coins`);loadChickenRace();}
+        else{setChickenRaceMsg(`Race started! Goal: ${d.goal.toLocaleString('en-US')} coins, Prize: ${d.prize.toLocaleString('en-US')} coins`);loadChickenRace();}
       }catch{setChickenRaceMsg('Connection error');}
       setChickenRaceLoading(false);
     }
@@ -686,10 +687,10 @@
           </div>
           {chickenRace && chickenRace.winner ? (
             <div style={{fontSize:13,color:'#f2a93b',marginBottom:12}}>
-              Won by {chickenRace.winner.username} at {Number(chickenRace.winner.wager).toLocaleString('en-US')} coins (goal was {chickenRace.goal.toLocaleString('en-US')})
+              Won by {chickenRace.winner.username} at {Number(chickenRace.winner.wager).toLocaleString('en-US')} coins (goal was {chickenRace.goal.toLocaleString('en-US')}, prize was {chickenRace.prize.toLocaleString('en-US')} coins)
             </div>
           ) : chickenRace ? (
-            <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Active - goal: {chickenRace.goal.toLocaleString('en-US')} coins, no winner yet.</div>
+            <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Active - goal: {chickenRace.goal.toLocaleString('en-US')} coins, prize: {chickenRace.prize.toLocaleString('en-US')} coins, no winner yet.</div>
           ) : (
             <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Loading...</div>
           )}
@@ -697,6 +698,10 @@
             <div style={{display:'flex',flexDirection:'column',gap:6}}>
               <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Wager Goal (Coins)</label>
               <input className="search-bar" style={{marginBottom:0,width:160}} type="number" value={chickenGoal} onChange={e=>setChickenGoal(e.target.value)}/>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:6}}>
+              <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Prize (Coins)</label>
+              <input className="search-bar" style={{marginBottom:0,width:160}} type="number" value={chickenPrize} onChange={e=>setChickenPrize(e.target.value)}/>
             </div>
             <button onClick={startChickenRace} disabled={chickenRaceLoading} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#f2a93b',color:'#1a1100',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase',opacity:chickenRaceLoading?0.4:1}}>
               {chickenRaceLoading?'Starting...':(chickenRace&&chickenRace.winner?'Restart Race':'Start Race')}
