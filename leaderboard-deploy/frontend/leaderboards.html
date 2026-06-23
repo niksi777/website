@@ -590,13 +590,18 @@ function ChickenLeaderboard() {
 
   const fmtPrize = p => (p.prize > 0 ? Number(p.prize).toLocaleString('en-US') : '-');
   const fmtWager = p => (p.wager > 0 ? Number(p.wager).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '-');
+  const maskName = name => {
+    if (!name || name.length <= 6) return name;
+    return <>{name.slice(0,3)}<span style={{filter:'blur(4px)',userSelect:'none'}}>{name.slice(3,-3)}</span>{name.slice(-3)}</>;
+  };
 
   if (rows === null) return <div className="loading">Loading...</div>;
 
   const prizes = (meta && meta.prizes) || [600,160,80,48,32,24,20,16,12,8];
   const displayRows = prizes.map((amt, i) => {
     const existing = rows.find(r => r.position === i + 1);
-    return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
+    if (existing) return { ...existing, username: maskName(existing.username) };
+    return { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
   });
 
   const top3 = displayRows.slice(0, 3);
