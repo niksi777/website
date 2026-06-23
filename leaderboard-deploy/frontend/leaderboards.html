@@ -628,10 +628,6 @@ function ChickenLeaderboard() {
       {meta && meta.end && <Countdown endDate={meta.end}/>}
 
       <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://chicken.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-chicken-sec">
-          View Leaderboard on Chicken.gg
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        </a>
         <a href="https://chicken.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-chicken">
           Sign Up Here
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1003,7 +999,6 @@ function App() {
           {chickenActive && (
             <button className={`ptab${tab==='chicken'?' active-chicken':''}`} onClick={() => setTab('chicken')}>
               <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
-              <span className="ptab-label">Chicken.gg</span>
             </button>
           )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
