@@ -311,6 +311,9 @@
     .lb-cta-gamba-sec{background:transparent;border:1px solid rgba(74,158,255,.4);color:var(--ac)}
     .lb-cta-gamba-sec:hover{background:rgba(74,158,255,.08);opacity:1}
     .lb-cta-chicken{background:var(--chicken);color:#1a1100}
+    .lb-cta-chicken-sec{background:transparent;border:1px solid rgba(242,169,59,.4);color:var(--chicken)}
+    .lb-cta-chicken-sec:hover{background:rgba(242,169,59,.08);opacity:1}
+    .lb-coin-icon{height:.75em;width:.75em;vertical-align:-0.05em;margin-right:6px;display:inline-block}
     .lb-cta-krush{background:var(--krush);color:#fff}
 
     /* Prize structure */
@@ -1607,19 +1610,25 @@ function ChickenLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'var(--chicken)'}}>$</span><span style={{color:'#fff'}}>{meta ? Math.round(meta.totalWagered).toLocaleString('en-US') : '...'}</span></div>
-        <div className="lb-prize-lbl">Total Wagered by Referrals</div>
+        <div className="lb-prize-amt">
+          <img src="/assets/coin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
+          <span style={{color:'#fff'}}>{meta ? Math.round(meta.totalWagered).toLocaleString('en-US') : '...'}</span>
+        </div>
+        <div className="lb-prize-lbl">Total Prize Pool</div>
         <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
 
-      <div className="lb-cta-row" style={{marginBottom:16}}>
+      {meta && meta.end && <Countdown endDate={meta.end}/>}
+
+      <div className="lb-cta-row" style={{marginBottom:28}}>
+        <a href="https://chicken.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-chicken-sec">
+          View Leaderboard on Chicken.gg
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+        </a>
         <a href="https://chicken.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-chicken">
           Sign Up Here
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-      </div>
-      <div style={{textAlign:'center',marginBottom:28,fontSize:12,color:'var(--mu)'}}>
-        {meta && meta.lastUpdated ? `Updated ${Math.max(1,Math.floor((Date.now()-meta.lastUpdated)/60000))}m ago` : ''}
       </div>
 
       {rows.length === 0 ? (
@@ -1627,7 +1636,7 @@ function ChickenLeaderboard() {
       ) : (
         <table className="lb-table">
           <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Deposited</th>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th>
           </tr></thead>
           <tbody>
             {rows.map((p, i) => (
@@ -1636,12 +1645,14 @@ function ChickenLeaderboard() {
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
                 <td><span className="tr-wager"><Amt s={fmtMoney(p.wager)}/></span></td>
-                <td><span className="tr-prize"><Amt s={fmtMoney(p.deposit)}/></span></td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+      <div style={{textAlign:'center',marginTop:16,fontSize:12,color:'var(--mu)'}}>
+        {meta && meta.lastUpdated ? `Updated ${Math.max(1,Math.floor((Date.now()-meta.lastUpdated)/60000))}m ago` : ''}
+      </div>
     </div>
   );
 }
