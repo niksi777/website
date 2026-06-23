@@ -598,6 +598,32 @@
     }
     React.useEffect(()=>{ loadKrushMeta(); },[]);
 
+    const [chickenRace,setChickenRace]=React.useState(null);
+    const [chickenGoal,setChickenGoal]=React.useState('10000');
+    const [chickenRaceLoading,setChickenRaceLoading]=React.useState(false);
+    const [chickenRaceMsg,setChickenRaceMsg]=React.useState('');
+
+    function loadChickenRace(){
+      fetch('/chicken-wager-race').then(r=>r.json()).then(setChickenRace).catch(()=>{});
+    }
+    React.useEffect(()=>{ loadChickenRace(); },[]);
+
+    async function startChickenRace(){
+      if(chickenRace && chickenRace.winner && !window.confirm('This race already has a winner. Start a new wager race now? This resets progress for everyone.')) return;
+      setChickenRaceLoading(true);setChickenRaceMsg('');
+      try{
+        const r=await fetch(`/admin/chicken/race/start?session=${sessionId}`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-session-id':sessionId},
+          body:JSON.stringify({session:sessionId, goal:Number(chickenGoal)||10000})
+        });
+        const d=await r.json();
+        if(!r.ok){setChickenRaceMsg(d.error||'Error');}
+        else{setChickenRaceMsg(`Race started! Goal: ${d.goal.toLocaleString('en-US')} coins`);loadChickenRace();}
+      }catch{setChickenRaceMsg('Connection error');}
+      setChickenRaceLoading(false);
+    }
+
     async function startKrush(){
       if(krushMeta && krushMeta.active && !window.confirm('A Krush.gg race is already active. Start a new 30-day race now? This resets the current standings.')) return;
       setKrushLoading(true);setKrushMsg('');
@@ -652,6 +678,31 @@
             {krushLoading?'Starting...':(krushMeta&&krushMeta.active?'Restart 30-Day Race':'Start 30-Day Race')}
           </button>
           {krushMsg&&<div style={{fontSize:12,color:'#9b5cff',marginTop:10}}>{krushMsg}</div>}
+        </div>
+
+        <div style={{background:'var(--s1)',border:'1px solid rgba(242,169,59,.3)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
+          <div style={{fontSize:13,color:'var(--mu)',marginBottom:12,lineHeight:1.5}}>
+            Chicken.gg wager race - first referral to hit the goal wins a prize (fulfilled manually). Starting it resets everyone's progress and clears the current winner.
+          </div>
+          {chickenRace && chickenRace.winner ? (
+            <div style={{fontSize:13,color:'#f2a93b',marginBottom:12}}>
+              Won by {chickenRace.winner.username} at {Number(chickenRace.winner.wager).toLocaleString('en-US')} coins (goal was {chickenRace.goal.toLocaleString('en-US')})
+            </div>
+          ) : chickenRace ? (
+            <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Active - goal: {chickenRace.goal.toLocaleString('en-US')} coins, no winner yet.</div>
+          ) : (
+            <div style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Loading...</div>
+          )}
+          <div style={{display:'flex',gap:10,alignItems:'flex-end',flexWrap:'wrap'}}>
+            <div style={{display:'flex',flexDirection:'column',gap:6}}>
+              <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Wager Goal (Coins)</label>
+              <input className="search-bar" style={{marginBottom:0,width:160}} type="number" value={chickenGoal} onChange={e=>setChickenGoal(e.target.value)}/>
+            </div>
+            <button onClick={startChickenRace} disabled={chickenRaceLoading} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#f2a93b',color:'#1a1100',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase',opacity:chickenRaceLoading?0.4:1}}>
+              {chickenRaceLoading?'Starting...':(chickenRace&&chickenRace.winner?'Restart Race':'Start Race')}
+            </button>
+          </div>
+          {chickenRaceMsg&&<div style={{fontSize:12,color:'#f2a93b',marginTop:10}}>{chickenRaceMsg}</div>}
         </div>
 
         <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">

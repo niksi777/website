@@ -193,6 +193,18 @@
     .lb-cta-chicken-sec:hover{background:rgba(242,169,59,.08);opacity:1}
     .lb-coin-icon{height:.75em;width:.75em;vertical-align:-0.05em;margin-right:6px;display:inline-block}
     .lb-coin-icon-sm{height:1em;width:1em;vertical-align:-0.15em;margin-right:4px;display:inline-block}
+
+    /* Wager race progress bars */
+    .race-section{margin-top:8px;margin-bottom:48px}
+    .race-winner{background:rgba(242,169,59,.1);border:1px solid rgba(242,169,59,.35);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+    .race-winner-badge{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--chicken)}
+    .race-winner-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff}
+    .race-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--b1)}
+    .race-row:last-child{border-bottom:none}
+    .race-name{width:160px;flex-shrink:0;font-size:13px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .race-bar-wrap{flex:1;height:10px;background:var(--s1);border:1px solid var(--b1);border-radius:6px;overflow:hidden}
+    .race-bar-fill{height:100%;background:linear-gradient(90deg,#f2a93b,#ffd24a);border-radius:6px;transition:width .4s ease}
+    .race-amt{width:140px;flex-shrink:0;text-align:right;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}
     .lb-cta-krush{background:var(--krush);color:#fff}
 
     /* Prize structure */
@@ -583,9 +595,11 @@ function GambaLeaderboard() {
 function ChickenLeaderboard() {
   const [rows, setRows] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
+  const [race, setRace] = React.useState(null);
   React.useEffect(() => {
     fetch('/chicken-leaderboard?limit=20').then(r => r.json()).then(d => setRows(d.leaderboard || [])).catch(() => setRows([]));
     fetch('/chicken-meta').then(r => r.json()).then(setMeta).catch(() => {});
+    fetch('/chicken-wager-race').then(r => r.json()).then(setRace).catch(() => {});
   }, []);
 
   const fmtPrize = p => (p.prize > 0 ? Number(p.prize).toLocaleString('en-US') : '-');
@@ -658,6 +672,36 @@ function ChickenLeaderboard() {
             ))}
           </tbody>
         </table>
+      )}
+
+      {race && race.goal && (
+        <div className="race-section">
+          <div className="prize-title">// Wager Race - First to {race.goal.toLocaleString('en-US')} Coins Wins</div>
+          {race.winner ? (
+            <div className="race-winner">
+              <Avatar src={race.winner.avatar} className="tr-av"/>
+              <div>
+                <div className="race-winner-badge">Race Won</div>
+                <div className="race-winner-name">{maskName(race.winner.username)}</div>
+              </div>
+            </div>
+          ) : race.referrals.length === 0 ? (
+            <div className="lb-hist-empty">No wagers tracked yet.</div>
+          ) : (
+            race.referrals.map((p, i) => (
+              <div className="race-row" key={i}>
+                <div className="race-name">{maskName(p.username)}</div>
+                <div className="race-bar-wrap">
+                  <div className="race-bar-fill" style={{width:`${Math.round(p.progress*100)}%`}}/>
+                </div>
+                <div className="race-amt">
+                  <img src="/assets/coin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>
+                  {Number(p.wager).toLocaleString('en-US',{maximumFractionDigits:0})} / {race.goal.toLocaleString('en-US')}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       )}
 
       <div style={{textAlign:'center',marginTop:16,fontSize:12,color:'var(--mu)'}}>

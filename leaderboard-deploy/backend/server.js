@@ -316,6 +316,7 @@ async function updateChickenLeaderboard() {
       JSON.stringify({ referrals: chickenReferrals, lastUpdated: chickenLastUpdated }, null, 2)
     );
     console.log("Chicken.gg leaderboard updated:", chickenReferrals.length, "referrals");
+    checkChickenRaceWinner();
   } catch (err) {
     console.log("Chicken.gg update error:", err.message);
   }
@@ -347,6 +348,54 @@ app.get("/chicken-leaderboard", (req, res) => {
 });
 
 const CHICKEN_POOL_TOTAL = 1000; // coins - fixed prize pool, not derived from wagered amount
+
+// ── Chicken.gg wager race (first to hit the goal wins) ──────────────────────
+const CHICKEN_RACE_PATH = require("path").join(__dirname, "../../chicken-race.json");
+let chickenRace = { goal: 10000, winner: null };
+try {
+  if (fs_lb.existsSync(CHICKEN_RACE_PATH)) {
+    chickenRace = { goal: 10000, winner: null, ...JSON.parse(fs_lb.readFileSync(CHICKEN_RACE_PATH, "utf-8")) };
+  }
+} catch (e) {}
+
+function checkChickenRaceWinner() {
+  if (chickenRace.winner) return;
+  const qualifiers = chickenReferrals.filter(r => Number(r.wagerAmount || 0) >= chickenRace.goal);
+  if (qualifiers.length === 0) return;
+  const top = qualifiers.sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))[0];
+  chickenRace.winner = {
+    username: top.displayName || "Hidden",
+    avatar: top.imageUrl || null,
+    wager: Number(top.wagerAmount || 0),
+    wonAt: Date.now(),
+  };
+  fs_lb.writeFileSync(CHICKEN_RACE_PATH, JSON.stringify(chickenRace, null, 2));
+  console.log("Chicken.gg wager race won by:", chickenRace.winner.username);
+}
+
+app.get("/chicken-wager-race", (req, res) => {
+  const rows = chickenReferrals
+    .filter(r => Number(r.wagerAmount || 0) > 0)
+    .map(r => ({
+      username: r.displayName || "Hidden",
+      avatar: r.imageUrl || null,
+      wager: Number(r.wagerAmount || 0),
+      progress: Math.min(1, Number(r.wagerAmount || 0) / chickenRace.goal),
+    }))
+    .sort((a, b) => b.wager - a.wager);
+  res.json({ goal: chickenRace.goal, winner: chickenRace.winner, referrals: rows });
+});
+
+app.post("/admin/chicken/race/start", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+
+  const goal = Number(req.body && req.body.goal) || 10000;
+  chickenRace = { goal, winner: null };
+  fs_lb.writeFileSync(CHICKEN_RACE_PATH, JSON.stringify(chickenRace, null, 2));
+  res.json({ ok: true, goal });
+});
 
 app.get("/chicken-meta", (req, res) => {
   const totalWagered = chickenReferrals.reduce((s, r) => s + Number(r.wagerAmount || 0), 0);
