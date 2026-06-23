@@ -448,7 +448,7 @@ function Avatar({ src, className }) {
   return <img className={className} src={src} alt="" onError={() => setErr(true)}/>;
 }
 
-function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, prizeIcon }) {
+function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, prizeIcon, wagerIcon }) {
   const cls = rank === 1 ? 'podium-card first' : rank === 2 ? 'podium-card second' : 'podium-card third';
   const badgeCls = `rank-badge r${rank}`;
   return (
@@ -460,7 +460,10 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, priz
       <div className="pod-stats-row">
         <div className="pod-stat">
           <div className="pod-stat-lbl">Wagered</div>
-          <div className="pod-stat-val"><Amt s={fmtWager(player)}/></div>
+          <div className="pod-stat-val">
+            {wagerIcon && <img src={wagerIcon} className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>}
+            {wagerIcon ? fmtWager(player) : <Amt s={fmtWager(player)}/>}
+          </div>
         </div>
         <div className="pod-stat">
           <div className="pod-stat-lbl">Prize</div>
@@ -585,9 +588,8 @@ function ChickenLeaderboard() {
     fetch('/chicken-meta').then(r => r.json()).then(setMeta).catch(() => {});
   }, []);
 
-  const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
   const fmtPrize = p => (p.prize > 0 ? Number(p.prize).toLocaleString('en-US') : '-');
-  const fmtWager = p => fmtMoney(p.wager);
+  const fmtWager = p => (p.wager > 0 ? Number(p.wager * 2).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '-');
 
   if (rows === null) return <div className="loading">Loading...</div>;
 
@@ -618,7 +620,7 @@ function ChickenLeaderboard() {
             const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
             return (
               <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor="var(--chicken)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/coin.png"/>
+                <PodiumCard player={p} rank={rank} accentColor="var(--chicken)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/coin.png" wagerIcon="/assets/coin.png"/>
               </div>
             );
           })}
@@ -645,7 +647,7 @@ function ChickenLeaderboard() {
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager"><Amt s={fmtMoney(p.wager)}/></span></td>
+                <td><span className="tr-wager"><img src="/assets/coin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmtWager(p)}</span></td>
                 <td><span className="tr-prize"><img src="/assets/coin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmtPrize(p)}</span></td>
               </tr>
             ))}
