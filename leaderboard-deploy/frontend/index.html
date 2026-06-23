@@ -225,7 +225,11 @@
 
   function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
-    const total = 3;
+    const [chickenActive, setChickenActive] = React.useState(false);
+    React.useEffect(() => {
+      fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
+    }, []);
+    const total = chickenActive ? 4 : 3;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -302,6 +306,25 @@
               <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer" style={btn('#53fc18','rgba(83,252,24,.4)')}>WATCH NOW <Arr/></a>
             </div>
           </div>
+
+          {chickenActive && (
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(252,154,14,.32) 0%, rgba(252,154,14,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(28,70,131,.22) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(252,154,14,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#170f06 0%,#0c0904 55%,#0a142a 100%)'
+          ].join(','),borderTop:'3px solid rgba(252,154,14,.65)'}}>
+            {logo('/assets/chicken.png',.6,'rgba(252,154,14,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(10,8,4),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={txt('#fc9a0e','clamp(44px,6vw,68px)',.88,6)}>1,000 COIN RACE</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CHICKEN.GG</div>
+              <div style={sub}>Compete for your share of the prize pool!</div>
+              <a href="/leaderboards?tab=chicken" style={btn('#fc9a0e','rgba(252,154,14,.4)')}>VIEW LEADERBOARD <Arr/></a>
+            </div>
+          </div>
+          )}
         </div>
 
         <div className="c-dots">
