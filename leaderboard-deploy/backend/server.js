@@ -325,6 +325,8 @@ async function updateChickenLeaderboard() {
 setInterval(updateChickenLeaderboard, 15 * 60 * 1000);
 updateChickenLeaderboard();
 
+const CHICKEN_PRIZES = [500, 200, 100, 60, 40, 30, 25, 20, 15, 10]; // coins, 50/20/10/6/4/3/2.5/2/1.5/1% of 1,000
+
 app.get("/chicken-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 20;
   const rows = chickenReferrals
@@ -339,9 +341,12 @@ app.get("/chicken-leaderboard", (req, res) => {
       wager: Number(r.wagerAmount || 0),
       deposit: Number(r.depositAmount || 0),
       commission: Number(r.commissionAmount || 0),
+      prize: CHICKEN_PRIZES[i] || 0,
     }));
   res.json({ leaderboard: rows });
 });
+
+const CHICKEN_POOL_TOTAL = 1000; // coins - fixed prize pool, not derived from wagered amount
 
 app.get("/chicken-meta", (req, res) => {
   const totalWagered = chickenReferrals.reduce((s, r) => s + Number(r.wagerAmount || 0), 0);
@@ -351,6 +356,7 @@ app.get("/chicken-meta", (req, res) => {
     totalReferrals: chickenReferrals.length,
     totalWagered,
     totalCommission,
+    totalPool: CHICKEN_POOL_TOTAL,
     lastUpdated: chickenLastUpdated,
     start: chickenPeriod.start,
     end: chickenPeriod.end,

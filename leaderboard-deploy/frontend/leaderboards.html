@@ -582,19 +582,34 @@ function ChickenLeaderboard() {
   }, []);
 
   const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
+  const fmtPrize = p => (p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')} COIN` : '-');
+  const fmtWager = p => fmtMoney(p.wager);
 
   if (rows === null) return <div className="loading">Loading...</div>;
+
+  const top3 = rows.slice(0, 3);
+  const rest = rows.slice(3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt">
           <img src="/assets/coin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
-          <span style={{color:'#fff'}}>{meta ? Math.round(meta.totalWagered).toLocaleString('en-US') : '...'}</span>
+          <span style={{color:'#fff'}}>{meta ? Math.round(meta.totalPool).toLocaleString('en-US') : '...'}</span>
         </div>
         <div className="lb-prize-lbl">Total Prize Pool</div>
         <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
       </div>
+
+      {top3.length > 0 && (
+        <div className="lb-podium">
+          {podiumOrder.map((p, i) => {
+            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
+            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--chicken)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
+          })}
+        </div>
+      )}
 
       {meta && meta.end && <Countdown endDate={meta.end}/>}
 
@@ -609,25 +624,37 @@ function ChickenLeaderboard() {
         </a>
       </div>
 
-      {rows.length === 0 ? (
-        <div className="lb-hist-empty">No referrals tracked yet.</div>
-      ) : (
+      {rest.length > 0 && (
         <table className="lb-table">
           <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
           </tr></thead>
           <tbody>
-            {rows.map((p, i) => (
+            {rest.map((p, i) => (
               <tr key={p.position || i}>
-                <td><span className="tr-rank">#{p.position || i + 1}</span></td>
+                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
                 <td><span className="tr-wager"><Amt s={fmtMoney(p.wager)}/></span></td>
+                <td><span className="tr-prize">{fmtPrize(p)}</span></td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+
+      <div className="prize-section">
+        <div className="prize-title">// Prize Structure</div>
+        <div className="prize-tiers">
+          {[500,200,100,60,40,30,25,20,15,10].map((amt, i) => (
+            <div key={i} className="prize-tier">
+              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][i]}</div>
+              <div className={`prize-tier-amt${i===0?' p1':i===1?' p2':i===2?' p3':''}`}>{amt.toLocaleString('en-US')} COIN</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{textAlign:'center',marginTop:16,fontSize:12,color:'var(--mu)'}}>
         {meta && meta.lastUpdated ? `Updated ${Math.max(1,Math.floor((Date.now()-meta.lastUpdated)/60000))}m ago` : ''}
       </div>
