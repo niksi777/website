@@ -116,20 +116,26 @@
     #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
 
     @media(max-width:680px){
+      .ni{padding:0 16px}
+      .page{padding:0 16px}
       .nlinks,.nsoc{display:none}
       .hamburger{display:flex}
-      .nlogo{border-right:none;margin-right:0;padding-right:0}
+      .nlogo{border-right:none;margin-right:0;padding-right:0;gap:6px}
       .nlogo .nname{display:none}
       .nauth{padding-left:0}
       .nuser{padding:4px 8px;gap:6px}
       .nuser-name{display:none}
-      .carousel-wrap{height:230px}
-      .c-slide{padding:28px 24px}
-      .feat-grid{grid-template-columns:repeat(2,1fr)}
-      .plat-row{flex-wrap:wrap;gap:14px}
-      .plat-perks{gap:14px}
+      .carousel-wrap{height:200px;border-radius:12px}
+      .c-slide{padding:20px 18px}
+      .feat-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+      .feat-card{padding:20px 10px 16px;gap:10px}
+      .feat-card svg{width:40px;height:40px}
+      .feat-label{font-size:12px}
+      .plat-row{flex-wrap:wrap;gap:10px;padding:14px 16px;min-height:auto}
+      .plat-perks{gap:10px}
+      .plat-logo-wrap{width:70px}
       .plat-btns{width:100%}
-      .plat-btn{flex:1;justify-content:center}
+      .plat-btn{flex:1;justify-content:center;padding:8px 12px;font-size:11px}
       .ftw{flex-direction:column;align-items:flex-start}
     }
   
