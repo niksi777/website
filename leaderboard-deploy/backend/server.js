@@ -322,8 +322,8 @@ async function updateChickenLeaderboard() {
   }
 }
 
-// Poll conservatively (every 15 min) until chicken.gg confirms an exact rate limit
-setInterval(updateChickenLeaderboard, 15 * 60 * 1000);
+// Poll every 3 min - chicken.gg hasn't confirmed an exact rate limit, watch logs for 429s
+setInterval(updateChickenLeaderboard, 3 * 60 * 1000);
 updateChickenLeaderboard();
 
 const CHICKEN_PRIZES = [600, 160, 80, 48, 32, 24, 20, 16, 12, 8]; // coins, sums to 1,000 (1st boosted to 600, 2nd-10th scaled down proportionally)
