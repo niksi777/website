@@ -483,6 +483,7 @@ updateKrushLeaderboard();
 app.get("/krush-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const rows = krushReferrals
+    .filter(r => Number(r.wagered || 0) > 0)
     .slice()
     .sort((a, b) => Number(b.wagered || 0) - Number(a.wagered || 0))
     .slice(0, limit)

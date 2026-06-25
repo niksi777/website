@@ -1437,7 +1437,7 @@ function HeroCarousel() {
       },
       ...(krushActive ? [{
         logo:'/assets/krush.png', color:'#9b5cff',
-        perks:['$1,000 PRIZE POOL','30-DAY WAGER RACE'],
+        perks:['$1,000 PRIZE POOL','30-DAY WAGER RACE','10% DEPOSIT BONUS / 10% LOSSBACK WEEKLY'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=krush', ext:false,
       }] : []),
       ...(chickenActive ? [{
@@ -1848,8 +1848,14 @@ function KrushLeaderboard() {
     );
   }
 
-  const top3 = players.slice(0, 3);
-  const rest = players.slice(3);
+  const prizes = meta.prizes || [500,200,100,60,40,30,25,20,15,10];
+  const displayRows = prizes.map((amt, i) => {
+    const existing = players.find(r => r.position === i + 1);
+    return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
+  });
+
+  const top3 = displayRows.slice(0, 3);
+  const rest = displayRows.slice(3);
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
@@ -1863,8 +1869,12 @@ function KrushLeaderboard() {
       {top3.length > 0 && (
         <div className="lb-podium">
           {podiumOrder.map((p, i) => {
-            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
-            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--krush)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
+            const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
+            return (
+              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
+                <PodiumCard player={p} rank={rank} accentColor="var(--krush)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>
+              </div>
+            );
           })}
         </div>
       )}
@@ -1885,7 +1895,7 @@ function KrushLeaderboard() {
           </tr></thead>
           <tbody>
             {rest.map((p, i) => (
-              <tr key={p.position || i}>
+              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
@@ -1896,18 +1906,6 @@ function KrushLeaderboard() {
           </tbody>
         </table>
       )}
-
-      <div className="prize-section">
-        <div className="prize-title">// Prize Structure</div>
-        <div className="prize-tiers">
-          {[500,200,100,60,40,30,25,20,15,10].map((amt, i) => (
-            <div key={i} className="prize-tier">
-              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][i]}</div>
-              <div className={`prize-tier-amt${i===0?' p1':i===1?' p2':i===2?' p3':''}`}>{fmtMoney(amt)}</div>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
@@ -2154,12 +2152,6 @@ function LeaderboardsPage() {
           <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
             <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
           </button>
-          {krushActive && (
-            <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => setTab('krush')}>
-              <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
-              <span className="ptab-label">Krush.gg</span>
-            </button>
-          )}
           {chickenActive && (
             <button className={`ptab${tab==='chicken'?' active-chicken':''}`} onClick={() => setTab('chicken')}>
               <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
@@ -2169,6 +2161,12 @@ function LeaderboardsPage() {
             <button className={`ptab${tab==='chickenrace'?' active-chicken':''}`} onClick={() => setTab('chickenrace')}>
               <img className="ptab-img" src="/assets/chicken.png" alt="" onError={e=>e.target.style.display='none'}/>
               <span className="ptab-label">Race</span>
+            </button>
+          )}
+          {krushActive && (
+            <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => setTab('krush')}>
+              <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
+              <span className="ptab-label">Krush.gg</span>
             </button>
           )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
