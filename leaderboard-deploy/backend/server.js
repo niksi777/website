@@ -1374,6 +1374,7 @@ app.get('/stream-overlay', (req, res) => res.sendFile(path.join(__dirname, '../f
 app.get('/stream-bg', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-bg.html')));
 app.get('/stream-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-banner.html')));
 app.get('/chicken-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/chicken-banner.html')));
+app.get('/krush-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/krush-banner.html')));
 
 // Points API
 app.get('/points/:username', (req, res) => {
