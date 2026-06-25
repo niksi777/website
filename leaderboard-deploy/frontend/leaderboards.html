@@ -65,6 +65,10 @@
     .ptab.active-krush{border-color:rgba(155,92,255,.5);background:rgba(155,92,255,.08);box-shadow:0 0 18px rgba(155,92,255,.12)}
     .ptab-img{height:34px;object-fit:contain}
     .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+    .ptab{flex-direction:column;gap:6px}
+    .ptab-top{display:flex;align-items:center;gap:10px}
+    .ptab-amt{display:flex;align-items:center;gap:4px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#fff}
+    .ptab-coin{height:14px;width:14px;object-fit:contain}
 
     /* NiksiPoints leaderboard */
     .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
@@ -1061,14 +1065,26 @@ function App() {
   });
   const [krushActive, setKrushActive] = React.useState(false);
   const [chickenActive, setChickenActive] = React.useState(false);
+  const [gambaAmt, setGambaAmt] = React.useState(null);
+  const [krushAmt, setKrushAmt] = React.useState(null);
+  const [chickenAmt, setChickenAmt] = React.useState(null);
+  const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
   React.useEffect(() => {
+    fetch('/gamba-meta').then(r => r.json()).then(d => {
+      if (d && d.prizePool) setGambaAmt(Math.round(d.prizePool));
+    }).catch(() => {});
     fetch('/krush-meta').then(r => r.json()).then(d => {
       setKrushActive(!!d.active);
+      if (d.totalPool) setKrushAmt(Math.round(d.totalPool));
       if (!d.active && tab === 'krush') setTab('gamba');
     }).catch(() => {});
     fetch('/chicken-meta').then(r => r.json()).then(d => {
       setChickenActive(!!d.active);
+      if (d.totalPool) setChickenAmt(Math.round(d.totalPool));
       if (!d.active && (tab === 'chicken' || tab === 'chickenrace')) setTab('gamba');
+    }).catch(() => {});
+    fetch('/chicken-wager-race').then(r => r.json()).then(d => {
+      if (d && d.prize) setChickenRaceAmt(d.prize);
     }).catch(() => {});
   }, []);
 
@@ -1078,27 +1094,41 @@ function App() {
       <div className="wrap">
         <div className="platform-tabs f1">
           <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => setTab('gamba')}>
-            <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
+            <div className="ptab-top">
+              <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
+            </div>
+            {gambaAmt != null && <div className="ptab-amt"><span style={{color:'var(--ac)'}}>$</span>{gambaAmt.toLocaleString('en-US')}</div>}
           </button>
           {chickenActive && (
             <button className={`ptab${tab==='chicken'?' active-chicken':''}`} onClick={() => setTab('chicken')}>
-              <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
+              <div className="ptab-top">
+                <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
+              </div>
+              {chickenAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
           {chickenActive && (
             <button className={`ptab${tab==='chickenrace'?' active-chicken':''}`} onClick={() => setTab('chickenrace')}>
-              <img className="ptab-img" src="/assets/chicken.png" alt="" onError={e=>e.target.style.display='none'}/>
-              <span className="ptab-label">Race</span>
+              <div className="ptab-top">
+                <img className="ptab-img" src="/assets/chicken.png" alt="" onError={e=>e.target.style.display='none'}/>
+                <span className="ptab-label">Race</span>
+              </div>
+              {chickenRaceAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenRaceAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
           {krushActive && (
             <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => setTab('krush')}>
-              <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
+              <div className="ptab-top">
+                <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
+              </div>
+              {krushAmt != null && <div className="ptab-amt"><span style={{color:'var(--krush)'}}>$</span>{krushAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
-            <img className="ptab-img" src="/assets/np-coin.svg" alt="" onError={e=>e.target.style.display='none'}/>
-            <span className="ptab-label">NiksiPoints</span>
+            <div className="ptab-top">
+              <img className="ptab-img" src="/assets/np-coin.svg" alt="" onError={e=>e.target.style.display='none'}/>
+              <span className="ptab-label">NiksiPoints</span>
+            </div>
           </button>
         </div>
 
