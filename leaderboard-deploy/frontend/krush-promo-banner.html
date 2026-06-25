@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,800&family=Inter:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:680px;height:590px;overflow:hidden;background:#0e0a1a}
+
+    .card{
+      width:680px;height:590px;
+      background:radial-gradient(ellipse at 50% -10%, #3a1a6e 0%, #1d0d35 40%, #0c081c 100%);
+      position:relative;overflow:hidden;
+      font-family:'Inter',sans-serif;
+    }
+
+    /* animated star particles */
+    .stars{position:absolute;inset:0;pointer-events:none}
+    .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s)}
+    @keyframes twinkle{0%,100%{opacity:var(--lo,.1)}50%{opacity:var(--hi,.6)}}
+
+    /* subtle grid lines */
+    .card::before{
+      content:'';position:absolute;inset:0;
+      background:
+        linear-gradient(rgba(155,92,255,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(155,92,255,.04) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+
+    /* purple glow orbs */
+    .orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+    .orb1{width:300px;height:200px;background:rgba(120,60,220,.35);top:-60px;left:50%;transform:translateX(-50%)}
+    .orb2{width:200px;height:200px;background:rgba(90,40,180,.25);bottom:80px;left:-40px}
+    .orb3{width:200px;height:200px;background:rgba(90,40,180,.25);bottom:80px;right:-40px}
+
+    /* ─── HEADER ─── */
+    .header{position:relative;z-index:2;text-align:center;padding-top:22px}
+    .logos{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
+    .logo-pill{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:5px 14px 5px 10px}
+    .logo-icon{width:26px;height:26px;object-fit:contain;border-radius:4px}
+    .logo-text{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.06em;color:#fff;text-transform:uppercase}
+    .logo-x{font-size:15px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.05em}
+
+    /* ─── PRIZE POOL ─── */
+    .prize-pool{position:relative;z-index:2;text-align:center;margin-top:2px}
+    .prize-amount{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:88px;font-weight:900;line-height:.95;
+      background:linear-gradient(180deg,#ffffff 0%,#c7a3ff 55%,#9b5cff 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      filter:drop-shadow(0 0 22px rgba(155,92,255,.55));
+      letter-spacing:-.01em;
+    }
+    .prize-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:26px;font-weight:800;letter-spacing:.22em;
+      color:rgba(255,255,255,.92);text-transform:uppercase;
+      margin-top:1px;
+    }
+    .prize-label span{color:#9b5cff}
+
+    /* ─── PODIUM ─── */
+    .podium{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:0 40px;margin-top:16px}
+
+    .pod{
+      background:linear-gradient(145deg,rgba(60,30,110,.85),rgba(28,14,60,.9));
+      border:1px solid rgba(155,92,255,.25);
+      border-radius:14px;padding:14px 10px 12px;
+      text-align:center;flex:1;max-width:160px;
+      position:relative;
+    }
+    .pod::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(180deg,rgba(155,92,255,.06),transparent);pointer-events:none}
+
+    .pod.first{
+      max-width:200px;padding:18px 12px 14px;
+      border-color:rgba(212,175,90,.45);
+      background:linear-gradient(145deg,rgba(75,40,130,.9),rgba(32,16,68,.95));
+    }
+    .pod.first::before{background:linear-gradient(180deg,rgba(212,175,90,.08),transparent)}
+
+    .crown{display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+    .crown svg{filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+
+    .pod-amount{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:28px;font-weight:900;color:#fff;
+      text-shadow:0 0 16px rgba(155,92,255,.6);
+    }
+    .pod.first .pod-amount{font-size:36px;color:#fff;text-shadow:0 0 20px rgba(212,175,90,.5)}
+
+    .pod-rank{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:26px;height:26px;border-radius:6px;
+      font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;
+      margin-top:6px;
+    }
+    .pod.first .pod-rank{background:#d4af5a;color:#1a0e00;width:28px;height:28px;font-size:16px;border-radius:7px}
+    .pod.second .pod-rank,.pod.third .pod-rank{background:rgba(200,175,230,.15);border:1px solid rgba(200,175,230,.2);color:rgba(225,210,245,.7)}
+
+    /* ─── INFO BOX ─── */
+    .info-box{
+      position:relative;z-index:2;
+      margin:14px 36px 0;
+      border:1.5px dashed rgba(155,92,255,.35);
+      border-radius:12px;
+      padding:12px 20px;
+      text-align:center;
+      background:rgba(28,14,60,.4);
+    }
+    .info-row{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:16px;font-weight:700;letter-spacing:.1em;
+      color:rgba(230,215,255,.9);text-transform:uppercase;
+      line-height:1.55;
+    }
+    .info-row.gold{color:#e8c96a}
+    .info-row.purple{color:#c7a3ff}
+    .info-row.small{font-size:12px;font-weight:600;letter-spacing:.14em;color:rgba(195,170,230,.55);margin-top:2px}
+
+    /* ─── BOTTOM BAR ─── */
+    .bottom-bar{
+      position:absolute;bottom:0;left:0;right:0;
+      background:linear-gradient(135deg,#2a1554,#180a35);
+      border-top:2px solid rgba(155,92,255,.3);
+      padding:12px 0 14px;
+      text-align:center;z-index:2;
+    }
+    .bottom-bar::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,#9b5cff,#7b3fe4,transparent);
+    }
+    .code-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:14px;font-weight:700;letter-spacing:.22em;
+      color:rgba(255,255,255,.55);text-transform:uppercase;margin-bottom:4px;
+    }
+    .code-value{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:34px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;
+      background:linear-gradient(90deg,#9b5cff,#d6bbff,#9b5cff);
+      background-size:200% auto;
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      animation:shine 3s linear infinite;
+      filter:drop-shadow(0 0 10px rgba(155,92,255,.45));
+    }
+    @keyframes shine{to{background-position:200% center}}
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- glow orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <!-- stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logos">
+      <div class="logo-pill">
+        <img class="logo-icon" src="/assets/krush-icon.png" onerror="this.style.display='none';this.nextSibling.style.display='block'" alt=""/>
+        <span style="display:none;font-size:18px">🎲</span>
+        <span class="logo-text">Krush</span>
+      </div>
+      <div class="logo-x">×</div>
+      <div class="logo-pill">
+        <img class="logo-icon" src="/assets/niksi.png" onerror="this.style.display='none'" alt=""/>
+        <span class="logo-text">NIKSI777</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIZE POOL -->
+  <div class="prize-pool">
+    <div class="prize-amount">$1,000</div>
+    <div class="prize-label">30-DAY <span>WAGER RACE</span></div>
+  </div>
+
+  <!-- PODIUM -->
+  <div class="podium">
+    <div class="pod second">
+      <div class="crown">
+        <svg width="38" height="30" viewBox="0 0 60 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#dce8f4"/>
+              <stop offset="50%" stop-color="#a8bece"/>
+              <stop offset="100%" stop-color="#7090a8"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 40 L4 26 L16 34 L30 6 L44 34 L56 26 L56 40 Q30 44 4 40Z" fill="url(#sg)" stroke="#c0d4e4" stroke-width="1.2"/>
+          <circle cx="4"  cy="25" r="4" fill="#c8dcea" stroke="#a0bcd0" stroke-width="1"/>
+          <circle cx="30" cy="5"  r="4" fill="#c8dcea" stroke="#a0bcd0" stroke-width="1"/>
+          <circle cx="56" cy="25" r="4" fill="#c8dcea" stroke="#a0bcd0" stroke-width="1"/>
+          <rect x="4" y="40" width="52" height="5" rx="2" fill="#8090a8"/>
+        </svg>
+      </div>
+      <div class="pod-amount">$160</div>
+      <div class="pod-rank">2</div>
+    </div>
+    <div class="pod first">
+      <div class="crown">
+        <svg width="50" height="40" viewBox="0 0 60 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fff5c0"/>
+              <stop offset="40%" stop-color="#f0c030"/>
+              <stop offset="100%" stop-color="#b8840a"/>
+            </linearGradient>
+            <linearGradient id="gg2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f8e080"/>
+              <stop offset="100%" stop-color="#c89010"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 40 L4 26 L16 34 L30 4 L44 34 L56 26 L56 40 Q30 45 4 40Z" fill="url(#gg)" stroke="#e8b820" stroke-width="1.4"/>
+          <circle cx="4"  cy="25" r="4.5" fill="#ffe060" stroke="#d4a010" stroke-width="1.2"/>
+          <circle cx="30" cy="3.5" r="5"   fill="#ffe060" stroke="#d4a010" stroke-width="1.2"/>
+          <circle cx="56" cy="25" r="4.5" fill="#ffe060" stroke="#d4a010" stroke-width="1.2"/>
+          <circle cx="30" cy="3.5" r="2.5" fill="#fff4a0"/>
+          <rect x="4" y="40" width="52" height="5" rx="2" fill="url(#gg2)"/>
+        </svg>
+      </div>
+      <div class="pod-amount">$600</div>
+      <div class="pod-rank">1</div>
+    </div>
+    <div class="pod third">
+      <div class="crown">
+        <svg width="38" height="30" viewBox="0 0 60 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0b080"/>
+              <stop offset="50%" stop-color="#c87840"/>
+              <stop offset="100%" stop-color="#8a4e20"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 40 L4 26 L16 34 L30 6 L44 34 L56 26 L56 40 Q30 44 4 40Z" fill="url(#bg)" stroke="#d48840" stroke-width="1.2"/>
+          <circle cx="4"  cy="25" r="4" fill="#e89050" stroke="#b86820" stroke-width="1"/>
+          <circle cx="30" cy="5"  r="4" fill="#e89050" stroke="#b86820" stroke-width="1"/>
+          <circle cx="56" cy="25" r="4" fill="#e89050" stroke="#b86820" stroke-width="1"/>
+          <rect x="4" y="40" width="52" height="5" rx="2" fill="#9a5828"/>
+        </svg>
+      </div>
+      <div class="pod-amount">$80</div>
+      <div class="pod-rank">3</div>
+    </div>
+  </div>
+
+  <!-- INFO BOX -->
+  <div class="info-box">
+    <div class="info-row gold">EXCLUSIVE WAGER RACE</div>
+    <div class="info-row purple">TOP 10 SPLIT THE $1,000 POOL</div>
+    <div class="info-row">FIRST TO GOAL WINS BONUS PRIZE</div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="code-label">Sign up today using code</div>
+    <div class="code-value">NIKSI</div>
+  </div>
+
+</div>
+<script>
+  // generate stars
+  const stars = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      --d:${2+Math.random()*4}s;
+      --delay:${Math.random()*4}s;
+      --lo:${0.05+Math.random()*0.1};
+      --hi:${0.4+Math.random()*0.5};
+    `;
+    stars.appendChild(s);
+  }
+</script>
+</body>
+</html>

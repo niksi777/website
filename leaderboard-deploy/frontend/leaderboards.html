@@ -1094,7 +1094,6 @@ function App() {
           {krushActive && (
             <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => setTab('krush')}>
               <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
-              <span className="ptab-label">Krush.gg</span>
             </button>
           )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
