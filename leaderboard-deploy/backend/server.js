@@ -349,24 +349,33 @@ app.get("/chicken-leaderboard", (req, res) => {
 
 const CHICKEN_POOL_TOTAL = 1000; // coins - fixed prize pool, not derived from wagered amount
 
-// ── Chicken.gg wager race (first to hit the goal wins) ──────────────────────
+// ── Chicken.gg wager race (first to wager `goal` SINCE RACE START wins) ────
+// Tracks progress via a baseline snapshot taken when the race starts, so it
+// counts only wagers placed after that moment - completely independent of
+// the main leaderboard's all-time cumulative totals (which has its own
+// separate period and must never be reset by this feature).
 const CHICKEN_RACE_PATH = require("path").join(__dirname, "../../chicken-race.json");
-let chickenRace = { goal: 10000, prize: 100, winner: null };
+let chickenRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null };
 try {
   if (fs_lb.existsSync(CHICKEN_RACE_PATH)) {
-    chickenRace = { goal: 10000, prize: 100, winner: null, ...JSON.parse(fs_lb.readFileSync(CHICKEN_RACE_PATH, "utf-8")) };
+    chickenRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null, ...JSON.parse(fs_lb.readFileSync(CHICKEN_RACE_PATH, "utf-8")) };
   }
 } catch (e) {}
 
+function chickenRaceProgress(r) {
+  const base = chickenRace.baseline[r.displayName] || 0;
+  return Math.max(0, Number(r.wagerAmount || 0) - base);
+}
+
 function checkChickenRaceWinner() {
-  if (chickenRace.winner) return;
-  const qualifiers = chickenReferrals.filter(r => Number(r.wagerAmount || 0) >= chickenRace.goal);
+  if (chickenRace.winner || !chickenRace.startedAt) return;
+  const qualifiers = chickenReferrals.filter(r => chickenRaceProgress(r) >= chickenRace.goal);
   if (qualifiers.length === 0) return;
-  const top = qualifiers.sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))[0];
+  const top = qualifiers.sort((a, b) => chickenRaceProgress(b) - chickenRaceProgress(a))[0];
   chickenRace.winner = {
     username: top.displayName || "Hidden",
     avatar: top.imageUrl || null,
-    wager: Number(top.wagerAmount || 0),
+    wager: chickenRaceProgress(top),
     wonAt: Date.now(),
   };
   fs_lb.writeFileSync(CHICKEN_RACE_PATH, JSON.stringify(chickenRace, null, 2));
@@ -375,13 +384,9 @@ function checkChickenRaceWinner() {
 
 app.get("/chicken-wager-race", (req, res) => {
   const rows = chickenReferrals
-    .filter(r => Number(r.wagerAmount || 0) > 0)
-    .map(r => ({
-      username: r.displayName || "Hidden",
-      avatar: r.imageUrl || null,
-      wager: Number(r.wagerAmount || 0),
-      progress: Math.min(1, Number(r.wagerAmount || 0) / chickenRace.goal),
-    }))
+    .map(r => ({ username: r.displayName || "Hidden", avatar: r.imageUrl || null, wager: chickenRaceProgress(r) }))
+    .filter(r => r.wager > 0)
+    .map(r => ({ ...r, progress: Math.min(1, r.wager / chickenRace.goal) }))
     .sort((a, b) => b.wager - a.wager);
   res.json({ goal: chickenRace.goal, prize: chickenRace.prize, winner: chickenRace.winner, referrals: rows });
 });
@@ -393,7 +398,9 @@ app.post("/admin/chicken/race/start", (req, res) => {
 
   const goal = Number(req.body && req.body.goal) || 10000;
   const prize = Number(req.body && req.body.prize) || 100;
-  chickenRace = { goal, prize, winner: null };
+  const baseline = {};
+  chickenReferrals.forEach(r => { baseline[r.displayName] = Number(r.wagerAmount || 0); });
+  chickenRace = { goal, prize, winner: null, baseline, startedAt: Date.now() };
   fs_lb.writeFileSync(CHICKEN_RACE_PATH, JSON.stringify(chickenRace, null, 2));
   res.json({ ok: true, goal, prize });
 });
