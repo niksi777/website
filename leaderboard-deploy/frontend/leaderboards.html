@@ -619,8 +619,8 @@ function ChickenLeaderboard() {
   const fmtPrize = p => (p.prize > 0 ? Number(p.prize).toLocaleString('en-US') : '-');
   const fmtWager = p => (p.wager > 0 ? Number(p.wager).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '-');
   const maskName = name => {
-    if (!name || name.length <= 6) return name;
-    return name.slice(0,3) + '*'.repeat(name.length - 6) + name.slice(-3);
+    if (!name || name.length <= 4) return name;
+    return name.slice(0,2) + '*'.repeat(name.length - 4) + name.slice(-2);
   };
 
   if (rows === null) return <div className="loading">Loading...</div>;
@@ -702,8 +702,8 @@ function ChickenRaceLeaderboard() {
   }, []);
 
   const maskName = name => {
-    if (!name || name.length <= 6) return name;
-    return name.slice(0,3) + '*'.repeat(name.length - 6) + name.slice(-3);
+    if (!name || name.length <= 4) return name;
+    return name.slice(0,2) + '*'.repeat(name.length - 4) + name.slice(-2);
   };
 
   if (race === null) return <div className="loading">Loading...</div>;
