@@ -95,7 +95,7 @@ async function updateAcebet() {
 let gambaMeta = { endDate: null, prizePool: null };
 async function updateLeaderboard() {
   try {
-    const raceId = 14422;
+    const raceId = 15148;
 
     const gql = JSON.stringify({
       query: `query { getRaceById(raceId: ${raceId}) { id prize_pool start_date end_date race_name competitors { id display_name total_wagered position avatar vip_level_name } prize_distribution { position percentage amount } } }`
