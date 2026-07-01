@@ -242,7 +242,20 @@ async function handleCommand(username, message, isBadgeMod = false) {
     const target = parts[1]?.replace('@', '').trim().toLowerCase();
     const amount = parseInt(parts[2]?.replace(/,/g, ''));
     console.log(`[addpoints] user=${username} target=${target} amount=${amount} parts=${JSON.stringify(parts)}`);
-    if (!target || isNaN(amount) || amount <= 0) { await sendMessage(`Usage: !addpoints <user> <amount> â€” received: "${parts.slice(1).join(' ')}"`); return; }
+    if (!target || isNaN(amount) || amount <= 0) { await sendMessage(`Usage: !addpoints <user> <amount> â€” received: “${parts.slice(1).join(' ')}”`); return; }
+    // Only add points to existing users
+    let userExists = false;
+    try {
+      const pts = JSON.parse(fs.readFileSync(path.join(__dirname, 'points.json'), 'utf8'));
+      if (Object.prototype.hasOwnProperty.call(pts, target)) userExists = true;
+    } catch {}
+    if (!userExists) {
+      try {
+        const accs = JSON.parse(fs.readFileSync(path.join(__dirname, 'accounts.json'), 'utf8'));
+        if (Object.keys(accs).some(k => k.toLowerCase() === target)) userExists = true;
+      } catch {}
+    }
+    if (!userExists) { await sendMessage(`@${target} not found - no account exists with that name.`); return; }
     const newBal = addPoints(target, amount);
     await sendMessage(`Added ${amount.toLocaleString()} pts to @${target}. New balance: ${newBal.toLocaleString()}`);
     return;
