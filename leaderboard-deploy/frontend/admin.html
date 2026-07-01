@@ -589,6 +589,28 @@
     const [msg,setMsg]=React.useState('');
     const [err,setErr]=React.useState('');
 
+    const [hiddenList,setHiddenList]=React.useState([]);
+    const [hiddenInput,setHiddenInput]=React.useState('');
+    const [hiddenMsg,setHiddenMsg]=React.useState('');
+
+    function loadHidden(){
+      fetch(`/admin/gamba/hidden?session=${sessionId}`).then(r=>r.json()).then(d=>{ if(Array.isArray(d)) setHiddenList(d); }).catch(()=>{});
+    }
+    React.useEffect(()=>{ if(sessionId) loadHidden(); },[sessionId]);
+
+    async function addHidden(){
+      const u=hiddenInput.trim(); if(!u) return;
+      const r=await fetch(`/admin/gamba/hidden/add?session=${sessionId}`,{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({session:sessionId,username:u})});
+      const d=await r.json();
+      if(d.ok){setHiddenList(d.hidden);setHiddenInput('');setHiddenMsg(`"${u}" hidden from Gamba leaderboard`);}
+      else{setHiddenMsg(d.error||'Error');}
+    }
+    async function removeHidden(u){
+      const r=await fetch(`/admin/gamba/hidden/remove?session=${sessionId}`,{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({session:sessionId,username:u})});
+      const d=await r.json();
+      if(d.ok){setHiddenList(d.hidden);setHiddenMsg(`"${u}" restored`);}
+    }
+
     const [krushMeta,setKrushMeta]=React.useState(null);
     const [krushLoading,setKrushLoading]=React.useState(false);
     const [krushMsg,setKrushMsg]=React.useState('');
@@ -708,6 +730,27 @@
             </button>
           </div>
           {chickenRaceMsg&&<div style={{fontSize:12,color:'#f2a93b',marginTop:10}}>{chickenRaceMsg}</div>}
+        </div>
+
+        <div style={{background:'var(--s1)',border:'1px solid rgba(224,53,53,.3)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
+          <div style={{fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--rd)',marginBottom:12}}>Hidden Gamba Accounts</div>
+          <div style={{fontSize:13,color:'var(--mu)',marginBottom:14,lineHeight:1.5}}>Accounts on this list are removed from the Gamba leaderboard display. They still exist on Gamba's side - this only hides them from the site.</div>
+          {hiddenList.length>0 && (
+            <div style={{display:'flex',flexWrap:'wrap',gap:8,marginBottom:14}}>
+              {hiddenList.map(u=>(
+                <div key={u} style={{display:'flex',alignItems:'center',gap:6,background:'rgba(224,53,53,.1)',border:'1px solid rgba(224,53,53,.25)',borderRadius:6,padding:'4px 10px'}}>
+                  <span style={{fontSize:13,color:'#e03535',fontWeight:600}}>{u}</span>
+                  <button onClick={()=>removeHidden(u)} style={{background:'none',border:'none',color:'rgba(224,53,53,.7)',cursor:'pointer',padding:'0 2px',fontSize:14,lineHeight:1}}>×</button>
+                </div>
+              ))}
+            </div>
+          )}
+          {hiddenList.length===0 && <div style={{fontSize:13,color:'var(--mu)',marginBottom:14}}>No accounts hidden.</div>}
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <input className="search-bar" style={{marginBottom:0,width:220}} placeholder="Gamba username..." value={hiddenInput} onChange={e=>setHiddenInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addHidden()}/>
+            <button onClick={addHidden} style={{padding:'10px 20px',borderRadius:8,border:'none',background:'var(--rd)',color:'#fff',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase'}}>Hide</button>
+          </div>
+          {hiddenMsg&&<div style={{fontSize:12,color:'var(--mu)',marginTop:10}}>{hiddenMsg}</div>}
         </div>
 
         <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
