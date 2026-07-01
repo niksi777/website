@@ -170,6 +170,15 @@ updateLeaderboard();
 // Existing Gamba endpoint
 ﻿const fs_lb = require("fs");
 const LB_HISTORY_PATH = require("path").join(__dirname, "gamba-history.json");
+const GAMBA_HIDDEN_PATH = require("path").join(__dirname, "gamba-hidden.json");
+
+function loadGambaHidden() {
+  try { return fs_lb.existsSync(GAMBA_HIDDEN_PATH) ? JSON.parse(fs_lb.readFileSync(GAMBA_HIDDEN_PATH, "utf-8")) : []; } catch { return []; }
+}
+function saveGambaHidden(list) {
+  fs_lb.writeFileSync(GAMBA_HIDDEN_PATH, JSON.stringify(list, null, 2));
+}
+let gambaHidden = loadGambaHidden();
 
 app.get("/lb-meta", (req, res) => {
   res.json({ lastUpdated: lastUpdatedMs });
@@ -267,12 +276,43 @@ app.get("/players", (req, res) => {
         console.log(err);
         return res.json([]);
       }
-      res.json(rows);
+      const hidden = gambaHidden.map(u => u.toLowerCase());
+      res.json(rows.filter(r => !hidden.includes((r.username || '').toLowerCase())));
     }
   );
 });
 
 app.get("/gamba-meta", (req, res) => res.json(gambaMeta));
+
+app.get("/admin/gamba/hidden", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  res.json(gambaHidden);
+});
+
+app.post("/admin/gamba/hidden/add", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const username = (req.body.username || '').trim();
+  if (!username) return res.status(400).json({ error: 'No username' });
+  if (!gambaHidden.map(u => u.toLowerCase()).includes(username.toLowerCase())) {
+    gambaHidden.push(username);
+    saveGambaHidden(gambaHidden);
+  }
+  res.json({ ok: true, hidden: gambaHidden });
+});
+
+app.post("/admin/gamba/hidden/remove", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const username = (req.body.username || '').trim();
+  gambaHidden = gambaHidden.filter(u => u.toLowerCase() !== username.toLowerCase());
+  saveGambaHidden(gambaHidden);
+  res.json({ ok: true, hidden: gambaHidden });
+});
 
 // ── Chicken.gg affiliate referrals ──────────────────────────────────────────
 const CHICKEN_CACHE_PATH = require("path").join(__dirname, "../../chicken-cache.json");
