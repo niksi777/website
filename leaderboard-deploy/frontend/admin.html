@@ -151,14 +151,28 @@
     const [fetching, setFetching] = React.useState(false);
     const [search, setSearch] = React.useState('');
 
-    React.useEffect(() => {
-      if (!user || !user.isAdmin || !sessionId) return;
+    function loadAccounts() {
       setFetching(true);
       fetch(`/admin/accounts?session=${sessionId}`)
         .then(r => r.json())
         .then(data => { if (Array.isArray(data)) setAccounts(data); })
         .finally(() => setFetching(false));
+    }
+
+    React.useEffect(() => {
+      if (!user || !user.isAdmin || !sessionId) return;
+      loadAccounts();
     }, [user, sessionId]);
+
+    async function removeAccount(username) {
+      if (!window.confirm(`Remove "${username}" from the system? This deletes their account and NiksiPoints.`)) return;
+      await fetch(`/admin/accounts/remove?session=${sessionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId },
+        body: JSON.stringify({ session: sessionId, username })
+      });
+      loadAccounts();
+    }
 
     if (loading) return <Navbar user={null}/>;
 
@@ -241,6 +255,7 @@
                     <th>NiksiPoints</th>
                     <th>First Seen</th>
                     <th>Last Seen</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -274,6 +289,7 @@
                       <td><span className="NP-cell">{(a.points||0).toLocaleString()}</span></td>
                       <td><span className="date-cell">{fmtDate(a.firstSeen)}</span></td>
                       <td><span className="date-cell">{fmtDate(a.lastSeen)}</span></td>
+                      <td><button className="btn-remove" onClick={()=>removeAccount(a.kickUsername)}>Remove</button></td>
                     </tr>
                   ))}
                 </tbody>

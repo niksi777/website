@@ -1216,6 +1216,27 @@ app.get('/admin/accounts', (req, res) => {
   res.json(result);
 });
 
+app.post('/admin/accounts/remove', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const username = (req.body.username || '').trim().toLowerCase();
+  if (!username) return res.status(400).json({ error: 'No username' });
+  const fs2 = require('fs'), path2 = require('path');
+  const POINTS_PATH = path2.join(__dirname, '../../points.json');
+  // Remove from accounts.json
+  const accounts = loadAccounts();
+  const accKey = Object.keys(accounts).find(k => k.toLowerCase() === username);
+  if (accKey) { delete accounts[accKey]; require('fs').writeFileSync(ACCOUNTS_PATH, JSON.stringify(accounts, null, 2)); }
+  // Remove from points.json
+  try {
+    const pts = JSON.parse(fs2.readFileSync(POINTS_PATH, 'utf8'));
+    const ptKey = Object.keys(pts).find(k => k.toLowerCase() === username);
+    if (ptKey) { delete pts[ptKey]; fs2.writeFileSync(POINTS_PATH, JSON.stringify(pts, null, 2)); }
+  } catch {}
+  res.json({ ok: true });
+});
+
 ﻿
 // ─── PREDICTOR ───────────────────────────────────────────────────────────────
 const PREDICTOR_PATH = require('path').join(__dirname, '../../predictor.json');
