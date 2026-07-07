@@ -227,10 +227,12 @@
   function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
     const [chickenActive, setChickenActive] = React.useState(false);
+    const [krushActive, setKrushActive] = React.useState(false);
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
+      fetch('/krush-meta').then(r => r.json()).then(d => setKrushActive(!!d.active)).catch(() => {});
     }, []);
-    const total = chickenActive ? 4 : 3;
+    const total = 3 + (chickenActive ? 1 : 0) + (krushActive ? 1 : 0);
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -238,7 +240,7 @@
       timerRef.current = setInterval(() => setSlide(s => (s + 1) % total), 5500);
     }
     function goTo(i) { setSlide(i); startTimer(); }
-    React.useEffect(() => { startTimer(); return () => clearInterval(timerRef.current); }, []);
+    React.useEffect(() => { startTimer(); return () => clearInterval(timerRef.current); }, [total]);
 
     const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
 
@@ -323,6 +325,25 @@
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CHICKEN.GG</div>
               <div style={sub}>Compete for your share of the prize pool!</div>
               <a href="/leaderboards?tab=chicken" style={btn('#fc9a0e','rgba(252,154,14,.4)')}>VIEW LEADERBOARD <Arr/></a>
+            </div>
+          </div>
+          )}
+
+          {krushActive && (
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(155,92,255,.32) 0%, rgba(155,92,255,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(155,92,255,.16) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(155,92,255,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#0e0818 0%,#0a0614 55%,#0c0a1a 100%)'
+          ].join(','),borderTop:'3px solid rgba(155,92,255,.65)'}}>
+            {logo('/assets/krush.png',.6,'rgba(155,92,255,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(14,8,24),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={txt('#9b5cff','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON KRUSH.GG</div>
+              <div style={sub}>10% deposit bonus + 10% lossback with code NIKSI</div>
+              <a href="/leaderboards?tab=krush" style={btn('#9b5cff','rgba(155,92,255,.4)')}>VIEW LEADERBOARD <Arr/></a>
             </div>
           </div>
           )}
