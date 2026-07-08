@@ -17,6 +17,27 @@ const ENV_PATH = path.join(__dirname, '.env');
 let BOT_TOKEN = process.env.KICK_BOT_TOKEN || '';
 let REFRESH_TOKEN = process.env.KICK_BOT_REFRESH_TOKEN || '';
 
+let _lastDiscordAlert = 0;
+async function sendDiscordAlert(msg) {
+  if (Date.now() - _lastDiscordAlert < 30 * 60 * 1000) return;
+  _lastDiscordAlert = Date.now();
+  try {
+    const token = process.env.DISCORD_BOT_TOKEN;
+    if (!token) return;
+    const { data: dm } = await axios.post('https://discord.com/api/v10/users/@me/channels',
+      { recipient_id: '180779629714341888' },
+      { headers: { Authorization: `Bot ${token}`, 'Content-Type': 'application/json' } }
+    );
+    await axios.post(`https://discord.com/api/v10/channels/${dm.id}/messages`,
+      { content: msg },
+      { headers: { Authorization: `Bot ${token}`, 'Content-Type': 'application/json' } }
+    );
+    console.log('[discord alert] DM sent.');
+  } catch (e) {
+    console.error('[discord alert] Failed:', e?.response?.data || e.message);
+  }
+}
+
 // â”€â”€â”€ TOKEN REFRESH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let _refreshing = false; // mutex â€” prevent simultaneous refresh calls invalidating each other
 async function refreshToken() {
@@ -46,6 +67,9 @@ async function refreshToken() {
     console.log('[auth] Token refreshed successfully.');
   } catch (err) {
     console.error('[auth] Token refresh failed:', err?.response?.data || err.message);
+    if ((err?.response?.data?.error) === 'invalid_grant') {
+      sendDiscordAlert('**Niksibot Kick auth expired** - commands are down.\nRe-authorize here: https://niksi777.com/token-refresh\n(Log into Kick as **niksibot**, then click Authorize)');
+    }
   } finally {
     _refreshing = false;
   }
