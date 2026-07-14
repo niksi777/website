@@ -126,7 +126,7 @@ try {
 }
 
     const race = json.data.getRaceById;
-    gambaMeta.endDate = race.end_date || null;
+    gambaMeta.endDate = race.end_date ? race.end_date.replace(' ', 'T') + 'Z' : null;
     gambaMeta.prizePool = race.prize_pool || null;
     const competitors = race.competitors;
     const prizes = race.prize_distribution;
