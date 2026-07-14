@@ -218,6 +218,10 @@
   </div>
   <div class="ctrls">
     <button class="fast-btn" id="fast-btn">⚡ Fast Mode</button>
+    <label class="fast-btn" style="display:flex;align-items:center;gap:8px;cursor:default">
+      <svg id="vol-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path id="vi1" d="M15.5 8.5a5 5 0 010 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path id="vi2" d="M18.5 5.5a9 9 0 010 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="0.5" style="width:62px;accent-color:var(--ac);cursor:pointer" onclick="event.stopPropagation()"/>
+    </label>
     <button class="open-btn" id="open-btn" disabled>Open Case</button>
   </div>
   <div class="pi-head" id="pi-head">Possible Items</div>
@@ -285,6 +289,46 @@ let activeCase = null;
 let activeResult = null;
 let phase      = 'idle'; // idle | spinning | golden-ready | golden-spinning | done
 let fast       = false;
+let volume     = 0.5;
+
+// ─── AUDIO ──────────────────────────────────────
+let _audioCtx = null;
+function getCtx(){
+  if(!_audioCtx) _audioCtx = new(window.AudioContext||window.webkitAudioContext)();
+  if(_audioCtx.state==='suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+function playTick(vol){
+  if(!vol) return;
+  try{
+    const ctx=getCtx(), now=ctx.currentTime;
+    const osc=ctx.createOscillator(), gain=ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type='sine';
+    osc.frequency.setValueAtTime(1100,now);
+    osc.frequency.exponentialRampToValueAtTime(520,now+0.055);
+    gain.gain.setValueAtTime(vol*0.28,now);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+0.055);
+    osc.start(now); osc.stop(now+0.06);
+  }catch(e){}
+}
+function playCelebration(vol){
+  if(!vol) return;
+  try{
+    const ctx=getCtx();
+    [523,659,784,1047].forEach((freq,i)=>{
+      const t=ctx.currentTime+i*0.09;
+      const osc=ctx.createOscillator(), gain=ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type='sine';
+      osc.frequency.setValueAtTime(freq,t);
+      gain.gain.setValueAtTime(0,t);
+      gain.gain.linearRampToValueAtTime(vol*0.38,t+0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001,t+0.45);
+      osc.start(t); osc.stop(t+0.46);
+    });
+  }catch(e){}
+}
 
 // ─── SESSION ────────────────────────────────────
 async function initSession(){
@@ -486,6 +530,15 @@ function spinReel(items, winner, isGolden, onDone){
     reel.push(i===WIN_IDX ? winner : pool[Math.floor(Math.random()*pool.length)]);
   }
 
+  // Near-miss golden bait on regular spin
+  if(!isGolden){
+    const bait = items.find(i=>i.isGolden||i.rarity==='golden-trigger');
+    if(bait){
+      if(Math.random()<0.7) reel[WIN_IDX-1] = bait;
+      if(Math.random()<0.4) reel[WIN_IDX-3] = bait;
+    }
+  }
+
   // Reset without animation
   track.style.transition = 'none';
   track.style.transform = 'translateX(0)';
@@ -514,7 +567,27 @@ function spinReel(items, winner, isGolden, onDone){
   track.style.transition = `transform ${dur}ms cubic-bezier(0.05,0.88,0.12,1.0)`;
   track.style.transform = `translateX(${finalX}px)`;
 
+  // Tick sounds synced to card position via bezier evaluation
+  const tickStart = performance.now();
+  let lastTickIdx = -1, tickRaf = null;
+  function evalBz(p){
+    const cx=3*0.05,bx=3*(0.12-0.05)-cx,ax=1-cx-bx;
+    const cy=3*0.88,by=3*(1.0-0.88)-cy,ay=1-cy-by;
+    let u=p;
+    for(let i=0;i<8;i++){const err=((ax*u+bx)*u+cx)*u-p;const d=(3*ax*u+2*bx)*u+cx;if(Math.abs(d)<1e-6)break;u-=err/d;}
+    return((ay*u+by)*u+cy)*u;
+  }
+  (function tickLoop(){
+    const elapsed=performance.now()-tickStart;
+    const p=Math.min(elapsed/dur,1);
+    const tx=finalX*evalBz(p);
+    const idx=Math.round((-tx+stageW/2-74)/ITEM_STEP);
+    if(idx!==lastTickIdx&&idx>=0&&idx<REEL_LEN){lastTickIdx=idx;playTick(volume);}
+    if(elapsed<dur+100) tickRaf=requestAnimationFrame(tickLoop);
+  })();
+
   setTimeout(()=>{
+    if(tickRaf) cancelAnimationFrame(tickRaf);
     const cards = track.querySelectorAll('.ri');
     if(cards[WIN_IDX]) cards[WIN_IDX].classList.add('lit');
     setTimeout(()=>{ if(onDone) onDone(); }, 550);
@@ -548,10 +621,12 @@ async function doOpen(){
   spinReel(activeCase.items||[], activeResult.regularItem, false, ()=>{
     if(activeResult.goldenItem){
       phase = 'golden-ready';
+      playCelebration(volume);
       document.getElementById('v-golden').classList.add('vis');
     } else {
       phase = 'done';
       if(activeResult.newPoints!=null){ user.points=activeResult.newPoints; updateBal(); }
+      if(activeResult.regularItem?.rarity!=='bust') playCelebration(volume);
       showWin(activeResult.regularItem);
     }
   });
@@ -565,6 +640,7 @@ function triggerGolden(){
   spinReel(golItems, activeResult.goldenItem, true, ()=>{
     phase = 'done';
     if(activeResult.newPoints!=null){ user.points=activeResult.newPoints; updateBal(); }
+    playCelebration(volume);
     showWin(activeResult.goldenItem);
   });
 }
@@ -576,13 +652,13 @@ function showWin(item){
   const winCol = item.rarity==='bust'?'rgba(200,205,216,.3)':r.col;
 
   let artInner;
-  if(item.isGolden||item.rarity==='golden-trigger'){
-    artInner=`<img src="/assets/niksi.png" style="width:72px;height:72px;border-radius:50%;border:2px solid #e8a427;box-shadow:0 0 24px rgba(232,164,39,.8)"/>`;
-  } else if(item.storeItem){
+  if(item.storeItem){
     artInner=`<img src="/assets/gamba.png" style="width:66px;height:66px;object-fit:contain"/>
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#22c55e;letter-spacing:.06em;max-width:140px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(item.name||'')}</div>`;
   } else if(item.rarity==='bust'){
     artInner=`<span style="font-size:60px">💨</span>`;
+  } else if((item.isGolden||item.rarity==='golden-trigger')&&!(item.points>0)){
+    artInner=`<img src="/assets/niksi.png" style="width:72px;height:72px;border-radius:50%;border:2px solid #e8a427;box-shadow:0 0 24px rgba(232,164,39,.8)"/>`;
   } else {
     artInner=`<img src="/assets/np-coin.svg" style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(212,174,90,.6))"/>`;
   }
@@ -757,6 +833,11 @@ document.getElementById('back-btn').addEventListener('click',goBack);
 document.getElementById('open-btn').addEventListener('click',doOpen);
 document.getElementById('fast-btn').addEventListener('click',toggleFast);
 document.getElementById('gt-btn').addEventListener('click',triggerGolden);
+document.getElementById('vol-slider').addEventListener('input',e=>{
+  volume=parseFloat(e.target.value);
+  document.getElementById('vi1').style.opacity=volume>0?1:0;
+  document.getElementById('vi2').style.opacity=volume>0.5?1:0;
+});
 
 // ─── INIT ───────────────────────────────────────
 (async()=>{
