@@ -373,7 +373,7 @@ function renderCaseList(){
   grid.innerHTML = sorted.map(cs=>{
     const t = THEMES[cs.id] || DT;
     const items = cs.items || [];
-    const gW = items.filter(x=>x.isGolden).reduce((s,i)=>s+i.weight,0);
+    const gW = items.filter(x=>x.isGolden||x.rarity==='golden-trigger').reduce((s,i)=>s+i.weight,0);
     const tW = items.reduce((s,i)=>s+i.weight,0);
     const gPct = tW>0?Math.round(gW/tW*100):0;
     const badge = gPct>0&&cs.goldenItems?.length
@@ -506,7 +506,8 @@ function spinReel(items, winner, isGolden, onDone){
   track.offsetWidth;
 
   const stageW = stage.offsetWidth;
-  const finalX = -(WIN_IDX * ITEM_STEP - stageW/2 + 74);
+  const nudge = (Math.random() - 0.5) * ITEM_STEP * 0.65;
+  const finalX = -(WIN_IDX * ITEM_STEP - stageW/2 + 74) + nudge;
   const dur = fast ? 3200 : 7500;
 
   // Set inline transition (overrides previous 'none')
@@ -633,7 +634,7 @@ function renderPossibleItems(cs){
   let golW=0, golInsert=-1;
   const merged=[];
   items.forEach((item,i)=>{
-    if(item.isGolden){ golW+=item.weight; if(golInsert<0) golInsert=merged.length; }
+    if(item.isGolden||item.rarity==='golden-trigger'){ golW+=item.weight; if(golInsert<0) golInsert=merged.length; }
     else merged.push(item);
   });
   if(golW>0){
