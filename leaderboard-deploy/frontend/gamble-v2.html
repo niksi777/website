@@ -373,13 +373,6 @@ function renderCaseList(){
   grid.innerHTML = sorted.map(cs=>{
     const t = THEMES[cs.id] || DT;
     const items = cs.items || [];
-    const pips = items.filter(i=>i.rarity!=='bust').slice(0,5).map(i=>{
-      const r = rif(i);
-      const icon = (i.isGolden||i.rarity==='golden-trigger') ? `<span style="font-size:12px">✨</span>`
-        : i.storeItem ? `<img src="/assets/gamba.png"/>`
-        : `<img src="/assets/np-coin.svg"/>`;
-      return `<div class="cc-pip" style="background:${r.glo.replace('rgba','rgba').replace(/[\d.]+\)$/,'.15)')};border-color:${r.bar}22" title="${esc(i.name)}">${icon}</div>`;
-    }).join('');
     const gW = items.filter(x=>x.isGolden).reduce((s,i)=>s+i.weight,0);
     const tW = items.reduce((s,i)=>s+i.weight,0);
     const gPct = tW>0?Math.round(gW/tW*100):0;
@@ -395,7 +388,6 @@ function renderCaseList(){
       <div class="cc-meta">
         <div class="cc-tier" style="color:${t.accent}">${t.tier}</div>
         <div class="cc-name">${esc(cs.name)}</div>
-        <div class="cc-pips">${pips}</div>
         <button class="cc-btn" style="--cc-accent:${t.accent}">Open - ${fmt(cs.cost)} NP</button>
       </div>
     </div>`;
