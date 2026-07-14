@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>NIKSI777 - Cases</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.7);--ac:#4a9eff;--gold:#d4af5a}
+    html,body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+    /* NAV */
+    nav{background:rgba(6,13,26,.97);border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:50}
+    .ni{max-width:1020px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px}
+    .nlogo{display:flex;align-items:center;gap:10px;padding-right:22px;border-right:1px solid var(--b2);margin-right:18px;flex-shrink:0;text-decoration:none}
+    .nlogo img{height:28px;width:28px;border-radius:50%;object-fit:cover}
+    .nname{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#fff;text-transform:uppercase}
+    .nlinks{display:flex;align-items:center;flex:1}
+    .nlinks a{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:0 13px;height:56px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;margin-bottom:-1px}
+    .nlinks a:hover{color:rgba(255,255,255,.9)}
+    .nlinks a.on{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+    .nauth-wrap{display:flex;align-items:center;gap:8px;padding-left:12px;margin-left:auto}
+    .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap}
+    .nlogin-btn:hover{opacity:.85}
+    .nuser-pill{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:default}
+    .nuser-pill img{width:24px;height:24px;border-radius:50%;object-fit:cover}
+    .nuser-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--tx)}
+    .nuser-np{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+
+    /* PREVIEW BANNER */
+    .v2-banner{background:rgba(212,174,90,.07);border-bottom:1px solid rgba(212,174,90,.18);padding:7px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,174,90,.7)}
+
+    /* WRAP */
+    .wrap{max-width:1020px;margin:0 auto;padding:0 24px}
+
+    /* LIST VIEW */
+    #v-list{padding:44px 0 72px}
+    .lhead{text-align:center;margin-bottom:44px}
+    .lhead-eye{font-size:10px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:12px}
+    .lhead-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,8vw,84px);font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:-.01em;line-height:.88;margin-bottom:8px}
+    .lhead-sub{font-size:13px;color:var(--mu)}
+    .cases-grid-v2{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:60px}
+
+    /* CASE CARD */
+    .cc{background:linear-gradient(160deg,var(--s1),#090b0f);border:1px solid var(--b2);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s cubic-bezier(.2,.8,.3,1),box-shadow .3s,border-color .3s}
+    .cc:hover{transform:translateY(-10px) scale(1.01);border-color:var(--cc-bdr,rgba(255,255,255,.18));box-shadow:0 40px 80px rgba(0,0,0,.8),0 0 60px -12px var(--cc-glow,transparent)}
+    .cc-art{height:196px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .cc-art-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,var(--cc-glow,transparent),transparent 70%);opacity:.55;transition:opacity .3s}
+    .cc:hover .cc-art-glow{opacity:1}
+    .cc-chest{position:relative;z-index:1;transition:transform .3s cubic-bezier(.2,.8,.3,1.2)}
+    .cc:hover .cc-chest{transform:translateY(-8px) scale(1.06)}
+    .cc-meta{padding:18px 20px 20px;border-top:1px solid var(--b1)}
+    .cc-tier{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px}
+    .cc-name{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;line-height:1;margin-bottom:10px}
+    .cc-pips{display:flex;gap:5px;margin-bottom:13px;flex-wrap:wrap}
+    .cc-pip{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+    .cc-pip img{width:14px;height:14px;object-fit:contain}
+    .cc-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:11px;border-radius:9px;border:1px solid var(--cc-accent,rgba(255,255,255,.2));background:transparent;color:var(--cc-accent,rgba(255,255,255,.7));font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .18s,color .18s;font-family:'Inter',sans-serif}
+    .cc-btn:hover{background:var(--cc-accent,rgba(255,255,255,.2));color:#07080e}
+
+    /* OPEN VIEW */
+    #v-open{display:none;padding:28px 0 72px}
+    .oh{display:flex;align-items:center;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+    .oh-back{background:none;border:1px solid var(--b2);color:var(--mu);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;border-radius:8px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;flex-shrink:0}
+    .oh-back:hover{color:var(--tx);border-color:var(--b3)}
+    .oh-name{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;line-height:1}
+    .oh-bal{margin-left:auto;font-size:12px;color:var(--mu);flex-shrink:0}
+    .oh-bal strong{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--gold)}
+
+    /* REEL */
+    .reel-wrap{position:relative;margin-bottom:20px}
+    .rind{position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:var(--ri-col,var(--gold));z-index:10;pointer-events:none;box-shadow:0 0 10px var(--ri-col,var(--gold)),0 0 28px var(--ri-glow,rgba(212,174,90,.35))}
+    .rind::before,.rind::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent}
+    .rind::before{top:-1px;border-top:11px solid var(--ri-col,var(--gold))}
+    .rind::after{bottom:-1px;border-bottom:11px solid var(--ri-col,var(--gold))}
+    .rstage{height:168px;overflow:hidden;position:relative;background:var(--s1);border:1px solid var(--b2);border-radius:12px}
+    .rfade{position:absolute;top:0;bottom:0;width:160px;z-index:5;pointer-events:none}
+    .rfade.l{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+    .rfade.r{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+    .rtrack{display:flex;align-items:center;gap:8px;height:100%;padding:0 8px;width:max-content;will-change:transform}
+
+    /* REEL ITEM CARDS */
+    .ri{flex-shrink:0;width:148px;height:150px;border-radius:10px;border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;background:var(--s2);user-select:none}
+    .ri-inner{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;z-index:1}
+    .ri-bar{position:absolute;bottom:0;left:0;right:0;height:3px}
+    .ri-glow{position:absolute;bottom:0;left:0;right:0;height:55%;opacity:.11}
+    .ri.r-blue{border-color:rgba(74,144,217,.2)}.ri.r-blue .ri-glow{opacity:.14}
+    .ri.r-purple{border-color:rgba(155,89,217,.2)}.ri.r-purple .ri-glow{opacity:.14}
+    .ri.r-pink,.ri.r-jackpot{border-color:rgba(217,79,155,.2)}.ri.r-pink .ri-glow,.ri.r-jackpot .ri-glow{opacity:.14}
+    .ri.r-gold{border-color:rgba(232,164,39,.25);animation:gPulse 2.5s ease-in-out infinite}.ri.r-gold .ri-glow{opacity:.16}
+    .ri.r-gold-ultra{border-color:rgba(255,200,50,.35);animation:gPulse 2s ease-in-out infinite}.ri.r-gold-ultra .ri-glow{opacity:.18}
+    .ri.r-ultra{border-color:rgba(160,100,255,.35);animation:uPulse 2s ease-in-out infinite}.ri.r-ultra .ri-glow{opacity:.18}
+    .ri.r-golden-trigger{border-color:rgba(232,164,39,.45);animation:gtPulse 1.8s ease-in-out infinite}.ri.r-golden-trigger .ri-glow{opacity:.22}
+    .ri.r-store{border-color:rgba(34,197,94,.2)}.ri.r-store .ri-glow{opacity:.14}
+    .ri.lit{border-color:rgba(255,255,255,.8)!important;box-shadow:0 0 0 2px rgba(255,255,255,.18),0 0 48px rgba(255,255,255,.08)!important;animation:litPop .45s cubic-bezier(.2,.8,.3,1.4) both!important}
+
+    @keyframes gPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 18px rgba(232,164,39,.3)}}
+    @keyframes uPulse{0%,100%{box-shadow:0 0 16px rgba(160,100,255,.15)}50%{box-shadow:0 0 36px rgba(160,100,255,.4)}}
+    @keyframes gtPulse{0%,100%{box-shadow:0 0 20px rgba(232,164,39,.2)}50%{box-shadow:0 0 44px rgba(232,164,39,.6)}}
+    @keyframes litPop{from{transform:scale(.88);opacity:.5}to{transform:scale(1);opacity:1}}
+
+    /* CONTROLS */
+    .ctrls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:30px;flex-wrap:wrap}
+    .open-btn{padding:14px 52px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;transition:transform .15s,box-shadow .2s,opacity .15s;box-shadow:0 4px 24px rgba(34,197,94,.3)}
+    .open-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 8px 36px rgba(34,197,94,.45)}
+    .open-btn:disabled{opacity:.28;cursor:not-allowed;transform:none;box-shadow:none}
+    .fast-btn{padding:9px 16px;border-radius:8px;border:1px solid var(--b2);background:transparent;color:var(--mu);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+    .fast-btn:hover,.fast-btn.on{background:var(--s2);color:var(--tx);border-color:var(--b3)}
+
+    /* POSSIBLE ITEMS */
+    .pi-head{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:rgba(221,227,239,.35);margin-bottom:18px;text-align:center}
+    .pi-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:0}
+    .pi-card{width:140px;border-radius:10px;border:1px solid var(--b1);background:var(--s1);overflow:hidden;cursor:default;transition:transform .2s,box-shadow .2s;position:relative}
+    .pi-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(0,0,0,.6)}
+    .pi-art{height:100px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .pi-art-bg{position:absolute;inset:0;opacity:.12}
+    .pi-bar{height:2px}
+    .pi-meta{padding:9px 11px 11px}
+    .pi-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;line-height:1;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pi-bot{display:flex;align-items:center;justify-content:space-between}
+    .pi-pts{font-size:11px;color:var(--mu)}
+    .pi-pct{font-size:10px;font-weight:700;letter-spacing:.04em}
+
+    /* GOLDEN OVERLAY */
+    #v-golden{display:none;position:fixed;inset:0;background:rgba(5,6,10,.92);z-index:150;align-items:center;justify-content:center;flex-direction:column;gap:20px;text-align:center;padding:24px;backdrop-filter:blur(10px)}
+    #v-golden.vis{display:flex}
+    .gt-img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #e8a427;box-shadow:0 0 32px rgba(232,164,39,.8);animation:gFlash 1.5s ease-in-out infinite}
+    .gt-text{font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,6vw,58px);font-weight:800;text-transform:uppercase;background:linear-gradient(90deg,#e8a427,#fff,#f5d080,#e8a427);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rnb 1.5s linear infinite;letter-spacing:.04em}
+    .gt-sub{font-size:13px;color:rgba(232,164,39,.6);letter-spacing:.1em;text-transform:uppercase}
+    .gt-btn{padding:16px 48px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:none;background:linear-gradient(135deg,#e8a427,#f5d080);color:#07080e;box-shadow:0 4px 24px rgba(232,164,39,.4);animation:gFlash 2s ease-in-out infinite}
+    .gt-btn:hover{opacity:.9}
+    @keyframes gFlash{0%,100%{opacity:1}50%{opacity:.5}}
+    @keyframes rnb{0%{background-position:0% center}100%{background-position:200% center}}
+
+    /* WIN OVERLAY */
+    #v-win{position:fixed;inset:0;background:rgba(5,6,10,.92);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .35s}
+    #v-win.vis{opacity:1;pointer-events:all}
+    .wm{text-align:center;position:relative;z-index:1;padding:0 24px;animation:wIn .6s cubic-bezier(.2,.8,.3,1.2) both}
+    .wm-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:320px;height:320px;border-radius:50%;opacity:.2;filter:blur(70px);pointer-events:none}
+    .wm-eye{font-size:10px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:var(--mu);margin-bottom:18px}
+    .wm-art{width:164px;height:164px;border-radius:18px;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;position:relative;overflow:hidden;background:var(--s2)}
+    .wm-art-bg{position:absolute;inset:0;opacity:.18}
+    .wm-art-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .wm-rarity{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
+    .wm-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,58px);font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:.9;margin-bottom:10px}
+    .wm-pts{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:800;letter-spacing:.04em;line-height:1;margin-bottom:28px}
+    .wm-pts.ultra{background:linear-gradient(90deg,#ff64c8,#a064ff,#64c8ff,#ff64c8);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rnb 1.5s linear infinite}
+    .wm-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .wm-again{padding:13px 32px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 4px 18px rgba(34,197,94,.3);transition:transform .12s}
+    .wm-again:hover{transform:translateY(-2px)}
+    .wm-again:disabled{opacity:.3;cursor:not-allowed;transform:none}
+    .wm-close{padding:13px 32px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid var(--b3);background:transparent;color:var(--mu);transition:all .12s}
+    .wm-close:hover{color:var(--tx);border-color:rgba(255,255,255,.3)}
+    @keyframes wIn{from{transform:scale(.82) translateY(24px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+
+    /* PARTICLES */
+    #px{position:fixed;inset:0;pointer-events:none;z-index:199;display:none}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--b1);padding:22px 0;margin-top:48px}
+    .ftw{max-width:1020px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ftd{font-size:12px;color:var(--mu)}
+
+    @media(max-width:700px){
+      .nlinks{display:none}
+      .cases-grid-v2{grid-template-columns:1fr 1fr}
+      .rstage{height:136px}.ri{height:120px}
+      .rfade{width:80px}
+    }
+    @media(max-width:480px){.cases-grid-v2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<canvas id="px"></canvas>
+
+<nav>
+  <div class="ni">
+    <a href="/" class="nlogo"><img src="/assets/niksi.png" alt=""/><span class="nname">NIKSI777</span></a>
+    <div class="nlinks">
+      <a href="/">HOME</a><a href="/leaderboards">LEADERBOARDS</a><a href="/points">POINTS</a>
+      <a href="/store">STORE</a><a href="/cases" class="on">CASES</a><a href="/predict">PREDICT</a>
+    </div>
+    <div class="nauth-wrap" id="nauth">
+      <a href="/auth/login" class="nlogin-btn">Login with Kick</a>
+    </div>
+  </div>
+</nav>
+
+<div class="v2-banner">New Case Design Preview (V2) - Not Live</div>
+
+<!-- LIST VIEW -->
+<div id="v-list" class="wrap">
+  <div class="lhead">
+    <p class="lhead-eye">Open Cases</p>
+    <h1 class="lhead-title">Cases</h1>
+    <p class="lhead-sub">Open cases to win NiksiPoints - provably fair - 5% chance for the Golden Spin</p>
+  </div>
+  <div class="cases-grid-v2" id="cases-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--mu);font-size:13px">Loading cases...</div>
+  </div>
+</div>
+
+<!-- OPEN VIEW -->
+<div id="v-open" class="wrap">
+  <div class="oh">
+    <button class="oh-back" id="back-btn">← All Cases</button>
+    <div class="oh-name" id="oh-name"></div>
+    <div class="oh-bal">Balance: <strong id="oh-bal">-</strong> NP</div>
+  </div>
+  <div class="reel-wrap">
+    <div class="rind" id="rind"></div>
+    <div class="rstage" id="rstage">
+      <div class="rfade l"></div>
+      <div class="rfade r"></div>
+      <div class="rtrack" id="rtrack"></div>
+    </div>
+  </div>
+  <div class="ctrls">
+    <button class="fast-btn" id="fast-btn">⚡ Fast Mode</button>
+    <button class="open-btn" id="open-btn" disabled>Open Case</button>
+  </div>
+  <div class="pi-head" id="pi-head">Possible Items</div>
+  <div class="pi-grid" id="pi-grid"></div>
+</div>
+
+<!-- GOLDEN TRIGGER OVERLAY -->
+<div id="v-golden">
+  <img src="/assets/niksi.png" class="gt-img" alt=""/>
+  <div class="gt-text">Golden Spin!</div>
+  <div class="gt-sub">Bonus round unlocked</div>
+  <button class="gt-btn" id="gt-btn">✨ Spin Now</button>
+</div>
+
+<!-- WIN OVERLAY -->
+<div id="v-win">
+  <div class="wm-glow" id="wm-glow"></div>
+  <div class="wm" id="wm"></div>
+</div>
+
+<footer>
+  <div class="ftw">
+    <p class="ftd"><strong>18+</strong> - Gamble responsibly. All outcomes are provably fair.</p>
+    <span class="ftd">V2 Preview</span>
+  </div>
+</footer>
+
+<script>
+// ─── CONFIG ─────────────────────────────────────
+const ITEM_STEP = 156; // 148px card + 8px gap
+const WIN_IDX   = 55;
+const REEL_LEN  = 80;
+
+// ─── CASE THEMES ────────────────────────────────
+const THEMES = {
+  starter:{lid:'#1a3a6a',body:'#0d1e38',accent:'#4a90d9',glow:'rgba(74,144,217,.5)',stripe:'rgba(74,144,217,.15)',tier:'Entry Level'},
+  premium:{lid:'#2a1a5a',body:'#150d2e',accent:'#9b59d9',glow:'rgba(155,89,217,.5)',stripe:'rgba(155,89,217,.15)',tier:'Mid Tier'},
+  elite:  {lid:'#0d2a3a',body:'#061520',accent:'#00bcd4',glow:'rgba(0,188,212,.5)',stripe:'rgba(0,188,212,.15)',tier:'High Stakes'},
+  mega:   {lid:'#3a2000',body:'#1e1000',accent:'#e8a427',glow:'rgba(232,164,39,.6)',stripe:'rgba(232,164,39,.15)',tier:'Premium'},
+  flip:   {lid:'#003a1a',body:'#001810',accent:'#22c55e',glow:'rgba(34,197,94,.5)',stripe:'rgba(34,197,94,.12)',tier:'Flip'},
+  lucky:  {lid:'#2a0030',body:'#160018',accent:'#cc44ff',glow:'rgba(200,64,255,.6)',stripe:'rgba(200,64,255,.1)',tier:'Lucky'},
+};
+const DT = {lid:'#1a3a6a',body:'#0d1e38',accent:'#4a9eff',glow:'rgba(74,158,255,.45)',stripe:'rgba(74,158,255,.12)',tier:'Standard'};
+
+// ─── RARITY INFO ────────────────────────────────
+const RI = {
+  bust:              {label:'Bust',         col:'rgba(200,205,216,.3)', bar:'#3a3a52', glo:'transparent'},
+  blue:              {label:'Mil-Spec',     col:'#9bbde0',             bar:'#4a90d9', glo:'rgba(74,144,217,.25)'},
+  purple:            {label:'Restricted',  col:'#c4a0e8',             bar:'#9b59d9', glo:'rgba(155,89,217,.25)'},
+  pink:              {label:'Classified',  col:'#f0a0cc',             bar:'#d94f9b', glo:'rgba(217,79,155,.25)'},
+  'golden-trigger':  {label:'Golden Spin', col:'#e8a427',             bar:'#e8a427', glo:'rgba(232,164,39,.4)'},
+  gold:              {label:'Covert',      col:'#f0c060',             bar:'#e8a427', glo:'rgba(232,164,39,.3)'},
+  'gold-ultra':      {label:'High Covert', col:'#ffe080',             bar:'#ffd040', glo:'rgba(255,208,64,.35)'},
+  store:             {label:'Store Item',  col:'#22c55e',             bar:'#22c55e', glo:'rgba(34,197,94,.25)'},
+  jackpot:           {label:'Jackpot',     col:'#f0a0cc',             bar:'#d94f9b', glo:'rgba(217,79,155,.3)'},
+  ultra:             {label:'Rare Special',col:'#e0c4ff',             bar:'#a064ff', glo:'rgba(160,100,255,.35)'},
+};
+function rif(item){ return RI[item.rarity] || RI.bust; }
+
+// ─── STATE ──────────────────────────────────────
+let sessionId  = null;
+let user       = null;
+let allCases   = [];
+let activeCase = null;
+let activeResult = null;
+let phase      = 'idle'; // idle | spinning | golden-ready | golden-spinning | done
+let fast       = false;
+
+// ─── SESSION ────────────────────────────────────
+async function initSession(){
+  const p = new URLSearchParams(window.location.search);
+  const sid = p.get('session') || localStorage.getItem('kick_session');
+  if(p.get('session')) window.history.replaceState({},'',window.location.pathname);
+  if(!sid){ renderNav(); return; }
+  localStorage.setItem('kick_session', sid);
+  sessionId = sid;
+  try{
+    const r = await fetch(`/auth/me?session=${sid}`);
+    if(r.ok){ user = await r.json(); localStorage.setItem('kick_user', JSON.stringify(user)); }
+    else{ localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); sessionId = null; }
+  }catch(e){}
+  renderNav();
+}
+
+function renderNav(){
+  const el = document.getElementById('nauth');
+  if(!user){ el.innerHTML = `<a href="/auth/login" class="nlogin-btn">Login with Kick</a>`; return; }
+  el.innerHTML = `<div class="nuser-pill">${user.avatar?`<img src="${esc(user.avatar)}" alt=""/>`:''}
+    <span class="nuser-name">${esc(user.displayName||user.username)}</span>
+    <span class="nuser-np" id="nav-np">${fmt(user.points||0)} NP</span></div>`;
+}
+
+// ─── LOAD CASES ─────────────────────────────────
+async function loadCases(){
+  try{
+    const r = await fetch('/gamble/cases');
+    if(!r.ok) throw new Error();
+    allCases = await r.json();
+    renderCaseList();
+  }catch(e){
+    document.getElementById('cases-grid').innerHTML =
+      `<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--mu)">Failed to load cases.</div>`;
+  }
+}
+
+// ─── CASE CHEST SVG ─────────────────────────────
+function makeSVG(id, size=120){
+  const t = THEMES[id] || DT;
+  const FW=84,FH=70,LID=24,DX=26,DY=16;
+  const VW=FW+DX, VH=FH+DY;
+  const cx=FW/2, lidY=DY+LID;
+  const logoR=13, lx=cx, ly=lidY+(FH-LID)/2;
+  const a=t.accent, h=Math.round(size*VH/VW);
+  return `<svg viewBox="0 0 ${VW} ${VH}" width="${size}" height="${h}" fill="none" style="display:block;filter:drop-shadow(0 8px 20px ${t.glow})">
+  <defs>
+    <linearGradient id="gf${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${t.lid}"/><stop offset="100%" stop-color="${t.body}"/></linearGradient>
+    <linearGradient id="gl${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${t.lid}" stop-opacity=".9"/><stop offset="100%" stop-color="${t.lid}" stop-opacity=".6"/></linearGradient>
+    <clipPath id="lc${id}"><circle cx="${lx}" cy="${ly}" r="${logoR}"/></clipPath>
+  </defs>
+  <polygon points="0,${DY} ${DX},0 ${VW},0 ${FW},${DY}" fill="${t.lid}"/>
+  <polygon points="0,${DY} ${DX},0 ${VW},0 ${FW},${DY}" fill="rgba(255,255,255,.13)"/>
+  <polygon points="${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}" fill="${t.body}"/>
+  <polygon points="${FW},${DY} ${VW},0 ${VW},${LID} ${FW},${lidY}" fill="rgba(0,0,0,.4)"/>
+  <polygon points="${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}" fill="${t.body}"/>
+  <polygon points="${FW},${lidY} ${VW},${LID} ${VW},${FH} ${FW},${FH+DY}" fill="rgba(0,0,0,.55)"/>
+  <rect x="0" y="${DY}" width="${FW}" height="${LID}" fill="url(#gl${id})"/>
+  <rect x="0" y="${lidY}" width="${FW}" height="${FH-LID}" fill="url(#gf${id})"/>
+  <rect x="0" y="${lidY}" width="${FW}" height="${FH-LID}" fill="${t.stripe}" opacity=".5"/>
+  <polygon points="0,${DY} ${FW},${DY} ${FW},${FH+DY} 0,${FH+DY}" fill="none" stroke="${a}" stroke-width=".8" stroke-opacity=".5"/>
+  <polygon points="0,${DY} ${DX},0 ${VW},0 ${FW},${DY}" fill="none" stroke="${a}" stroke-width=".8" stroke-opacity=".4"/>
+  <polygon points="${FW},${DY} ${VW},0 ${VW},${FH} ${FW},${FH+DY}" fill="none" stroke="${a}" stroke-width=".8" stroke-opacity=".4"/>
+  <line x1="0" y1="${lidY}" x2="${FW}" y2="${lidY}" stroke="${a}" stroke-width="2" stroke-opacity=".8"/>
+  <line x1="${FW}" y1="${lidY}" x2="${VW}" y2="${LID}" stroke="${a}" stroke-width="1.5" stroke-opacity=".6"/>
+  <polyline points="0,${DY+11} 0,${DY} 11,${DY}" fill="none" stroke="${a}" stroke-width="3" stroke-linecap="square" stroke-opacity=".85"/>
+  <polyline points="${FW-11},${DY} ${FW},${DY} ${FW},${DY+11}" fill="none" stroke="${a}" stroke-width="3" stroke-linecap="square" stroke-opacity=".85"/>
+  <polyline points="0,${FH+DY-11} 0,${FH+DY} 11,${FH+DY}" fill="none" stroke="${a}" stroke-width="3" stroke-linecap="square" stroke-opacity=".85"/>
+  <polyline points="${FW-11},${FH+DY} ${FW},${FH+DY} ${FW},${FH+DY-11}" fill="none" stroke="${a}" stroke-width="3" stroke-linecap="square" stroke-opacity=".85"/>
+  <line x1="${FW}" y1="${DY}" x2="${VW}" y2="0" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-opacity=".7"/>
+  <line x1="${FW}" y1="${FH+DY}" x2="${VW}" y2="${FH}" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-opacity=".6"/>
+  <rect x="${cx-9}" y="${lidY-7}" width="18" height="13" rx="3" fill="${t.body}" stroke="${a}" stroke-width="1.5"/>
+  <path d="M ${cx-5} ${lidY-7} a5 5 0 0 1 10 0" fill="none" stroke="${a}" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="${cx}" cy="${lidY}" r="2.5" fill="${a}" opacity=".9"/>
+  <circle cx="${lx}" cy="${ly}" r="${logoR+3}" fill="rgba(0,0,0,.3)" stroke="${a}" stroke-width="1.5" stroke-opacity=".7"/>
+  <image href="/assets/niksi.png" x="${lx-logoR}" y="${ly-logoR}" width="${logoR*2}" height="${logoR*2}" clip-path="url(#lc${id})"/>
+  </svg>`;
+}
+
+// ─── RENDER CASE LIST ───────────────────────────
+function renderCaseList(){
+  const grid = document.getElementById('cases-grid');
+  if(!allCases.length){ grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--mu)">No cases available.</div>'; return; }
+  const sorted = [...allCases].sort((a,b)=>a.cost-b.cost);
+  grid.innerHTML = sorted.map(cs=>{
+    const t = THEMES[cs.id] || DT;
+    const items = cs.items || [];
+    const pips = items.filter(i=>i.rarity!=='bust').slice(0,5).map(i=>{
+      const r = rif(i);
+      const icon = (i.isGolden||i.rarity==='golden-trigger') ? `<span style="font-size:12px">✨</span>`
+        : i.storeItem ? `<img src="/assets/gamba.png"/>`
+        : `<img src="/assets/np-coin.svg"/>`;
+      return `<div class="cc-pip" style="background:${r.glo.replace('rgba','rgba').replace(/[\d.]+\)$/,'.15)')};border-color:${r.bar}22" title="${esc(i.name)}">${icon}</div>`;
+    }).join('');
+    const gW = items.filter(x=>x.isGolden).reduce((s,i)=>s+i.weight,0);
+    const tW = items.reduce((s,i)=>s+i.weight,0);
+    const gPct = tW>0?Math.round(gW/tW*100):0;
+    const badge = gPct>0&&cs.goldenItems?.length
+      ? `<div style="position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#e8a427,#f5d080);color:#07080e;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px">${gPct}% GOLDEN</div>`
+      : '';
+    return `<div class="cc" style="--cc-accent:${t.accent};--cc-bdr:${t.accent}30;--cc-glow:${t.glow}" onclick="openCase('${esc(cs.id)}')">
+      <div class="cc-art" style="background:radial-gradient(ellipse at 50% 120%,${t.lid}80,transparent 70%),linear-gradient(160deg,${t.body},#07080e)">
+        <div class="cc-art-glow"></div>
+        <div class="cc-chest">${makeSVG(cs.id,120)}</div>
+        ${badge}
+      </div>
+      <div class="cc-meta">
+        <div class="cc-tier" style="color:${t.accent}">${t.tier}</div>
+        <div class="cc-name">${esc(cs.name)}</div>
+        <div class="cc-pips">${pips}</div>
+        <button class="cc-btn" style="--cc-accent:${t.accent}">Open - ${fmt(cs.cost)} NP</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── OPEN CASE VIEW ─────────────────────────────
+function openCase(id){
+  const cs = allCases.find(c=>c.id===id);
+  if(!cs) return;
+  activeCase = cs;
+  activeResult = null;
+  phase = 'idle';
+  const t = THEMES[cs.id] || DT;
+
+  document.getElementById('v-list').style.display = 'none';
+  document.getElementById('v-open').style.display = 'block';
+  document.getElementById('oh-name').textContent = cs.name;
+
+  const rind = document.getElementById('rind');
+  rind.style.setProperty('--ri-col', t.accent);
+  rind.style.setProperty('--ri-glow', t.glow);
+
+  buildIdleReel(cs.items || []);
+  renderPossibleItems(cs);
+  updateBal();
+  updateOpenBtn();
+  window.scrollTo(0,0);
+}
+
+function goBack(){
+  document.getElementById('v-open').style.display = 'none';
+  document.getElementById('v-list').style.display = 'block';
+  activeCase = null; phase = 'idle';
+}
+
+// ─── REEL ───────────────────────────────────────
+function buildPool(items){
+  const pool=[];
+  items.forEach(item=>{
+    const n = Math.max(1, Math.round((item.weight||1)*5));
+    for(let i=0;i<n;i++) pool.push(item);
+  });
+  return pool;
+}
+
+function buildIdleReel(items){
+  const pool = buildPool(items);
+  const track = document.getElementById('rtrack');
+  track.style.transition = 'none';
+  track.style.transform = 'translateX(0)';
+  track.innerHTML = Array.from({length:REEL_LEN},()=>riHTML(pool[Math.floor(Math.random()*pool.length)])).join('');
+}
+
+function riHTML(item){
+  const r = rif(item);
+  const cls = 'r-'+(item.rarity||'bust');
+  let icon, pts;
+  if(item.isGolden || item.rarity==='golden-trigger'){
+    icon = `<img src="/assets/niksi.png" style="width:48px;height:48px;border-radius:50%;border:2px solid #e8a427;box-shadow:0 0 14px rgba(232,164,39,.8)"/>`;
+    pts  = `<span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#e8a427;letter-spacing:.06em">GOLDEN</span>`;
+  } else if(item.storeItem){
+    icon = `<img src="/assets/gamba.png" style="width:42px;height:42px;object-fit:contain"/>`;
+    pts  = `<span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#22c55e;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(item.name||'Prize')}</span>`;
+  } else if(item.rarity==='bust'){
+    icon = `<span style="font-size:34px;line-height:1;opacity:.4">💨</span>`;
+    pts  = `<span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:rgba(200,205,216,.3);letter-spacing:.06em">BUST</span>`;
+  } else {
+    icon = `<img src="/assets/np-coin.svg" style="width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(212,174,90,.5))"/>`;
+    pts  = `<span style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:${r.col};letter-spacing:.04em">${fmt(item.points||0)} NP</span>`;
+  }
+  return `<div class="ri ${cls}">
+    <div class="ri-inner">${icon}${pts}</div>
+    <div class="ri-bar" style="background:${r.bar}"></div>
+    <div class="ri-glow" style="background:linear-gradient(to top,${r.glo},transparent)"></div>
+  </div>`;
+}
+
+function spinReel(items, winner, isGolden, onDone){
+  const pool = buildPool(items);
+  const track = document.getElementById('rtrack');
+  const stage = document.getElementById('rstage');
+
+  const reel = [];
+  for(let i=0;i<REEL_LEN;i++){
+    reel.push(i===WIN_IDX ? winner : pool[Math.floor(Math.random()*pool.length)]);
+  }
+
+  // Reset without animation
+  track.style.transition = 'none';
+  track.style.transform = 'translateX(0)';
+  track.innerHTML = reel.map(riHTML).join('');
+
+  // Update indicator color
+  const rind = document.getElementById('rind');
+  if(isGolden){
+    rind.style.setProperty('--ri-col','#e8a427');
+    rind.style.setProperty('--ri-glow','rgba(232,164,39,.5)');
+  } else {
+    const t = THEMES[activeCase.id] || DT;
+    rind.style.setProperty('--ri-col', t.accent);
+    rind.style.setProperty('--ri-glow', t.glow);
+  }
+
+  // Force reflow so reset is painted before animation starts
+  track.offsetWidth;
+
+  const stageW = stage.offsetWidth;
+  const finalX = -(WIN_IDX * ITEM_STEP - stageW/2 + 74);
+  const dur = fast ? 3200 : 7500;
+
+  // Set inline transition (overrides previous 'none')
+  track.style.transition = `transform ${dur}ms cubic-bezier(0.05,0.88,0.12,1.0)`;
+  track.style.transform = `translateX(${finalX}px)`;
+
+  setTimeout(()=>{
+    const cards = track.querySelectorAll('.ri');
+    if(cards[WIN_IDX]) cards[WIN_IDX].classList.add('lit');
+    setTimeout(()=>{ if(onDone) onDone(); }, 550);
+  }, dur);
+}
+
+// ─── OPEN CASE API ──────────────────────────────
+async function doOpen(){
+  if(phase!=='idle') return;
+  if(!user){ alert('Please login to open cases.'); return; }
+  if((user.points||0)<(activeCase.cost||0)){ alert(`Need ${fmt(activeCase.cost)} NP to open this case.`); return; }
+
+  phase = 'spinning';
+  updateOpenBtn();
+
+  let d;
+  try{
+    const resp = await fetch('/gamble/open',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-session-id':sessionId},
+      body:JSON.stringify({caseId:activeCase.id,session:sessionId})
+    });
+    d = await resp.json();
+    if(!resp.ok){ phase='idle'; updateOpenBtn(); alert(d.error||'Error opening case.'); return; }
+  }catch(e){
+    phase='idle'; updateOpenBtn(); alert('Connection error. Please try again.'); return;
+  }
+
+  activeResult = d;
+
+  spinReel(activeCase.items||[], activeResult.regularItem, false, ()=>{
+    if(activeResult.goldenItem){
+      phase = 'golden-ready';
+      document.getElementById('v-golden').classList.add('vis');
+    } else {
+      phase = 'done';
+      if(activeResult.newPoints!=null){ user.points=activeResult.newPoints; updateBal(); }
+      showWin(activeResult.regularItem);
+    }
+  });
+}
+
+// ─── GOLDEN SPIN ────────────────────────────────
+function triggerGolden(){
+  document.getElementById('v-golden').classList.remove('vis');
+  phase = 'golden-spinning';
+  const golItems = activeCase.goldenItems||activeCase.items||[];
+  spinReel(golItems, activeResult.goldenItem, true, ()=>{
+    phase = 'done';
+    if(activeResult.newPoints!=null){ user.points=activeResult.newPoints; updateBal(); }
+    showWin(activeResult.goldenItem);
+  });
+}
+
+// ─── WIN MODAL ──────────────────────────────────
+function showWin(item){
+  const r = rif(item);
+  const isUltra = ['ultra','gold-ultra'].includes(item.rarity);
+  const winCol = item.rarity==='bust'?'rgba(200,205,216,.3)':r.col;
+
+  let artInner;
+  if(item.isGolden||item.rarity==='golden-trigger'){
+    artInner=`<img src="/assets/niksi.png" style="width:72px;height:72px;border-radius:50%;border:2px solid #e8a427;box-shadow:0 0 24px rgba(232,164,39,.8)"/>`;
+  } else if(item.storeItem){
+    artInner=`<img src="/assets/gamba.png" style="width:66px;height:66px;object-fit:contain"/>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#22c55e;letter-spacing:.06em;max-width:140px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(item.name||'')}</div>`;
+  } else if(item.rarity==='bust'){
+    artInner=`<span style="font-size:60px">💨</span>`;
+  } else {
+    artInner=`<img src="/assets/np-coin.svg" style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(212,174,90,.6))"/>`;
+  }
+
+  let ptsHTML;
+  if(item.rarity==='bust') ptsHTML=`<div class="wm-pts" style="color:rgba(200,205,216,.3)">Nothing</div>`;
+  else if(item.storeItem) ptsHTML=`<div class="wm-pts" style="color:#22c55e">${esc(item.title||item.name||'Store Item')}</div>`;
+  else {
+    const ptsCls = isUltra?'wm-pts ultra':'wm-pts';
+    const ptsStyle = isUltra?'':` style="color:${winCol}"`;
+    ptsHTML=`<div class="${ptsCls}"${ptsStyle}>+${fmt(item.points||0)} NP</div>`;
+  }
+
+  const canAgain = user&&(user.points||0)>=(activeCase.cost||0);
+
+  document.getElementById('wm-glow').style.background = r.glo;
+  document.getElementById('wm').innerHTML = `
+    <div class="wm-eye">You received</div>
+    <div class="wm-art" style="border-color:${r.bar}28;box-shadow:0 0 80px ${r.glo}">
+      <div class="wm-art-bg" style="background:linear-gradient(to top,${r.bar}28,transparent)"></div>
+      <div class="wm-art-inner">${artInner}</div>
+    </div>
+    <div class="wm-rarity" style="color:${winCol}">${r.label}</div>
+    <div class="wm-name">${esc(item.name||'')}</div>
+    ${ptsHTML}
+    <div class="wm-acts">
+      <button class="wm-again" id="wm-again" ${canAgain?'':'disabled'}>Open Again</button>
+      <button class="wm-close" onclick="closeWin()">Close</button>
+    </div>`;
+
+  document.getElementById('wm-again').onclick = ()=>{ closeWin(); setTimeout(doOpen,80); };
+
+  const ov = document.getElementById('v-win');
+  ov.offsetWidth;
+  ov.classList.add('vis');
+
+  if(item.rarity!=='bust') fireParticles(r.bar);
+}
+
+function closeWin(){
+  document.getElementById('v-win').classList.remove('vis');
+  setTimeout(()=>{ phase='idle'; updateOpenBtn(); updateBal(); },350);
+}
+
+// ─── POSSIBLE ITEMS ─────────────────────────────
+function renderPossibleItems(cs){
+  const items = cs.items||[];
+  const tW = items.reduce((s,i)=>s+(i.weight||0),0);
+  let golW=0, golInsert=-1;
+  const merged=[];
+  items.forEach((item,i)=>{
+    if(item.isGolden){ golW+=item.weight; if(golInsert<0) golInsert=merged.length; }
+    else merged.push(item);
+  });
+  if(golW>0){
+    merged.splice(golInsert>=0?golInsert:merged.length,0,
+      {name:'Golden Spin',points:0,rarity:'golden-trigger',isGolden:true,weight:golW});
+  }
+
+  document.getElementById('pi-head').textContent = (cs.goldenItems&&cs.goldenItems.length>0)
+    ? `Possible Items - Golden Spin at ${((items.filter(i=>i.isGolden).reduce((s,i)=>s+i.weight,0)/tW)*100).toFixed(2)}%`
+    : 'Possible Items';
+
+  document.getElementById('pi-grid').innerHTML = merged.map(item=>{
+    const r = rif(item);
+    const pct = tW>0?((item.weight/tW)*100).toFixed(1):'0.0';
+    let icon;
+    if(item.isGolden||item.rarity==='golden-trigger') icon=`<img src="/assets/niksi.png" style="width:48px;height:48px;border-radius:50%;border:2px solid #e8a427"/>`;
+    else if(item.storeItem) icon=`<img src="/assets/gamba.png" style="width:44px;height:44px;object-fit:contain"/>`;
+    else if(item.rarity==='bust') icon=`<span style="font-size:36px;opacity:.5">💨</span>`;
+    else icon=`<img src="/assets/np-coin.svg" style="width:44px;height:44px;object-fit:contain"/>`;
+    const ptsLabel = item.rarity==='bust'?'Nothing':item.storeItem?(item.title||'Store Item'):`${fmt(item.points||0)} NP`;
+    return `<div class="pi-card">
+      <div class="pi-art" style="background:linear-gradient(160deg,${r.bar}18,transparent)">
+        <div class="pi-art-bg" style="background:radial-gradient(circle at 50% 80%,${r.bar},transparent)"></div>
+        <span style="position:relative;z-index:1">${icon}</span>
+      </div>
+      <div class="pi-bar" style="background:${r.bar}"></div>
+      <div class="pi-meta">
+        <div class="pi-name" style="color:${r.col}">${esc(item.name||'')}</div>
+        <div class="pi-bot">
+          <span class="pi-pts">${ptsLabel}</span>
+          <span class="pi-pct" style="color:${r.bar}">${pct}%</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Golden items section
+  if(cs.goldenItems&&cs.goldenItems.length>0){
+    const golTW = cs.goldenItems.reduce((s,i)=>s+(i.weight||0),0);
+    const golTriggerW = items.filter(i=>i.isGolden).reduce((s,i)=>s+i.weight,0);
+    const golTriggerRate = tW>0?golTriggerW/tW:0;
+    const gSection = document.createElement('div');
+    gSection.style.cssText='margin-top:28px;width:100%';
+    gSection.innerHTML=`<div style="font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(232,164,39,.6);text-align:center;margin-bottom:18px">✨ Golden Spin Prizes</div>
+    <div class="pi-grid">${cs.goldenItems.map(item=>{
+      const r=rif(item);
+      const overall=(golTW>0?(item.weight/golTW)*golTriggerRate*100:0).toFixed(4);
+      let icon;
+      if(item.storeItem) icon=`<img src="/assets/gamba.png" style="width:44px;height:44px;object-fit:contain"/>`;
+      else icon=`<img src="/assets/np-coin.svg" style="width:44px;height:44px;object-fit:contain"/>`;
+      const ptsLabel=item.storeItem?(item.title||'Store Item'):`${fmt(item.points||0)} NP`;
+      return `<div class="pi-card">
+        <div class="pi-art" style="background:linear-gradient(160deg,${r.bar}18,transparent)">
+          <div class="pi-art-bg" style="background:radial-gradient(circle at 50% 80%,${r.bar},transparent)"></div>
+          <span style="position:relative;z-index:1">${icon}</span>
+        </div>
+        <div class="pi-bar" style="background:${r.bar}"></div>
+        <div class="pi-meta">
+          <div class="pi-name" style="color:${r.col}">${esc(item.name||'')}</div>
+          <div class="pi-bot"><span class="pi-pts">${ptsLabel}</span><span class="pi-pct" style="color:#e8a427">${overall}%</span></div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+    document.getElementById('pi-grid').after(gSection);
+  }
+}
+
+// ─── PARTICLES ──────────────────────────────────
+function fireParticles(color){
+  const c=document.getElementById('px');
+  c.width=window.innerWidth; c.height=window.innerHeight; c.style.display='block';
+  const ctx=c.getContext('2d');
+  const cx=c.width/2, cy=c.height*0.42;
+  const pts=[]; const cols=[color,'#d4af5a','#ffffff'];
+  for(let i=0;i<90;i++){
+    const a=Math.random()*Math.PI*2, spd=2+Math.random()*10;
+    pts.push({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-2,sz:1.5+Math.random()*4,alpha:1,c:cols[i%3]});
+  }
+  function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    let alive=false;
+    for(const p of pts){
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.28; p.alpha-=0.013;
+      if(p.alpha<=0) continue; alive=true;
+      ctx.save(); ctx.globalAlpha=p.alpha; ctx.fillStyle=p.c;
+      ctx.shadowBlur=10; ctx.shadowColor=p.c;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,Math.PI*2); ctx.fill(); ctx.restore();
+    }
+    if(alive) requestAnimationFrame(frame); else c.style.display='none';
+  }
+  requestAnimationFrame(frame);
+}
+
+// ─── HELPERS ────────────────────────────────────
+function updateBal(){
+  const pts=user?(user.points||0):0;
+  const b=document.getElementById('oh-bal'); if(b) b.textContent=fmt(pts);
+  const n=document.getElementById('nav-np'); if(n) n.textContent=fmt(pts)+' NP';
+}
+function updateOpenBtn(){
+  const btn=document.getElementById('open-btn'); if(!activeCase) return;
+  const can=user&&(user.points||0)>=(activeCase.cost||0)&&phase==='idle';
+  btn.disabled=!can;
+  btn.textContent=!user?'Login to Open'
+    :!can&&phase==='idle'?`Need ${fmt(activeCase.cost)} NP`
+    :phase!=='idle'?'Spinning...'
+    :`Open Case - ${fmt(activeCase.cost||0)} NP`;
+}
+function toggleFast(){
+  fast=!fast;
+  const b=document.getElementById('fast-btn');
+  b.classList.toggle('on',fast);
+  b.textContent=fast?'⚡ Fast On':'⚡ Fast Mode';
+}
+function fmt(n){ return Number(n||0).toLocaleString('en-US'); }
+function esc(s){ const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML; }
+
+// ─── EVENTS ─────────────────────────────────────
+document.getElementById('back-btn').addEventListener('click',goBack);
+document.getElementById('open-btn').addEventListener('click',doOpen);
+document.getElementById('fast-btn').addEventListener('click',toggleFast);
+document.getElementById('gt-btn').addEventListener('click',triggerGolden);
+
+// ─── INIT ───────────────────────────────────────
+(async()=>{
+  await initSession();
+  await loadCases();
+  updateOpenBtn();
+})();
+</script>
+</body>
+</html>
