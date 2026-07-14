@@ -450,7 +450,17 @@ function buildIdleReel(items){
   track.innerHTML = Array.from({length:REEL_LEN},()=>riHTML(pool[Math.floor(Math.random()*pool.length)])).join('');
 }
 
-function riHTML(item){
+function riHTML(item, masked=false){
+  if(masked){
+    return `<div class="ri r-golden-trigger">
+      <div class="ri-inner">
+        <img src="/assets/niksi.png" style="width:48px;height:48px;border-radius:50%;border:2px solid #e8a427;box-shadow:0 0 14px rgba(232,164,39,.8)"/>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#e8a427;letter-spacing:.06em">GOLDEN</span>
+      </div>
+      <div class="ri-bar" style="background:#e8a427"></div>
+      <div class="ri-glow" style="background:linear-gradient(to top,rgba(232,164,39,.4),transparent)"></div>
+    </div>`;
+  }
   const r = rif(item);
   const cls = 'r-'+(item.rarity||'bust');
   let icon, pts;
@@ -487,7 +497,7 @@ function spinReel(items, winner, isGolden, onDone){
   // Reset without animation
   track.style.transition = 'none';
   track.style.transform = 'translateX(0)';
-  track.innerHTML = reel.map(riHTML).join('');
+  track.innerHTML = reel.map(item => riHTML(item, isGolden)).join('');
 
   // Update indicator color
   const rind = document.getElementById('rind');
