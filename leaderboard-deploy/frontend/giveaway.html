@@ -105,14 +105,16 @@
     .roller-wrap{background:var(--s1);border:1px solid var(--b2);border-radius:16px;padding:28px 28px 24px;display:flex;flex-direction:column;gap:24px}
     .roller-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
     .roller-stage-wrap{position:relative}
-    .roller-pointer-top{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid #b8cce8;z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
-    .roller-pointer-bot{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:14px solid #b8cce8;z-index:10;filter:drop-shadow(0 0 4px rgba(184,204,232,.4))}
-    .roller-stage{position:relative;height:130px;overflow:hidden;border-radius:0;background:#080a0e;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
-    .roller-stage::before{content:'';position:absolute;left:0;top:0;bottom:0;width:140px;background:linear-gradient(to right,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
-    .roller-stage::after{content:'';position:absolute;right:0;top:0;bottom:0;width:140px;background:linear-gradient(to left,#0d0f14 0%,#0d0f1488 60%,transparent 100%);z-index:4;pointer-events:none}
-    .roller-win-zone{position:absolute;left:50%;top:0;bottom:0;width:176px;transform:translateX(-50%);background:linear-gradient(to bottom,transparent,rgba(184,204,232,.04),transparent);z-index:3;pointer-events:none}
+    .roller-stage{position:relative;height:168px;overflow:hidden;border-radius:12px;background:var(--s1);border:1px solid var(--b2)}
+    .rfade{position:absolute;top:0;bottom:0;width:140px;z-index:5;pointer-events:none}
+    .rfade.l{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+    .rfade.r{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+    .rind{position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:#b8cce8;z-index:10;pointer-events:none;box-shadow:0 0 10px rgba(184,204,232,.5),0 0 28px rgba(184,204,232,.2)}
+    .rind::before,.rind::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent}
+    .rind::before{top:-1px;border-top:11px solid #b8cce8}
+    .rind::after{bottom:-1px;border-bottom:11px solid #b8cce8}
     .roller-track{display:flex;align-items:center;gap:4px;position:absolute;top:0;height:100%;will-change:transform;white-space:nowrap;padding:0 4px}
-    .roller-card{flex-shrink:0;width:140px;height:122px;border-radius:6px;background:linear-gradient(160deg,#0f1218,#0a0c10);border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;user-select:none;transition:border-color .3s;position:relative;overflow:hidden}
+    .roller-card{flex-shrink:0;width:140px;height:150px;border-radius:10px;background:linear-gradient(160deg,var(--s2),#080b12);border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;user-select:none;transition:border-color .3s;position:relative;overflow:hidden}
     .roller-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08)}
     .roller-avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid rgba(255,255,255,.15)}
     .roller-card-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c8cdd8}
@@ -374,12 +376,8 @@
       track.style.transition='none';
       track.style.transform='translateX(0px)';
       void track.offsetWidth;
-      requestAnimationFrame(()=>{
-        requestAnimationFrame(()=>{
-          track.style.transition='transform 6200ms cubic-bezier(0.12,0,0.1,1)';
-          track.style.transform='translateX('+finalX+'px)';
-        });
-      });
+      track.style.transition='transform 6200ms cubic-bezier(0.05,0.88,0.12,1.0)';
+      track.style.transform='translateX('+finalX+'px)';
       setTimeout(()=>{
         setWinnerIdx(landIdx);
         if(onRollingChange)onRollingChange(false);
@@ -445,10 +443,10 @@
           </div>
         </div>
         <div className="roller-stage-wrap">
-          <div className="roller-pointer-top"/>
-          <div className="roller-pointer-bot"/>
           <div className="roller-stage" ref={stageRef}>
-            <div className="roller-win-zone"/>
+            <div className="rind"/>
+            <div className="rfade l"/>
+            <div className="rfade r"/>
             <div className="roller-track" ref={trackRef} style={{transform:'translateX(0px)',left:0,top:0}} onTransitionEnd={onTransitionEnd}/>
           </div>
         </div>
