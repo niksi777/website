@@ -2058,8 +2058,7 @@ function LeaderboardsPage() {
 
   function changeTab(t) {
     setTab(t);
-    const url = t === 'gamba' ? window.location.pathname : `${window.location.pathname}?tab=${t}`;
-    window.history.pushState({ tab: t }, '', url);
+    window.history.pushState({ tab: t }, '', `${window.location.pathname}?tab=${t}`);
   }
 
   React.useEffect(() => {
