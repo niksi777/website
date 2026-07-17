@@ -1190,7 +1190,7 @@ function HeroCarousel() {
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
-    const total = chickenActive ? 4 : 3;
+    const total = chickenActive ? 5 : 4;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1215,7 +1215,25 @@ function HeroCarousel() {
         <div className="carousel-wrap">
         <div className="c-track" style={{transform:`translateX(-${slide*100}%)`}}>
 
-          {/* Slide 0 - USE CODE NIKSI */}
+          {/* Slide 0 - BETFURY */}
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(247,147,26,.34) 0%, rgba(247,147,26,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(247,147,26,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(247,147,26,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#110a02 0%,#0d0901 55%,#110b02 100%)'
+          ].join(','),borderTop:'3px solid rgba(247,147,26,.7)'}}>
+            {logo('/assets/betfury.png',.65,'rgba(247,147,26,.55)')}
+            <div style={{position:'absolute',inset:0,background:fade(17,10,2),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={txt('#f7931a','clamp(44px,6vw,68px)',.88,6)}>PLAY ON BETFURY</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>DAILY BONUSES & RAKEBACK</div>
+              <div style={sub}>Use code <strong style={{color:'#f7931a'}}>NIKSI777</strong> for exclusive rewards</div>
+              <a href="https://betfury.tv/niksi777" target="_blank" rel="noreferrer" style={btn('#f7931a','rgba(247,147,26,.45)')}>PLAY NOW <Arr/></a>
+            </div>
+          </div>
+
+          {/* Slide 1 - USE CODE NIKSI */}
           <div className="c-slide" style={{background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(74,158,255,.38) 0%, rgba(74,158,255,.08) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(74,158,255,.16) 0%, transparent 58%)',
@@ -1352,6 +1370,11 @@ function HeroCarousel() {
         logo:'/assets/gamba2.png', color:'#22c55e',
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
+      },
+      {
+        logo:'/assets/betfury.png', color:'#f7931a',
+        perks:['DAILY BONUSES','RAKEBACK REWARDS','CRYPTO CASINO'],
+        cta:'PLAY NOW', href:'https://betfury.tv/niksi777', ext:true,
       },
       ...(krushActive ? [{
         logo:'/assets/krush.png', color:'#9b5cff',
