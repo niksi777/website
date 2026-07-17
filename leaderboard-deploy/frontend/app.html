@@ -97,6 +97,14 @@
     .plat-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;min-width:148px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;white-space:nowrap;pointer-events:none}
     .plat-btn-ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(221,227,239,.7)}
 
+    .bf-overlay{position:fixed;inset:0;background:rgba(2,3,8,.8);backdrop-filter:blur(4px);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;animation:fu .18s ease both}
+    .bf-modal{background:#0e0204;border:1px solid rgba(210,30,45,.3);border-top:3px solid #d21e2d;border-radius:16px;width:100%;max-width:460px;padding:36px 28px 28px;position:relative;text-align:center}
+    .bf-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:7px;border:1px solid var(--b2);background:rgba(255,255,255,.04);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .bf-close:hover{color:#fff;border-color:var(--b3)}
+    .bf-link{display:block;font-size:12px;color:rgba(221,227,239,.55);background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:8px;padding:10px 14px;margin:18px 0;word-break:break-all;font-family:'Inter',sans-serif;letter-spacing:.02em}
+    .bf-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 32px;background:#d21e2d;color:#fff;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:opacity .15s}
+    .bf-btn:hover{opacity:.85}
+
     footer{border-top:1px solid var(--b1);padding:22px 0}
     .ftw{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .ftd{font-size:12px;line-height:1.6;color:var(--mu);max-width:500px}
@@ -1184,7 +1192,28 @@ function Navbar() {
 
 
 // ==================== HOMEPAGE ====================
-function HeroCarousel() {
+const BETFURY_URL = 'https://betfury.bet/dfkwpq9sw';
+
+function BetfuryModal({ onClose }) {
+  return (
+    <div className="bf-overlay" onClick={e=>{ if(e.target===e.currentTarget) onClose(); }}>
+      <div className="bf-modal">
+        <button className="bf-close" onClick={onClose}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800,color:'#fff',letterSpacing:'.04em',lineHeight:1.25,marginBottom:10}}>BETFURY</div>
+        <div style={{fontSize:13,color:'rgba(221,227,239,.7)',lineHeight:1.7}}>There is no referral code - All you have to do is sign up via the link provided</div>
+        <div className="bf-link">{BETFURY_URL}</div>
+        <a href={BETFURY_URL} target="_blank" rel="noreferrer" className="bf-btn" onClick={onClose}>
+          Take me there
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function HeroCarousel({ onBetfury }) {
     const [slide, setSlide] = React.useState(0);
     const [chickenActive, setChickenActive] = React.useState(false);
     React.useEffect(() => {
@@ -1229,7 +1258,7 @@ function HeroCarousel() {
               <div style={txt('#d21e2d','clamp(44px,6vw,68px)',.88,6)}>PLAY ON BETFURY</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>150% DEPOSIT BONUS</div>
               <div style={sub}>Create a ticket on Discord or DM niksiii to gain an exclusive offer!</div>
-              <a href="https://betfury.tv/niksi777" target="_blank" rel="noreferrer" style={btn('#d21e2d','rgba(210,30,45,.45)')}>PLAY NOW <Arr/></a>
+              <a href="#" onClick={e=>{e.preventDefault();onBetfury();}} style={btn('#d21e2d','rgba(210,30,45,.45)')}>SIGN UP <Arr/></a>
             </div>
           </div>
 
@@ -1354,7 +1383,7 @@ function HeroCarousel() {
     );
   }
 
-  function PartneredPlatforms() {
+  function PartneredPlatforms({ onBetfury }) {
     const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
@@ -1369,7 +1398,7 @@ function HeroCarousel() {
       {
         logo:'/assets/betfury.png', color:'#d21e2d',
         perks:['150% DEPOSIT BONUS','EXCLUSIVE CODE BONUS','RAKEBACK REWARDS'],
-        cta:'SIGN UP', href:'https://betfury.tv/niksi777', ext:true,
+        cta:'SIGN UP', href:BETFURY_URL, ext:true, modal:true,
       },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
@@ -1393,7 +1422,12 @@ function HeroCarousel() {
         <div className="plat-title">PARTNERED PLATFORMS</div>
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         {platforms.map((p,i) => (
-          <a key={i} className="plat-row" href={p.href} target={p.ext?'_blank':undefined} rel={p.ext?'noreferrer':undefined} style={{borderBottom:`2px solid ${p.color}40`}}>
+          <a key={i} className="plat-row"
+             href={p.modal ? '#' : p.href}
+             target={!p.modal && p.ext ? '_blank' : undefined}
+             rel={!p.modal && p.ext ? 'noreferrer' : undefined}
+             onClick={p.modal ? (e)=>{e.preventDefault();onBetfury();} : undefined}
+             style={{borderBottom:`2px solid ${p.color}40`}}>
             <div className="plat-logo-wrap">
               <img src={p.logo} className={`plat-logo${p.bigLogo?' lg':''}`} alt="" onError={e=>e.target.style.display='none'}/>
             </div>
@@ -1417,11 +1451,12 @@ function HeroCarousel() {
   }
 
   function HomePage(){
+    const [bfOpen, setBfOpen] = React.useState(false);
     return (<>
-      
+      {bfOpen && <BetfuryModal onClose={()=>setBfOpen(false)}/>}
       <div className="page">
-        <HeroCarousel/>
-        <PartneredPlatforms/>
+        <HeroCarousel onBetfury={()=>setBfOpen(true)}/>
+        <PartneredPlatforms onBetfury={()=>setBfOpen(true)}/>
       </div>
       <footer>
         <div className="page">
