@@ -1443,6 +1443,7 @@ app.get('/stream-bg', (req, res) => res.sendFile(path.join(__dirname, '../fronte
 app.get('/stream-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-banner.html')));
 app.get('/chicken-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/chicken-banner.html')));
 app.get('/krush-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/krush-banner.html')));
+app.get('/betfury-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/betfury-banner.html')));
 
 // Points API
 app.get('/points/:username', (req, res) => {
