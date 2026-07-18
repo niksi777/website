@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 800px;
+      height: 120px;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .banner {
+      width: 800px;
+      height: 120px;
+      background: linear-gradient(135deg, #120205 0%, #1e0508 60%, #0e0204 100%);
+      border: 1px solid rgba(210, 30, 45, 0.28);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(210,30,45,0.5), rgba(180,20,35,0.45), transparent);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .flash {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: radial-gradient(ellipse at center, rgba(210,30,45,0.2) 0%, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .logo-wrap {
+      width: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .logo-wrap img {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(210,30,45,0.45));
+    }
+
+    .sep {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, rgba(210,30,45,0.3), transparent);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .slides {
+      flex: 1;
+      padding: 0 28px;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      perspective: 520px;
+      perspective-origin: center center;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: rotateX(72deg);
+      opacity: 0;
+      transition: none;
+      pointer-events: none;
+    }
+
+    .slide.active {
+      transform: rotateX(0deg);
+      opacity: 1;
+      transition: transform 0.36s cubic-bezier(0.0, 0.6, 0.4, 1.0),
+                  opacity 0.12s ease;
+    }
+
+    .slide.exit {
+      transform: rotateX(-72deg);
+      opacity: 0;
+      transition: transform 0.28s cubic-bezier(0.6, 0.0, 1.0, 0.4),
+                  opacity 0.28s ease;
+    }
+
+    .slide-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ff6b6b;
+      margin-bottom: 6px;
+    }
+
+    .slide-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .slide-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: rgba(240, 180, 185, 0.6);
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .red { color: #d21e2d; }
+
+    .brand {
+      width: 120px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      border-left: 1px solid rgba(210, 30, 45, 0.2);
+      padding: 0 16px;
+      z-index: 1;
+    }
+
+    .brand-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(210, 30, 45, 0.65);
+    }
+
+    .brand-code {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .nav-dots {
+      position: absolute;
+      bottom: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .nav-dot {
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.14);
+      width: 28px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .dot-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #d21e2d, #ff4455);
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="banner">
+
+  <div class="flash" id="flash"></div>
+
+  <div class="logo-wrap">
+    <img src="/assets/betfury.png" alt="Betfury"/>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="slides">
+
+    <div class="slide active">
+      <div class="slide-label">Betfury.bet</div>
+      <div class="slide-title"><span class="red">150%</span> Deposit Bonus</div>
+      <div class="slide-sub">For your FIRST deposit until out of funds</div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-label">Sign Up</div>
+      <div class="slide-title">betfury.bet/dfkwpq9sw</div>
+      <div class="slide-sub">No referral code needed - just sign up!</div>
+    </div>
+
+  </div>
+
+  <div class="brand">
+    <div class="brand-label">Sign Up</div>
+    <div class="brand-code">Now</div>
+  </div>
+
+  <div class="nav-dots">
+    <div class="nav-dot on"><div class="dot-fill"></div></div>
+    <div class="nav-dot"><div class="dot-fill"></div></div>
+  </div>
+
+</div>
+<script>
+  const slides   = Array.from(document.querySelectorAll('.slide'));
+  const navDots  = Array.from(document.querySelectorAll('.nav-dot'));
+  const fills    = Array.from(document.querySelectorAll('.dot-fill'));
+  const flash    = document.getElementById('flash');
+  const DURATION = 5500;
+  let cur = 0, t0 = null, raf = null, busy = false;
+
+  function glowFlash() {
+    flash.style.transition = 'opacity 0.06s ease';
+    flash.style.opacity = '1';
+    setTimeout(() => {
+      flash.style.transition = 'opacity 0.22s ease';
+      flash.style.opacity = '0';
+    }, 60);
+  }
+
+  function goTo(next) {
+    if (busy) return;
+    busy = true;
+
+    const outIdx = cur;
+    const inIdx  = next % slides.length;
+
+    slides[outIdx].classList.remove('active');
+    slides[outIdx].classList.add('exit');
+    navDots[outIdx].classList.remove('on');
+    fills[outIdx].style.transition = 'none';
+    fills[outIdx].style.width = '0%';
+
+    setTimeout(glowFlash, 140);
+
+    setTimeout(() => {
+      slides[outIdx].classList.remove('exit');
+      cur = inIdx;
+      navDots[inIdx].classList.add('on');
+      fills[inIdx].style.transition = 'none';
+      fills[inIdx].style.width = '0%';
+      slides[inIdx].classList.add('active');
+
+      t0 = null;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(tick);
+
+      setTimeout(() => { busy = false; }, 380);
+    }, 290);
+  }
+
+  function tick(ts) {
+    if (!t0) t0 = ts;
+    const pct = Math.min((ts - t0) / DURATION * 100, 100);
+    fills[cur].style.width = pct + '%';
+    if (pct < 100) {
+      raf = requestAnimationFrame(tick);
+    } else {
+      goTo(cur + 1);
+    }
+  }
+
+  raf = requestAnimationFrame(tick);
+</script>
+</body>
+</html>
