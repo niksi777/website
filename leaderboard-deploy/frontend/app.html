@@ -1560,11 +1560,9 @@ function GambaLeaderboard() {
     fetch('/gamba-meta').then(r => r.json()).then(setGambaMeta).catch(() => {});
   }, []);
 
-  const GAMBA_NP = { 1:2250, 2:1250, 3:575, 4:250, 5:175, 6:150, 7:125, 8:100, 9:75, 10:50 };
   const fmtMoney = n => n > 0 ? `$${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
   const fmtPrize = (p, rank) => fmtMoney(p.reward ?? 0);
   const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-  const fmtNP    = rank => (GAMBA_NP[rank] || 0).toLocaleString();
 
   if (players === null) return <div className="loading">Loading...</div>;
 
@@ -1584,7 +1582,7 @@ function GambaLeaderboard() {
         <div className="lb-podium">
           {podiumOrder.map((p, i) => {
             const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
-            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--ac)" fmtPrize={fmtPrize} fmtWager={fmtWager} fmtNP={fmtNP}/>;
+            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--ac)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
           })}
         </div>
       )}
@@ -1611,7 +1609,7 @@ function GambaLeaderboard() {
       {rest.length > 0 && (
         <table className="lb-table">
           <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th><th className="col-np" style={{textAlign:'right'}}>NiksiPoints</th>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
           </tr></thead>
           <tbody>
             {rest.map((p, i) => (
@@ -1622,9 +1620,7 @@ function GambaLeaderboard() {
                 <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
                 <td>
                   <span className="tr-prize"><Amt s={fmtPrize(p, p.position || i+4)}/></span>
-                  <div className="np-mobile">+{fmtNP(p.position || i+4)} NP</div>
                 </td>
-                <td className="col-np" style={{textAlign:'right'}}><span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:14,fontWeight:700,color:'#fff'}}>+{fmtNP(p.position || i+4)} NP</span></td>
               </tr>
             ))}
           </tbody>
@@ -1638,7 +1634,6 @@ function GambaLeaderboard() {
             <div key={p.position} className="prize-tier">
               <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][p.position-1]||`#${p.position}`}</div>
               <div className={`prize-tier-amt${p.position===1?' p1':p.position===2?' p2':p.position===3?' p3':''}`}>{fmtMoney(p.reward)}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,fontWeight:700,color:'#fff',marginTop:4}}>+{fmtNP(p.position)} NP</div>
             </div>
           ))}
         </div>
