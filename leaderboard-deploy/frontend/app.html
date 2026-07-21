@@ -2171,15 +2171,6 @@ function LeaderboardsPage() {
               {chickenAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {chickenActive && (
-            <button className={`ptab${tab==='chickenrace'?' active-chicken':''}`} onClick={() => changeTab('chickenrace')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/chicken.png" alt="" onError={e=>e.target.style.display='none'}/>
-                <span className="ptab-label">Race</span>
-              </div>
-              {chickenRaceAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenRaceAmt.toLocaleString('en-US')}</div>}
-            </button>
-          )}
           {krushActive && (
             <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => changeTab('krush')}>
               <div className="ptab-top">
