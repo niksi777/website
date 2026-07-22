@@ -389,6 +389,57 @@ app.get("/chicken-leaderboard", (req, res) => {
 
 const CHICKEN_POOL_TOTAL = 1000; // coins - fixed prize pool, not derived from wagered amount
 
+const CHICKEN_HISTORY_PATH = require("path").join(__dirname, "../../chicken-history.json");
+
+app.get("/chicken-lb-history", (req, res) => {
+  try {
+    const data = fs_lb.existsSync(CHICKEN_HISTORY_PATH)
+      ? JSON.parse(fs_lb.readFileSync(CHICKEN_HISTORY_PATH, "utf-8"))
+      : [];
+    res.json(data);
+  } catch { res.json([]); }
+});
+
+app.post("/admin/chicken/lb-snapshot", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  try {
+    const label = (req.body && req.body.label) || '';
+    const rows = chickenReferrals
+      .filter(r => Number(r.wagerAmount || 0) > 0)
+      .slice().sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))
+      .slice(0, CHICKEN_PRIZES.length)
+      .map((r, i) => ({
+        position: i + 1,
+        username: r.displayName || 'Hidden',
+        avatar: r.imageUrl || null,
+        wager: Number(r.wagerAmount || 0),
+        prize: CHICKEN_PRIZES[i] || 0,
+      }));
+    let history = [];
+    try { history = fs_lb.existsSync(CHICKEN_HISTORY_PATH) ? JSON.parse(fs_lb.readFileSync(CHICKEN_HISTORY_PATH, "utf-8")) : []; } catch {}
+    const nextId = history.length ? Math.max(...history.map(h => h.id || 0)) + 1 : 1;
+    const prevEnd = history.length ? history[history.length - 1].end : null;
+    const entry = {
+      id: nextId,
+      label: label || `Chicken Leaderboard #${nextId}`,
+      start: prevEnd || (chickenPeriod.start ? new Date(chickenPeriod.start).toISOString().slice(0, 10) : null),
+      end: chickenPeriod.end ? new Date(chickenPeriod.end).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+      prizePool: CHICKEN_POOL_TOTAL,
+      totalWagered: rows.reduce((s, r) => s + r.wager, 0),
+      totalUsers: rows.length,
+      entries: rows,
+    };
+    history.push(entry);
+    fs_lb.writeFileSync(CHICKEN_HISTORY_PATH, JSON.stringify(history, null, 2));
+    res.json({ ok: true, entry });
+  } catch (e) {
+    console.log("Chicken snapshot error:", e);
+    res.status(500).json({ error: "Failed to snapshot chicken leaderboard" });
+  }
+});
+
 // ── Chicken.gg wager race (first to wager `goal` SINCE RACE START wins) ────
 // Tracks progress via a baseline snapshot taken when the race starts, so it
 // counts only wagers placed after that moment - completely independent of
