@@ -366,7 +366,7 @@ async function updateChickenLeaderboard() {
 setInterval(updateChickenLeaderboard, 3 * 60 * 1000);
 updateChickenLeaderboard();
 
-const CHICKEN_PRIZES = [600, 160, 80, 48, 32, 24, 20, 16, 12, 8]; // coins, sums to 1,000 (1st boosted to 600, 2nd-10th scaled down proportionally)
+const CHICKEN_PRIZES = [250, 100, 50, 25, 20, 15, 15, 10, 10, 5]; // coins, sums to 500 (50% to 1st, descending to 10th)
 
 app.get("/chicken-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 20;
@@ -387,7 +387,7 @@ app.get("/chicken-leaderboard", (req, res) => {
   res.json({ leaderboard: rows });
 });
 
-const CHICKEN_POOL_TOTAL = 1000; // coins - fixed prize pool, not derived from wagered amount
+const CHICKEN_POOL_TOTAL = 500; // coins - fixed prize pool, not derived from wagered amount
 
 const CHICKEN_HISTORY_PATH = require("path").join(__dirname, "../../chicken-history.json");
 
