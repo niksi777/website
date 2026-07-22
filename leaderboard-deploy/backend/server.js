@@ -458,7 +458,7 @@ app.get("/chicken-meta", (req, res) => {
     lastUpdated: chickenLastUpdated,
     start: chickenPeriod.start,
     end: chickenPeriod.end,
-    active: !!(chickenPeriod.start && chickenPeriod.end && now < chickenPeriod.end),
+    active: !!(chickenPeriod.start && chickenPeriod.end),
   });
 });
 
