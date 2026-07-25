@@ -1388,9 +1388,10 @@ function HeroCarousel({ onBetfury }) {
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
     const [krushActive, setKrushActive] = React.useState(false);
+    const [krushEnded, setKrushEnded] = React.useState(false);
     const [chickenActive, setChickenActive] = React.useState(false);
     React.useEffect(() => {
-      fetch('/krush-meta').then(r => r.json()).then(d => setKrushActive(!!d.active)).catch(() => {});
+      fetch('/krush-meta').then(r => r.json()).then(d => { setKrushActive(!!d.active); setKrushEnded(!!(d.end && Date.now() > d.end)); }).catch(() => {});
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
 
@@ -1405,10 +1406,10 @@ function HeroCarousel({ onBetfury }) {
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'LEADERBOARD', href:'/leaderboards', ext:false,
       },
-      ...(krushActive ? [{
+      ...((krushActive || krushEnded) ? [{
         logo:'/assets/krush.png', color:'#9b5cff',
         perks:['$1,000 PRIZE POOL','30-DAY WAGER RACE','10% DEPOSIT BONUS / 10% LOSSBACK WEEKLY'],
-        cta:'LEADERBOARD', href:'/leaderboards?tab=krush', ext:false,
+        cta: krushEnded ? 'FINAL RESULTS' : 'LEADERBOARD', href:'/leaderboards?tab=krush', ext:false,
       }] : []),
       ...(chickenActive ? [{
         logo:'/assets/chicken.png', color:'#f2a93b',
@@ -1823,7 +1824,9 @@ function KrushLeaderboard() {
 
   if (players === null || meta === null) return <div className="loading">Loading...</div>;
 
-  if (!meta.active) {
+  const isEnded = meta.end && Date.now() > meta.end;
+
+  if (!meta.active && !isEnded) {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
         <div className="lb-prize-amt"><span style={{color:'var(--krush)'}}>$</span><span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span></div>
@@ -1848,7 +1851,7 @@ function KrushLeaderboard() {
       <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt"><span style={{color:'var(--krush)'}}>$</span><span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span></div>
         <div className="lb-prize-lbl">30-Day Wager Race</div>
-        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
+        <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
 
       {top3.length > 0 && (
@@ -1864,7 +1867,8 @@ function KrushLeaderboard() {
         </div>
       )}
 
-      {meta.end && <Countdown endDate={meta.end}/>}
+      {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
+      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:'var(--krush)',color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
 
       <div className="lb-cta-row" style={{marginBottom:28}}>
         <a href="https://krush.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-krush">
@@ -2206,6 +2210,7 @@ function LeaderboardsPage() {
     return VALID_TABS.includes(t) ? t : 'gamba';
   });
   const [krushActive, setKrushActive] = React.useState(false);
+  const [krushEnded, setKrushEnded] = React.useState(false);
   const [chickenActive, setChickenActive] = React.useState(false);
   const [gambaAmt, setGambaAmt] = React.useState(null);
   const [krushAmt, setKrushAmt] = React.useState(null);
@@ -2231,9 +2236,11 @@ function LeaderboardsPage() {
       if (d && d.prizePool) setGambaAmt(Math.round(d.prizePool));
     }).catch(() => {});
     fetch('/krush-meta').then(r => r.json()).then(d => {
+      const ended = !!(d.end && Date.now() > d.end);
       setKrushActive(!!d.active);
+      setKrushEnded(ended);
       if (d.totalPool) setKrushAmt(Math.round(d.totalPool));
-      if (!d.active && tab === 'krush') setTab('gamba');
+      if (!d.active && !ended && tab === 'krush') setTab('gamba');
     }).catch(() => {});
     fetch('/chicken-meta').then(r => r.json()).then(d => {
       setChickenActive(!!d.active);
@@ -2264,7 +2271,7 @@ function LeaderboardsPage() {
               {chickenAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {krushActive && (
+          {(krushActive || krushEnded) && (
             <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => changeTab('krush')}>
               <div className="ptab-top">
                 <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
