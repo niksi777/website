@@ -773,7 +773,9 @@ function KrushLeaderboard() {
 
   if (players === null || meta === null) return <div className="loading">Loading...</div>;
 
-  if (!meta.active) {
+  const isEnded = meta.end && Date.now() > meta.end;
+
+  if (!meta.active && !isEnded) {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
         <div className="lb-prize-amt"><span style={{color:'var(--krush)'}}>$</span><span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span></div>
@@ -798,7 +800,7 @@ function KrushLeaderboard() {
       <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt"><span style={{color:'var(--krush)'}}>$</span><span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span></div>
         <div className="lb-prize-lbl">30-Day Wager Race</div>
-        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
+        <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
 
       {top3.length > 0 && (
@@ -814,7 +816,8 @@ function KrushLeaderboard() {
         </div>
       )}
 
-      {meta.end && <Countdown endDate={meta.end}/>}
+      {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
+      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:'var(--krush)',color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
 
       <div className="lb-cta-row" style={{marginBottom:28}}>
         <a href="https://krush.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-krush">
