@@ -500,8 +500,9 @@ function riHTML(item, masked=false){
       <div class="ri-glow" style="background:linear-gradient(to top,rgba(232,164,39,.4),transparent)"></div>
     </div>`;
   }
-  const r = rif(item);
-  const cls = 'r-'+(item.rarity||'bust');
+  const isGolden = item.isGolden || item.rarity === 'golden-trigger';
+  const r = isGolden ? RI['golden-trigger'] : rif(item);
+  const cls = 'r-' + (isGolden ? 'golden-trigger' : (item.rarity || 'bust'));
   let icon, pts;
   if(item.isGolden || item.rarity==='golden-trigger'){
     icon = `<img src="/assets/niksi.png" style="width:48px;height:48px;border-radius:50%;border:2px solid #e8a427;box-shadow:0 0 14px rgba(232,164,39,.8)"/>`;
