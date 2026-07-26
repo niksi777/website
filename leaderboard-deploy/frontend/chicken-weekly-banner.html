@@ -16,150 +16,196 @@
     .banner {
       width: 400px;
       height: 120px;
-      background: linear-gradient(135deg, #170f06 0%, #1c4683 130%, #0c0904 100%);
-      border: 1px solid rgba(252, 154, 14, 0.28);
       border-radius: 18px;
-      display: flex;
-      align-items: center;
+      border: 1px solid rgba(252, 154, 14, 0.35);
       position: relative;
       overflow: hidden;
-    }
-
-    .banner::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(252,154,14,0.45), rgba(28,70,131,0.5), transparent);
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .logo-wrap {
-      width: 76px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+    }
+
+    /* Animated background */
+    .bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0e0a03, #0c1830, #0e0a03);
+      background-size: 300% 300%;
+      animation: bgShift 6s ease-in-out infinite;
+    }
+    @keyframes bgShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Sweeping shimmer */
+    .shimmer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 35%, rgba(252,154,14,0.07) 50%, transparent 65%);
+      background-size: 200% 100%;
+      animation: sweep 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+    @keyframes sweep {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Top edge glow line */
+    .edge {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(252,154,14,0.6), rgba(100,160,255,0.4), transparent);
+      animation: edgePulse 3s ease-in-out infinite;
+      z-index: 4;
+    }
+    @keyframes edgePulse {
+      0%,100% { opacity: 0.5; }
+      50%      { opacity: 1; }
+    }
+
+    /* Radial glow behind content */
+    .radial {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 120%, rgba(252,154,14,0.18) 0%, transparent 65%);
+      animation: radialPulse 2.5s ease-in-out infinite;
       z-index: 1;
     }
-
-    .logo-wrap img {
-      width: 46px;
-      height: 46px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(252,154,14,0.4));
+    @keyframes radialPulse {
+      0%,100% { opacity: 0.6; }
+      50%      { opacity: 1; }
     }
 
-    .sep {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, rgba(252,154,14,0.3), transparent);
-      flex-shrink: 0;
-      z-index: 1;
+    /* Canvas for particles */
+    canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
     }
 
+    /* Content */
     .content {
-      flex: 1;
+      position: relative;
+      z-index: 5;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 2px;
       text-align: center;
-      padding: 0 16px;
-      z-index: 1;
-      gap: 3px;
     }
 
     .amount {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 34px;
+      font-size: 52px;
       font-weight: 800;
+      line-height: 1;
       color: #fc9a0e;
       letter-spacing: 0.02em;
-      line-height: 1;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      text-shadow: 0 0 24px rgba(252,154,14,0.7), 0 0 60px rgba(252,154,14,0.3);
+      animation: amountPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes amountPulse {
+      0%,100% { text-shadow: 0 0 24px rgba(252,154,14,0.7), 0 0 60px rgba(252,154,14,0.3); }
+      50%      { text-shadow: 0 0 36px rgba(252,154,14,1),   0 0 80px rgba(252,154,14,0.5); }
     }
 
-    .amount img {
-      width: 28px;
-      height: 28px;
+    .coin {
+      width: 42px;
+      height: 42px;
       object-fit: contain;
+      animation: coinSpin 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(252,154,14,0.8));
+    }
+    @keyframes coinSpin {
+      0%,100% { transform: rotateY(0deg) scale(1); }
+      40%      { transform: rotateY(180deg) scale(1.1); }
+      80%      { transform: rotateY(360deg) scale(1); }
     }
 
     .title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 800;
-      color: #ffffff;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      line-height: 1;
+      color: #ffffff;
       white-space: nowrap;
+      background: linear-gradient(90deg, #fff 0%, #ffd080 40%, #fff 60%, #ffd080 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleShine 3s linear infinite;
     }
-
-    .sep2 {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, rgba(252,154,14,0.2), transparent);
-      flex-shrink: 0;
-      z-index: 1;
-    }
-
-    .brand {
-      width: 82px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
-      padding: 0 12px;
-      z-index: 1;
-    }
-
-    .brand-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(252, 154, 14, 0.65);
-    }
-
-    .brand-code {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #ffffff;
+    @keyframes titleShine {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
     }
   </style>
 </head>
 <body>
 <div class="banner">
-
-  <div class="logo-wrap">
-    <img src="/assets/niksi.png" alt="NIKSI777"/>
-  </div>
-
-  <div class="sep"></div>
+  <div class="bg"></div>
+  <div class="radial"></div>
+  <canvas id="px"></canvas>
+  <div class="shimmer"></div>
+  <div class="edge"></div>
 
   <div class="content">
-    <div class="amount">500 <img src="/assets/coin.png" alt=""/></div>
+    <div class="amount">500 <img class="coin" src="/assets/coin.png" alt=""/></div>
     <div class="title">Weekly Leaderboard!</div>
   </div>
-
-  <div class="sep2"></div>
-
-  <div class="brand">
-    <div class="brand-label">Code</div>
-    <div class="brand-code">NIKSI</div>
-  </div>
-
 </div>
+
+<script>
+  const c = document.getElementById('px');
+  c.width = 400; c.height = 120;
+  const ctx = c.getContext('2d');
+
+  const particles = [];
+  function spawn() {
+    particles.push({
+      x: Math.random() * 400,
+      y: 120 + 6,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: -(0.5 + Math.random() * 1.0),
+      size: 1.2 + Math.random() * 2,
+      alpha: 0.7 + Math.random() * 0.3,
+      col: Math.random() > 0.4 ? '#fc9a0e' : '#ffd080',
+    });
+  }
+
+  let frame = 0;
+  function tick() {
+    ctx.clearRect(0, 0, 400, 120);
+    if (frame % 4 === 0) spawn();
+    frame++;
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.alpha -= 0.008;
+      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.col;
+      ctx.shadowBlur = 6; ctx.shadowColor = p.col;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+</script>
 </body>
 </html>
