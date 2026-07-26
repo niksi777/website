@@ -36,7 +36,7 @@
     }
 
     .logo-wrap {
-      width: 80px;
+      width: 76px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -45,8 +45,8 @@
     }
 
     .logo-wrap img {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       object-fit: contain;
       filter: drop-shadow(0 0 8px rgba(252,154,14,0.4));
     }
@@ -66,41 +66,39 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 20px;
+      padding: 0 16px;
       z-index: 1;
+      gap: 3px;
     }
 
-    .label {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #ffb443;
-      margin-bottom: 5px;
+    .amount {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      color: #fc9a0e;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .amount img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
     }
 
     .title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 28px;
+      font-size: 18px;
       font-weight: 800;
       color: #ffffff;
-      letter-spacing: 0.02em;
-      line-height: 1;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
+      line-height: 1;
+      white-space: nowrap;
     }
-
-    .title .coin-icon {
-      height: 0.82em;
-      width: 0.82em;
-      object-fit: contain;
-    }
-
-    .title .hl { color: #fc9a0e; }
 
     .sep2 {
       width: 1px;
@@ -111,14 +109,14 @@
     }
 
     .brand {
-      width: 90px;
+      width: 82px;
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 1px;
-      padding: 0 14px;
+      padding: 0 12px;
       z-index: 1;
     }
 
@@ -133,7 +131,7 @@
 
     .brand-code {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -151,10 +149,8 @@
   <div class="sep"></div>
 
   <div class="content">
-    <div class="label">Chicken.gg</div>
-    <div class="title">
-      Weekly <img class="coin-icon" src="/assets/coin.png" alt=""/> <span class="hl">500c</span> Leaderboard!
-    </div>
+    <div class="amount">500 <img src="/assets/coin.png" alt=""/></div>
+    <div class="title">Weekly Leaderboard!</div>
   </div>
 
   <div class="sep2"></div>
