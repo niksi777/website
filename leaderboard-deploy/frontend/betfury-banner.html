@@ -16,8 +16,8 @@
     .banner {
       width: 800px;
       height: 120px;
-      background: linear-gradient(135deg, #031209 0%, #0a2e14 60%, #021008 100%);
-      border: 3px solid rgba(34, 197, 94, 0.9);
+      background: linear-gradient(135deg, #120205 0%, #1e0508 60%, #0e0204 100%);
+      border: 3px solid rgba(210, 30, 45, 0.9);
       border-radius: 18px;
       display: flex;
       align-items: center;
@@ -26,8 +26,8 @@
       animation: borderPulse 2.5s ease-in-out infinite;
     }
     @keyframes borderPulse {
-      0%,100% { border-color: rgba(34,197,94,0.9); }
-      50%      { border-color: rgba(34,197,94,1); }
+      0%,100% { border-color: rgba(210,30,45,0.9); }
+      50%      { border-color: rgba(210,30,45,1); }
     }
 
     .banner::after {
@@ -35,7 +35,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(34,197,94,0.5), rgba(22,163,74,0.45), transparent);
+      background: linear-gradient(90deg, transparent, rgba(210,30,45,0.5), rgba(180,20,35,0.45), transparent);
       pointer-events: none;
       z-index: 2;
     }
@@ -44,7 +44,7 @@
       position: absolute;
       inset: 0;
       border-radius: 18px;
-      background: radial-gradient(ellipse at center, rgba(34,197,94,0.2) 0%, transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(210,30,45,0.2) 0%, transparent 70%);
       opacity: 0;
       pointer-events: none;
       z-index: 6;
@@ -63,13 +63,13 @@
       width: 54px;
       height: 54px;
       object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(34,197,94,0.45));
+      filter: drop-shadow(0 0 8px rgba(210,30,45,0.45));
     }
 
     .sep {
       width: 1px;
       height: 60px;
-      background: linear-gradient(to bottom, transparent, rgba(34,197,94,0.3), transparent);
+      background: linear-gradient(to bottom, transparent, rgba(210,30,45,0.3), transparent);
       flex-shrink: 0;
       z-index: 1;
     }
@@ -120,7 +120,7 @@
       font-weight: 600;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #4ade80;
+      color: #ff6b6b;
       margin-bottom: 6px;
     }
 
@@ -138,12 +138,12 @@
       font-family: 'Inter', sans-serif;
       font-size: 11.5px;
       font-weight: 500;
-      color: rgba(180, 240, 200, 0.6);
+      color: rgba(240, 180, 185, 0.6);
       margin-top: 6px;
       letter-spacing: 0.02em;
     }
 
-    .red { color: #22c55e; }
+    .red { color: #d21e2d; }
 
     .brand {
       width: 120px;
@@ -164,7 +164,7 @@
       font-weight: 600;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(34, 197, 94, 0.65);
+      color: rgba(210, 30, 45, 0.65);
     }
 
     .brand-code {
@@ -199,7 +199,7 @@
     .dot-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #22c55e, #4ade80);
+      background: linear-gradient(90deg, #d21e2d, #ff4455);
       border-radius: 2px;
     }
   </style>
