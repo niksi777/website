@@ -17,12 +17,17 @@
       width: 800px;
       height: 120px;
       background: linear-gradient(135deg, #170f06 0%, #1c4683 130%, #0c0904 100%);
-      border: 1px solid rgba(252, 154, 14, 0.28);
+      border: 3px solid rgba(252, 154, 14, 0.9);
       border-radius: 18px;
       display: flex;
       align-items: center;
       position: relative;
       overflow: hidden;
+      animation: borderPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes borderPulse {
+      0%,100% { border-color: rgba(252,154,14,0.9); }
+      50%      { border-color: rgba(252,154,14,1); }
     }
 
     .banner::after {
