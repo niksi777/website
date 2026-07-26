@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 400px;
+      height: 120px;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .banner {
+      width: 400px;
+      height: 120px;
+      background: linear-gradient(135deg, #170f06 0%, #1c4683 130%, #0c0904 100%);
+      border: 1px solid rgba(252, 154, 14, 0.28);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(252,154,14,0.45), rgba(28,70,131,0.5), transparent);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .logo-wrap {
+      width: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .logo-wrap img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(252,154,14,0.4));
+    }
+
+    .sep {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, rgba(252,154,14,0.3), transparent);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+      z-index: 1;
+    }
+
+    .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffb443;
+      margin-bottom: 5px;
+    }
+
+    .title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .title .coin-icon {
+      height: 0.82em;
+      width: 0.82em;
+      object-fit: contain;
+    }
+
+    .title .hl { color: #fc9a0e; }
+
+    .sep2 {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, rgba(252,154,14,0.2), transparent);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .brand {
+      width: 90px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      padding: 0 14px;
+      z-index: 1;
+    }
+
+    .brand-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(252, 154, 14, 0.65);
+    }
+
+    .brand-code {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+<div class="banner">
+
+  <div class="logo-wrap">
+    <img src="/assets/niksi.png" alt="NIKSI777"/>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="content">
+    <div class="label">Chicken.gg</div>
+    <div class="title">
+      Weekly <img class="coin-icon" src="/assets/coin.png" alt=""/> <span class="hl">500c</span> Leaderboard!
+    </div>
+  </div>
+
+  <div class="sep2"></div>
+
+  <div class="brand">
+    <div class="brand-label">Code</div>
+    <div class="brand-code">NIKSI</div>
+  </div>
+
+</div>
+</body>
+</html>
