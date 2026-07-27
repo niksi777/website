@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 1200px;
+      height: 675px;
+      overflow: hidden;
+      background: #07080e;
+    }
+
+    .card {
+      width: 1200px;
+      height: 675px;
+      background: #07080e;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Grid texture */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(252,154,14,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(252,154,14,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Main radial glow */
+    .glow-center {
+      position: absolute;
+      width: 900px;
+      height: 600px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(232,164,39,0.18) 0%, rgba(232,164,39,0.06) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Bottom edge glow */
+    .glow-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 280px;
+      background: radial-gradient(ellipse at 50% 100%, rgba(252,154,14,0.22) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top edge line */
+    .edge-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(252,154,14,0.8), rgba(255,215,0,0.6), rgba(252,154,14,0.8), transparent);
+      z-index: 2;
+    }
+    .edge-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(252,154,14,0.8), rgba(255,215,0,0.6), rgba(252,154,14,0.8), transparent);
+      z-index: 2;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+      border-bottom: 1px solid rgba(252,154,14,0.12);
+      z-index: 5;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-left img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(252,154,14,0.5);
+      filter: drop-shadow(0 0 10px rgba(252,154,14,0.4));
+    }
+    .brand-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .brand-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chicken-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(252,154,14,0.5));
+    }
+    .chicken-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: rgba(252,154,14,0.9);
+      text-transform: uppercase;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      margin-top: -10px;
+    }
+
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(252,154,14,0.75);
+      margin-bottom: 18px;
+    }
+
+    .date-line {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffd700;
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(255,215,0,0.5), 0 0 80px rgba(252,154,14,0.3);
+      margin-bottom: 14px;
+    }
+
+    .divider {
+      width: 480px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(252,154,14,0.5), transparent);
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 108px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 0.9;
+      text-shadow: 0 0 60px rgba(255,255,255,0.1);
+      margin-bottom: 10px;
+    }
+
+    .hero span {
+      color: #fc9a0e;
+      text-shadow: 0 0 40px rgba(252,154,14,0.8), 0 0 80px rgba(252,154,14,0.4);
+    }
+
+    .sub1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .sub2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .sub3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fc9a0e;
+      line-height: 1;
+      text-shadow: 0 0 24px rgba(252,154,14,0.5);
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottombar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid rgba(252,154,14,0.12);
+      gap: 32px;
+      z-index: 5;
+    }
+
+    .code-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(252,154,14,0.12);
+      border: 1.5px solid rgba(252,154,14,0.45);
+      border-radius: 100px;
+      padding: 10px 28px;
+    }
+    .code-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(252,154,14,0.7);
+    }
+    .code-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .bottom-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+    }
+
+    /* Corner coin decorations */
+    .corner-coin {
+      position: absolute;
+      opacity: 0.07;
+      z-index: 1;
+    }
+    .corner-coin img { width: 180px; height: 180px; object-fit: contain; }
+    .corner-coin.tl { top: -30px; left: -30px; transform: rotate(-20deg); }
+    .corner-coin.br { bottom: -30px; right: -30px; transform: rotate(20deg); }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- Background effects -->
+  <div class="glow-center"></div>
+  <div class="glow-bottom"></div>
+  <div class="edge-top"></div>
+  <div class="edge-bottom"></div>
+
+  <!-- Corner decorations -->
+  <div class="corner-coin tl"><img src="/assets/coin.png" alt=""/></div>
+  <div class="corner-coin br"><img src="/assets/coin.png" alt=""/></div>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="brand-left">
+      <img src="/assets/niksi.png" alt="NIKSI777"/>
+      <span class="brand-name">NIKSI777</span>
+    </div>
+    <div class="brand-right">
+      <img class="chicken-logo" src="/assets/coin.png" alt="Chicken.gg"/>
+      <span class="chicken-label">Chicken.gg</span>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+    <div class="eyebrow">Special Event</div>
+    <div class="date-line">Thursday, July 30</div>
+    <div class="divider"></div>
+    <div class="hero"><span>100%</span> OF MY</div>
+    <div class="hero" style="margin-bottom:16px">CASHOUT</div>
+    <div class="sub1">Will be given out to active players</div>
+    <div class="sub2">using code</div>
+    <div class="sub3">NIKSI on Chicken.gg</div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottombar">
+    <div class="code-badge">
+      <span class="code-label">Code</span>
+      <span class="code-val">NIKSI</span>
+    </div>
+    <span class="bottom-note">Must be active under code NIKSI on Chicken.gg to qualify</span>
+  </div>
+
+</div>
+</body>
+</html>

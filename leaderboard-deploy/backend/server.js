@@ -1497,6 +1497,7 @@ app.get('/chicken-weekly-banner', (req, res) => res.sendFile(path.join(__dirname
 app.get('/gamba-weekly-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba-weekly-banner.html')));
 app.get('/krush-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/krush-banner.html')));
 app.get('/betfury-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/betfury-banner.html')));
+app.get('/cashout-promo', (req, res) => res.sendFile(path.join(__dirname, '../frontend/cashout-promo.html')));
 
 // Points API
 app.get('/points/:username', (req, res) => {
