@@ -1245,14 +1245,6 @@ function App() {
               {chickenRaceAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenRaceAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {krushActive && (
-            <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => setTab('krush')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
-              </div>
-              {krushAmt != null && <div className="ptab-amt"><span style={{color:'var(--krush)'}}>$</span>{krushAmt.toLocaleString('en-US')}</div>}
-            </button>
-          )}
           {csgowinActive && (
             <button className={`ptab${tab==='csgowin'?' active-csgowin':''}`} onClick={() => setTab('csgowin')}>
               <div className="ptab-top">
@@ -1270,7 +1262,6 @@ function App() {
         </div>
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
-        <div style={{display: tab === 'krush' ? 'block' : 'none'}}><KrushLeaderboard/></div>
         <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
         <div style={{display: tab === 'csgowin' ? 'block' : 'none'}}><CsgowinLeaderboard/></div>

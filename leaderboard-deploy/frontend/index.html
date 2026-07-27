@@ -227,12 +227,10 @@
   function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
     const [chickenActive, setChickenActive] = React.useState(false);
-    const [krushActive, setKrushActive] = React.useState(false);
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
-      fetch('/krush-meta').then(r => r.json()).then(d => setKrushActive(!!d.active)).catch(() => {});
     }, []);
-    const total = 3 + (chickenActive ? 1 : 0) + (krushActive ? 1 : 0);
+    const total = 3 + (chickenActive ? 1 : 0);
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -329,24 +327,6 @@
           </div>
           )}
 
-          {krushActive && (
-          <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(155,92,255,.32) 0%, rgba(155,92,255,.07) 50%, transparent 70%)',
-            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(155,92,255,.16) 0%, transparent 58%)',
-            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(155,92,255,.08) 0%, transparent 55%)',
-            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
-            'linear-gradient(140deg,#0e0818 0%,#0a0614 55%,#0c0a1a 100%)'
-          ].join(','),borderTop:'3px solid rgba(155,92,255,.65)'}}>
-            {logo('/assets/krush.png',.6,'rgba(155,92,255,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(14,8,24),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#9b5cff','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON KRUSH.GG</div>
-              <div style={sub}>10% deposit bonus + 10% lossback with code NIKSI</div>
-              <a href="/leaderboards?tab=krush" style={btn('#9b5cff','rgba(155,92,255,.4)')}>VIEW LEADERBOARD <Arr/></a>
-            </div>
-          </div>
-          )}
         </div>
 
         <div className="c-dots">
@@ -401,10 +381,8 @@
     const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
-    const [krushActive, setKrushActive] = React.useState(false);
     const [chickenActive, setChickenActive] = React.useState(false);
     React.useEffect(() => {
-      fetch('/krush-meta').then(r => r.json()).then(d => setKrushActive(!!d.active)).catch(() => {});
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
 
@@ -414,11 +392,6 @@
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards', ext:false,
       },
-      ...(krushActive ? [{
-        logo:'/assets/krush.png', color:'#9b5cff',
-        perks:['$1,000 PRIZE POOL','30-DAY WAGER RACE','10% DEPOSIT BONUS / 10% LOSSBACK WEEKLY'],
-        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=krush', ext:false,
-      }] : []),
       ...(chickenActive ? [{
         logo:'/assets/chicken.png', color:'#f2a93b',
         perks:['UP TO 15% LOSSBACK','REQUEST IN DISCORD','1,000 COIN LEADERBOARD'],
