@@ -1387,11 +1387,8 @@ function HeroCarousel({ onBetfury }) {
     const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
-    const [krushActive, setKrushActive] = React.useState(false);
-    const [krushEnded, setKrushEnded] = React.useState(false);
     const [chickenActive, setChickenActive] = React.useState(false);
     React.useEffect(() => {
-      fetch('/krush-meta').then(r => r.json()).then(d => { setKrushActive(!!d.active); setKrushEnded(!!(d.end && Date.now() > d.end)); }).catch(() => {});
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
 
@@ -1406,11 +1403,6 @@ function HeroCarousel({ onBetfury }) {
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
         cta:'LEADERBOARD', href:'/leaderboards', ext:false,
       },
-      ...((krushActive || krushEnded) ? [{
-        logo:'/assets/krush.png', color:'#9b5cff',
-        perks:['$1,000 PRIZE POOL','30-DAY WAGER RACE','10% DEPOSIT BONUS / 10% LOSSBACK WEEKLY'],
-        cta: krushEnded ? 'FINAL RESULTS' : 'LEADERBOARD', href:'/leaderboards?tab=krush', ext:false,
-      }] : []),
       ...(chickenActive ? [{
         logo:'/assets/chicken.png', color:'#f2a93b',
         perks:['UP TO 15% LOSSBACK','REQUEST IN DISCORD','1,000 COIN LEADERBOARD'],
@@ -2271,14 +2263,6 @@ function LeaderboardsPage() {
               {chickenAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {(krushActive || krushEnded) && (
-            <button className={`ptab${tab==='krush'?' active-krush':''}`} onClick={() => changeTab('krush')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/krush.png" alt="Krush.gg" onError={e=>e.target.style.display='none'}/>
-              </div>
-              {krushAmt != null && <div className="ptab-amt"><span style={{color:'var(--krush)'}}>$</span>{krushAmt.toLocaleString('en-US')}</div>}
-            </button>
-          )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => changeTab('points')}>
             <div className="ptab-top">
               <img className="ptab-img" src="/assets/np-coin.svg" alt="" onError={e=>e.target.style.display='none'}/>
@@ -2288,7 +2272,6 @@ function LeaderboardsPage() {
         </div>
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
-        <div style={{display: tab === 'krush' ? 'block' : 'none'}}><KrushLeaderboard/></div>
         <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
         <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
