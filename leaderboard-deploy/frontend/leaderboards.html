@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff}
+    :root{--bg:#07080e;--s1:#0c1020;--s2:#101828;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;--csgowin:#D4A020}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -210,6 +210,8 @@
     .race-bar-fill{height:100%;background:linear-gradient(90deg,#f2a93b,#ffd24a);border-radius:8px;transition:width .4s ease}
     .race-amt{width:140px;flex-shrink:0;text-align:right;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}
     .lb-cta-krush{background:var(--krush);color:#fff}
+    .lb-cta-csgowin{background:var(--csgowin);color:#0a0800}
+    .ptab.active-csgowin{border-color:rgba(212,160,32,.5);background:rgba(212,160,32,.08);box-shadow:0 0 18px rgba(212,160,32,.12)}
 
     /* Prize structure */
     .prize-section{margin-bottom:48px}
@@ -848,6 +850,121 @@ function KrushLeaderboard() {
   );
 }
 
+function CsgowinLeaderboard() {
+  const [players, setPlayers] = React.useState(null);
+  const [meta, setMeta] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/csgowin-leaderboard?limit=10').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
+    fetch('/csgowin-meta').then(r => r.json()).then(setMeta).catch(() => {});
+  }, []);
+
+  const fmtWager = p => Number(p.wager||0) > 0 ? Number(p.wager).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '-';
+  const fmtPrize = p => p.prize > 0 ? p.prize.toLocaleString('en-US') : '-';
+
+  if (players === null || meta === null) return <div className="loading">Loading...</div>;
+
+  const prizes = meta.prizes || [200,100,60,40,25,20,15,15,15,10];
+  const isEnded = meta.end && Date.now() > meta.end;
+
+  if (!meta.active && !isEnded) {
+    return (
+      <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
+        <div className="lb-prize-amt">
+          <img src="/assets/csgowincoin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
+          <span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span>
+        </div>
+        <div className="lb-prize-lbl">2-Week Prize Pool</div>
+        <div className="lb-code" style={{marginTop:10}}>Starting soon - use code <strong>NIKSI</strong> to qualify</div>
+        <div className="lb-cta-row" style={{marginTop:28}}>
+          <a href="https://csgowin.com/r/niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-csgowin">
+            Sign Up Here
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  const displayRows = prizes.map((amt, i) => {
+    const existing = players.find(r => r.position === i + 1);
+    return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
+  });
+
+  const top3 = displayRows.slice(0, 3);
+  const rest = displayRows.slice(3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+
+  return (
+    <div className="f2">
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div className="lb-prize-amt">
+          <img src="/assets/csgowincoin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
+          <span style={{color:'#fff'}}>{meta.totalPool.toLocaleString('en-US')}</span>
+        </div>
+        <div className="lb-prize-lbl">2-Week Prize Pool</div>
+        <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
+      </div>
+
+      {top3.length > 0 && (
+        <div className="lb-podium">
+          {podiumOrder.map((p, i) => {
+            const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
+            return (
+              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
+                <PodiumCard player={p} rank={rank} accentColor="var(--csgowin)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/csgowincoin.png" wagerIcon="/assets/csgowincoin.png"/>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
+      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:'var(--csgowin)',color:'#0a0800',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
+
+      <div className="lb-cta-row" style={{marginBottom:28}}>
+        <a href="https://csgowin.com/r/niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-csgowin">
+          Sign Up Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      {rest.length > 0 && (
+        <table className="lb-table">
+          <thead><tr>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
+          </tr></thead>
+          <tbody>
+            {rest.map((p, i) => (
+              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
+                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
+                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
+                <td><span className="tr-wager"><img src="/assets/csgowincoin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmtWager(p)}</span></td>
+                <td><span className="tr-prize" style={{color:'var(--csgowin)'}}><img src="/assets/csgowincoin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmtPrize(p)}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      <div className="prize-section">
+        <div className="prize-title">// Prize Structure</div>
+        <div className="prize-tiers">
+          {prizes.map((amt, i) => (
+            <div key={i} className="prize-tier">
+              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][i]}</div>
+              <div className={`prize-tier-amt${i===0?' p1':i===1?' p2':i===2?' p3':''}`}>
+                <img src="/assets/csgowincoin.png" style={{height:'0.75em',verticalAlign:'-0.05em',marginRight:3}} alt="" onError={e=>e.target.style.display='none'}/>
+                {amt}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
   React.useEffect(() => {
@@ -1067,14 +1184,16 @@ function App() {
   const { user, logout } = useSession();
   const [tab, setTab] = React.useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
-    return (t === 'points' || t === 'krush' || t === 'chicken' || t === 'chickenrace') ? t : 'gamba';
+    return (t === 'points' || t === 'krush' || t === 'chicken' || t === 'chickenrace' || t === 'csgowin') ? t : 'gamba';
   });
   const [krushActive, setKrushActive] = React.useState(false);
   const [chickenActive, setChickenActive] = React.useState(false);
+  const [csgowinActive, setCsgowinActive] = React.useState(false);
   const [gambaAmt, setGambaAmt] = React.useState(null);
   const [krushAmt, setKrushAmt] = React.useState(null);
   const [chickenAmt, setChickenAmt] = React.useState(null);
   const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
+  const [csgowinAmt, setCsgowinAmt] = React.useState(null);
   React.useEffect(() => {
     fetch('/gamba-meta').then(r => r.json()).then(d => {
       if (d && d.prizePool) setGambaAmt(Math.round(d.prizePool));
@@ -1091,6 +1210,10 @@ function App() {
     }).catch(() => {});
     fetch('/chicken-wager-race').then(r => r.json()).then(d => {
       if (d && d.prize) setChickenRaceAmt(d.prize);
+    }).catch(() => {});
+    fetch('/csgowin-meta').then(r => r.json()).then(d => {
+      setCsgowinActive(true);
+      if (d.totalPool) setCsgowinAmt(Math.round(d.totalPool));
     }).catch(() => {});
   }, []);
 
@@ -1130,6 +1253,14 @@ function App() {
               {krushAmt != null && <div className="ptab-amt"><span style={{color:'var(--krush)'}}>$</span>{krushAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
+          {csgowinActive && (
+            <button className={`ptab${tab==='csgowin'?' active-csgowin':''}`} onClick={() => setTab('csgowin')}>
+              <div className="ptab-top">
+                <img className="ptab-img" src="/assets/csgowin.png" alt="CSGOwin" onError={e=>e.target.style.display='none'}/>
+              </div>
+              {csgowinAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>{csgowinAmt.toLocaleString('en-US')}</div>}
+            </button>
+          )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => setTab('points')}>
             <div className="ptab-top">
               <img className="ptab-img" src="/assets/np-coin.svg" alt="" onError={e=>e.target.style.display='none'}/>
@@ -1142,6 +1273,7 @@ function App() {
         <div style={{display: tab === 'krush' ? 'block' : 'none'}}><KrushLeaderboard/></div>
         <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
+        <div style={{display: tab === 'csgowin' ? 'block' : 'none'}}><CsgowinLeaderboard/></div>
         <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
