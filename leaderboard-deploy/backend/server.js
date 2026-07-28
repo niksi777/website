@@ -622,21 +622,20 @@ app.post("/admin/krush/start", (req, res) => {
 });
 
 // ─── CSGOwin leaderboard ───────────────────────────────────────────────────
-const CSGOWIN_API_KEY   = '5bb7502706';
-const CSGOWIN_PRIZES    = [200, 100, 60, 40, 25, 20, 15, 15, 15, 10]; // 500c total
-const CSGOWIN_POOL      = CSGOWIN_PRIZES.reduce((s, v) => s + v, 0);
-const CSGOWIN_CACHE_PATH  = '/root/website/csgowin-cache.json';
-const CSGOWIN_PERIOD_PATH = '/root/website/csgowin-period.json';
+const CSGOWIN_API_KEY  = '5bb7502706';
+const CSGOWIN_PRIZES   = [200, 100, 60, 40, 25, 20, 15, 15, 15, 10]; // 500c fallback
+const CSGOWIN_POOL     = CSGOWIN_PRIZES.reduce((s, v) => s + v, 0);
+const CSGOWIN_CACHE_PATH = '/root/website/csgowin-cache.json';
 
-let csgowinReferrals  = [];
-let csgowinPeriod     = {};
+let csgowinUsers      = [];
+let csgowinApiMeta    = { active: false, dateStart: null, dateEnd: null, prizes: CSGOWIN_PRIZES };
 let csgowinLastUpdated = null;
 
-try { if (fs_lb.existsSync(CSGOWIN_PERIOD_PATH)) csgowinPeriod = JSON.parse(fs_lb.readFileSync(CSGOWIN_PERIOD_PATH, 'utf-8')); } catch {}
 try {
   if (fs_lb.existsSync(CSGOWIN_CACHE_PATH)) {
     const c = JSON.parse(fs_lb.readFileSync(CSGOWIN_CACHE_PATH, 'utf-8'));
-    csgowinReferrals  = c.referrals || [];
+    csgowinUsers      = c.users || [];
+    csgowinApiMeta    = c.meta  || csgowinApiMeta;
     csgowinLastUpdated = c.lastUpdated || null;
   }
 } catch {}
@@ -648,12 +647,18 @@ async function updateCsgowinLeaderboard() {
       { headers: { 'x-apikey': CSGOWIN_API_KEY } }
     );
     const json = await response.json();
-    const entries = json.leaderboards || json.data || json.players || [];
-    if (!Array.isArray(entries)) { console.log('CSGOwin: unexpected response'); return; }
-    csgowinReferrals  = entries;
+    const lb = json.leaderboards && json.leaderboards[0];
+    if (!lb) { console.log('CSGOwin: no leaderboard in response'); return; }
+    csgowinUsers      = lb.users || [];
+    csgowinApiMeta    = {
+      active:    lb.active    || false,
+      dateStart: lb.dateStart || null,
+      dateEnd:   lb.dateEnd   || null,
+      prizes:    lb.prizes    || CSGOWIN_PRIZES,
+    };
     csgowinLastUpdated = Date.now();
-    fs_lb.writeFileSync(CSGOWIN_CACHE_PATH, JSON.stringify({ referrals: csgowinReferrals, lastUpdated: csgowinLastUpdated }, null, 2));
-    console.log('CSGOwin leaderboard updated:', csgowinReferrals.length, 'entries');
+    fs_lb.writeFileSync(CSGOWIN_CACHE_PATH, JSON.stringify({ users: csgowinUsers, meta: csgowinApiMeta, lastUpdated: csgowinLastUpdated }, null, 2));
+    console.log('CSGOwin leaderboard updated:', csgowinUsers.length, 'entries, active:', csgowinApiMeta.active);
   } catch (err) {
     console.log('CSGOwin update error:', err.message);
   }
@@ -664,43 +669,31 @@ updateCsgowinLeaderboard();
 
 app.get('/csgowin-leaderboard', (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
-  const sorted = csgowinReferrals
+  const prizes = csgowinApiMeta.prizes || CSGOWIN_PRIZES;
+  const sorted = csgowinUsers
     .slice()
-    .sort((a, b) => Number(b.wagered || b.wager || b.wageredAmount || b.amount || 0) - Number(a.wagered || a.wager || a.wageredAmount || a.amount || 0))
+    .sort((a, b) => Number(b.wagered || 0) - Number(a.wagered || 0))
     .slice(0, limit)
     .map((r, i) => ({
       position: i + 1,
-      username: r.username || r.name || r.displayName || 'Hidden',
-      avatar: r.avatar || r.avatarUrl || r.image_url || null,
-      wager: Number(r.wagered || r.wager || r.wageredAmount || r.amount || 0),
-      prize: CSGOWIN_PRIZES[i] || 0,
+      username: r.hidden ? 'Anonymous' : (r.name || r.uuid || 'Unknown'),
+      avatar:   r.steam_avatar || null,
+      wager:    Number(r.wagered || 0),
+      prize:    r.prize || prizes[i] || 0,
     }));
   res.json({ leaderboard: sorted });
 });
 
 app.get('/csgowin-meta', (req, res) => {
-  const now = Date.now();
+  const prizes = csgowinApiMeta.prizes || CSGOWIN_PRIZES;
   res.json({
-    start: csgowinPeriod.start || null,
-    end: csgowinPeriod.end || null,
-    active: !!(csgowinPeriod.start && csgowinPeriod.end && now >= csgowinPeriod.start && now < csgowinPeriod.end),
-    totalPool: CSGOWIN_POOL,
-    prizes: CSGOWIN_PRIZES,
+    start:      csgowinApiMeta.dateStart || null,
+    end:        csgowinApiMeta.dateEnd   || null,
+    active:     csgowinApiMeta.active    || false,
+    totalPool:  prizes.reduce((s, v) => s + v, 0),
+    prizes,
     lastUpdated: csgowinLastUpdated,
   });
-});
-
-app.post('/admin/csgowin/start', (req, res) => {
-  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
-  const session = sessions[sessionId];
-  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
-  const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
-  const end   = (req.body && req.body.end)   ? new Date(req.body.end).getTime()   : new Date('2026-08-11T23:59:00Z').getTime();
-  csgowinPeriod = { start, end };
-  fs_lb.writeFileSync(CSGOWIN_PERIOD_PATH, JSON.stringify(csgowinPeriod, null, 2));
-  csgowinReferrals = [];
-  updateCsgowinLeaderboard();
-  res.json({ ok: true, start, end });
 });
 
 // ─── Chancer ───────────────────────────────────────────────────────────────
