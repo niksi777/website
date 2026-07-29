@@ -1429,6 +1429,11 @@ function HeroCarousel({ onBetfury }) {
         perks:['UP TO 15% LOSSBACK','REQUEST IN DISCORD','1,000 COIN LEADERBOARD'],
         cta:'LEADERBOARD', href:'/leaderboards?tab=chicken', ext:false,
       }] : []),
+      {
+        textLogo:'CSGO.WIN', color:'#f59e0b',
+        perks:['500C LEADERBOARD','FREE BATTLES & CASES','5% DEPOSIT BONUS'],
+        cta:'SIGN UP', href:'https://csgo.win/r/niksi', ext:true,
+      },
     ];
 
     return (
@@ -1443,7 +1448,10 @@ function HeroCarousel({ onBetfury }) {
              onClick={p.modal ? (e)=>{e.preventDefault();onBetfury();} : undefined}
              style={{borderBottom:`2px solid ${p.color}40`}}>
             <div className="plat-logo-wrap">
-              <img src={p.logo} className={`plat-logo${p.bigLogo?' lg':''}`} alt="" onError={e=>e.target.style.display='none'}/>
+              {p.textLogo
+                ? <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,letterSpacing:'.08em',color:p.color,textTransform:'uppercase'}}>{p.textLogo}</span>
+                : <img src={p.logo} className={`plat-logo${p.bigLogo?' lg':''}`} alt="" onError={e=>e.target.style.display='none'}/>
+              }
             </div>
             <div className="plat-perks">
               {p.perks.map(pk => (
