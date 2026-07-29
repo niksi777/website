@@ -87,16 +87,16 @@
     .plat-section{margin-top:44px;margin-bottom:56px}
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
     .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:22px}
-    .plat-row{display:flex;align-items:center;gap:24px;padding:20px 26px;min-height:84px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;margin-bottom:10px;transition:background .15s,border-color .15s;text-decoration:none;color:inherit;cursor:pointer}
+    .plat-wrap{margin-bottom:20px}
+    .plat-card-hd{padding:0 20px 6px;display:flex;align-items:center}
+    .plat-logo{height:28px;object-fit:contain;max-width:130px}
+    .plat-logo.lg{height:38px;max-width:150px}
+    .plat-row{display:flex;align-items:center;gap:16px;padding:16px 20px;min-height:64px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;transition:background .15s,border-color .15s}
     .plat-row:hover{background:rgba(255,255,255,.048);border-color:var(--b3)}
-    .plat-logo-wrap{width:100px;flex-shrink:0;display:flex;align-items:center}
-    .plat-logo{height:28px;object-fit:contain;max-width:100px}
-    .plat-logo.lg{height:44px;max-width:130px}
-    .plat-perks{flex:1;display:flex;gap:28px;flex-wrap:wrap;align-items:center}
+    .plat-perks{flex:1;display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center}
     .plat-perk{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(221,227,239,.62)}
-    .plat-btns{display:flex;gap:8px;flex-shrink:0}
-    .plat-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;min-width:148px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;white-space:nowrap;pointer-events:none}
-    .plat-btn-ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(221,227,239,.7)}
+    .plat-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;text-decoration:none;flex-shrink:0;transition:opacity .15s;cursor:pointer}
+    .plat-btn:hover{opacity:.82}
 
     .bf-overlay{position:fixed;inset:0;background:rgba(2,3,8,.8);backdrop-filter:blur(4px);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;animation:fu .18s ease both}
     .bf-modal{background:#0e0204;border:1px solid rgba(210,30,45,.3);border-top:3px solid #d21e2d;border-radius:16px;width:100%;max-width:460px;padding:36px 28px 28px;position:relative;text-align:center}
@@ -995,10 +995,8 @@ html{overflow-y:scroll;}
       .carousel-wrap{height:200px;border-radius:12px}
       .c-slide{padding:20px 18px}
       .plat-row{flex-wrap:wrap;gap:10px;padding:14px 16px;min-height:auto}
-      .plat-perks{gap:10px}
-      .plat-logo-wrap{width:70px}
-      .plat-btns{width:100%}
-      .plat-btn{flex:1;justify-content:center;padding:8px 12px;font-size:11px}
+      .plat-perks{gap:10px;justify-content:flex-start}
+      .plat-btn{padding:8px 12px;font-size:11px}
       .ftw{flex-direction:column;align-items:flex-start}
     }
 @media(max-width:700px){
@@ -1422,22 +1420,24 @@ function HeroCarousel({ onBetfury }) {
       {
         logo:'/assets/betfury.png', color:'#d21e2d',
         perks:['150% DEPOSIT BONUS','EXCLUSIVE CODE BONUS','RAKEBACK REWARDS'],
-        cta:'SIGN UP', href:BETFURY_URL, ext:true, modal:true,
+        signupHref:BETFURY_URL, signupExt:true, signupModal:true,
       },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
-        cta:'LEADERBOARD', href:'/leaderboards', ext:false,
+        lbHref:'/leaderboards',
       },
       ...(chickenActive ? [{
-        logo:'/assets/chicken.png', color:'#f2a93b',
+        logo:'/assets/chicken.png', color:'#f2a93b', bigLogo:true,
         perks:['UP TO 15% LOSSBACK','REQUEST IN DISCORD','1,000 COIN LEADERBOARD'],
-        cta:'LEADERBOARD', href:'/leaderboards?tab=chicken', ext:false,
+        signupHref:'https://chicken.gg?ref=niksi', signupExt:true,
+        lbHref:'/leaderboards?tab=chicken',
       }] : []),
       {
         logo:'/assets/csgowin.png', color:'#f59e0b',
         perks:['500C LEADERBOARD','FREE BATTLES & CASES','5% DEPOSIT BONUS'],
-        cta:'SIGN UP', href:'https://csgowin.com/r/niksi', ext:true,
+        signupHref:'https://csgowin.com/r/niksi', signupExt:true,
+        lbHref:'/leaderboards?tab=csgowin',
       },
     ];
 
@@ -1446,32 +1446,39 @@ function HeroCarousel({ onBetfury }) {
         <div className="plat-title">PARTNERED PLATFORMS</div>
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         {platforms.map((p,i) => (
-          <a key={i} className="plat-row"
-             href={p.modal ? '#' : p.href}
-             target={!p.modal && p.ext ? '_blank' : undefined}
-             rel={!p.modal && p.ext ? 'noreferrer' : undefined}
-             onClick={p.modal ? (e)=>{e.preventDefault();onBetfury();} : undefined}
-             style={{borderBottom:`2px solid ${p.color}40`}}>
-            <div className="plat-logo-wrap">
+          <div key={i} className="plat-wrap">
+            <div className="plat-card-hd">
               {p.textLogo
                 ? <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,letterSpacing:'.08em',color:p.color,textTransform:'uppercase'}}>{p.textLogo}</span>
                 : <img src={p.logo} className={`plat-logo${p.bigLogo?' lg':''}`} alt="" onError={e=>e.target.style.display='none'}/>
               }
             </div>
-            <div className="plat-perks">
-              {p.perks.map(pk => (
-                <div key={pk} className="plat-perk">
-                  <span style={{color:p.color,fontSize:13,fontWeight:800}}>✓</span>
-                  <span>{pk}</span>
-                </div>
-              ))}
+            <div className="plat-row" style={{borderBottom:`2px solid ${p.color}40`}}>
+              {p.signupHref && (
+                <a className="plat-btn" style={{background:p.color,color:'#fff'}}
+                   href={p.signupExt ? p.signupHref : '#'}
+                   target={p.signupExt ? '_blank' : undefined}
+                   rel={p.signupExt ? 'noreferrer' : undefined}
+                   onClick={p.signupModal ? (e)=>{e.preventDefault();onBetfury();} : undefined}>
+                  SIGN UP <Ext/>
+                </a>
+              )}
+              <div className="plat-perks">
+                {p.perks.map(pk => (
+                  <div key={pk} className="plat-perk">
+                    <span style={{color:p.color,fontSize:13,fontWeight:800}}>✓</span>
+                    <span>{pk}</span>
+                  </div>
+                ))}
+              </div>
+              {p.lbHref && (
+                <a className="plat-btn" style={{background:'var(--s2)',border:`1px solid ${p.color}55`,color:p.color}}
+                   href={p.lbHref}>
+                  LEADERBOARD <Arr/>
+                </a>
+              )}
             </div>
-            <div className="plat-btns">
-              <span className="plat-btn" style={{background:p.color}}>
-                {p.cta} {p.ext?<Ext/>:<Arr/>}
-              </span>
-            </div>
-          </a>
+          </div>
         ))}
       </div>
     );
