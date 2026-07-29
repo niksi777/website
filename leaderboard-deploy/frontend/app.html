@@ -114,23 +114,6 @@
 
     #constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-    /* CSGOWin banner */
-    .csgo-banner{border-radius:14px;overflow:hidden;background:#100a00;border:1px solid rgba(245,158,11,.18);border-top:3px solid rgba(245,158,11,.7);margin-bottom:28px}
-    .csgo-banner-head{display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid rgba(245,158,11,.1)}
-    .csgo-banner-logo{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:.16em;color:#f59e0b;text-transform:uppercase}
-    .csgo-banner-badge{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border-radius:100px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.28);color:rgba(245,158,11,.8)}
-    .csgo-banner-panels{display:grid;grid-template-columns:repeat(4,1fr)}
-    .csgo-panel{padding:18px 18px 20px;border-right:1px solid rgba(245,158,11,.08)}
-    .csgo-panel:last-child{border-right:none}
-    .csgo-panel-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#f59e0b;margin-bottom:5px}
-    .csgo-panel-desc{font-size:12px;color:rgba(221,227,239,.5);line-height:1.5}
-    .csgo-banner-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-top:1px solid rgba(245,158,11,.1);text-decoration:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,158,11,.55);transition:color .15s,background .15s}
-    .csgo-banner-cta:hover{color:#f59e0b;background:rgba(245,158,11,.04)}
-    @media(max-width:640px){.csgo-banner-panels{grid-template-columns:1fr 1fr}.csgo-panel:nth-child(2){border-right:none}.csgo-panel:nth-child(1),.csgo-panel:nth-child(2){border-bottom:1px solid rgba(245,158,11,.08)}}
-
-
-
-
     }}
     
     
@@ -1383,35 +1366,6 @@ function HeroCarousel({ onBetfury }) {
     );
   }
 
-  function CsgowinBanner() {
-    const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
-    const panels = [
-      { title: '500C Leaderboard', desc: 'Race to the top with other Niksi affiliates for your share of 500 credits' },
-      { title: 'Free Promos', desc: 'Exclusive promotions available to all Niksi affiliates on CSGO.WIN' },
-      { title: 'Free Battles & Cases', desc: 'Join battles and open cases at no cost as a Niksi affiliate' },
-      { title: '5% Deposit Bonus', desc: 'Get an extra 5% on every deposit - use code NIKSI at signup' },
-    ];
-    return (
-      <div className="csgo-banner f2">
-        <div className="csgo-banner-head">
-          <span className="csgo-banner-logo">CSGO.WIN</span>
-          <span className="csgo-banner-badge">PARTNER</span>
-        </div>
-        <div className="csgo-banner-panels">
-          {panels.map((p,i) => (
-            <div key={i} className="csgo-panel">
-              <div className="csgo-panel-title">{p.title}</div>
-              <div className="csgo-panel-desc">{p.desc}</div>
-            </div>
-          ))}
-        </div>
-        <a href="https://csgo.win" target="_blank" rel="noreferrer" className="csgo-banner-cta">
-          Visit CSGO.WIN <Arr/>
-        </a>
-      </div>
-    );
-  }
-
   function PredictorBanner() {
     const [hunt, setHunt] = React.useState(null);
     const [stats, setStats] = React.useState(null);
@@ -1516,7 +1470,6 @@ function HeroCarousel({ onBetfury }) {
       {bfOpen && <BetfuryModal onClose={()=>setBfOpen(false)}/>}
       <div className="page">
         <HeroCarousel onBetfury={()=>setBfOpen(true)}/>
-        <CsgowinBanner/>
         <PartneredPlatforms onBetfury={()=>setBfOpen(true)}/>
       </div>
       <footer>
