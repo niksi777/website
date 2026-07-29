@@ -274,12 +274,12 @@
     .pod-name{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:700;color:#fff;margin-bottom:18px;text-align:center;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .pod-name.first{font-size:26px}
     .pod-stats-row{width:100%;background:rgba(0,0,0,.45);border-radius:8px;overflow:hidden;margin-bottom:6px}
-    .pod-stat{display:flex;align-items:center;justify-content:space-between;padding:10px 13px}
+    .pod-stat{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 13px;gap:4px}
     .pod-stat.full{border-top:1px solid rgba(255,255,255,.07)}
     .pod-stat-divider{height:1px;background:rgba(255,255,255,.07)}
-    .pod-stat-lbl{font-size:13px;font-weight:700;color:#fff}
-    .pod-stat-lbl.muted{font-size:12px;font-weight:400;color:rgba(255,255,255,.45)}
-    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;display:flex;align-items:center;gap:3px}
+    .pod-stat-lbl{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+    .pod-stat-lbl.muted{color:rgba(255,255,255,.45)}
+    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#fff;display:flex;align-items:center;gap:4px}
     .pod-stat-val.muted{color:rgba(255,255,255,.45)}
     .pod-stat-green{color:#22c55e}
 
@@ -1530,13 +1530,22 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, priz
         <div className="pod-stat">
           <span className="pod-stat-lbl">Prize</span>
           <span className="pod-stat-val">
-            {(() => { const v = fmtPrize(player, rank); return v === '-' ? <span style={{color:'rgba(255,255,255,.45)'}}>-</span> : <><span className="pod-stat-green">$</span><span>{v.replace('$','')}</span></>; })()}
+            {(() => {
+              const v = fmtPrize(player, rank);
+              if (v === '-') return <span style={{color:'rgba(255,255,255,.45)'}}>-</span>;
+              const num = v.replace('$','');
+              const icon = prizeIcon ? <img src={prizeIcon} className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/> : <span className="pod-stat-green">$</span>;
+              return <>{icon}<span>{num}</span></>;
+            })()}
           </span>
         </div>
         <div className="pod-stat-divider"/>
         <div className="pod-stat">
           <span className="pod-stat-lbl muted">Wagered</span>
-          <span className="pod-stat-val muted"><span>$</span><span>{fmtWager(player).replace('$','')}</span></span>
+          <span className="pod-stat-val muted">
+            {wagerIcon ? <img src={wagerIcon} className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/> : <span>$</span>}
+            <span>{fmtWager(player).replace('$','')}</span>
+          </span>
         </div>
         {fmtNP && <div className="pod-stat full">
           <span className="pod-stat-lbl">NiksiPoints</span>
