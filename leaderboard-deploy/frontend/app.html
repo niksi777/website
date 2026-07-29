@@ -271,12 +271,15 @@
     .pod-avatar.first{width:118px;height:118px;border-color:rgba(212,175,90,.45)}
     .pod-name{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:700;color:#fff;margin-bottom:18px;text-align:center;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .pod-name.first{font-size:26px}
-    .pod-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:6px}
-    .pod-stat{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 10px}
-    .pod-stat.full{grid-column:1/-1}
-    .pod-stat-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-top:3px}
-    .pod-stat-val.prize{font-size:19px}
+    .pod-stats-row{width:100%;background:rgba(0,0,0,.45);border-radius:8px;overflow:hidden;margin-bottom:6px}
+    .pod-stat{display:flex;align-items:center;justify-content:space-between;padding:10px 13px}
+    .pod-stat.full{border-top:1px solid rgba(255,255,255,.07)}
+    .pod-stat-divider{height:1px;background:rgba(255,255,255,.07)}
+    .pod-stat-lbl{font-size:13px;font-weight:700;color:#fff}
+    .pod-stat-lbl.muted{font-size:12px;font-weight:400;color:rgba(255,255,255,.45)}
+    .pod-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;display:flex;align-items:center;gap:3px}
+    .pod-stat-val.muted{color:rgba(255,255,255,.45)}
+    .pod-stat-green{color:#22c55e}
 
     /* Table */
     .lb-table{width:100%;border-collapse:collapse;margin-bottom:32px}
@@ -1523,22 +1526,19 @@ function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, priz
       <div className={`pod-name${rank===1?' first':''}`} style={rank===1?{color:accentColor}:{}}>{player.username || player.display_name || 'Hidden'}</div>
       <div className="pod-stats-row">
         <div className="pod-stat">
-          <div className="pod-stat-lbl">Wagered</div>
-          <div className="pod-stat-val">
-            {wagerIcon && <img src={wagerIcon} className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>}
-            {wagerIcon ? fmtWager(player) : <Amt s={fmtWager(player)}/>}
-          </div>
+          <span className="pod-stat-lbl">Prize</span>
+          <span className="pod-stat-val">
+            {(() => { const v = fmtPrize(player, rank); return v === '-' ? <span style={{color:'rgba(255,255,255,.45)'}}>-</span> : <><span className="pod-stat-green">$</span><span>{v.replace('$','')}</span></>; })()}
+          </span>
         </div>
+        <div className="pod-stat-divider"/>
         <div className="pod-stat">
-          <div className="pod-stat-lbl">Prize</div>
-          <div className="pod-stat-val prize">
-            {prizeIcon && <img src={prizeIcon} className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>}
-            {prizeIcon ? fmtPrize(player, rank) : <Amt s={fmtPrize(player, rank)}/>}
-          </div>
+          <span className="pod-stat-lbl muted">Wagered</span>
+          <span className="pod-stat-val muted"><span>$</span><span>{fmtWager(player).replace('$','')}</span></span>
         </div>
         {fmtNP && <div className="pod-stat full">
-          <div className="pod-stat-lbl">NiksiPoints</div>
-          <div className="pod-stat-val" style={{color:'#fff',fontSize:14}}>+{fmtNP(rank)} NP</div>
+          <span className="pod-stat-lbl">NiksiPoints</span>
+          <span className="pod-stat-val" style={{color:'#fff'}}>+{fmtNP(rank)} NP</span>
         </div>}
       </div>
     </div>
