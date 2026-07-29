@@ -2405,7 +2405,8 @@ function LeaderboardsPage() {
           {(csgowinActive || csgowinEnded) && (
             <button className={`ptab${tab==='csgowin'?' active-csgowin':''}`} onClick={() => changeTab('csgowin')}>
               <div className="ptab-top">
-                <img className="ptab-img" src="/assets/csgowin.png" alt="CSGO.WIN" style={{maxWidth:80}} onError={e=>e.target.style.display='none'}/>
+                <img className="ptab-img" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>
+                <span className="ptab-label">CSGOWIN</span>
               </div>
               {csgowinAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>{csgowinAmt.toLocaleString('en-US')}</div>}
             </button>
