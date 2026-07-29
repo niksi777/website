@@ -257,11 +257,13 @@
 
     /* Podium */
     .lb-podium{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin-bottom:0}
-    .podium-card{display:flex;flex-direction:column;align-items:center;padding:36px 28px;border-radius:18px;border:1px solid var(--b2);background:var(--s1);position:relative;width:268px;transition:transform .2s}
+    .podium-card{display:flex;flex-direction:column;align-items:center;padding:36px 28px;border-radius:18px;border:none;background:var(--s1);position:relative;width:268px;transition:transform .2s}
+    .podium-card::before{content:'';position:absolute;inset:0;border-radius:18px;padding:1px;background:linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.12) 70%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;pointer-events:none}
     .podium-card:hover{transform:translateY(-4px)}
-    .podium-card.first{border-color:rgba(212,175,90,.35);background:linear-gradient(180deg,rgba(212,175,90,.08) 0%,var(--s1) 100%);width:300px;padding-bottom:40px}
-    .podium-card.second{border-color:rgba(180,180,200,.18)}
-    .podium-card.third{border-color:rgba(150,100,60,.22)}
+    .podium-card.first{background:linear-gradient(180deg,rgba(212,175,90,.06) 0%,var(--s1) 100%);width:300px;padding-bottom:40px}
+    .podium-card.first::before{background:linear-gradient(to bottom,transparent 0%,rgba(212,175,90,.9) 65%);padding:2px}
+    .podium-card.second::before{background:linear-gradient(to bottom,transparent 0%,rgba(180,190,210,.6) 65%);padding:1px}
+    .podium-card.third::before{background:linear-gradient(to bottom,transparent 0%,rgba(160,100,50,.7) 65%);padding:1px}
     .rank-badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#000}
     .rank-badge.r1{background:var(--gold);width:38px;height:38px;font-size:19px}
     .rank-badge.r2{background:#c0c0c8}
