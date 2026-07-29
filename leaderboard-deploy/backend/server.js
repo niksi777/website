@@ -640,6 +640,36 @@ try {
   }
 } catch {}
 
+// ── CSGOWIN wager race ─────────────────────────────────────────────────────
+const CSGOWIN_RACE_PATH = '/root/website/csgowin-race.json';
+let csgowinRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null };
+try {
+  if (fs_lb.existsSync(CSGOWIN_RACE_PATH)) {
+    csgowinRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null, ...JSON.parse(fs_lb.readFileSync(CSGOWIN_RACE_PATH, 'utf-8')) };
+  }
+} catch(e) {}
+
+function csgowinRaceProgress(r) {
+  const key = r.name || r.uuid;
+  const base = csgowinRace.baseline[key] || 0;
+  return Math.max(0, Number(r.wagered || 0) - base);
+}
+
+function checkCsgowinRaceWinner() {
+  if (csgowinRace.winner || !csgowinRace.startedAt) return;
+  const qualifiers = csgowinUsers.filter(r => csgowinRaceProgress(r) >= csgowinRace.goal);
+  if (qualifiers.length === 0) return;
+  const top = qualifiers.sort((a, b) => csgowinRaceProgress(b) - csgowinRaceProgress(a))[0];
+  csgowinRace.winner = {
+    username: top.hidden ? 'Anonymous' : (top.name || top.uuid || 'Unknown'),
+    avatar: top.steam_avatar || null,
+    wager: csgowinRaceProgress(top),
+    wonAt: Date.now(),
+  };
+  fs_lb.writeFileSync(CSGOWIN_RACE_PATH, JSON.stringify(csgowinRace, null, 2));
+  console.log('CSGOWIN wager race won by:', csgowinRace.winner.username);
+}
+
 async function updateCsgowinLeaderboard() {
   try {
     const response = await fetch(
@@ -659,13 +689,21 @@ async function updateCsgowinLeaderboard() {
     csgowinLastUpdated = Date.now();
     fs_lb.writeFileSync(CSGOWIN_CACHE_PATH, JSON.stringify({ users: csgowinUsers, meta: csgowinApiMeta, lastUpdated: csgowinLastUpdated }, null, 2));
     console.log('CSGOwin leaderboard updated:', csgowinUsers.length, 'entries, active:', csgowinApiMeta.active);
+    checkCsgowinRaceWinner();
   } catch (err) {
     console.log('CSGOwin update error:', err.message);
   }
 }
 
-setInterval(updateCsgowinLeaderboard, 15 * 60 * 1000);
-updateCsgowinLeaderboard();
+// Dynamic interval - 2 min when race active, 15 min otherwise
+let csgowinTimer = null;
+function scheduleCsgowinUpdate() {
+  if (csgowinTimer) clearTimeout(csgowinTimer);
+  const raceActive = csgowinRace.startedAt && !csgowinRace.winner;
+  const delay = raceActive ? 2 * 60 * 1000 : 15 * 60 * 1000;
+  csgowinTimer = setTimeout(async () => { await updateCsgowinLeaderboard(); scheduleCsgowinUpdate(); }, delay);
+}
+updateCsgowinLeaderboard().then(scheduleCsgowinUpdate);
 
 app.get('/csgowin-leaderboard', (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
@@ -694,6 +732,30 @@ app.get('/csgowin-meta', (req, res) => {
     prizes,
     lastUpdated: csgowinLastUpdated,
   });
+});
+
+app.get('/csgowin-wager-race', (req, res) => {
+  const rows = csgowinUsers
+    .map(r => ({
+      username: r.hidden ? 'Anonymous' : (r.name || r.uuid || 'Unknown'),
+      avatar: r.steam_avatar || null,
+      wager: csgowinRaceProgress(r),
+    }))
+    .filter(r => r.wager > 0)
+    .map(r => ({ ...r, progress: Math.min(1, r.wager / csgowinRace.goal) }))
+    .sort((a, b) => b.wager - a.wager);
+  res.json({ goal: csgowinRace.goal, prize: csgowinRace.prize, winner: csgowinRace.winner, startedAt: csgowinRace.startedAt, referrals: rows });
+});
+
+app.post('/admin/csgowin/race/start', (req, res) => {
+  const goal  = Number(req.body && req.body.goal)  || 10000;
+  const prize = Number(req.body && req.body.prize) || 100;
+  const baseline = {};
+  csgowinUsers.forEach(r => { baseline[r.name || r.uuid] = Number(r.wagered || 0); });
+  csgowinRace = { goal, prize, winner: null, baseline, startedAt: Date.now() };
+  fs_lb.writeFileSync(CSGOWIN_RACE_PATH, JSON.stringify(csgowinRace, null, 2));
+  scheduleCsgowinUpdate();
+  res.json({ ok: true, goal, prize });
 });
 
 // ─── Chancer ───────────────────────────────────────────────────────────────
