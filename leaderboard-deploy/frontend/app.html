@@ -88,7 +88,7 @@
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
     .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:22px}
     .plat-wrap{margin-bottom:20px}
-    .plat-card-hd{padding:0 20px 6px;display:flex;align-items:center}
+    .plat-card-hd{padding:0 20px 6px;display:flex;align-items:center;justify-content:center}
     .plat-logo{height:28px;object-fit:contain;max-width:130px}
     .plat-logo.lg{height:38px;max-width:150px}
     .plat-row{display:flex;align-items:center;gap:16px;padding:16px 20px;min-height:64px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;transition:background .15s,border-color .15s}
@@ -1425,6 +1425,7 @@ function HeroCarousel({ onBetfury }) {
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
         perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
+        signupHref:'https://gamba.com?c=niksi', signupExt:true,
         lbHref:'/leaderboards',
       },
       ...(chickenActive ? [{
