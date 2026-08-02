@@ -1852,30 +1852,14 @@ function ChickenRaceLeaderboard() {
 
 function CsgowinRaceLeaderboard() {
   const [race, setRace] = React.useState(null);
-  const [now, setNow] = React.useState(Date.now());
 
   React.useEffect(() => {
     fetch('/csgowin-wager-race').then(r => r.json()).then(setRace).catch(() => {});
   }, []);
 
-  React.useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
   const maskName = name => {
     if (!name || name.length <= 4) return name;
     return name.slice(0,2) + '*'.repeat(name.length - 4) + name.slice(-2);
-  };
-
-  const fmtCountdown = ms => {
-    if (ms <= 0) return '0s';
-    const h = Math.floor(ms / 3600000);
-    const m = Math.floor((ms % 3600000) / 60000);
-    const s = Math.floor((ms % 60000) / 1000);
-    if (h > 0) return `${h}h ${m}m ${s}s`;
-    if (m > 0) return `${m}m ${s}s`;
-    return `${s}s`;
   };
 
   if (race === null) return <div className="loading">Loading...</div>;
@@ -1885,8 +1869,7 @@ function CsgowinRaceLeaderboard() {
     </div>
   );
 
-  const timeLeft = race.endsAt ? Math.max(0, race.endsAt - now) : null;
-  const isExpired = race.expired || (timeLeft !== null && timeLeft <= 0 && !race.winner);
+  const isExpired = race.expired || (race.endsAt && Date.now() > race.endsAt && !race.winner);
 
   return (
     <div className="f2">
@@ -1896,10 +1879,8 @@ function CsgowinRaceLeaderboard() {
           <span style={{color: isExpired ? 'var(--mu)' : '#fff'}}>{race.prize.toLocaleString('en-US')}</span>
         </div>
         <div className="lb-prize-lbl">Prize - First to Wager {race.goal.toLocaleString('en-US')} Coins Wins</div>
-        {!race.winner && !isExpired && timeLeft !== null && (
-          <div style={{marginTop:10,color:'#f59e0b',fontSize:13,fontWeight:600,letterSpacing:'.04em'}}>
-            Ends in {fmtCountdown(timeLeft)}
-          </div>
+        {!race.winner && !isExpired && race.endsAt && (
+          <Countdown endDate={new Date(race.endsAt)}/>
         )}
         {isExpired && !race.winner && (
           <div style={{marginTop:10,color:'var(--mu)',fontSize:13}}>Race ended - no winner</div>
