@@ -642,10 +642,10 @@ try {
 
 // ── CSGOWIN wager race ─────────────────────────────────────────────────────
 const CSGOWIN_RACE_PATH = '/root/website/csgowin-race.json';
-let csgowinRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null };
+let csgowinRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null, endsAt: null, expired: false };
 try {
   if (fs_lb.existsSync(CSGOWIN_RACE_PATH)) {
-    csgowinRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null, ...JSON.parse(fs_lb.readFileSync(CSGOWIN_RACE_PATH, 'utf-8')) };
+    csgowinRace = { goal: 10000, prize: 100, winner: null, baseline: {}, startedAt: null, endsAt: null, expired: false, ...JSON.parse(fs_lb.readFileSync(CSGOWIN_RACE_PATH, 'utf-8')) };
   }
 } catch(e) {}
 
@@ -656,7 +656,13 @@ function csgowinRaceProgress(r) {
 }
 
 function checkCsgowinRaceWinner() {
-  if (csgowinRace.winner || !csgowinRace.startedAt) return;
+  if (csgowinRace.winner || csgowinRace.expired || !csgowinRace.startedAt) return;
+  if (csgowinRace.endsAt && Date.now() > csgowinRace.endsAt) {
+    csgowinRace.expired = true;
+    fs_lb.writeFileSync(CSGOWIN_RACE_PATH, JSON.stringify(csgowinRace, null, 2));
+    console.log('CSGOWIN wager race expired - no winner');
+    return;
+  }
   const qualifiers = csgowinUsers.filter(r => csgowinRaceProgress(r) >= csgowinRace.goal);
   if (qualifiers.length === 0) return;
   const top = qualifiers.sort((a, b) => csgowinRaceProgress(b) - csgowinRaceProgress(a))[0];
@@ -699,7 +705,7 @@ async function updateCsgowinLeaderboard() {
 let csgowinTimer = null;
 function scheduleCsgowinUpdate() {
   if (csgowinTimer) clearTimeout(csgowinTimer);
-  const raceActive = csgowinRace.startedAt && !csgowinRace.winner;
+  const raceActive = csgowinRace.startedAt && !csgowinRace.winner && !csgowinRace.expired;
   const delay = raceActive ? 2 * 60 * 1000 : 15 * 60 * 1000;
   csgowinTimer = setTimeout(async () => { await updateCsgowinLeaderboard(); scheduleCsgowinUpdate(); }, delay);
 }
@@ -744,18 +750,21 @@ app.get('/csgowin-wager-race', (req, res) => {
     .filter(r => r.wager > 0)
     .map(r => ({ ...r, progress: Math.min(1, r.wager / csgowinRace.goal) }))
     .sort((a, b) => b.wager - a.wager);
-  res.json({ goal: csgowinRace.goal, prize: csgowinRace.prize, winner: csgowinRace.winner, startedAt: csgowinRace.startedAt, referrals: rows });
+  res.json({ goal: csgowinRace.goal, prize: csgowinRace.prize, winner: csgowinRace.winner, startedAt: csgowinRace.startedAt, endsAt: csgowinRace.endsAt, expired: csgowinRace.expired, referrals: rows });
 });
 
 app.post('/admin/csgowin/race/start', (req, res) => {
-  const goal  = Number(req.body && req.body.goal)  || 10000;
-  const prize = Number(req.body && req.body.prize) || 100;
+  const goal       = Number(req.body && req.body.goal)       || 10000;
+  const prize      = Number(req.body && req.body.prize)      || 100;
+  const durationMs = Number(req.body && req.body.durationMs) || (70 * 60 * 60 * 1000);
   const baseline = {};
   csgowinUsers.forEach(r => { baseline[r.name || r.uuid] = Number(r.wagered || 0); });
-  csgowinRace = { goal, prize, winner: null, baseline, startedAt: Date.now() };
+  const startedAt = Date.now();
+  const endsAt = startedAt + durationMs;
+  csgowinRace = { goal, prize, winner: null, baseline, startedAt, endsAt, expired: false };
   fs_lb.writeFileSync(CSGOWIN_RACE_PATH, JSON.stringify(csgowinRace, null, 2));
   scheduleCsgowinUpdate();
-  res.json({ ok: true, goal, prize });
+  res.json({ ok: true, goal, prize, endsAt });
 });
 
 // ─── Chancer ───────────────────────────────────────────────────────────────

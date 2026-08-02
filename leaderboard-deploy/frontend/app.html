@@ -1852,13 +1852,30 @@ function ChickenRaceLeaderboard() {
 
 function CsgowinRaceLeaderboard() {
   const [race, setRace] = React.useState(null);
+  const [now, setNow] = React.useState(Date.now());
+
   React.useEffect(() => {
     fetch('/csgowin-wager-race').then(r => r.json()).then(setRace).catch(() => {});
+  }, []);
+
+  React.useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
   }, []);
 
   const maskName = name => {
     if (!name || name.length <= 4) return name;
     return name.slice(0,2) + '*'.repeat(name.length - 4) + name.slice(-2);
+  };
+
+  const fmtCountdown = ms => {
+    if (ms <= 0) return '0s';
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    if (h > 0) return `${h}h ${m}m ${s}s`;
+    if (m > 0) return `${m}m ${s}s`;
+    return `${s}s`;
   };
 
   if (race === null) return <div className="loading">Loading...</div>;
@@ -1868,14 +1885,25 @@ function CsgowinRaceLeaderboard() {
     </div>
   );
 
+  const timeLeft = race.endsAt ? Math.max(0, race.endsAt - now) : null;
+  const isExpired = race.expired || (timeLeft !== null && timeLeft <= 0 && !race.winner);
+
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt">
           <img src="/assets/csgowincoin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
-          <span style={{color:'#fff'}}>{race.prize.toLocaleString('en-US')}</span>
+          <span style={{color: isExpired ? 'var(--mu)' : '#fff'}}>{race.prize.toLocaleString('en-US')}</span>
         </div>
         <div className="lb-prize-lbl">Prize - First to Wager {race.goal.toLocaleString('en-US')} Coins Wins</div>
+        {!race.winner && !isExpired && timeLeft !== null && (
+          <div style={{marginTop:10,color:'#f59e0b',fontSize:13,fontWeight:600,letterSpacing:'.04em'}}>
+            Ends in {fmtCountdown(timeLeft)}
+          </div>
+        )}
+        {isExpired && !race.winner && (
+          <div style={{marginTop:10,color:'var(--mu)',fontSize:13}}>Race ended - no winner</div>
+        )}
         <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> on CSGO.WIN to qualify</div>
       </div>
 
@@ -3708,6 +3736,7 @@ function fmtDate(iso) {
     const [csgowinRaceAdmin,setCsgowinRaceAdmin]=React.useState(null);
     const [csgowinGoal,setCsgowinGoal]=React.useState('10000');
     const [csgowinPrize,setCsgowinPrize]=React.useState('100');
+    const [csgowinDuration,setCsgowinDuration]=React.useState('70');
     const [csgowinRaceLoading,setCsgowinRaceLoading]=React.useState(false);
     const [csgowinRaceMsg,setCsgowinRaceMsg]=React.useState('');
 
@@ -3720,13 +3749,14 @@ function fmtDate(iso) {
       if(csgowinRaceAdmin && csgowinRaceAdmin.winner && !window.confirm('This race already has a winner. Start a new wager race now? This resets progress for everyone.')) return;
       setCsgowinRaceLoading(true);setCsgowinRaceMsg('');
       try{
+        const durationMs=(Number(csgowinDuration)||70)*60*60*1000;
         const r=await fetch(`/admin/csgowin/race/start?session=${sessionId}`,{
           method:'POST',
           headers:{'Content-Type':'application/json','x-session-id':sessionId},
-          body:JSON.stringify({session:sessionId, goal:Number(csgowinGoal)||10000, prize:Number(csgowinPrize)||100})
+          body:JSON.stringify({session:sessionId, goal:Number(csgowinGoal)||10000, prize:Number(csgowinPrize)||100, durationMs})
         });
         const d=await r.json();
-        if(d.ok){ setCsgowinRaceMsg(`Race started! Goal: ${d.goal.toLocaleString('en-US')} coins, Prize: ${d.prize}C`); loadCsgowinRace(); }
+        if(d.ok){ setCsgowinRaceMsg(`Race started! Goal: ${d.goal.toLocaleString('en-US')} coins, Prize: ${d.prize}C, Ends: ${new Date(d.endsAt).toLocaleString()}`); loadCsgowinRace(); }
         else setCsgowinRaceMsg(d.error||'Failed');
       }catch(e){ setCsgowinRaceMsg('Error: '+e.message); }
       setCsgowinRaceLoading(false);
@@ -3839,7 +3869,7 @@ function fmtDate(iso) {
             Start a first-to-wager race on CSGO.WIN. Only wagers placed after the race starts count. First person to hit the goal wins the prize.
             {csgowinRaceAdmin && csgowinRaceAdmin.startedAt && (
               <span style={{display:'block',marginTop:6,color:'#f59e0b'}}>
-                {csgowinRaceAdmin.winner ? `Race won by ${csgowinRaceAdmin.winner.username}` : `Race active - goal: ${(csgowinRaceAdmin.goal||0).toLocaleString('en-US')} coins`}
+                {csgowinRaceAdmin.winner ? `Race won by ${csgowinRaceAdmin.winner.username}` : csgowinRaceAdmin.expired ? 'Race expired - no winner' : `Race active - goal: ${(csgowinRaceAdmin.goal||0).toLocaleString('en-US')} coins${csgowinRaceAdmin.endsAt ? ` - ends ${new Date(csgowinRaceAdmin.endsAt).toLocaleString()}` : ''}`}
               </span>
             )}
           </div>
@@ -3852,8 +3882,12 @@ function fmtDate(iso) {
               <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Prize (Coins)</label>
               <input className="search-bar" style={{marginBottom:0,width:160}} type="number" value={csgowinPrize} onChange={e=>setCsgowinPrize(e.target.value)}/>
             </div>
+            <div style={{display:'flex',flexDirection:'column',gap:6}}>
+              <label style={{fontSize:11,color:'var(--mu)',letterSpacing:'.1em',textTransform:'uppercase'}}>Duration (Hours)</label>
+              <input className="search-bar" style={{marginBottom:0,width:100}} type="number" value={csgowinDuration} onChange={e=>setCsgowinDuration(e.target.value)}/>
+            </div>
             <button onClick={startCsgowinRace} disabled={csgowinRaceLoading} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#f59e0b',color:'#1a1100',cursor:'pointer',fontSize:13,fontWeight:600,letterSpacing:'.06em',textTransform:'uppercase',opacity:csgowinRaceLoading?0.4:1}}>
-              {csgowinRaceLoading?'Starting...':(csgowinRaceAdmin&&csgowinRaceAdmin.winner?'Restart Race':'Start Race')}
+              {csgowinRaceLoading?'Starting...':(csgowinRaceAdmin&&(csgowinRaceAdmin.winner||csgowinRaceAdmin.expired)?'Restart Race':'Start Race')}
             </button>
           </div>
           {csgowinRaceMsg&&<div style={{fontSize:12,color:'#f59e0b',marginTop:10}}>{csgowinRaceMsg}</div>}
