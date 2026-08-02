@@ -758,7 +758,6 @@ app.post('/admin/csgowin/race/start', (req, res) => {
   const prize      = Number(req.body && req.body.prize)      || 100;
   const durationMs = Number(req.body && req.body.durationMs) || (70 * 60 * 60 * 1000);
   const baseline = {};
-  csgowinUsers.forEach(r => { baseline[r.name || r.uuid] = Number(r.wagered || 0); });
   const startedAt = Date.now();
   const endsAt = startedAt + durationMs;
   csgowinRace = { goal, prize, winner: null, baseline, startedAt, endsAt, expired: false };
