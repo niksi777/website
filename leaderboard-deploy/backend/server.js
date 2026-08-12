@@ -1114,6 +1114,7 @@ app.get('/token-callback', async (req, res) => {
     }
     fs.writeFileSync(envPath, env.trim() + '\n');
     tokenPkce = null;
+    fs.writeFileSync('/root/website/niksibot-last-auth.json', JSON.stringify({ lastFullAuthAt: Date.now() }));
     require('child_process').exec('pm2 restart niksibot');
     res.send('<h1 style="font-family:sans-serif;color:#22c55e;background:#07080c;margin:0;padding:60px;min-height:100vh">✅ Token saved! NiksiBot is restarting with the new token.</h1>');
   } catch (err) {
