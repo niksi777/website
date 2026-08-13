@@ -92,26 +92,6 @@
     }
     .panel-dot{width:5px;height:5px;border-radius:50%;background:#00d8ff;box-shadow:0 0 5px rgba(0,216,255,0.8);flex-shrink:0}
 
-    /* ── Keyword panel ────────────────────────────── */
-    .kw-panel{flex-shrink:0}
-    .kw-body{
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:20px 14px 22px;gap:4px;
-    }
-    .kw-sublabel{
-      font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
-      color:rgba(160,230,255,0.45);
-    }
-    .kw-text{
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:80px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-      color:#fff;line-height:1;text-shadow:0 0 30px rgba(0,216,255,0.35);
-    }
-    .kw-idle{
-      font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
-      color:rgba(160,230,255,0.38);
-    }
-
     /* ── Chat panel ───────────────────────────────── */
     .chat-panel{
       flex:1;
@@ -168,18 +148,6 @@
 <!-- RIGHT SIDEBAR -->
 <div class="sidebar">
 
-  <div class="panel kw-panel">
-    <div class="panel-header">
-      <div class="panel-dot"></div>
-      <div class="panel-label" id="kw-label">Giveaway Keyword</div>
-      <div class="panel-dot"></div>
-    </div>
-    <div class="kw-body">
-      <div class="kw-text" id="kw-text" style="display:none"></div>
-      <div class="kw-idle" id="kw-idle">No Active Giveaway</div>
-    </div>
-  </div>
-
   <div class="panel chat-panel">
     <div class="panel-header">
       <div class="panel-dot"></div>
@@ -194,27 +162,5 @@
 <!-- BOTTOM STRIP — place stream-banner.html browser source here in OBS -->
 <div class="bottom-strip"></div>
 
-<script>
-  async function pollState() {
-    try {
-      const d = await fetch('/giveaway/state').then(r => r.json());
-      const kwText = document.getElementById('kw-text');
-      const kwIdle = document.getElementById('kw-idle');
-      const kwLabel = document.getElementById('kw-label');
-      if (d.giveaway && d.giveaway.keyword) {
-        kwText.textContent = d.giveaway.keyword;
-        kwText.style.display = 'block';
-        kwIdle.style.display = 'none';
-        kwLabel.textContent = 'Type to Enter';
-      } else {
-        kwText.style.display = 'none';
-        kwIdle.style.display = 'block';
-        kwLabel.textContent = 'Giveaway Keyword';
-      }
-    } catch(e) {}
-  }
-  pollState();
-  setInterval(pollState, 2000);
-</script>
 </body>
 </html>
