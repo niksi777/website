@@ -626,6 +626,7 @@ const CSGOWIN_API_KEY  = '5bb7502706';
 const CSGOWIN_PRIZES   = [200, 100, 60, 40, 25, 20, 15, 15, 15, 10]; // 500c fallback
 const CSGOWIN_POOL     = CSGOWIN_PRIZES.reduce((s, v) => s + v, 0);
 const CSGOWIN_CACHE_PATH = '/root/website/csgowin-cache.json';
+const CSGOWIN_HISTORY_PATH = '/root/website/csgowin-history.json';
 
 let csgowinUsers      = [];
 let csgowinApiMeta    = { active: false, dateStart: null, dateEnd: null, prizes: CSGOWIN_PRIZES };
@@ -726,6 +727,15 @@ app.get('/csgowin-leaderboard', (req, res) => {
       prize:    r.prize || prizes[i] || 0,
     }));
   res.json({ leaderboard: sorted });
+});
+
+app.get('/csgowin-lb-history', (req, res) => {
+  try {
+    const data = fs_lb.existsSync(CSGOWIN_HISTORY_PATH)
+      ? JSON.parse(fs_lb.readFileSync(CSGOWIN_HISTORY_PATH, 'utf-8'))
+      : [];
+    res.json(data);
+  } catch { res.json([]); }
 });
 
 app.get('/csgowin-meta', (req, res) => {

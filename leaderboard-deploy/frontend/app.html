@@ -2212,6 +2212,94 @@ function ChickenHistoryModal({ onClose }) {
   );
 }
 
+function CsgowinHistoryDetail({ entry }) {
+  const fmt = n => n > 0 ? Number(n).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '-';
+  const players = entry.entries || [];
+  return (
+    <div>
+      <div style={{textAlign:'center',marginBottom:28}}>
+        <div className="lb-prize-amt"><img src="/assets/csgowincoin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/><span style={{color:'#fff'}}>{Number(entry.prizePool||0).toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-lbl">{entry.label}</div>
+        <div className="lb-code" style={{marginTop:8}}>{entry.start||'?'} - {entry.end||'?'}</div>
+      </div>
+      {players.length === 0 ? (
+        <div className="lb-hist-empty">No entries saved for this period.</div>
+      ) : (
+        <table className="lb-table">
+          <thead><tr><th>Place</th><th></th><th>Player</th><th>Wagered</th><th>Prize</th></tr></thead>
+          <tbody>
+            {players.map((p, i) => (
+              <tr key={i}>
+                <td><span className="tr-rank">#{p.position||i+1}</span></td>
+                <td><Avatar src={p.avatar} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username||'Hidden'}</span></td>
+                <td><span className="tr-wager"><img src="/assets/csgowincoin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmt(p.wager)}</span></td>
+                <td><span className="tr-prize"><img src="/assets/csgowincoin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{p.prize > 0 ? Number(p.prize).toLocaleString('en-US') : '-'}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
+
+function CsgowinHistoryModal({ onClose }) {
+  const [history, setHistory] = React.useState(null);
+  const [selected, setSelected] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/csgowin-lb-history').then(r => r.json()).then(d => setHistory(Array.isArray(d) ? d.slice().reverse() : [])).catch(() => setHistory([]));
+  }, []);
+  return (
+    <div className="lb-modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="lb-modal">
+        <button className="lb-modal-close" onClick={onClose}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        {selected ? (
+          <>
+            <button className="lb-back-btn" onClick={() => setSelected(null)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M15 18l-6-6 6-6"/></svg>
+              Back to list
+            </button>
+            <CsgowinHistoryDetail entry={selected}/>
+          </>
+        ) : (
+          <>
+            <div className="lb-modal-title">Previous Leaderboards</div>
+            {history === null ? (
+              <div className="lb-hist-empty">Loading...</div>
+            ) : history.length === 0 ? (
+              <div className="lb-hist-empty">No leaderboards recorded yet.</div>
+            ) : (
+              <div className="lb-hist-list">
+                {history.map((h, i) => (
+                  <button key={h.id||i} className="lb-hist-item" onClick={() => setSelected(h)}>
+                    <div>
+                      <div className="lb-hist-label">{h.label}</div>
+                      <div className="lb-hist-period">{h.start||'?'} - {h.end||'?'}</div>
+                    </div>
+                    <div className="lb-hist-stats">
+                      <div className="lb-hist-stat">
+                        <div className="lb-hist-stat-val">{Number(h.prizePool||0).toLocaleString('en-US')} coins</div>
+                        <div className="lb-hist-stat-lbl">Prize Pool</div>
+                      </div>
+                      <div className="lb-hist-stat">
+                        <div className="lb-hist-stat-val">{h.totalUsers ?? (h.entries?h.entries.length:0)}</div>
+                        <div className="lb-hist-stat-lbl">Players</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function useLeaderboard() {
   const [lb, setLb] = React.useState([]);
   React.useEffect(() => {
@@ -2320,6 +2408,7 @@ function LbMetaBar() {
 function CsgowinLeaderboard() {
   const [rows, setRows] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
+  const [histOpen, setHistOpen] = React.useState(false);
   React.useEffect(() => {
     fetch('/csgowin-leaderboard?limit=10').then(r => r.json()).then(d => setRows(d.leaderboard || [])).catch(() => setRows([]));
     fetch('/csgowin-meta').then(r => r.json()).then(setMeta).catch(() => {});
@@ -2349,6 +2438,7 @@ function CsgowinLeaderboard() {
 
   return (
     <div className="f2">
+      {histOpen && <CsgowinHistoryModal onClose={() => setHistOpen(false)}/>}
       <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt">
           <img src="/assets/csgowincoin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
@@ -2379,6 +2469,9 @@ function CsgowinLeaderboard() {
           Sign Up on CSGO.WIN
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+        <button onClick={() => setHistOpen(true)} className="lb-hist-btn">
+          Previous Leaderboards
+        </button>
       </div>
 
       {rest.length > 0 && (
