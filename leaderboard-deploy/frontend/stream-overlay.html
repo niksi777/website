@@ -21,39 +21,39 @@
     /* ── Top bar ──────────────────────────────────── */
     .topbar{
       position:fixed;top:0;left:0;right:0;height:58px;
-      background:#07101f;
-      border-bottom:1px solid rgba(56,120,220,0.32);
+      background:#0d1f3c;
+      border-bottom:1px solid rgba(0,216,255,0.35);
       display:flex;align-items:center;
       z-index:30;
     }
     .topbar::after{
       content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(70,130,255,0.55),rgba(100,70,255,0.38),transparent);
+      background:linear-gradient(90deg,transparent,rgba(0,216,255,0.9),rgba(120,60,255,0.6),transparent);
     }
 
     .tb-left{flex:1;display:flex;align-items:center;gap:14px;padding:0 22px}
     .tb-center{position:absolute;left:748px;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:18px}
     .tb-right{display:none}
 
-    .live-badge{display:flex;align-items:center;gap:5px;background:rgba(220,50,50,0.12);border:1px solid rgba(220,50,50,0.26);border-radius:100px;padding:5px 12px;flex-shrink:0}
-    .live-dot{width:7px;height:7px;border-radius:50%;background:#e05555;animation:blink 1.3s ease-in-out infinite}
+    .live-badge{display:flex;align-items:center;gap:5px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.5);border-radius:100px;padding:5px 12px;flex-shrink:0}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:#f87171;animation:blink 1.3s ease-in-out infinite;box-shadow:0 0 6px rgba(248,113,113,0.8)}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-    .live-txt{font-size:11px;font-weight:600;letter-spacing:.13em;color:#e05555;text-transform:uppercase}
+    .live-txt{font-size:11px;font-weight:600;letter-spacing:.13em;color:#f87171;text-transform:uppercase}
 
-    .tb-logo{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(70,130,255,0.4))}
-    .pipe{width:1px;height:28px;background:rgba(80,130,255,0.22);flex-shrink:0}
+    .tb-logo{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(0,216,255,0.7))}
+    .pipe{width:1px;height:28px;background:rgba(0,216,255,0.3);flex-shrink:0}
 
     .tb-soc{display:flex;align-items:center;gap:8px}
-    .tb-soc svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
-    .tb-soc span{font-size:14px;font-weight:500;color:rgba(185,210,255,0.7);letter-spacing:.02em;white-space:nowrap}
+    .tb-soc svg{width:16px;height:16px;flex-shrink:0;opacity:.9}
+    .tb-soc span{font-size:14px;font-weight:500;color:rgba(200,235,255,0.85);letter-spacing:.02em;white-space:nowrap}
 
     .tb-name{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#fff;white-space:nowrap}
-    .tb-deco{font-size:22px;font-weight:300;color:rgba(80,130,255,0.4);line-height:1}
+    .tb-deco{font-size:22px;font-weight:300;color:rgba(0,216,255,0.55);line-height:1}
 
     /* ── Thin left edge ───────────────────────────── */
     .edge-left{
       position:fixed;top:58px;left:0;width:6px;height:862px;
-      background:#07101f;z-index:10;
+      background:#0d1f3c;z-index:10;
     }
 
     /* ── Right sidebar ────────────────────────────── */
@@ -61,9 +61,10 @@
       position:fixed;
       top:58px;right:0;
       width:424px;height:862px;
-      background:#07101f;
-      border-left:1px solid rgba(56,120,220,0.22);
-      border-bottom:1px solid rgba(56,120,220,0.22);
+      background:#0d1f3c;
+      border-left:1px solid rgba(0,216,255,0.4);
+      border-bottom:1px solid rgba(0,216,255,0.4);
+      box-shadow:-4px 0 40px rgba(0,0,20,0.6),inset 1px 0 0 rgba(0,216,255,0.08);
       display:flex;flex-direction:column;
       z-index:20;
     }
@@ -71,24 +72,25 @@
     /* Panel shared */
     .panel{
       margin:12px 12px 0;
-      border:1px solid rgba(56,120,220,0.22);
+      border:1px solid rgba(0,216,255,0.3);
       border-radius:8px;
-      background:rgba(8,14,30,0.7);
+      background:rgba(12,30,60,0.8);
       display:flex;flex-direction:column;
       overflow:hidden;
+      box-shadow:0 0 0 1px rgba(0,216,255,0.06),inset 0 1px 0 rgba(255,255,255,0.04);
     }
     .panel-header{
       display:flex;align-items:center;justify-content:center;gap:8px;
       padding:9px 14px;
-      border-bottom:1px solid rgba(56,120,220,0.15);
-      background:rgba(56,120,220,0.06);
+      border-bottom:1px solid rgba(0,216,255,0.18);
+      background:rgba(0,216,255,0.08);
       flex-shrink:0;
     }
     .panel-label{
       font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-      color:rgba(150,190,255,0.5);
+      color:rgba(160,230,255,0.7);
     }
-    .panel-dot{width:5px;height:5px;border-radius:50%;background:#3b82f6;opacity:.55;flex-shrink:0}
+    .panel-dot{width:5px;height:5px;border-radius:50%;background:#00d8ff;box-shadow:0 0 5px rgba(0,216,255,0.8);flex-shrink:0}
 
     /* ── Keyword panel ────────────────────────────── */
     .kw-panel{flex-shrink:0}
@@ -98,16 +100,16 @@
     }
     .kw-sublabel{
       font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
-      color:rgba(150,190,255,0.3);
+      color:rgba(160,230,255,0.45);
     }
     .kw-text{
       font-family:'Barlow Condensed',sans-serif;
       font-size:80px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-      color:#fff;line-height:1;
+      color:#fff;line-height:1;text-shadow:0 0 30px rgba(0,216,255,0.35);
     }
     .kw-idle{
       font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
-      color:rgba(150,190,255,0.25);
+      color:rgba(160,230,255,0.38);
     }
 
     /* ── Chat panel ───────────────────────────────── */
@@ -122,13 +124,13 @@
       position:fixed;
       bottom:0;left:0;right:0;
       height:160px;
-      background:#07101f;
-      border-top:1px solid rgba(56,120,220,0.32);
+      background:#0d1f3c;
+      border-top:1px solid rgba(0,216,255,0.35);
       z-index:20;
     }
     .bottom-strip::before{
       content:'';position:absolute;top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(70,130,255,0.5),rgba(100,70,255,0.35),transparent);
+      background:linear-gradient(90deg,transparent,rgba(0,216,255,0.9),rgba(120,60,255,0.6),transparent);
     }
   </style>
 </head>
