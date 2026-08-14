@@ -928,7 +928,6 @@
     .recent-winner-prize{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--ac)}
     .recent-winner-time{font-size:11px;color:var(--mu)}
     .winner-prize{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--ac)}
-    .confetti{font-size:32px;letter-spacing:8px}
     .winner-panel{background:var(--s1);border:1px solid rgba(232,164,39,.3);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:20px;animation:fu .4s ease both}
     .winner-panel-header{display:flex;align-items:center;gap:16px}
     .winner-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(232,164,39,.5);flex-shrink:0;background:var(--s2)}
@@ -4274,6 +4273,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
     const [keyword,setKeyword]=React.useState('');
     const [prize,setPrize]=React.useState('');
     const [starting,setStarting]=React.useState(false);
+    const [platform,setPlatform]=React.useState('Chicken');
     const [timerMins,setTimerMins]=React.useState(1);
     const [timerSecs,setTimerSecs]=React.useState(0);
     const [useTimer,setUseTimer]=React.useState(false);
@@ -4436,22 +4436,36 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
           
 
           <div className="statusbar f2">
-            
-            <div className="stat"><div className="stat-lbl">Entries</div><div className="stat-val">{entries.length}</div></div>
+            <div className="stat"><div className="stat-lbl">Platform</div><div className="stat-val">{giveaway?platform:'-'}</div></div>
             <div className="stat" style={{background:'rgba(184,204,232,.04)',borderRadius:8}}>
-              <div className="stat-lbl">Keyword</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'#fff',letterSpacing:'.06em',textTransform:'uppercase',lineHeight:1,marginTop:2}}>
-                {giveaway?.keyword||'-'}
+              <div className="stat-lbl">Amount</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:36,fontWeight:800,color:'var(--ac)',letterSpacing:'.06em',textTransform:'uppercase',lineHeight:1,marginTop:2}}>
+                {giveaway?.prize||'-'}
               </div>
             </div>
-            <div className="stat"><div className="stat-lbl">Prize</div><div className="stat-val active">{giveaway?.prize||'-'}</div></div>
+            <div className="stat">
+              <div className="stat-lbl">Timer</div>
+              <div className={'stat-val'+(urgent?' urgent-t':'')} style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:timerRunning?32:24,color:urgent?'var(--rd)':timerRunning?'#fff':'var(--mu)'}}>
+                {timerRunning?fmt(secondsLeft):(duration>0?fmt(duration):'-')}
+              </div>
+            </div>
           </div>
 
           {!giveaway?(
             <div className="card f2">
+              <div className="form-group">
+                <label className="lbl">Platform</label>
+                <select className="inp-sm" value={platform} onChange={e=>setPlatform(e.target.value)} style={{cursor:'pointer'}}>
+                  <option>Chicken</option>
+                  <option>CSGOWIN</option>
+                  <option>Gamba</option>
+                  <option>BetFury</option>
+                  <option>Other</option>
+                </select>
+              </div>
               <div className="form-grid">
+                <div className="form-group"><label className="lbl">Amount</label><input className="inp-sm" placeholder="" value={prize} onChange={e=>setPrize(e.target.value)} autoComplete="nope"/></div>
                 <div className="form-group"><label className="lbl">Keyword</label><input className="inp-sm" placeholder="" value={keyword} onChange={e=>setKeyword(e.target.value)} autoComplete="nope"/></div>
-                <div className="form-group"><label className="lbl">Prize</label><input className="inp-sm" placeholder="" value={prize} onChange={e=>setPrize(e.target.value)} autoComplete="nope"/></div>
               </div>
               <div className="divider-line"/>
               {!useTimer?(
