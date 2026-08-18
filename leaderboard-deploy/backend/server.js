@@ -370,8 +370,10 @@ const CHICKEN_PRIZES = [325, 130, 65, 32, 26, 20, 20, 13, 13, 6]; // coins, sums
 
 app.get("/chicken-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 20;
+  const hidden = chickenHidden.map(u => u.toLowerCase());
   const rows = chickenReferrals
     .filter(r => Number(r.wagerAmount || 0) > 0)
+    .filter(r => !hidden.includes((r.displayName || '').toLowerCase()))
     .slice()
     .sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))
     .slice(0, limit)
@@ -388,6 +390,12 @@ app.get("/chicken-leaderboard", (req, res) => {
 });
 
 const CHICKEN_POOL_TOTAL = 650; // coins - fixed prize pool, not derived from wagered amount
+
+const CHICKEN_HIDDEN_PATH = require("path").join(__dirname, "../../chicken-hidden.json");
+function loadChickenHidden() {
+  try { return fs_lb.existsSync(CHICKEN_HIDDEN_PATH) ? JSON.parse(fs_lb.readFileSync(CHICKEN_HIDDEN_PATH, "utf-8")) : []; } catch { return []; }
+}
+let chickenHidden = loadChickenHidden();
 
 const CHICKEN_HISTORY_PATH = require("path").join(__dirname, "../../chicken-history.json");
 
