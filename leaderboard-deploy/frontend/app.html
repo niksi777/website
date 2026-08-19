@@ -2592,15 +2592,6 @@ function LeaderboardsPage() {
               {csgowinAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>{csgowinAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {csgowinRaceStarted && (
-            <button className={`ptab${tab==='csgowinrace'?' active-csgowin':''}`} onClick={() => changeTab('csgowinrace')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>
-                <span className="ptab-label">CW Race</span>
-              </div>
-              {csgowinRacePrize != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>{csgowinRacePrize.toLocaleString('en-US')}C</div>}
-            </button>
-          )}
           <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => changeTab('points')}>
             <div className="ptab-top">
               <img className="ptab-img" src="/assets/np-coin.svg" alt="" onError={e=>e.target.style.display='none'}/>
