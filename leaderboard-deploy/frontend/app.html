@@ -1197,28 +1197,9 @@ function Navbar() {
 
 
 // ==================== HOMEPAGE ====================
-const BETFURY_URL = 'https://betfury.bet/dfkwpq9sw';
+const CS2SKIN_URL = 'https://cs2skin.com/r/NIKSI';
 
-function BetfuryModal({ onClose }) {
-  return (
-    <div className="bf-overlay" onClick={e=>{ if(e.target===e.currentTarget) onClose(); }}>
-      <div className="bf-modal">
-        <button className="bf-close" onClick={onClose}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:24,fontWeight:800,color:'#fff',letterSpacing:'.04em',lineHeight:1.25,marginBottom:10}}>BETFURY</div>
-        <div style={{fontSize:13,color:'rgba(221,227,239,.7)',lineHeight:1.7}}>There is no referral code - All you have to do is sign up via the link provided</div>
-        <div className="bf-link">{BETFURY_URL}</div>
-        <a href={BETFURY_URL} target="_blank" rel="noreferrer" className="bf-btn" onClick={onClose}>
-          Take me there
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        </a>
-      </div>
-    </div>
-  );
-}
-
-function HeroCarousel({ onBetfury }) {
+function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
     const [chickenActive, setChickenActive] = React.useState(false);
     React.useEffect(() => {
@@ -1249,21 +1230,21 @@ function HeroCarousel({ onBetfury }) {
         <div className="carousel-wrap">
         <div className="c-track" style={{transform:`translateX(-${slide*100}%)`}}>
 
-          {/* Slide 0 - BETFURY */}
+          {/* Slide 0 - CS2SKIN */}
           <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(210,30,45,.38) 0%, rgba(210,30,45,.08) 50%, transparent 70%)',
-            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(210,30,45,.16) 0%, transparent 58%)',
-            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(210,30,45,.08) 0%, transparent 55%)',
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(245,158,11,.35) 0%, rgba(245,158,11,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(245,158,11,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(245,158,11,.07) 0%, transparent 55%)',
             'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
-            'linear-gradient(140deg,#120205 0%,#0e0204 55%,#120205 100%)'
-          ].join(','),borderTop:'3px solid rgba(210,30,45,.72)'}}>
-            {logo('/assets/betfury.png',.7,'rgba(210,30,45,.55)')}
-            <div style={{position:'absolute',inset:0,background:fade(18,2,5),pointerEvents:'none'}}/>
+            'linear-gradient(140deg,#0e0a02 0%,#0b0800 55%,#0e0a02 100%)'
+          ].join(','),borderTop:'3px solid rgba(245,158,11,.72)'}}>
+            {logo('/assets/cs2skin.png',.75,'rgba(245,158,11,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(14,10,2),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#d21e2d','clamp(44px,6vw,68px)',.88,6)}>PLAY ON BETFURY</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>150% DEPOSIT BONUS</div>
-              <div style={sub}>Create a ticket on Discord or DM niksiii to gain an exclusive offer!</div>
-              <a href="#" onClick={e=>{e.preventDefault();onBetfury();}} style={btn('#d21e2d','rgba(210,30,45,.45)')}>SIGN UP <Arr/></a>
+              <div style={txt('#f59e0b','clamp(44px,6vw,68px)',.88,6)}>PLAY ON CS2SKIN</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>100% DEPOSIT BONUS</div>
+              <div style={sub}>Unlocks 5% every 1x of initial deposit wagered</div>
+              <a href={CS2SKIN_URL} target="_blank" rel="noreferrer" style={btn('#f59e0b','rgba(245,158,11,.45)')}>SIGN UP <Arr/></a>
             </div>
           </div>
 
@@ -1406,7 +1387,7 @@ function HeroCarousel({ onBetfury }) {
     );
   }
 
-  function PartneredPlatforms({ onBetfury }) {
+  function PartneredPlatforms() {
     const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
@@ -1417,9 +1398,9 @@ function HeroCarousel({ onBetfury }) {
 
     const platforms = [
       {
-        logo:'/assets/betfury.png', color:'#d21e2d',
-        perks:['150% DEPOSIT BONUS','EXCLUSIVE CODE BONUS','RAKEBACK REWARDS'],
-        signupHref:BETFURY_URL, signupExt:true, signupModal:true,
+        logo:'/assets/cs2skin.png', color:'#f59e0b',
+        perks:['100% DEPOSIT BONUS','UNLOCKS 5% PER 1X WAGERED','USE CODE NIKSI'],
+        signupHref:CS2SKIN_URL, signupExt:true,
       },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
@@ -1459,7 +1440,7 @@ function HeroCarousel({ onBetfury }) {
                    href={p.signupExt ? p.signupHref : '#'}
                    target={p.signupExt ? '_blank' : undefined}
                    rel={p.signupExt ? 'noreferrer' : undefined}
-                   onClick={p.signupModal ? (e)=>{e.preventDefault();onBetfury();} : undefined}>
+                   onClick={undefined}>
                   SIGN UP <Ext/>
                 </a>
               )}
@@ -1485,12 +1466,10 @@ function HeroCarousel({ onBetfury }) {
   }
 
   function HomePage(){
-    const [bfOpen, setBfOpen] = React.useState(false);
     return (<>
-      {bfOpen && <BetfuryModal onClose={()=>setBfOpen(false)}/>}
       <div className="page">
-        <HeroCarousel onBetfury={()=>setBfOpen(true)}/>
-        <PartneredPlatforms onBetfury={()=>setBfOpen(true)}/>
+        <HeroCarousel/>
+        <PartneredPlatforms/>
       </div>
       <footer>
         <div className="page">
@@ -4454,7 +4433,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
                   <option>Chicken</option>
                   <option>CSGOWIN</option>
                   <option>Gamba</option>
-                  <option>BetFury</option>
+                  <option>CS2Skin</option>
                   <option>Other</option>
                 </select>
               </div>
