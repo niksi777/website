@@ -4044,7 +4044,8 @@ const CORRECT_PASSWORD='niksi';
   const CARD_GAP=12;
 function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
   async function removeEntry(username){
-    await fetch('/giveaway/remove-entry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username})});
+    const sid=localStorage.getItem('kick_session')||'';
+    await fetch('/giveaway/remove-entry',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sid},body:JSON.stringify({username})});
   }
   function CardRoller({entries,avatarMap,onWinner,forceWinner,onForceConsumed,onRollingChange,onReroll,hasWinner,recentWinners,onReset,onRemoveEntry}){
     const trackRef=React.useRef(null);
@@ -4251,6 +4252,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
     );
   }
   function GiveawayPage(){
+    const { sessionId } = useUser();
     const [authed,setAuthed]=React.useState(true);
     const [pw,setPw]=React.useState('');
     const [pwErr,setPwErr]=React.useState('');
@@ -4310,25 +4312,25 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
       clearInterval(timerRef.current);
       const d=dur||duration;
       setSecondsLeft(d);setTimerRunning(true);
-      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'start', duration:dur||duration})});
+      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId||''},body:JSON.stringify({action:'start', duration:dur||duration})});
       let s=d;
       timerRef.current=setInterval(()=>{s=Math.max(0,s-1);setSecondsLeft(s);if(s===0){clearInterval(timerRef.current);setTimerRunning(false);}},1000);
     }
     function stopTimer(){
       clearInterval(timerRef.current);setTimerRunning(false);setSecondsLeft(duration);
-      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'stop'})});
+      fetch('/giveaway/timer',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId||''},body:JSON.stringify({action:'stop'})});
     }
     async function startGiveaway(){
       if(!keyword.trim())return;
       setStarting(true);
       try{
-        await fetch('/giveaway/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keyword:keyword.trim().toLowerCase(),prize:prize.trim()})});
+        await fetch('/giveaway/start',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId||''},body:JSON.stringify({keyword:keyword.trim().toLowerCase(),prize:prize.trim()})});
         setKeyword('');setPrize('');if(useTimer&&timerMins*60+timerSecs>0) startTimer(timerMins*60+timerSecs);fetchState();
       }catch(e){}
       setStarting(false);
     }
     async function prepareSeed(){
-      try{const r=await fetch('/giveaway/pf/prepare');const d=await r.json();setPfHash(d.hash);setPfProof(null);setShowProof(false);}catch(e){}
+      try{const r=await fetch('/giveaway/pf/prepare',{headers:{'x-session-id':sessionId||''}});const d=await r.json();setPfHash(d.hash);setPfProof(null);setShowProof(false);}catch(e){}
     }
     function toggleProof(){
       setShowProof(p=>{
@@ -4340,7 +4342,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
       if(pfLoading||!pfHash)return;
       setPfLoading(true);
       try{
-        const r=await fetch('/giveaway/pf/roll',{method:'POST'});
+        const r=await fetch('/giveaway/pf/roll',{method:'POST',headers:{'x-session-id':sessionId||''}});
         const d=await r.json();
         if(d.error){alert(d.error);setPfLoading(false);return;}
         setPfProof(d);
@@ -4381,7 +4383,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
     }
     async function confirmWinner(name){
       try{
-        await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({winner:name})});
+        await fetch('/giveaway/roll',{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId||''},body:JSON.stringify({winner:name})});
         setWinner(name);
         setRecentWinners(prev=>[{name,prize:giveaway?.prize,ts:Date.now()},...prev].slice(0,5));
       }catch(e){}
@@ -4391,7 +4393,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
         rerollingRef.current=true;
         setWinner(null);
         setRerollTarget(null); // clear first so React always sees a change
-        const r=await fetch('/giveaway/reroll',{method:'POST'});
+        const r=await fetch('/giveaway/reroll',{method:'POST',headers:{'x-session-id':sessionId||''}});
         const d=await r.json();
         if(d.winner){
           // Small delay so null render happens before new winner triggers the roll
@@ -4403,7 +4405,7 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
       stopTimer();
       clearInterval(respTimerRef.current);clearInterval(chatPollRef.current);
       setRespTimer(null);setWinnerChat([]);setPfHash(null);setPfProof(null);setPfForce(null);setShowProof(false);setWinnerAvatarUrl(null);
-      await fetch('/giveaway/reset',{method:'POST'});
+      await fetch('/giveaway/reset',{method:'POST',headers:{'x-session-id':sessionId||''}});
       setWinner(null);fetchState();
     }
     if(!authed) return (<>

@@ -1259,12 +1259,18 @@ setInterval(async () => {
 const cryptoPF = require('crypto');
 let pfState = { seed: null, hash: null };
 app.get('/giveaway/pf/prepare', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   const seed = cryptoPF.randomBytes(32).toString('hex');
   const hash = cryptoPF.createHash('sha256').update(seed).digest('hex');
   pfState = { seed, hash };
   res.json({ hash });
 });
 app.post('/giveaway/pf/roll', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   if (!pfState.seed) return res.status(400).json({ error: 'No seed prepared. Click Generate Seed first.' });
   const entries = giveawayState.entries;
   if (!entries || entries.length === 0) return res.status(400).json({ error: 'No entries to roll from.' });
@@ -1283,6 +1289,9 @@ app.get('/giveaway/state', (req, res) => {
 });
 
 app.post('/giveaway/start', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   const { keyword, prize } = req.body;
   if (!keyword) return res.status(400).json({ error: 'keyword required' });
   giveawayState = {
@@ -1307,6 +1316,9 @@ app.post('/giveaway/enter', (req, res) => {
 });
 
 app.post('/giveaway/remove-entry', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   const { username } = req.body;
   if (!username) return res.status(400).json({ error: 'username required' });
   giveawayState.entries = giveawayState.entries.filter(e => e.username.toLowerCase() !== username.toLowerCase());
@@ -1314,6 +1326,9 @@ app.post('/giveaway/remove-entry', (req, res) => {
 });
 
 app.post('/giveaway/roll', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   if (!giveawayState.giveaway || giveawayState.entries.length === 0) {
     return res.status(400).json({ error: 'No entries to roll' });
   }
@@ -1328,6 +1343,9 @@ app.post('/giveaway/roll', (req, res) => {
 });
 
 app.post('/giveaway/reroll', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   if (!giveawayState.giveaway || giveawayState.entries.length === 0) {
     return res.status(400).json({ error: 'No entries to reroll' });
   }
@@ -1341,6 +1359,9 @@ app.post('/giveaway/reroll', (req, res) => {
 });
 
 app.post('/giveaway/reset', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   giveawayState = { giveaway: null, entries: [] };
   console.log('Giveaway reset');
   res.json({ ok: true });
@@ -1349,6 +1370,9 @@ app.post('/giveaway/reset', (req, res) => {
 // Timer signal endpoint
 let timerSignal = null;
 app.post('/giveaway/timer', (req, res) => {
+  const sessionId = req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   const { action, duration } = req.body;
   timerSignal = { action, duration: duration || 60 };
   res.json({ ok: true });
