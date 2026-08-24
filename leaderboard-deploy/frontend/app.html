@@ -6,8 +6,8 @@
   <title>NIKSI777</title>
   <link rel="icon" href="/assets/niksi.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
 
@@ -2579,12 +2579,12 @@ function LeaderboardsPage() {
           </button>
         </div>
 
-        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
-        <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
-        <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
-        <div style={{display: tab === 'csgowin' ? 'block' : 'none'}}><CsgowinLeaderboard/></div>
-        <div style={{display: tab === 'csgowinrace' ? 'block' : 'none'}}><CsgowinRaceLeaderboard/></div>
-        <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
+        {tab === 'gamba' && <GambaLeaderboard/>}
+        {tab === 'chicken' && <ChickenLeaderboard/>}
+        {tab === 'chickenrace' && <ChickenRaceLeaderboard/>}
+        {tab === 'csgowin' && <CsgowinLeaderboard/>}
+        {tab === 'csgowinrace' && <CsgowinRaceLeaderboard/>}
+        {tab === 'points' && <NiksiPointsLeaderboard/>}
       </div>
 
       <footer>
