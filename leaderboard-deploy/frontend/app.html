@@ -4252,8 +4252,10 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
     );
   }
   function GiveawayPage(){
-    const { sessionId } = useUser();
+    const { user, sessionId, loading } = useUser();
     const [authed,setAuthed]=React.useState(true);
+    if (loading) return null;
+    if (!user || !user.isAdmin) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'60vh',color:'var(--mu)',fontSize:14}}>Access denied.</div>;
     const [pw,setPw]=React.useState('');
     const [pwErr,setPwErr]=React.useState('');
     const [giveaway,setGiveaway]=React.useState(null);
