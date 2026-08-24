@@ -2579,12 +2579,12 @@ function LeaderboardsPage() {
           </button>
         </div>
 
-        {tab === 'gamba' && <GambaLeaderboard/>}
-        {tab === 'chicken' && <ChickenLeaderboard/>}
-        {tab === 'chickenrace' && <ChickenRaceLeaderboard/>}
-        {tab === 'csgowin' && <CsgowinLeaderboard/>}
-        {tab === 'csgowinrace' && <CsgowinRaceLeaderboard/>}
-        {tab === 'points' && <NiksiPointsLeaderboard/>}
+        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+        <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
+        <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
+        <div style={{display: tab === 'csgowin' ? 'block' : 'none'}}><CsgowinLeaderboard/></div>
+        <div style={{display: tab === 'csgowinrace' ? 'block' : 'none'}}><CsgowinRaceLeaderboard/></div>
+        <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
       <footer>
