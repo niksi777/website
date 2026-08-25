@@ -1445,12 +1445,12 @@ function HeroCarousel() {
               </div>
               <div className="plat-card-title-wrap">
                 {p.prize ? (<>
-                  <div className="plat-card-prize" style={{color:p.color}}>
+                  <div className="plat-card-prize" style={{color:'#fff'}}>
                     {p.prize}{p.prizeIcon && <span style={{fontSize:'0.75em'}}>{p.prizeIcon}</span>}
                   </div>
-                  <div className="plat-card-lbtype" style={{color:p.color}}>{p.lbType} LEADERBOARD</div>
+                  <div className="plat-card-lbtype" style={{color:'rgba(221,227,239,.6)'}}>{p.lbType} LEADERBOARD</div>
                 </>) : (
-                  <div className="plat-card-title" style={{color:p.color}}>
+                  <div className="plat-card-title" style={{color:'#fff'}}>
                     {p.title}{p.subtitle && <><br/>{p.subtitle}</>}
                   </div>
                 )}
