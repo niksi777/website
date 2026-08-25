@@ -1211,7 +1211,7 @@ function HeroCarousel() {
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
-    const total = chickenActive ? 5 : 4;
+    const total = chickenActive ? 6 : 5;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1253,7 +1253,29 @@ function HeroCarousel() {
             </div>
           </div>
 
-          {/* Slide 1 - GAMBA */}
+          {/* Slide 1 - CS2SKIN */}
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(167,139,250,.55) 0%, rgba(124,58,237,.22) 38%, transparent 62%)',
+            'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(124,58,237,.2) 0%, transparent 55%)',
+            'radial-gradient(ellipse 40% 50% at 5% 100%, rgba(109,40,217,.18) 0%, transparent 52%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.018) 24px,rgba(255,255,255,.018) 25px)',
+            'linear-gradient(140deg,#0c0718 0%,#090514 55%,#0e0820 100%)'
+          ].join(','),borderTop:'3px solid rgba(167,139,250,.85)',outline:'1px solid rgba(124,58,237,.22)',outlineOffset:'-1px'}}>
+            <img src="/assets/cs2skin.png" aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'68%',width:'auto',maxWidth:'36%',objectFit:'contain',opacity:.72,pointerEvents:'none',filter:'brightness(0) invert(1) drop-shadow(0 0 32px rgba(167,139,250,.75)) drop-shadow(0 0 80px rgba(124,58,237,.45))'}}/>
+            <div style={{position:'absolute',inset:0,background:fade(12,7,24),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(124,58,237,.28)',border:'1px solid rgba(167,139,250,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:'#a78bfa',boxShadow:'0 0 6px rgba(167,139,250,1)',display:'inline-block',flexShrink:0}}></span>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#c4b5fd',textTransform:'uppercase'}}>New Partner</span>
+              </div>
+              <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>100% DEPOSIT</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BONUS ON CS2SKIN</div>
+              <div style={sub}>Unlocks 5% of bonus for each 1x of deposit wagered - Use code NIKSI</div>
+              <a href={CS2SKIN_URL} target="_blank" rel="noreferrer" style={btn('#7c3aed','rgba(124,58,237,.55)')}>CLAIM BONUS <Arr/></a>
+            </div>
+          </div>
+
+          {/* Slide 2 - GAMBA */}
           <div className="c-slide" style={{background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(34,197,94,.34) 0%, rgba(34,197,94,.07) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(34,197,94,.14) 0%, transparent 58%)',
@@ -1387,7 +1409,7 @@ function HeroCarousel() {
     const platforms = [
       {
         logo:'/assets/cs2skin.png', logoFilter:'brightness(0) invert(1) drop-shadow(0 0 12px rgba(124,58,237,0.85))',
-        color:'#7c3aed',
+        color:'#7c3aed', isNew:true,
         title:'100% DEPOSIT', subtitle:'BONUS',
         perks:['5% OF BONUS PER 1X WAGERED'],
         bigImg:'/assets/cs2skin.png', bigImgFilter:'brightness(0) invert(1)',
@@ -1425,7 +1447,12 @@ function HeroCarousel() {
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         <div className="plat-grid">
           {platforms.map((p,i) => (
-            <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`}}>
+            <div key={i} style={{position:'relative',paddingTop:p.isNew?'18px':'0'}}>
+              {p.isNew && <div style={{position:'absolute',top:0,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',gap:5,background:'#7c3aed',borderRadius:100,padding:'3px 12px',boxShadow:'0 0 14px rgba(124,58,237,.8)',whiteSpace:'nowrap'}}>
+                <span style={{width:5,height:5,borderRadius:'50%',background:'#e9d5ff',boxShadow:'0 0 5px #e9d5ff',display:'inline-block'}}></span>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:800,letterSpacing:'.22em',color:'#fff',textTransform:'uppercase'}}>New</span>
+              </div>}
+            <div className="plat-card" style={{borderBottom:`2px solid ${p.color}70`,height:'100%'}}>
               <div className="plat-card-logo-wrap">
                 <img src={p.logo} className="plat-card-logo" alt=""
                   style={p.logoFilter?{filter:p.logoFilter}:{}}
@@ -1451,6 +1478,7 @@ function HeroCarousel() {
                 CLAIM <Ext/>
               </a>
               <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
+            </div>
             </div>
           ))}
         </div>
