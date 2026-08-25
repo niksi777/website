@@ -90,13 +90,13 @@
     .plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
     .plat-card{background:#0d0c12;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s}
     .plat-card:hover{border-color:rgba(255,255,255,.15);box-shadow:0 8px 40px rgba(0,0,0,.45)}
-    .plat-card-logo{height:24px;object-fit:contain;max-width:120px;margin-bottom:14px}
+    .plat-card-logo{height:44px;object-fit:contain;max-width:160px;margin-bottom:16px}
     .plat-card-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;font-style:italic;letter-spacing:.06em;text-transform:uppercase;text-align:center;line-height:1.1;margin-bottom:8px}
-    .plat-card-perks{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:20px;min-height:36px}
+    .plat-card-perks{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:0;min-height:36px}
     .plat-card-perk{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;font-style:italic;letter-spacing:.05em;text-transform:uppercase;text-align:center;opacity:.72}
-    .plat-card-img{width:140px;height:140px;object-fit:contain;margin-bottom:20px}
+    .plat-card-spacer{flex:1}
     .plat-card-code{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(220,225,240,.45);margin-bottom:14px;text-align:center}
-    .plat-card-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px 0;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s;margin-top:auto;border:none;color:#fff}
+    .plat-card-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px 0;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s;border:none;color:#fff}
     .plat-card-btn:hover{opacity:.82}
     .plat-card-btn2{margin-top:8px;background:transparent;border:1px solid;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px 0;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s}
     .plat-card-btn2:hover{opacity:.72}
@@ -1434,9 +1434,7 @@ function HeroCarousel() {
               <div className="plat-card-perks" style={{color:p.color}}>
                 {p.perks.map(pk => <div key={pk} className="plat-card-perk">{pk}</div>)}
               </div>
-              <img src={p.bigImg} className="plat-card-img" alt=""
-                style={p.bigImgFilter?{filter:p.bigImgFilter}:{}}
-                onError={e=>e.target.style.display='none'}/>
+              <div className="plat-card-spacer"/>
               <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
               <a className="plat-card-btn" style={{background:p.color}}
                  href={p.signupExt ? p.signupHref : '#'}
