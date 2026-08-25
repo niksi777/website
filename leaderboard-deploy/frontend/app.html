@@ -1430,9 +1430,8 @@ function HeroCarousel() {
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         <div className="plat-grid">
           {platforms.map((p,i) => (
-            <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`,paddingTop:p.isNew?'44px':'30px'}}>
-              {p.isNew && <div style={{position:'absolute',top:12,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',gap:5,background:'#7c3aed',borderRadius:100,padding:'4px 13px',boxShadow:'0 0 16px rgba(124,58,237,.85)',whiteSpace:'nowrap'}}>
-                <span style={{width:5,height:5,borderRadius:'50%',background:'#e9d5ff',boxShadow:'0 0 5px #e9d5ff',display:'inline-block',flexShrink:0}}></span>
+            <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`}}>
+              {p.isNew && <div style={{position:'absolute',top:-13,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',background:'#7c3aed',borderRadius:100,padding:'4px 14px',boxShadow:'0 0 16px rgba(124,58,237,.85)',whiteSpace:'nowrap'}}>
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:800,letterSpacing:'.22em',color:'#fff',textTransform:'uppercase'}}>New</span>
               </div>}
               <div className="plat-card-logo-wrap">
