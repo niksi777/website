@@ -1412,7 +1412,7 @@ function HeroCarousel() {
       },
       ...(chickenActive ? [{
         logo:'/assets/chicken.png', color:'#f2a93b',
-        prize:'650', prizeIcon:'🪙', lbType:'WEEKLY',
+        prize:'650', prizeIcon:<img src="/assets/chicken-icon.png" alt="" style={{height:'0.75em',verticalAlign:'middle',objectFit:'contain'}}/>, lbType:'WEEKLY',
         perks:['0.5% WAGERBACK','UP TO 15% LOSSBACK'],
         bigImg:'/assets/chicken.png',
         signupHref:'https://chicken.gg?ref=niksi', signupExt:true,
@@ -1446,7 +1446,7 @@ function HeroCarousel() {
               <div className="plat-card-title-wrap">
                 {p.prize ? (<>
                   <div className="plat-card-prize" style={{color:'#fff'}}>
-                    {p.prize}{p.prizeIcon && <span style={{fontSize:'0.75em'}}>{p.prizeIcon}</span>}
+                    {p.prizeIcon && <span style={{fontSize:'0.75em',lineHeight:1}}>{p.prizeIcon}</span>}{p.prize}
                   </div>
                   <div className="plat-card-lbtype" style={{color:'rgba(221,227,239,.6)'}}>{p.lbType} LEADERBOARD</div>
                 </>) : (
