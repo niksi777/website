@@ -96,7 +96,7 @@
     .plat-card-perks{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:52px;justify-content:center}
     .plat-card-perk{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;font-style:italic;letter-spacing:.05em;text-transform:uppercase;text-align:center;opacity:.72}
     .plat-card-spacer{flex:1}
-    .plat-card-code{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(220,225,240,.45);margin-bottom:14px;margin-top:24px;text-align:center}
+    .plat-card-code{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(220,225,240,.45);margin-top:12px;margin-bottom:0;text-align:center}
     .plat-card-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:13px 0;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s;border:none;color:#fff}
     .plat-card-btn:hover{opacity:.82}
     .plat-card-btn2{margin-top:10px;background:transparent;border:1px solid;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:10px 0;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s}
@@ -1386,7 +1386,7 @@ function HeroCarousel() {
 
     const platforms = [
       {
-        logo:'/assets/cs2skin.png', logoFilter:'brightness(0) invert(1)',
+        logo:'/assets/cs2skin.png', logoFilter:'brightness(0) invert(1) drop-shadow(0 0 12px rgba(124,58,237,0.85))',
         color:'#7c3aed',
         title:'100% DEPOSIT', subtitle:'BONUS',
         perks:['Unlocks 5% per 1x wagered'],
@@ -1438,19 +1438,19 @@ function HeroCarousel() {
                 {p.perks.map(pk => <div key={pk} className="plat-card-perk">{pk}</div>)}
               </div>
               <div className="plat-card-spacer"/>
-              <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
-              <a className="plat-card-btn" style={{background:p.color}}
-                 href={p.signupExt ? p.signupHref : '#'}
-                 target={p.signupExt ? '_blank' : undefined}
-                 rel={p.signupExt ? 'noreferrer' : undefined}>
-                CLAIM <Ext/>
-              </a>
               {p.lbHref && (
                 <a className="plat-card-btn2" style={{color:p.color,borderColor:`${p.color}55`}}
                    href={p.lbHref}>
                   LEADERBOARD <Arr/>
                 </a>
               )}
+              <a className="plat-card-btn" style={{background:p.color,marginTop:p.lbHref?'10px':'0'}}
+                 href={p.signupExt ? p.signupHref : '#'}
+                 target={p.signupExt ? '_blank' : undefined}
+                 rel={p.signupExt ? 'noreferrer' : undefined}>
+                CLAIM <Ext/>
+              </a>
+              <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
             </div>
           ))}
         </div>
