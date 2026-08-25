@@ -95,7 +95,8 @@
     .plat-card-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;font-style:italic;letter-spacing:.06em;text-transform:uppercase;text-align:center;line-height:1.1;min-height:66px;display:flex;flex-direction:column;justify-content:center;margin-bottom:10px}
     .plat-card-prize{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;font-style:italic;letter-spacing:.04em;line-height:1;display:flex;align-items:center;justify-content:center;gap:6px}
     .plat-card-lbtype{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;font-style:italic;letter-spacing:.12em;text-transform:uppercase;text-align:center;opacity:.75;margin-top:4px}
-    .plat-card-title-wrap{min-height:66px;display:flex;flex-direction:column;justify-content:center;margin-bottom:10px;text-align:center}
+    .plat-card-title-wrap{min-height:66px;display:flex;flex-direction:column;justify-content:center;margin-bottom:0;text-align:center}
+    .plat-divider{width:100%;height:1px;border:none;margin:14px 0;flex-shrink:0}
     .plat-card-perks{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:52px;justify-content:center}
     .plat-card-perk{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;font-style:italic;letter-spacing:.05em;text-transform:uppercase;text-align:center;opacity:.72}
     .plat-card-spacer{flex:1}
@@ -1454,9 +1455,11 @@ function HeroCarousel() {
                   </div>
                 )}
               </div>
+              <div className="plat-divider" style={{background:`linear-gradient(90deg,transparent,${p.color}55,transparent)`}}/>
               <div className="plat-card-perks" style={{color:p.color}}>
                 {p.perks.map((pk,j) => <div key={j} className="plat-card-perk">{pk}</div>)}
               </div>
+              <div className="plat-divider" style={{background:`linear-gradient(90deg,transparent,${p.color}55,transparent)`}}/>
               <div className="plat-card-spacer"/>
               {p.lbHref && (
                 <a className="plat-card-btn2" style={{color:p.color,borderColor:`${p.color}55`}}
