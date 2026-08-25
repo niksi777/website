@@ -1389,14 +1389,14 @@ function HeroCarousel() {
         logo:'/assets/cs2skin.png', logoFilter:'brightness(0) invert(1) drop-shadow(0 0 12px rgba(124,58,237,0.85))',
         color:'#7c3aed',
         title:'100% DEPOSIT', subtitle:'BONUS',
-        perks:['Unlocks 5% per 1x wagered'],
+        perks:['5% OF BONUS PER 1X WAGERED'],
         bigImg:'/assets/cs2skin.png', bigImgFilter:'brightness(0) invert(1)',
         signupHref:CS2SKIN_URL, signupExt:true,
       },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
         title:'VIP PROGRAM',
-        perks:['Bi-weekly leaderboard','Rakebacks'],
+        perks:['$750 WEEKLY LEADERBOARD','10-20% LOSSBACK'],
         bigImg:'/assets/gamba2.png',
         signupHref:'https://gamba.com?c=niksi', signupExt:true,
         lbHref:'/leaderboards',
@@ -1404,7 +1404,7 @@ function HeroCarousel() {
       ...(chickenActive ? [{
         logo:'/assets/chicken.png', color:'#f2a93b',
         title:'MONTHLY', subtitle:'LEADERBOARD',
-        perks:['Up to 15% lossback','Daily cases'],
+        perks:[<>WEEKLY 650 <img src="/assets/chicken.png" style={{height:'1.1em',verticalAlign:'middle',margin:'0 2px'}} alt=""/> LEADERBOARD</>],
         bigImg:'/assets/chicken.png',
         signupHref:'https://chicken.gg?ref=niksi', signupExt:true,
         lbHref:'/leaderboards?tab=chicken',
@@ -1412,7 +1412,7 @@ function HeroCarousel() {
       {
         logo:'/assets/csgowin.png', color:'#f59e0b',
         title:'WEEKLY', subtitle:'LEADERBOARD',
-        perks:['Compete for prizes every week'],
+        perks:['5% DEPOSIT BONUS'],
         bigImg:'/assets/csgowin.png',
         signupHref:'https://csgowin.com/r/niksi', signupExt:true,
         lbHref:'/leaderboards?tab=csgowin',
@@ -1435,7 +1435,7 @@ function HeroCarousel() {
                 {p.title}{p.subtitle && <><br/>{p.subtitle}</>}
               </div>
               <div className="plat-card-perks" style={{color:p.color}}>
-                {p.perks.map(pk => <div key={pk} className="plat-card-perk">{pk}</div>)}
+                {p.perks.map((pk,j) => <div key={j} className="plat-card-perk">{pk}</div>)}
               </div>
               <div className="plat-card-spacer"/>
               {p.lbHref && (
