@@ -88,7 +88,7 @@
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
     .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:28px}
     .plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    .plat-card{background:#0d0c12;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:30px 24px 24px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+    .plat-card{background:#0d0c12;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:30px 24px 24px;position:relative;transition:border-color .2s,box-shadow .2s}
     .plat-card:hover{border-color:rgba(255,255,255,.15);box-shadow:0 8px 40px rgba(0,0,0,.45)}
     .plat-card-logo-wrap{height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;width:100%}
     .plat-card-logo{max-height:58px;max-width:180px;width:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,255,255,.15))}
@@ -1211,7 +1211,7 @@ function HeroCarousel() {
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
-    const total = chickenActive ? 6 : 5;
+    const total = chickenActive ? 5 : 4;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1236,24 +1236,7 @@ function HeroCarousel() {
         <div className="carousel-wrap">
         <div className="c-track" style={{transform:`translateX(-${slide*100}%)`}}>
 
-          {/* Slide 0 - USE CODE NIKSI */}
-          <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(74,158,255,.38) 0%, rgba(74,158,255,.08) 50%, transparent 70%)',
-            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(74,158,255,.16) 0%, transparent 58%)',
-            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(74,158,255,.1) 0%, transparent 55%)',
-            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
-            'linear-gradient(140deg,#080c1c 0%,#060a16 55%,#07091a 100%)'
-          ].join(','),borderTop:'3px solid rgba(74,158,255,.7)'}}>
-            <img src="/assets/niksi.png" aria-hidden="true" style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',width:164,height:164,borderRadius:'50%',objectFit:'cover',opacity:.55,pointerEvents:'none',boxShadow:'0 0 0 2px rgba(74,158,255,.45),0 0 55px rgba(74,158,255,.35),0 0 110px rgba(74,158,255,.14)',filter:'drop-shadow(0 0 24px rgba(74,158,255,.45))'}}/>
-            <div style={{position:'absolute',inset:0,background:fade(8,12,28),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('rgba(255,255,255,.38)',14,1,10,{letterSpacing:'.32em',fontWeight:700})}>USE CODE</div>
-              <div style={txt('#fff','clamp(62px,8.5vw,96px)',.88,16,{textShadow:'0 2px 60px rgba(74,158,255,.45)'})}>NIKSI</div>
-              <div style={sub}>Exclusive bonuses, leaderboards &amp; rewards on Gamba</div>
-            </div>
-          </div>
-
-          {/* Slide 1 - CS2SKIN */}
+          {/* Slide 0 - CS2SKIN */}
           <div className="c-slide" style={{background:[
             'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(167,139,250,.55) 0%, rgba(124,58,237,.22) 38%, transparent 62%)',
             'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(124,58,237,.2) 0%, transparent 55%)',
@@ -1275,7 +1258,7 @@ function HeroCarousel() {
             </div>
           </div>
 
-          {/* Slide 2 - GAMBA */}
+          {/* Slide 1 - GAMBA */}
           <div className="c-slide" style={{background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(34,197,94,.34) 0%, rgba(34,197,94,.07) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(34,197,94,.14) 0%, transparent 58%)',
@@ -1447,12 +1430,11 @@ function HeroCarousel() {
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         <div className="plat-grid">
           {platforms.map((p,i) => (
-            <div key={i} style={{position:'relative',paddingTop:p.isNew?'18px':'0'}}>
-              {p.isNew && <div style={{position:'absolute',top:0,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',gap:5,background:'#7c3aed',borderRadius:100,padding:'3px 12px',boxShadow:'0 0 14px rgba(124,58,237,.8)',whiteSpace:'nowrap'}}>
-                <span style={{width:5,height:5,borderRadius:'50%',background:'#e9d5ff',boxShadow:'0 0 5px #e9d5ff',display:'inline-block'}}></span>
+            <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`,paddingTop:p.isNew?'44px':'30px'}}>
+              {p.isNew && <div style={{position:'absolute',top:12,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',gap:5,background:'#7c3aed',borderRadius:100,padding:'4px 13px',boxShadow:'0 0 16px rgba(124,58,237,.85)',whiteSpace:'nowrap'}}>
+                <span style={{width:5,height:5,borderRadius:'50%',background:'#e9d5ff',boxShadow:'0 0 5px #e9d5ff',display:'inline-block',flexShrink:0}}></span>
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:800,letterSpacing:'.22em',color:'#fff',textTransform:'uppercase'}}>New</span>
               </div>}
-            <div className="plat-card" style={{borderBottom:`2px solid ${p.color}70`,height:'100%'}}>
               <div className="plat-card-logo-wrap">
                 <img src={p.logo} className="plat-card-logo" alt=""
                   style={p.logoFilter?{filter:p.logoFilter}:{}}
@@ -1478,7 +1460,6 @@ function HeroCarousel() {
                 CLAIM <Ext/>
               </a>
               <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
-            </div>
             </div>
           ))}
         </div>
