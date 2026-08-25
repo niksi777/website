@@ -83,20 +83,23 @@
     .pred-badge-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:pu 1.2s ease-in-out infinite}
     
 
-    /* Platform rows */
+    /* Platform cards */
     .plat-section{margin-top:44px;margin-bottom:56px}
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
-    .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:22px}
-    .plat-wrap{margin-bottom:20px}
-    .plat-card-hd{padding:0 20px 6px;display:flex;align-items:center;justify-content:center}
-    .plat-logo{height:28px;object-fit:contain;max-width:130px}
-    .plat-logo.lg{height:38px;max-width:150px}
-    .plat-row{display:flex;align-items:center;gap:16px;padding:16px 20px;min-height:64px;background:rgba(255,255,255,.025);border:1px solid var(--b2);border-radius:12px;transition:background .15s,border-color .15s}
-    .plat-row:hover{background:rgba(255,255,255,.048);border-color:var(--b3)}
-    .plat-perks{flex:1;display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center}
-    .plat-perk{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(221,227,239,.62)}
-    .plat-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;text-decoration:none;flex-shrink:0;transition:opacity .15s;cursor:pointer}
-    .plat-btn:hover{opacity:.82}
+    .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:28px}
+    .plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .plat-card{background:#0d0c12;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+    .plat-card:hover{border-color:rgba(255,255,255,.15);box-shadow:0 8px 40px rgba(0,0,0,.45)}
+    .plat-card-logo{height:24px;object-fit:contain;max-width:120px;margin-bottom:14px}
+    .plat-card-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;font-style:italic;letter-spacing:.06em;text-transform:uppercase;text-align:center;line-height:1.1;margin-bottom:8px}
+    .plat-card-perks{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:20px;min-height:36px}
+    .plat-card-perk{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;font-style:italic;letter-spacing:.05em;text-transform:uppercase;text-align:center;opacity:.72}
+    .plat-card-img{width:140px;height:140px;object-fit:contain;margin-bottom:20px}
+    .plat-card-code{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(220,225,240,.45);margin-bottom:14px;text-align:center}
+    .plat-card-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px 0;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s;margin-top:auto;border:none;color:#fff}
+    .plat-card-btn:hover{opacity:.82}
+    .plat-card-btn2{margin-top:8px;background:transparent;border:1px solid;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px 0;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:opacity .15s}
+    .plat-card-btn2:hover{opacity:.72}
 
     .bf-overlay{position:fixed;inset:0;background:rgba(2,3,8,.8);backdrop-filter:blur(4px);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;animation:fu .18s ease both}
     .bf-modal{background:#0e0204;border:1px solid rgba(210,30,45,.3);border-top:3px solid #d21e2d;border-radius:16px;width:100%;max-width:460px;padding:36px 28px 28px;position:relative;text-align:center}
@@ -993,10 +996,12 @@ html{overflow-y:scroll;}
       .nuser-name{display:none}
       .carousel-wrap{height:200px;border-radius:12px}
       .c-slide{padding:20px 18px}
-      .plat-row{flex-wrap:wrap;gap:10px;padding:14px 16px;min-height:auto}
-      .plat-perks{gap:10px;justify-content:flex-start}
-      .plat-btn{padding:8px 12px;font-size:11px}
+      .plat-grid{grid-template-columns:repeat(2,1fr)}
+      .plat-card-img{width:110px;height:110px}
       .ftw{flex-direction:column;align-items:flex-start}
+    }
+@media(max-width:500px){
+      .plat-grid{grid-template-columns:1fr}
     }
 @media(max-width:700px){
       .statsbar{grid-template-columns:1fr}
@@ -1370,8 +1375,8 @@ function HeroCarousel() {
   }
 
   function PartneredPlatforms() {
-    const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
-    const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
+    const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
+    const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
     const [chickenActive, setChickenActive] = React.useState(false);
     React.useEffect(() => {
@@ -1380,25 +1385,34 @@ function HeroCarousel() {
 
     const platforms = [
       {
-        logo:'/assets/cs2skin.png', color:'#7c3aed', logoFilter:'brightness(0) invert(1)',
-        perks:['100% DEPOSIT BONUS','UNLOCKS 5% PER 1X WAGERED','USE CODE NIKSI'],
+        logo:'/assets/cs2skin.png', logoFilter:'brightness(0) invert(1)',
+        color:'#7c3aed',
+        title:'100% DEPOSIT', subtitle:'BONUS',
+        perks:['Unlocks 5% per 1x wagered'],
+        bigImg:'/assets/cs2skin.png', bigImgFilter:'brightness(0) invert(1)',
         signupHref:CS2SKIN_URL, signupExt:true,
       },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
-        perks:['EXCLUSIVE BONUSES','BI-WEEKLY LEADERBOARD','70% COMMISSION'],
+        title:'VIP PROGRAM',
+        perks:['Bi-weekly leaderboard','Rakebacks'],
+        bigImg:'/assets/gamba2.png',
         signupHref:'https://gamba.com?c=niksi', signupExt:true,
         lbHref:'/leaderboards',
       },
       ...(chickenActive ? [{
-        logo:'/assets/chicken.png', color:'#f2a93b', bigLogo:true,
-        perks:['UP TO 15% LOSSBACK','REQUEST IN DISCORD','1,000 COIN LEADERBOARD'],
+        logo:'/assets/chicken.png', color:'#f2a93b',
+        title:'MONTHLY', subtitle:'LEADERBOARD',
+        perks:['Up to 15% lossback','Daily cases'],
+        bigImg:'/assets/chicken.png',
         signupHref:'https://chicken.gg?ref=niksi', signupExt:true,
         lbHref:'/leaderboards?tab=chicken',
       }] : []),
       {
         logo:'/assets/csgowin.png', color:'#f59e0b',
-        perks:['500C LEADERBOARD','FREE BATTLES & CASES','5% DEPOSIT BONUS'],
+        title:'WEEKLY', subtitle:'LEADERBOARD',
+        perks:['Compete for prizes every week'],
+        bigImg:'/assets/csgowin.png',
         signupHref:'https://csgowin.com/r/niksi', signupExt:true,
         lbHref:'/leaderboards?tab=csgowin',
       },
@@ -1408,41 +1422,37 @@ function HeroCarousel() {
       <div className="plat-section f3">
         <div className="plat-title">PARTNERED PLATFORMS</div>
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
-        {platforms.map((p,i) => (
-          <div key={i} className="plat-wrap">
-            <div className="plat-card-hd">
-              {p.textLogo
-                ? <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:17,fontWeight:800,letterSpacing:'.08em',color:p.color,textTransform:'uppercase'}}>{p.textLogo}</span>
-                : <img src={p.logo} className={`plat-logo${p.bigLogo?' lg':''}`} alt="" style={p.logoFilter?{filter:p.logoFilter}:{}} onError={e=>e.target.style.display='none'}/>
-              }
-            </div>
-            <div className="plat-row" style={{borderBottom:`2px solid ${p.color}40`}}>
-              {p.signupHref && (
-                <a className="plat-btn" style={{background:p.color,color:'#fff'}}
-                   href={p.signupExt ? p.signupHref : '#'}
-                   target={p.signupExt ? '_blank' : undefined}
-                   rel={p.signupExt ? 'noreferrer' : undefined}
-                   onClick={undefined}>
-                  SIGN UP <Ext/>
-                </a>
-              )}
-              <div className="plat-perks">
-                {p.perks.map(pk => (
-                  <div key={pk} className="plat-perk">
-                    <span style={{color:p.color,fontSize:13,fontWeight:800}}>✓</span>
-                    <span>{pk}</span>
-                  </div>
-                ))}
+        <div className="plat-grid">
+          {platforms.map((p,i) => (
+            <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`}}>
+              <img src={p.logo} className="plat-card-logo" alt=""
+                style={p.logoFilter?{filter:p.logoFilter}:{}}
+                onError={e=>e.target.style.display='none'}/>
+              <div className="plat-card-title" style={{color:p.color}}>
+                {p.title}{p.subtitle && <><br/>{p.subtitle}</>}
               </div>
+              <div className="plat-card-perks" style={{color:p.color}}>
+                {p.perks.map(pk => <div key={pk} className="plat-card-perk">{pk}</div>)}
+              </div>
+              <img src={p.bigImg} className="plat-card-img" alt=""
+                style={p.bigImgFilter?{filter:p.bigImgFilter}:{}}
+                onError={e=>e.target.style.display='none'}/>
+              <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
+              <a className="plat-card-btn" style={{background:p.color}}
+                 href={p.signupExt ? p.signupHref : '#'}
+                 target={p.signupExt ? '_blank' : undefined}
+                 rel={p.signupExt ? 'noreferrer' : undefined}>
+                CLAIM <Ext/>
+              </a>
               {p.lbHref && (
-                <a className="plat-btn" style={{background:'var(--s2)',border:`1px solid ${p.color}55`,color:p.color}}
+                <a className="plat-card-btn2" style={{color:p.color,borderColor:`${p.color}55`}}
                    href={p.lbHref}>
                   LEADERBOARD <Arr/>
                 </a>
               )}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
