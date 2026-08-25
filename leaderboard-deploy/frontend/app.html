@@ -93,7 +93,7 @@
     .plat-card-logo-wrap{height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;width:100%}
     .plat-card-logo{max-height:58px;max-width:180px;width:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,255,255,.15))}
     .plat-card-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;font-style:italic;letter-spacing:.06em;text-transform:uppercase;text-align:center;line-height:1.1;min-height:66px;display:flex;flex-direction:column;justify-content:center;margin-bottom:10px}
-    .plat-card-prize{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;font-style:italic;letter-spacing:.04em;line-height:1;display:flex;align-items:center;justify-content:center;gap:7px}
+    .plat-card-prize{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;font-style:italic;letter-spacing:.04em;line-height:1;display:flex;align-items:center;justify-content:center;gap:6px}
     .plat-card-lbtype{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;font-style:italic;letter-spacing:.12em;text-transform:uppercase;text-align:center;opacity:.75;margin-top:4px}
     .plat-card-title-wrap{min-height:66px;display:flex;flex-direction:column;justify-content:center;margin-bottom:10px;text-align:center}
     .plat-card-perks{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:52px;justify-content:center}
@@ -1419,7 +1419,7 @@ function HeroCarousel() {
       }] : []),
       {
         logo:'/assets/csgowin.png', color:'#f59e0b',
-        prize:'500', prizeImg:true, lbType:'BI-WEEKLY',
+        prize:'500C', lbType:'BI-WEEKLY',
         perks:['5% DEPOSIT BONUS'],
         bigImg:'/assets/csgowin.png',
         signupHref:'https://csgowin.com/r/niksi', signupExt:true,
@@ -1445,9 +1445,7 @@ function HeroCarousel() {
               <div className="plat-card-title-wrap">
                 {p.prize ? (<>
                   <div className="plat-card-prize" style={{color:p.color}}>
-                    {p.prize}
-                    {p.prizeIcon && <span>{p.prizeIcon}</span>}
-                    {p.prizeImg && <img src="/assets/csgowin.png" alt="" style={{height:'0.8em',objectFit:'contain',verticalAlign:'middle'}}/>}
+                    {p.prize}{p.prizeIcon && <span style={{fontSize:'0.75em'}}>{p.prizeIcon}</span>}
                   </div>
                   <div className="plat-card-lbtype" style={{color:p.color}}>{p.lbType} LEADERBOARD</div>
                 </>) : (
