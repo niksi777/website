@@ -1215,7 +1215,7 @@ function HeroCarousel() {
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
-    const total = chickenActive ? 5 : 4;
+    const total = chickenActive ? 4 : 3;
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1298,23 +1298,6 @@ function HeroCarousel() {
             </div>
           </div>
 
-          {/* CSGOWin slide */}
-          <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(245,158,11,.34) 0%, rgba(245,158,11,.07) 50%, transparent 70%)',
-            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(245,158,11,.13) 0%, transparent 58%)',
-            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(245,158,11,.07) 0%, transparent 55%)',
-            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
-            'linear-gradient(140deg,#150e01 0%,#100900 55%,#140e02 100%)'
-          ].join(','),borderTop:'3px solid rgba(245,158,11,.72)'}}>
-            {logo('/assets/csgowin.png',.75,'rgba(245,158,11,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(21,14,1),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#f59e0b','clamp(44px,6vw,68px)',.88,6)}>CSGO.WIN</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>5% DEPOSIT BONUS</div>
-              <div style={sub}>Use code NIKSI - leaderboard, free battles, cases &amp; promos!</div>
-              <a href="https://csgo.win" target="_blank" rel="noreferrer" style={btn('#f59e0b','rgba(245,158,11,.4)')}>SIGN UP <Arr/></a>
-            </div>
-          </div>
 
           {chickenActive && (
           <div className="c-slide" style={{background:[
@@ -1418,14 +1401,6 @@ function HeroCarousel() {
         signupHref:'https://chicken.gg?ref=niksi', signupExt:true,
         lbHref:'/leaderboards?tab=chicken',
       }] : []),
-      {
-        logo:'/assets/csgowin.png', color:'#f59e0b',
-        prize:'500', prizeIcon:<img src="/assets/csgowincoin.png" alt="C" style={{height:'0.75em',verticalAlign:'middle',objectFit:'contain'}}/>, lbType:'BI-WEEKLY',
-        perks:['5% DEPOSIT BONUS'],
-        bigImg:'/assets/csgowin.png',
-        signupHref:'https://csgowin.com/r/niksi', signupExt:true,
-        lbHref:'/leaderboards?tab=csgowin',
-      },
     ];
 
     return (
