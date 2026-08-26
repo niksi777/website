@@ -2471,7 +2471,7 @@ function CsgowinLeaderboard() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
-  const VALID_TABS = ['points', 'krush', 'chicken', 'chickenrace', 'csgowin', 'csgowinrace'];
+  const VALID_TABS = ['krush', 'chicken', 'chickenrace'];
   const [tab, setTab] = React.useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
     return VALID_TABS.includes(t) ? t : 'gamba';
@@ -2479,15 +2479,10 @@ function LeaderboardsPage() {
   const [krushActive, setKrushActive] = React.useState(false);
   const [krushEnded, setKrushEnded] = React.useState(false);
   const [chickenActive, setChickenActive] = React.useState(false);
-  const [csgowinActive, setCsgowinActive] = React.useState(false);
-  const [csgowinEnded, setCsgowinEnded] = React.useState(false);
   const [gambaAmt, setGambaAmt] = React.useState(null);
   const [krushAmt, setKrushAmt] = React.useState(null);
   const [chickenAmt, setChickenAmt] = React.useState(null);
   const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
-  const [csgowinAmt, setCsgowinAmt] = React.useState(null);
-  const [csgowinRaceStarted, setCsgowinRaceStarted] = React.useState(false);
-  const [csgowinRacePrize, setCsgowinRacePrize] = React.useState(null);
 
   function changeTab(t) {
     setTab(t);
@@ -2522,16 +2517,6 @@ function LeaderboardsPage() {
     fetch('/chicken-wager-race').then(r => r.json()).then(d => {
       if (d && d.prize) setChickenRaceAmt(d.prize);
     }).catch(() => {});
-    fetch('/csgowin-meta').then(r => r.json()).then(d => {
-      const ended = !!(d.end && Date.now() > new Date(d.end).getTime());
-      setCsgowinActive(!!d.active);
-      setCsgowinEnded(ended);
-      if (d.totalPool) setCsgowinAmt(Math.round(d.totalPool));
-      if (!d.active && !ended && tab === 'csgowin') setTab('gamba');
-    }).catch(() => {});
-    fetch('/csgowin-wager-race').then(r => r.json()).then(d => {
-      if (d && d.startedAt) { setCsgowinRaceStarted(true); if (d.prize) setCsgowinRacePrize(d.prize); }
-    }).catch(() => {});
   }, []);
 
   return (
@@ -2553,29 +2538,11 @@ function LeaderboardsPage() {
               {chickenAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {(csgowinActive || csgowinEnded) && (
-            <button className={`ptab${tab==='csgowin'?' active-csgowin':''}`} onClick={() => changeTab('csgowin')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>
-                <span className="ptab-label">CSGOWIN</span>
-              </div>
-              {csgowinAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/csgowincoin.png" alt="" onError={e=>e.target.style.display='none'}/>{csgowinAmt.toLocaleString('en-US')}</div>}
-            </button>
-          )}
-          <button className={`ptab${tab==='points'?' active-points':''}`} onClick={() => changeTab('points')}>
-            <div className="ptab-top">
-              <img className="ptab-img" src="/assets/np-coin.svg" alt="" onError={e=>e.target.style.display='none'}/>
-              <span className="ptab-label">NiksiPoints</span>
-            </div>
-          </button>
         </div>
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
         <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
-        <div style={{display: tab === 'csgowin' ? 'block' : 'none'}}><CsgowinLeaderboard/></div>
-        <div style={{display: tab === 'csgowinrace' ? 'block' : 'none'}}><CsgowinRaceLeaderboard/></div>
-        <div style={{display: tab === 'points' ? 'block' : 'none'}}><NiksiPointsLeaderboard/></div>
       </div>
 
       <footer>
