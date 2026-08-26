@@ -87,7 +87,7 @@
     .plat-section{margin-top:44px;margin-bottom:56px}
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
     .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:28px}
-    .plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .plat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,300px));gap:16px;justify-content:center}
     .plat-card{background:#0d0c12;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:30px 24px 24px;position:relative;transition:border-color .2s,box-shadow .2s}
     .plat-card:hover{border-color:rgba(255,255,255,.15);box-shadow:0 8px 40px rgba(0,0,0,.45)}
     .plat-card-logo-wrap{height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;width:100%}
@@ -1001,7 +1001,7 @@ html{overflow-y:scroll;}
       .nuser-name{display:none}
       .carousel-wrap{height:200px;border-radius:12px}
       .c-slide{padding:20px 18px}
-      .plat-grid{grid-template-columns:repeat(2,1fr)}
+      .plat-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
       .plat-card{padding:22px 16px 18px}
       .ftw{flex-direction:column;align-items:flex-start}
     }
