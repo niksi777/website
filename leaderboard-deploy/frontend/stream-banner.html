@@ -13,11 +13,7 @@
       border-radius:14px;background:#07050e;
       overflow:hidden;
       /* pulsing outer glow via box-shadow - stays contained to element */
-      animation:outerPulse 2s ease-in-out infinite;
-    }
-    @keyframes outerPulse{
-      0%,100%{box-shadow:0 0 22px rgba(var(--rgb),.55),0 0 50px rgba(var(--rgb),.28)}
-      50%    {box-shadow:0 0 38px rgba(var(--rgb),.9), 0 0 85px rgba(var(--rgb),.48),0 0 130px rgba(var(--rgb),.18)}
+      animation:glow 2s ease-in-out infinite;
     }
 
     /* ── animated gradient border ── */
@@ -74,16 +70,12 @@
 
     /* logo box */
     .logo-box{
-      width:82px;height:80px;flex-shrink:0;
+      height:80px;flex-shrink:0;
       border-radius:10px;
       display:flex;align-items:center;justify-content:center;
-      animation:logoGlow 2.2s ease-in-out infinite;
+      animation:glow 2s ease-in-out infinite;
     }
-    @keyframes logoGlow{
-      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.35),inset 0 0 10px rgba(var(--rgb),.08)}
-      50%    {box-shadow:0 0 34px rgba(var(--rgb),.85),0 0 65px rgba(var(--rgb),.32),inset 0 0 20px rgba(var(--rgb),.18)}
-    }
-    .logo-box img{max-width:66px;max-height:60px;object-fit:contain}
+    .logo-box img{max-height:58px;object-fit:contain}
 
     /* platform name */
     .plat-name{
@@ -91,11 +83,7 @@
       font-size:58px;font-weight:800;font-style:italic;
       letter-spacing:.03em;text-transform:uppercase;
       color:#fff;line-height:1;flex-shrink:0;
-      animation:nameGlow 2.4s ease-in-out infinite;
-    }
-    @keyframes nameGlow{
-      0%,100%{text-shadow:var(--glo)}
-      50%    {text-shadow:var(--ghi)}
+      animation:nameGlow 2s ease-in-out infinite;
     }
 
     /* separator */
@@ -114,16 +102,26 @@
       text-transform:uppercase;color:rgba(200,215,240,.52);
     }
 
+    /* single shared glow keyframe - everything pulses together at 2s */
+    @keyframes glow{
+      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.35),inset 0 0 8px rgba(var(--rgb),.06)}
+      50%    {box-shadow:0 0 34px rgba(var(--rgb),.88),0 0 65px rgba(var(--rgb),.35),inset 0 0 18px rgba(var(--rgb),.16)}
+    }
+    @keyframes nameGlow{
+      0%,100%{text-shadow:var(--glo)}
+      50%    {text-shadow:var(--ghi)}
+    }
+    @keyframes codeTextGlow{
+      0%,100%{text-shadow:0 0 14px rgba(var(--rgb),.9),0 0 35px rgba(var(--rgb),.5)}
+      50%    {text-shadow:0 0 28px var(--al),0 0 55px rgba(var(--rgb),.95),0 0 95px rgba(var(--rgb),.45)}
+    }
+
     /* code box */
     .code-box{
       flex-shrink:0;border-radius:10px;
       padding:7px 22px;
       display:flex;flex-direction:column;align-items:center;gap:1px;
-      animation:codeGlow 1.7s ease-in-out infinite;
-    }
-    @keyframes codeGlow{
-      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.42),inset 0 0 10px rgba(var(--rgb),.08)}
-      50%    {box-shadow:0 0 30px rgba(var(--rgb),.95),0 0 60px rgba(var(--rgb),.42),inset 0 0 18px rgba(var(--rgb),.2)}
+      animation:glow 2s ease-in-out infinite;
     }
     .code-lbl{
       font-size:10px;font-weight:700;
@@ -133,14 +131,8 @@
     .code-val{
       font-family:'Barlow Condensed',sans-serif;
       font-size:42px;font-weight:800;letter-spacing:.1em;line-height:1;
-      animation:codeTextGlow 1.7s ease-in-out infinite;
+      animation:codeTextGlow 2s ease-in-out infinite;
     }
-    @keyframes codeTextGlow{
-      0%,100%{text-shadow:0 0 16px rgba(var(--rgb),.9),0 0 38px rgba(var(--rgb),.55)}
-      50%    {text-shadow:0 0 30px var(--al),0 0 60px rgba(var(--rgb),.95),0 0 100px rgba(var(--rgb),.48)}
-    }
-
-    #ptcl{position:absolute;inset:0;z-index:8;pointer-events:none}
   </style>
 </head>
 <body>
@@ -149,7 +141,6 @@
   <div class="orb"     id="orb"></div>
   <div class="shimmer"></div>
   <div class="content" id="C"></div>
-  <canvas id="ptcl" width="1200" height="100"></canvas>
 </div>
 
 <script>
@@ -158,13 +149,12 @@ const PLATS = {
     c1:'#7c3aed',c2:'#ec4899',c3:'#06b6d4',
     accent:'#7c3aed',al:'#a78bfa',rgb:'124,58,237',
     logoBg:'rgba(124,58,237,.2)',logoBdr:'rgba(124,58,237,.52)',
-    logoSrc:'/assets/cs2skin.png',
+    logoSrc:'/assets/cs2skin.png',logoW:'160px',
     logoFilter:'brightness(0) invert(1) drop-shadow(0 0 14px rgba(124,58,237,1)) drop-shadow(0 0 4px #ddd8ff)',
-    name:'CS2SKIN',
+    noLabel:true,
     promoH:'100% Deposit Bonus',
     promoS:'5% unlocked for every 1x of deposit wagered',
-    glo:'0 0 22px rgba(124,58,237,.55),0 0 55px rgba(124,58,237,.28)',
-    ghi:'0 0 42px rgba(167,139,250,1),0 0 85px rgba(124,58,237,.8),0 0 150px rgba(124,58,237,.35)',
+    glo:'',ghi:'',
   },
   gamba:{
     c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
@@ -209,11 +199,12 @@ for(const [k,v] of Object.entries(vars)) B.style.setProperty(k,v);
 orb.style.background = P.accent;
 
 /* build content */
+const logoW = P.logoW || '82px';
 document.getElementById('C').innerHTML = `
-  <div class="logo-box" style="background:${P.logoBg};border:1px solid ${P.logoBdr}">
-    <img src="${P.logoSrc}" style="filter:${P.logoFilter}"/>
+  <div class="logo-box" style="width:${logoW};background:${P.logoBg};border:1px solid ${P.logoBdr}">
+    <img src="${P.logoSrc}" style="max-width:calc(${logoW} - 16px);filter:${P.logoFilter}"/>
   </div>
-  <div class="plat-name">${P.name}</div>
+  ${P.noLabel ? '' : `<div class="plat-name">${P.name}</div>`}
   <div class="sep"></div>
   <div class="promo">
     <div class="promo-h">${P.promoH}</div>
@@ -224,35 +215,6 @@ document.getElementById('C').innerHTML = `
     <div class="code-val" style="color:${P.al}">NIKSI</div>
   </div>
 `;
-
-/* floating sparkle particles */
-const cnv = document.getElementById('ptcl');
-const ctx = cnv.getContext('2d');
-const [R,G,Bl] = P.rgb.split(',').map(Number);
-
-const sparks = Array.from({length:30},()=>({
-  x:Math.random()*1200, y:Math.random()*100,
-  vx:(Math.random()-.5)*.5, vy:(Math.random()-.5)*.4,
-  sz:.8+Math.random()*2.2,
-  phase:Math.random()*Math.PI*2,
-  spd:.012+Math.random()*.012,
-}));
-
-function draw(t){
-  ctx.clearRect(0,0,1200,100);
-  for(const s of sparks){
-    s.x+=s.vx; s.y+=s.vy; s.phase+=s.spd;
-    if(s.x<0)s.x=1200; if(s.x>1200)s.x=0;
-    if(s.y<0)s.y=100;  if(s.y>100)s.y=0;
-    const a = (Math.sin(s.phase)*.5+.5)*.75;
-    ctx.beginPath();ctx.arc(s.x,s.y,s.sz,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${R},${G},${Bl},${a})`;ctx.fill();
-    ctx.beginPath();ctx.arc(s.x,s.y,s.sz*3.5,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${R},${G},${Bl},${a*.18})`;ctx.fill();
-  }
-  requestAnimationFrame(draw);
-}
-requestAnimationFrame(draw);
 </script>
 </body>
 </html>
