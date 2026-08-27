@@ -2,323 +2,257 @@
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@600;700&display=swap" rel="stylesheet"/>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:1200px;height:100px;overflow:hidden;background:transparent}
 
-    html, body {
-      width: 800px;
-      height: 120px;
-      overflow: hidden;
-      background: transparent;
+    /* ── shell: overflow:hidden keeps ALL effects inside ── */
+    .banner{
+      position:relative;width:1200px;height:100px;
+      border-radius:14px;background:#07050e;
+      overflow:hidden;
+      /* pulsing outer glow via box-shadow - stays contained to element */
+      animation:outerPulse 2s ease-in-out infinite;
+    }
+    @keyframes outerPulse{
+      0%,100%{box-shadow:0 0 22px rgba(var(--rgb),.55),0 0 50px rgba(var(--rgb),.28)}
+      50%    {box-shadow:0 0 38px rgba(var(--rgb),.9), 0 0 85px rgba(var(--rgb),.48),0 0 130px rgba(var(--rgb),.18)}
     }
 
-    .banner {
-      width: 800px;
-      height: 120px;
-      background: linear-gradient(135deg, #030f07 0%, #071a0e 60%, #041209 100%);
-      border: 3px solid rgba(34, 197, 94, 0.9);
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      animation: borderPulse 2.5s ease-in-out infinite;
+    /* ── animated gradient border ── */
+    .banner::before{
+      content:'';position:absolute;inset:0;
+      border-radius:14px;padding:2.5px;
+      background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c1));
+      background-size:250% 100%;
+      animation:sweep 2s linear infinite;
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      pointer-events:none;z-index:30;
     }
-    @keyframes borderPulse {
-      0%,100% { border-color: rgba(34,197,94,0.9); }
-      50%      { border-color: rgba(34,197,94,1); }
+    @keyframes sweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+    /* ── grid lines bg ── */
+    .grid{
+      position:absolute;inset:0;z-index:1;pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+      background-size:38px 38px;
     }
 
-    .banner::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(34,197,94,0.45), rgba(22,163,74,0.3), transparent);
-      pointer-events: none;
-      z-index: 2;
+    /* ── drifting color orb (stays inside via parent overflow:hidden) ── */
+    .orb{
+      position:absolute;top:50%;transform:translateY(-50%);
+      width:240px;height:240px;border-radius:50%;
+      filter:blur(60px);opacity:.16;pointer-events:none;z-index:2;
+      background:var(--accent);
+      animation:orbDrift 8s ease-in-out infinite alternate;
+    }
+    @keyframes orbDrift{0%{left:-50px}100%{left:400px}}
+
+    /* ── light-beam shimmer across banner ── */
+    .shimmer{
+      position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;
+    }
+    .shimmer::after{
+      content:'';
+      position:absolute;top:0;bottom:0;width:80px;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
+      animation:beam 4.5s ease-in-out infinite;
+      transform:skewX(-15deg);
+    }
+    @keyframes beam{0%{left:-100px}100%{left:1280px}}
+
+    /* ── content row ── */
+    .content{
+      position:absolute;inset:0;z-index:10;
+      display:flex;align-items:center;
+      padding:0 18px;gap:18px;
     }
 
-    /* ── Flip glow flash at midpoint ── */
-    .flash {
-      position: absolute;
-      inset: 0;
-      border-radius: 18px;
-      background: radial-gradient(ellipse at center, rgba(34,197,94,0.18) 0%, transparent 70%);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 6;
+    /* logo box */
+    .logo-box{
+      width:82px;height:80px;flex-shrink:0;
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      animation:logoGlow 2.2s ease-in-out infinite;
+    }
+    @keyframes logoGlow{
+      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.35),inset 0 0 10px rgba(var(--rgb),.08)}
+      50%    {box-shadow:0 0 34px rgba(var(--rgb),.85),0 0 65px rgba(var(--rgb),.32),inset 0 0 20px rgba(var(--rgb),.18)}
+    }
+    .logo-box img{max-width:66px;max-height:60px;object-fit:contain}
+
+    /* platform name */
+    .plat-name{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:58px;font-weight:800;font-style:italic;
+      letter-spacing:.03em;text-transform:uppercase;
+      color:#fff;line-height:1;flex-shrink:0;
+      animation:nameGlow 2.4s ease-in-out infinite;
+    }
+    @keyframes nameGlow{
+      0%,100%{text-shadow:var(--glo)}
+      50%    {text-shadow:var(--ghi)}
     }
 
-    /* ── Logo ── */
-    .logo-wrap {
-      width: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      z-index: 1;
+    /* separator */
+    .sep{width:2px;height:52px;background:rgba(255,255,255,.1);flex-shrink:0;border-radius:2px}
+
+    /* promo text */
+    .promo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+    .promo-h{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:25px;font-weight:800;font-style:italic;
+      letter-spacing:.06em;text-transform:uppercase;
+      color:#fff;white-space:nowrap;
+    }
+    .promo-s{
+      font-size:12px;font-weight:600;letter-spacing:.1em;
+      text-transform:uppercase;color:rgba(200,215,240,.52);
     }
 
-    .logo-wrap img {
-      width: 54px;
-      height: 54px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(34,197,94,0.35));
+    /* code box */
+    .code-box{
+      flex-shrink:0;border-radius:10px;
+      padding:7px 22px;
+      display:flex;flex-direction:column;align-items:center;gap:1px;
+      animation:codeGlow 1.7s ease-in-out infinite;
+    }
+    @keyframes codeGlow{
+      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.42),inset 0 0 10px rgba(var(--rgb),.08)}
+      50%    {box-shadow:0 0 30px rgba(var(--rgb),.95),0 0 60px rgba(var(--rgb),.42),inset 0 0 18px rgba(var(--rgb),.2)}
+    }
+    .code-lbl{
+      font-size:10px;font-weight:700;
+      letter-spacing:.22em;text-transform:uppercase;
+      color:rgba(200,215,240,.42);
+    }
+    .code-val{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:42px;font-weight:800;letter-spacing:.1em;line-height:1;
+      animation:codeTextGlow 1.7s ease-in-out infinite;
+    }
+    @keyframes codeTextGlow{
+      0%,100%{text-shadow:0 0 16px rgba(var(--rgb),.9),0 0 38px rgba(var(--rgb),.55)}
+      50%    {text-shadow:0 0 30px var(--al),0 0 60px rgba(var(--rgb),.95),0 0 100px rgba(var(--rgb),.48)}
     }
 
-    /* ── Separator ── */
-    .sep {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, rgba(34,197,94,0.25), transparent);
-      flex-shrink: 0;
-      z-index: 1;
-    }
-
-    /* ── Slide area ── */
-    .slides {
-      flex: 1;
-      padding: 0 28px;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      perspective: 520px;
-      perspective-origin: center center;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      /* Default state: waiting below, hidden */
-      transform: rotateX(72deg);
-      opacity: 0;
-      transition: none;
-      pointer-events: none;
-    }
-
-    /* Entering: rolls up from below into flat */
-    .slide.active {
-      transform: rotateX(0deg);
-      opacity: 1;
-      transition: transform 0.36s cubic-bezier(0.0, 0.6, 0.4, 1.0),
-                  opacity 0.12s ease;
-    }
-
-    /* Exiting: flips away upward */
-    .slide.exit {
-      transform: rotateX(-72deg);
-      opacity: 0;
-      transition: transform 0.28s cubic-bezier(0.6, 0.0, 1.0, 0.4),
-                  opacity 0.28s ease;
-    }
-
-    .slide-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #4ade80;
-      margin-bottom: 6px;
-    }
-
-    .slide-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 30px;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: 0.02em;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    .slide-sub {
-      font-family: 'Inter', sans-serif;
-      font-size: 11.5px;
-      font-weight: 500;
-      color: rgba(170, 235, 195, 0.6);
-      margin-top: 6px;
-      letter-spacing: 0.02em;
-    }
-
-    .green { color: #22c55e; }
-    .blue  { color: #3b82f6; }
-
-    /* ── Right code section ── */
-    .brand {
-      width: 120px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
-      border-left: 1px solid rgba(34, 197, 94, 0.2);
-      padding: 0 16px;
-      z-index: 1;
-    }
-
-    .brand-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(34, 197, 94, 0.65);
-    }
-
-    .brand-code {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #ffffff;
-    }
-
-    /* ── Progress pills ── */
-    .nav-dots {
-      position: absolute;
-      bottom: 9px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      z-index: 5;
-    }
-
-    .nav-dot {
-      height: 3px;
-      border-radius: 2px;
-      background: rgba(255,255,255,0.14);
-      width: 28px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .dot-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #22c55e, #4ade80);
-      border-radius: 2px;
-    }
+    #ptcl{position:absolute;inset:0;z-index:8;pointer-events:none}
   </style>
 </head>
 <body>
-<div class="banner">
-
-  <div class="flash" id="flash"></div>
-
-  <div class="logo-wrap">
-    <img src="/assets/niksi.png" alt="NIKSI777"/>
-  </div>
-
-  <div class="sep"></div>
-
-  <div class="slides">
-
-    <div class="slide active">
-      <div class="slide-label">Exclusive Benefits</div>
-      <div class="slide-title">Rewards &amp; Perks</div>
-      <div class="slide-sub">Rakeback &nbsp;·&nbsp; VIP Perks &nbsp;·&nbsp; Race Sprints &nbsp;·&nbsp; Promo Codes</div>
-    </div>
-
-    <div class="slide">
-      <div class="slide-label">NiksiPoints System</div>
-      <div class="slide-title">Earn Points by Watching!</div>
-      <div class="slide-sub">Redeem for prizes in the NiksiPoints store</div>
-    </div>
-
-    <div class="slide">
-      <div class="slide-label">Official Website</div>
-      <div class="slide-title"><span class="blue">www.niksi777.com</span></div>
-      <div class="slide-sub">Leaderboards &nbsp;·&nbsp; Store &nbsp;·&nbsp; Points &nbsp;·&nbsp; Cases &nbsp;·&nbsp; Predict</div>
-    </div>
-
-  </div>
-
-  <div class="brand">
-    <div class="brand-label">Code</div>
-    <div class="brand-code">NIKSI</div>
-  </div>
-
-  <div class="nav-dots">
-    <div class="nav-dot on"><div class="dot-fill"></div></div>
-    <div class="nav-dot"><div class="dot-fill"></div></div>
-    <div class="nav-dot"><div class="dot-fill"></div></div>
-  </div>
-
+<div class="banner" id="B">
+  <div class="grid"></div>
+  <div class="orb"     id="orb"></div>
+  <div class="shimmer"></div>
+  <div class="content" id="C"></div>
+  <canvas id="ptcl" width="1200" height="100"></canvas>
 </div>
+
 <script>
-  const slides   = Array.from(document.querySelectorAll('.slide'));
-  const navDots  = Array.from(document.querySelectorAll('.nav-dot'));
-  const fills    = Array.from(document.querySelectorAll('.dot-fill'));
-  const flash    = document.getElementById('flash');
-  const DURATION = 5500;
-  let cur = 0, t0 = null, raf = null, busy = false;
+const PLATS = {
+  cs2skin:{
+    c1:'#7c3aed',c2:'#ec4899',c3:'#06b6d4',
+    accent:'#7c3aed',al:'#a78bfa',rgb:'124,58,237',
+    logoBg:'rgba(124,58,237,.2)',logoBdr:'rgba(124,58,237,.52)',
+    logoSrc:'/assets/cs2skin.png',
+    logoFilter:'brightness(0) invert(1) drop-shadow(0 0 14px rgba(124,58,237,1)) drop-shadow(0 0 4px #ddd8ff)',
+    name:'CS2SKIN',
+    promoH:'100% Deposit Bonus',
+    promoS:'5% unlocked for every 1x of deposit wagered',
+    glo:'0 0 22px rgba(124,58,237,.55),0 0 55px rgba(124,58,237,.28)',
+    ghi:'0 0 42px rgba(167,139,250,1),0 0 85px rgba(124,58,237,.8),0 0 150px rgba(124,58,237,.35)',
+  },
+  gamba:{
+    c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
+    accent:'#22c55e',al:'#4ade80',rgb:'34,197,94',
+    logoBg:'rgba(34,197,94,.16)',logoBdr:'rgba(34,197,94,.48)',
+    logoSrc:'/assets/gamba2.png',
+    logoFilter:'drop-shadow(0 0 14px rgba(34,197,94,1)) drop-shadow(0 0 4px rgba(74,222,128,.6))',
+    name:'GAMBA',
+    promoH:'$750 Weekly Leaderboard',
+    promoS:'10-20% Lossback',
+    glo:'0 0 22px rgba(34,197,94,.55),0 0 55px rgba(34,197,94,.28)',
+    ghi:'0 0 42px rgba(74,222,128,1),0 0 85px rgba(34,197,94,.8),0 0 150px rgba(34,197,94,.35)',
+  },
+  chicken:{
+    c1:'#f59e0b',c2:'#f97316',c3:'#fbbf24',
+    accent:'#f59e0b',al:'#fbbf24',rgb:'245,158,11',
+    logoBg:'rgba(245,158,11,.14)',logoBdr:'rgba(245,158,11,.46)',
+    logoSrc:'/assets/chicken.png',
+    logoFilter:'drop-shadow(0 0 14px rgba(245,158,11,1)) drop-shadow(0 0 4px rgba(251,191,36,.7))',
+    name:'CHICKEN.GG',
+    promoH:'650 Coin Weekly Leaderboard',
+    promoS:'0.5% Wagerback - Up to 15% Lossback',
+    glo:'0 0 22px rgba(245,158,11,.55),0 0 55px rgba(245,158,11,.28)',
+    ghi:'0 0 42px rgba(251,191,36,1),0 0 85px rgba(245,158,11,.8),0 0 150px rgba(245,158,11,.35)',
+  },
+};
 
-  function glowFlash() {
-    flash.style.transition = 'opacity 0.06s ease';
-    flash.style.opacity = '1';
-    setTimeout(() => {
-      flash.style.transition = 'opacity 0.22s ease';
-      flash.style.opacity = '0';
-    }, 60);
+const key = new URLSearchParams(location.search).get('p') || 'cs2skin';
+const P   = PLATS[key] || PLATS.cs2skin;
+const B   = document.getElementById('B');
+const orb = document.getElementById('orb');
+
+/* set CSS vars */
+const vars = {
+  '--c1':P.c1,'--c2':P.c2,'--c3':P.c3,
+  '--accent':P.accent,'--al':P.al,
+  '--rgb':P.rgb,
+  '--glo':P.glo,'--ghi':P.ghi,
+};
+for(const [k,v] of Object.entries(vars)) B.style.setProperty(k,v);
+
+orb.style.background = P.accent;
+
+/* build content */
+document.getElementById('C').innerHTML = `
+  <div class="logo-box" style="background:${P.logoBg};border:1px solid ${P.logoBdr}">
+    <img src="${P.logoSrc}" style="filter:${P.logoFilter}"/>
+  </div>
+  <div class="plat-name">${P.name}</div>
+  <div class="sep"></div>
+  <div class="promo">
+    <div class="promo-h">${P.promoH}</div>
+    <div class="promo-s">${P.promoS}</div>
+  </div>
+  <div class="code-box" style="border:2px solid ${P.accent};background:rgba(${P.rgb},.08)">
+    <div class="code-lbl">Use code</div>
+    <div class="code-val" style="color:${P.al}">NIKSI</div>
+  </div>
+`;
+
+/* floating sparkle particles */
+const cnv = document.getElementById('ptcl');
+const ctx = cnv.getContext('2d');
+const [R,G,Bl] = P.rgb.split(',').map(Number);
+
+const sparks = Array.from({length:30},()=>({
+  x:Math.random()*1200, y:Math.random()*100,
+  vx:(Math.random()-.5)*.5, vy:(Math.random()-.5)*.4,
+  sz:.8+Math.random()*2.2,
+  phase:Math.random()*Math.PI*2,
+  spd:.012+Math.random()*.012,
+}));
+
+function draw(t){
+  ctx.clearRect(0,0,1200,100);
+  for(const s of sparks){
+    s.x+=s.vx; s.y+=s.vy; s.phase+=s.spd;
+    if(s.x<0)s.x=1200; if(s.x>1200)s.x=0;
+    if(s.y<0)s.y=100;  if(s.y>100)s.y=0;
+    const a = (Math.sin(s.phase)*.5+.5)*.75;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.sz,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${R},${G},${Bl},${a})`;ctx.fill();
+    ctx.beginPath();ctx.arc(s.x,s.y,s.sz*3.5,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${R},${G},${Bl},${a*.18})`;ctx.fill();
   }
-
-  function goTo(next) {
-    if (busy) return;
-    busy = true;
-
-    const outIdx = cur;
-    const inIdx  = next % slides.length;
-
-    slides[outIdx].classList.remove('active');
-    slides[outIdx].classList.add('exit');
-    navDots[outIdx].classList.remove('on');
-    fills[outIdx].style.transition = 'none';
-    fills[outIdx].style.width = '0%';
-
-    setTimeout(glowFlash, 140);
-
-    setTimeout(() => {
-      slides[outIdx].classList.remove('exit');
-      cur = inIdx;
-      navDots[inIdx].classList.add('on');
-      fills[inIdx].style.transition = 'none';
-      fills[inIdx].style.width = '0%';
-      slides[inIdx].classList.add('active');
-
-      t0 = null;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(tick);
-
-      setTimeout(() => { busy = false; }, 380);
-    }, 290);
-  }
-
-  function tick(ts) {
-    if (!t0) t0 = ts;
-    const pct = Math.min((ts - t0) / DURATION * 100, 100);
-    fills[cur].style.width = pct + '%';
-    if (pct < 100) {
-      raf = requestAnimationFrame(tick);
-    } else {
-      goTo(cur + 1);
-    }
-  }
-
-  raf = requestAnimationFrame(tick);
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
 </script>
 </body>
 </html>
