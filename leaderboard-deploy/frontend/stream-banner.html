@@ -36,17 +36,6 @@
       background-size:40px 40px;
     }
 
-    /* two light beams sweeping */
-    .beams{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
-    .beams::before,.beams::after{
-      content:'';position:absolute;top:0;bottom:0;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
-      transform:skewX(-18deg);
-    }
-    .beams::before{width:50px;animation:beam1 3.2s ease-out infinite}
-    .beams::after {width:110px;opacity:.55;animation:beam2 5.5s ease-out infinite 1.8s}
-    @keyframes beam1{0%{left:-80px;opacity:0}15%{opacity:1}85%{opacity:.8}100%{left:1300px;opacity:0}}
-    @keyframes beam2{0%{left:-200px;opacity:0}15%{opacity:.55}85%{opacity:.4}100%{left:1400px;opacity:0}}
 
     /* content row */
     .content{
@@ -158,7 +147,7 @@
 <div class="banner" id="B">
   <div class="grid"></div>
   <canvas id="bg" width="1200" height="100"></canvas>
-  <div class="beams"></div>
+
   <div class="content" id="C"></div>
 </div>
 
@@ -241,19 +230,6 @@ const parts = Array.from({length:PCOUNT},(_,i)=>({
   alpha: Math.random()*0.7,
 }));
 
-/* --- horizontal energy streaks --- */
-const SCOUNT = 6;
-const streaks = Array.from({length:SCOUNT},()=>makeStreak(true));
-function makeStreak(init){
-  return{
-    x: init ? Math.random()*1400-200 : -400,
-    y: 5 + Math.random()*90,
-    spd: 9 + Math.random()*20,
-    len: 100 + Math.random()*280,
-    h: 0.6 + Math.random()*2,
-    a: 0.35 + Math.random()*0.55,
-  };
-}
 
 /* --- border travelling hotspot --- */
 let bT = 0;
@@ -297,27 +273,6 @@ function frame(){
     }
   }
 
-  /* streaks */
-  for(let i=0;i<streaks.length;i++){
-    const s=streaks[i];
-    s.x+=s.spd;
-    if(s.x>1350) streaks[i]=makeStreak(false);
-    const g=ctx.createLinearGradient(s.x,0,s.x+s.len,0);
-    g.addColorStop(0,`rgba(${R},${G},${Bl},0)`);
-    g.addColorStop(.35,`rgba(${R},${G},${Bl},${s.a})`);
-    g.addColorStop(.65,`rgba(${R},${G},${Bl},${s.a})`);
-    g.addColorStop(1,`rgba(${R},${G},${Bl},0)`);
-    ctx.fillStyle=g;
-    ctx.fillRect(s.x,s.y-s.h/2,s.len,s.h);
-    /* white core */
-    const wg=ctx.createLinearGradient(s.x,0,s.x+s.len,0);
-    wg.addColorStop(0,'rgba(255,255,255,0)');
-    wg.addColorStop(.35,`rgba(255,255,255,${s.a*0.45})`);
-    wg.addColorStop(.65,`rgba(255,255,255,${s.a*0.45})`);
-    wg.addColorStop(1,'rgba(255,255,255,0)');
-    ctx.fillStyle=wg;
-    ctx.fillRect(s.x,s.y-0.6,s.len,1.2);
-  }
 
   /* border travelling hotspot */
   bT += 1/(3.5*60);
