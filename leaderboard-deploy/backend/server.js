@@ -629,6 +629,105 @@ app.post("/admin/krush/start", (req, res) => {
   res.json({ ok: true, start, end });
 });
 
+// ─── CS2SKIN leaderboard ──────────────────────────────────────────────────
+const CS2SKIN_PRIZES = [300, 150, 100, 75, 50, 35, 25, 15];
+const CS2SKIN_POOL_TOTAL = CS2SKIN_PRIZES.reduce((s, p) => s + p, 0); // 750
+const CS2SKIN_PERIOD_PATH = require("path").join(__dirname, "../../cs2skin-period.json");
+const CS2SKIN_CACHE_PATH = require("path").join(__dirname, "../../cs2skin-cache.json");
+
+let cs2skinPeriod = { start: null, end: null };
+let cs2skinPlayers = [];
+let cs2skinLastUpdated = null;
+try {
+  if (fs_lb.existsSync(CS2SKIN_PERIOD_PATH)) {
+    cs2skinPeriod = JSON.parse(fs_lb.readFileSync(CS2SKIN_PERIOD_PATH, "utf-8"));
+  }
+} catch (e) {}
+try {
+  if (fs_lb.existsSync(CS2SKIN_CACHE_PATH)) {
+    const cached = JSON.parse(fs_lb.readFileSync(CS2SKIN_CACHE_PATH, "utf-8"));
+    cs2skinPlayers = cached.players || [];
+    cs2skinLastUpdated = cached.lastUpdated || null;
+  }
+} catch (e) {}
+
+async function updateCs2skinLeaderboard() {
+  try {
+    if (!process.env.CS2SKIN_API_KEY || !cs2skinPeriod.start) return;
+    const response = await fetch(
+      'https://cs2skin.com/api/public/affiliate/leaderboards',
+      { headers: { 'Authorization': `Bearer ${process.env.CS2SKIN_API_KEY}` } }
+    );
+    const json = await response.json();
+    if (!json || json.status !== 1 || !json.data) {
+      console.log('CS2SKIN: unexpected response, keeping existing data', JSON.stringify(json).slice(0, 200));
+      return;
+    }
+    const raw = Array.isArray(json.data) ? json.data
+      : (json.data.entries || json.data.players || json.data.leaderboard || json.data.results || []);
+    if (!Array.isArray(raw)) {
+      console.log('CS2SKIN: no array found in response data');
+      return;
+    }
+    cs2skinPlayers = raw;
+    cs2skinLastUpdated = Date.now();
+    fs_lb.writeFileSync(
+      CS2SKIN_CACHE_PATH,
+      JSON.stringify({ players: cs2skinPlayers, lastUpdated: cs2skinLastUpdated }, null, 2)
+    );
+    console.log('CS2SKIN leaderboard updated:', cs2skinPlayers.length, 'players');
+  } catch (err) {
+    console.log('CS2SKIN update error:', err.message);
+  }
+}
+
+setInterval(updateCs2skinLeaderboard, 5 * 60 * 1000);
+updateCs2skinLeaderboard();
+
+app.get('/cs2skin-leaderboard', (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  const rows = cs2skinPlayers
+    .slice()
+    .sort((a, b) => {
+      const wa = Number(a.wagered ?? a.wager ?? a.totalWagered ?? a.total_wagered ?? 0);
+      const wb = Number(b.wagered ?? b.wager ?? b.totalWagered ?? b.total_wagered ?? 0);
+      return wb - wa;
+    })
+    .slice(0, limit)
+    .map((r, i) => ({
+      position: i + 1,
+      username: r.username || r.name || r.user || r.display_name || 'Hidden',
+      wager: Number(r.wagered ?? r.wager ?? r.totalWagered ?? r.total_wagered ?? 0),
+      prize: CS2SKIN_PRIZES[i] || 0,
+    }));
+  res.json({ leaderboard: rows });
+});
+
+app.get('/cs2skin-meta', (req, res) => {
+  const now = Date.now();
+  res.json({
+    start: cs2skinPeriod.start,
+    end: cs2skinPeriod.end,
+    active: !!(cs2skinPeriod.start && cs2skinPeriod.end && now < cs2skinPeriod.end),
+    totalPool: CS2SKIN_POOL_TOTAL,
+    prizes: CS2SKIN_PRIZES,
+    lastUpdated: cs2skinLastUpdated,
+  });
+});
+
+app.post('/admin/cs2skin/start', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
+  const end = start + 7 * 24 * 60 * 60 * 1000;
+  cs2skinPeriod = { start, end };
+  fs_lb.writeFileSync(CS2SKIN_PERIOD_PATH, JSON.stringify(cs2skinPeriod, null, 2));
+  cs2skinPlayers = [];
+  updateCs2skinLeaderboard();
+  res.json({ ok: true, start, end });
+});
+
 // ─── CSGOwin leaderboard ───────────────────────────────────────────────────
 const CSGOWIN_API_KEY  = '5bb7502706';
 const CSGOWIN_PRIZES   = [200, 100, 60, 40, 25, 20, 15, 15, 15, 10]; // 500c fallback
