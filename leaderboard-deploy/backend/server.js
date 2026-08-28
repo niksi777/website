@@ -694,15 +694,15 @@ app.get('/cs2skin-leaderboard', (req, res) => {
   const rows = cs2skinPlayers
     .slice()
     .sort((a, b) => {
-      const wa = Number(a.wagered ?? a.wager ?? a.totalWagered ?? a.total_wagered ?? 0);
-      const wb = Number(b.wagered ?? b.wager ?? b.totalWagered ?? b.total_wagered ?? 0);
+      const wa = Number(a.wagered_amount ?? a.wagered ?? a.wager ?? a.totalWagered ?? a.total_wagered ?? 0);
+      const wb = Number(b.wagered_amount ?? b.wagered ?? b.wager ?? b.totalWagered ?? b.total_wagered ?? 0);
       return wb - wa;
     })
     .slice(0, limit)
     .map((r, i) => ({
-      position: i + 1,
-      username: r.username || r.name || r.user || r.display_name || 'Hidden',
-      wager: Number(r.wagered ?? r.wager ?? r.totalWagered ?? r.total_wagered ?? 0),
+      position: r.rank || i + 1,
+      username: r.display_name || r.username || r.name || r.user || 'Hidden',
+      wager: Number(r.wagered_amount ?? r.wagered ?? r.wager ?? r.totalWagered ?? r.total_wagered ?? 0),
       prize: CS2SKIN_PRIZES[i] || 0,
     }));
   res.json({ leaderboard: rows });
