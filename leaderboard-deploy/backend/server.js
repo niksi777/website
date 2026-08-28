@@ -653,23 +653,28 @@ try {
 
 async function updateCs2skinLeaderboard() {
   try {
-    if (!process.env.CS2SKIN_API_KEY || !cs2skinPeriod.start) return;
+    if (!process.env.CS2SKIN_API_KEY) return;
     const response = await fetch(
       'https://cs2skin.com/api/public/affiliate/leaderboards',
       { headers: { 'Authorization': `Bearer ${process.env.CS2SKIN_API_KEY}` } }
     );
     const json = await response.json();
     if (!json || json.status !== 1 || !json.data) {
-      console.log('CS2SKIN: unexpected response, keeping existing data', JSON.stringify(json).slice(0, 200));
+      console.log('CS2SKIN: unexpected response', JSON.stringify(json).slice(0, 200));
       return;
+    }
+    // sync period to CS2SKIN's authoritative dates
+    if (json.data.begin_at && json.data.end_at) {
+      const newStart = new Date(json.data.begin_at).getTime();
+      const newEnd = new Date(json.data.end_at).getTime();
+      if (newStart !== cs2skinPeriod.start || newEnd !== cs2skinPeriod.end) {
+        cs2skinPeriod = { start: newStart, end: newEnd };
+        fs_lb.writeFileSync(CS2SKIN_PERIOD_PATH, JSON.stringify(cs2skinPeriod, null, 2));
+      }
     }
     const raw = Array.isArray(json.data) ? json.data
       : (json.data.entries || json.data.players || json.data.leaderboard || json.data.results || []);
-    if (!Array.isArray(raw)) {
-      console.log('CS2SKIN: no array found in response data');
-      return;
-    }
-    cs2skinPlayers = raw;
+    cs2skinPlayers = Array.isArray(raw) ? raw : [];
     cs2skinLastUpdated = Date.now();
     fs_lb.writeFileSync(
       CS2SKIN_CACHE_PATH,
