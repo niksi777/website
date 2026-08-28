@@ -1260,7 +1260,7 @@ function HeroCarousel() {
               <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>100% DEPOSIT</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BONUS ON CS2SKIN</div>
               <div style={sub}>Unlocks 5% of bonus for each 1x of deposit wagered - Use code NIKSI</div>
-              <a href={CS2SKIN_URL} target="_blank" rel="noreferrer" style={btn('#7c3aed','rgba(124,58,237,.55)')}>CLAIM BONUS <Arr/></a>
+              <a href="/leaderboards?tab=cs2skin" style={btn('#7c3aed','rgba(124,58,237,.55)')}>GO TO LEADERBOARD <Arr/></a>
             </div>
           </div>
 
@@ -1386,6 +1386,7 @@ function HeroCarousel() {
         perks:['5% OF BONUS PER 1X WAGERED'],
         bigImg:'/assets/cs2skin.png', bigImgFilter:'brightness(0) invert(1)',
         signupHref:CS2SKIN_URL, signupExt:true,
+        lbHref:'/leaderboards?tab=cs2skin',
       },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
