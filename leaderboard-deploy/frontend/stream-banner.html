@@ -99,15 +99,11 @@
       text-transform:uppercase;color:rgba(200,215,240,.5);
     }
 
-    /* code box - smooth glow pulse */
+    /* code box - static glow, no pulse */
     .code-box{
       flex-shrink:0;border-radius:10px;padding:7px 22px;
       display:flex;flex-direction:column;align-items:center;gap:1px;
-      animation:codeGlow 3s ease-in-out infinite;
-    }
-    @keyframes codeGlow{
-      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.45),inset 0 0 8px rgba(var(--rgb),.1)}
-      50%    {box-shadow:0 0 36px rgba(var(--rgb),.95),0 0 70px rgba(var(--rgb),.45),0 0 110px rgba(var(--rgb),.2),inset 0 0 22px rgba(var(--rgb),.2)}
+      box-shadow:0 0 22px rgba(var(--rgb),.55),inset 0 0 10px rgba(var(--rgb),.12);
     }
     .code-lbl{
       font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
@@ -116,11 +112,7 @@
     .code-val{
       font-family:'Barlow Condensed',sans-serif;
       font-size:42px;font-weight:800;letter-spacing:.1em;line-height:1;
-      animation:niksiFlash 3s ease-in-out infinite;
-    }
-    @keyframes niksiFlash{
-      0%,100%{text-shadow:0 0 14px rgba(var(--rgb),.9),0 0 30px rgba(var(--rgb),.5)}
-      50%    {text-shadow:0 0 32px var(--al),0 0 60px rgba(var(--rgb),.95),0 0 100px rgba(var(--rgb),.5)}
+      text-shadow:0 0 18px rgba(var(--rgb),.95),0 0 40px rgba(var(--rgb),.5);
     }
   </style>
 </head>
@@ -146,7 +138,7 @@ const PLATS = {
   gamba:{
     c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
     accent:'#22c55e',al:'#86efac',rgb:'34,197,94',
-    logoW:'72px',logoH:'72px',
+    logoW:'92px',logoH:'92px',
     logoSrc:'/assets/gamba2.png',
     logoFilter:'drop-shadow(0 0 14px rgba(34,197,94,1)) drop-shadow(0 0 5px rgba(134,239,172,.5))',
     noLabel:true,name:'GAMBA',
