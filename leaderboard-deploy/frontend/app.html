@@ -2003,7 +2003,7 @@ function Cs2skinLeaderboard() {
   if (!meta.active && !isEnded) {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><span style={{color:'var(--cs2skin)',fontSize:'0.5em',marginLeft:8,verticalAlign:'middle'}}>COINS</span></div>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><img src="/assets/cs2skincoin.png" alt="coins" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
         <div className="lb-prize-lbl">7-Day Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
       </div>
@@ -2023,7 +2023,7 @@ function Cs2skinLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><span style={{color:'var(--cs2skin)',fontSize:'0.5em',marginLeft:8,verticalAlign:'middle'}}>COINS</span></div>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><img src="/assets/cs2skincoin.png" alt="coins" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
         <div className="lb-prize-lbl">7-Day Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
@@ -2642,7 +2642,7 @@ function LeaderboardsPage() {
               <div className="ptab-top">
                 <img className="ptab-img" src="/assets/cs2skin.png" alt="CS2SKIN" onError={e=>e.target.style.display='none'} style={{filter:'brightness(0) invert(1)'}}/>
               </div>
-              {cs2skinAmt != null && <div className="ptab-amt">{cs2skinAmt.toLocaleString('en-US')}<span style={{color:'var(--cs2skin)',marginLeft:3,fontSize:'0.85em'}}>coins</span></div>}
+              {cs2skinAmt != null && <div className="ptab-amt"><img src="/assets/cs2skincoin.png" alt="" className="ptab-coin" onError={e=>e.target.style.display='none'}/>{cs2skinAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
         </div>
