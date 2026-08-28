@@ -36,7 +36,6 @@
       background-size:40px 40px;
     }
 
-
     /* content row */
     .content{
       position:absolute;inset:0;z-index:10;
@@ -44,22 +43,16 @@
       padding:0 18px;gap:18px;
     }
 
-    /* logo box - floats up and down */
-    .logo-box{
-      height:80px;flex-shrink:0;border-radius:10px;
+    /* logo - floats up and down, no box */
+    .logo-wrap{
+      flex-shrink:0;
       display:flex;align-items:center;justify-content:center;
       animation:logoFloat 3s ease-in-out infinite;
     }
-    .logo-box img{max-height:58px;object-fit:contain}
+    .logo-wrap img{object-fit:contain}
     @keyframes logoFloat{
-      0%,100%{
-        transform:translateY(0px);
-        box-shadow:0 0 25px rgba(var(--rgb),.5),0 0 60px rgba(var(--rgb),.18),0 6px 20px rgba(0,0,0,.3);
-      }
-      50%{
-        transform:translateY(-6px);
-        box-shadow:0 0 55px rgba(var(--rgb),.95),0 0 110px rgba(var(--rgb),.5),0 0 180px rgba(var(--rgb),.22),0 18px 35px rgba(0,0,0,.45);
-      }
+      0%,100%{transform:translateY(0px)}
+      50%{transform:translateY(-6px)}
     }
 
     /* platform name - shimmer sweep across text + glow pulse */
@@ -135,7 +128,6 @@
 <div class="banner" id="B">
   <div class="grid"></div>
   <canvas id="bg" width="1200" height="100"></canvas>
-
   <div class="content" id="C"></div>
 </div>
 
@@ -144,7 +136,7 @@ const PLATS = {
   cs2skin:{
     c1:'#7c3aed',c2:'#ec4899',c3:'#06b6d4',
     accent:'#7c3aed',al:'#c4b5fd',rgb:'124,58,237',
-    logoBg:'rgba(124,58,237,.07)',logoBdr:'rgba(124,58,237,.25)',logoW:'160px',
+    logoW:'160px',logoH:'52px',
     logoSrc:'/assets/cs2skin.png',
     logoFilter:'brightness(0) invert(1) drop-shadow(0 0 14px rgba(124,58,237,1))',
     noLabel:true,
@@ -154,7 +146,7 @@ const PLATS = {
   gamba:{
     c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
     accent:'#22c55e',al:'#86efac',rgb:'34,197,94',
-    logoBg:'rgba(34,197,94,.16)',logoBdr:'rgba(34,197,94,.5)',logoW:'82px',
+    logoW:'72px',logoH:'72px',
     logoSrc:'/assets/gamba2.png',
     logoFilter:'drop-shadow(0 0 14px rgba(34,197,94,1)) drop-shadow(0 0 5px rgba(134,239,172,.5))',
     noLabel:false,name:'GAMBA',
@@ -164,7 +156,7 @@ const PLATS = {
   chicken:{
     c1:'#f59e0b',c2:'#f97316',c3:'#fbbf24',
     accent:'#f59e0b',al:'#fde68a',rgb:'245,158,11',
-    logoBg:'rgba(245,158,11,.14)',logoBdr:'rgba(245,158,11,.48)',logoW:'82px',
+    logoW:'72px',logoH:'72px',
     logoSrc:'/assets/chicken.png',
     logoFilter:'drop-shadow(0 0 14px rgba(245,158,11,1)) drop-shadow(0 0 5px rgba(253,230,138,.5))',
     noLabel:false,name:'CHICKEN.GG',
@@ -183,10 +175,9 @@ const B = document.getElementById('B');
 ].forEach(([k,v])=>B.style.setProperty(k,v));
 
 /* build HTML */
-const logoW = P.logoW || '82px';
 document.getElementById('C').innerHTML = `
-  <div class="logo-box" style="width:${logoW};background:${P.logoBg};border:1px solid ${P.logoBdr}">
-    <img src="${P.logoSrc}" style="max-width:calc(${logoW} - 14px);max-height:58px;filter:${P.logoFilter}"/>
+  <div class="logo-wrap">
+    <img src="${P.logoSrc}" style="width:${P.logoW};height:${P.logoH};filter:${P.logoFilter}"/>
   </div>
   ${P.noLabel?'':'<div class="plat-name">'+P.name+'</div>'}
   <div class="sep"></div>
@@ -200,14 +191,14 @@ document.getElementById('C').innerHTML = `
   </div>
 `;
 
-/* ── canvas animation ── */
+/* canvas animation */
 const cnv = document.getElementById('bg');
 const ctx = cnv.getContext('2d');
 const [R,G,Bl] = P.rgb.split(',').map(Number);
 
-/* --- particles drifting left → right --- */
+/* particles drifting left to right */
 const PCOUNT = 75;
-const parts = Array.from({length:PCOUNT},(_,i)=>({
+const parts = Array.from({length:PCOUNT},()=>({
   x: Math.random()*1200,
   y: Math.random()*100,
   vx: 0.4 + Math.random()*1.8,
@@ -217,17 +208,6 @@ const parts = Array.from({length:PCOUNT},(_,i)=>({
   phaseSpd: 0.015 + Math.random()*0.02,
   alpha: Math.random()*0.7,
 }));
-
-
-
-/* --- periodic corner flares --- */
-let cornerT = 0;
-const corners = [[0,0],[1200,0],[1200,100],[0,100]];
-let activeCorner = 0;
-let cornerAlpha = 0;
-let cornerDir = 1;
-
-/* --- background radial bloom --- */
 
 function frame(){
   ctx.clearRect(0,0,1200,100);
@@ -250,26 +230,6 @@ function frame(){
       ctx.fillStyle=`rgba(${R},${G},${Bl},${a*0.15})`; ctx.fill();
     }
   }
-
-
-
-  /* corner flares */
-  cornerT++;
-  if(cornerDir===1){
-    cornerAlpha = Math.min(cornerAlpha+0.06, 1);
-    if(cornerAlpha>=1) cornerDir=-1;
-  } else {
-    cornerAlpha = Math.max(cornerAlpha-0.035, 0);
-    if(cornerAlpha<=0){
-      cornerDir=1;
-      activeCorner=(activeCorner+1)%4;
-    }
-  }
-  const [cx,cy]=corners[activeCorner];
-  const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,80);
-  cg.addColorStop(0,`rgba(${R},${G},${Bl},${cornerAlpha*0.55})`);
-  cg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=cg; ctx.fillRect(0,0,1200,100);
 
   requestAnimationFrame(frame);
 }
