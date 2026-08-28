@@ -7,139 +7,158 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{width:1200px;height:100px;overflow:hidden;background:transparent}
 
-    /* ── shell: overflow:hidden keeps ALL effects inside ── */
     .banner{
       position:relative;width:1200px;height:100px;
-      border-radius:14px;background:#07050e;
-      overflow:hidden;
-      /* pulsing outer glow via box-shadow - stays contained to element */
-      animation:glow 2s ease-in-out infinite;
+      border-radius:14px;background:#07050e;overflow:hidden;
     }
 
-    /* ── animated gradient border ── */
+    /* sweeping gradient border */
     .banner::before{
-      content:'';position:absolute;inset:0;
-      border-radius:14px;padding:2.5px;
+      content:'';position:absolute;inset:0;border-radius:14px;padding:2.5px;
       background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c1));
       background-size:250% 100%;
-      animation:sweep 2s linear infinite;
+      animation:borderSweep 1.8s linear infinite;
       -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
       -webkit-mask-composite:xor;mask-composite:exclude;
       pointer-events:none;z-index:30;
     }
-    @keyframes sweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+    @keyframes borderSweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
 
-    /* ── grid lines bg ── */
+    /* bg canvas sits behind everything */
+    #bg{position:absolute;inset:0;z-index:2;pointer-events:none}
+
+    /* subtle grid */
     .grid{
       position:absolute;inset:0;z-index:1;pointer-events:none;
       background-image:
-        linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
-      background-size:38px 38px;
+        linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+      background-size:40px 40px;
     }
 
-    /* ── drifting color orb (stays inside via parent overflow:hidden) ── */
-    .orb{
-      position:absolute;top:50%;transform:translateY(-50%);
-      width:240px;height:240px;border-radius:50%;
-      filter:blur(60px);opacity:.16;pointer-events:none;z-index:2;
-      background:var(--accent);
-      animation:orbDrift 8s ease-in-out infinite alternate;
+    /* two light beams sweeping */
+    .beams{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+    .beams::before,.beams::after{
+      content:'';position:absolute;top:0;bottom:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+      transform:skewX(-18deg);
     }
-    @keyframes orbDrift{0%{left:-50px}100%{left:400px}}
+    .beams::before{width:50px;animation:beam1 3.2s ease-out infinite}
+    .beams::after {width:110px;opacity:.55;animation:beam2 5.5s ease-out infinite 1.8s}
+    @keyframes beam1{0%{left:-80px;opacity:0}15%{opacity:1}85%{opacity:.8}100%{left:1300px;opacity:0}}
+    @keyframes beam2{0%{left:-200px;opacity:0}15%{opacity:.55}85%{opacity:.4}100%{left:1400px;opacity:0}}
 
-    /* ── light-beam shimmer across banner ── */
-    .shimmer{
-      position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;
-    }
-    .shimmer::after{
-      content:'';
-      position:absolute;top:0;bottom:0;width:80px;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
-      animation:beam 4.5s ease-in-out infinite;
-      transform:skewX(-15deg);
-    }
-    @keyframes beam{0%{left:-100px}100%{left:1280px}}
-
-    /* ── content row ── */
+    /* content row */
     .content{
       position:absolute;inset:0;z-index:10;
       display:flex;align-items:center;
       padding:0 18px;gap:18px;
     }
 
-    /* logo box */
+    /* logo box - floats up and down */
     .logo-box{
-      height:80px;flex-shrink:0;
-      border-radius:10px;
+      height:80px;flex-shrink:0;border-radius:10px;
       display:flex;align-items:center;justify-content:center;
-      animation:glow 2s ease-in-out infinite;
+      animation:logoFloat 3s ease-in-out infinite;
     }
     .logo-box img{max-height:58px;object-fit:contain}
+    @keyframes logoFloat{
+      0%,100%{
+        transform:translateY(0px);
+        box-shadow:0 0 16px rgba(var(--rgb),.42),0 6px 20px rgba(0,0,0,.35),inset 0 0 10px rgba(var(--rgb),.08);
+      }
+      50%{
+        transform:translateY(-6px);
+        box-shadow:0 0 38px rgba(var(--rgb),.9),0 0 75px rgba(var(--rgb),.38),0 18px 35px rgba(0,0,0,.5),inset 0 0 22px rgba(var(--rgb),.2);
+      }
+    }
 
-    /* platform name */
+    /* platform name - shimmer sweep across text + glow pulse */
     .plat-name{
       font-family:'Barlow Condensed',sans-serif;
       font-size:58px;font-weight:800;font-style:italic;
       letter-spacing:.03em;text-transform:uppercase;
-      color:#fff;line-height:1;flex-shrink:0;
-      animation:nameGlow 2s ease-in-out infinite;
+      line-height:1;flex-shrink:0;
+      background:linear-gradient(90deg,#fff 25%,var(--al) 50%,#fff 75%);
+      background-size:200% auto;
+      -webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;
+      animation:nameShim 3s ease-in-out infinite;
+    }
+    @keyframes nameShim{
+      0%,100%{
+        background-position:200% center;
+        filter:drop-shadow(0 0 10px rgba(var(--rgb),.55)) drop-shadow(0 0 25px rgba(var(--rgb),.28));
+      }
+      50%{
+        background-position:-100% center;
+        filter:drop-shadow(0 0 25px rgba(var(--rgb),.95)) drop-shadow(0 0 55px rgba(var(--rgb),.6));
+      }
     }
 
-    /* separator */
-    .sep{width:2px;height:52px;background:rgba(255,255,255,.1);flex-shrink:0;border-radius:2px}
+    /* separator that pulses to the beat */
+    .sep{
+      width:2px;height:52px;border-radius:2px;flex-shrink:0;
+      animation:sepPulse 3s ease-in-out infinite;
+    }
+    @keyframes sepPulse{
+      0%,100%{background:rgba(255,255,255,.1);box-shadow:none}
+      50%{background:rgba(var(--rgb),.7);box-shadow:0 0 12px rgba(var(--rgb),.8)}
+    }
 
-    /* promo text */
     .promo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
     .promo-h{
       font-family:'Barlow Condensed',sans-serif;
       font-size:25px;font-weight:800;font-style:italic;
-      letter-spacing:.06em;text-transform:uppercase;
-      color:#fff;white-space:nowrap;
+      letter-spacing:.06em;text-transform:uppercase;color:#fff;white-space:nowrap;
     }
     .promo-s{
       font-size:12px;font-weight:600;letter-spacing:.1em;
-      text-transform:uppercase;color:rgba(200,215,240,.52);
+      text-transform:uppercase;color:rgba(200,215,240,.5);
     }
 
-    /* single shared glow keyframe - everything pulses together at 2s */
-    @keyframes glow{
-      0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.35),inset 0 0 8px rgba(var(--rgb),.06)}
-      50%    {box-shadow:0 0 34px rgba(var(--rgb),.88),0 0 65px rgba(var(--rgb),.35),inset 0 0 18px rgba(var(--rgb),.16)}
-    }
-    @keyframes nameGlow{
-      0%,100%{text-shadow:var(--glo)}
-      50%    {text-shadow:var(--ghi)}
-    }
-    @keyframes codeTextGlow{
-      0%,100%{text-shadow:0 0 14px rgba(var(--rgb),.9),0 0 35px rgba(var(--rgb),.5)}
-      50%    {text-shadow:0 0 28px var(--al),0 0 55px rgba(var(--rgb),.95),0 0 95px rgba(var(--rgb),.45)}
-    }
-
-    /* code box */
+    /* code box - electrical crackle effect */
     .code-box{
-      flex-shrink:0;border-radius:10px;
-      padding:7px 22px;
+      flex-shrink:0;border-radius:10px;padding:7px 22px;
       display:flex;flex-direction:column;align-items:center;gap:1px;
-      animation:glow 2s ease-in-out infinite;
+      animation:crackle 2s ease-in-out infinite;
+    }
+    @keyframes crackle{
+      0%   {box-shadow:0 0 14px rgba(var(--rgb),.5),inset 0 0 8px rgba(var(--rgb),.1)}
+      22%  {box-shadow:0 0 38px rgba(var(--rgb),.95),0 0 70px rgba(var(--rgb),.45),0 0 110px rgba(var(--rgb),.22),inset 0 0 24px rgba(var(--rgb),.22)}
+      23%  {box-shadow:0 0 6px rgba(var(--rgb),.2),inset 0 0 3px rgba(var(--rgb),.04)}
+      46%  {box-shadow:0 0 45px rgba(var(--rgb),1),0 0 85px rgba(var(--rgb),.55),0 0 130px rgba(var(--rgb),.28),inset 0 0 30px rgba(var(--rgb),.28)}
+      47%  {box-shadow:0 0 9px rgba(var(--rgb),.28),inset 0 0 5px rgba(var(--rgb),.05)}
+      70%  {box-shadow:0 0 32px rgba(var(--rgb),.9),0 0 62px rgba(var(--rgb),.42),inset 0 0 20px rgba(var(--rgb),.2)}
+      71%  {box-shadow:0 0 5px rgba(var(--rgb),.18),inset 0 0 3px rgba(var(--rgb),.03)}
+      100% {box-shadow:0 0 14px rgba(var(--rgb),.5),inset 0 0 8px rgba(var(--rgb),.1)}
     }
     .code-lbl{
-      font-size:10px;font-weight:700;
-      letter-spacing:.22em;text-transform:uppercase;
+      font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
       color:rgba(200,215,240,.42);
     }
     .code-val{
       font-family:'Barlow Condensed',sans-serif;
       font-size:42px;font-weight:800;letter-spacing:.1em;line-height:1;
-      animation:codeTextGlow 2s ease-in-out infinite;
+      animation:niksiFlash 2s ease-in-out infinite;
+    }
+    @keyframes niksiFlash{
+      0%   {text-shadow:0 0 14px rgba(var(--rgb),.9),0 0 28px rgba(var(--rgb),.5)}
+      22%  {text-shadow:0 0 32px var(--al),0 0 60px rgba(var(--rgb),.95),0 0 95px rgba(var(--rgb),.5)}
+      23%  {text-shadow:0 0 4px rgba(var(--rgb),.25)}
+      46%  {text-shadow:0 0 42px var(--al),0 0 80px rgba(var(--rgb),1),0 0 130px rgba(var(--rgb),.55)}
+      47%  {text-shadow:0 0 6px rgba(var(--rgb),.3)}
+      70%  {text-shadow:0 0 26px var(--al),0 0 52px rgba(var(--rgb),.9)}
+      71%  {text-shadow:0 0 3px rgba(var(--rgb),.18)}
+      100% {text-shadow:0 0 14px rgba(var(--rgb),.9),0 0 28px rgba(var(--rgb),.5)}
     }
   </style>
 </head>
 <body>
 <div class="banner" id="B">
   <div class="grid"></div>
-  <div class="orb"     id="orb"></div>
-  <div class="shimmer"></div>
+  <canvas id="bg" width="1200" height="100"></canvas>
+  <div class="beams"></div>
   <div class="content" id="C"></div>
 </div>
 
@@ -147,74 +166,190 @@
 const PLATS = {
   cs2skin:{
     c1:'#7c3aed',c2:'#ec4899',c3:'#06b6d4',
-    accent:'#7c3aed',al:'#a78bfa',rgb:'124,58,237',
-    logoBg:'rgba(124,58,237,.2)',logoBdr:'rgba(124,58,237,.52)',
-    logoSrc:'/assets/cs2skin.png',logoW:'160px',
-    logoFilter:'brightness(0) invert(1) drop-shadow(0 0 14px rgba(124,58,237,1)) drop-shadow(0 0 4px #ddd8ff)',
+    accent:'#7c3aed',al:'#c4b5fd',rgb:'124,58,237',
+    logoBg:'rgba(124,58,237,.2)',logoBdr:'rgba(124,58,237,.55)',logoW:'160px',
+    logoSrc:'/assets/cs2skin.png',
+    logoFilter:'brightness(0) invert(1) drop-shadow(0 0 14px rgba(124,58,237,1))',
     noLabel:true,
     promoH:'100% Deposit Bonus',
     promoS:'5% unlocked for every 1x of deposit wagered',
-    glo:'',ghi:'',
   },
   gamba:{
     c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
-    accent:'#22c55e',al:'#4ade80',rgb:'34,197,94',
-    logoBg:'rgba(34,197,94,.16)',logoBdr:'rgba(34,197,94,.48)',
+    accent:'#22c55e',al:'#86efac',rgb:'34,197,94',
+    logoBg:'rgba(34,197,94,.16)',logoBdr:'rgba(34,197,94,.5)',logoW:'82px',
     logoSrc:'/assets/gamba2.png',
-    logoFilter:'drop-shadow(0 0 14px rgba(34,197,94,1)) drop-shadow(0 0 4px rgba(74,222,128,.6))',
-    name:'GAMBA',
+    logoFilter:'drop-shadow(0 0 14px rgba(34,197,94,1)) drop-shadow(0 0 5px rgba(134,239,172,.5))',
+    noLabel:false,name:'GAMBA',
     promoH:'$750 Weekly Leaderboard',
     promoS:'10-20% Lossback',
-    glo:'0 0 22px rgba(34,197,94,.55),0 0 55px rgba(34,197,94,.28)',
-    ghi:'0 0 42px rgba(74,222,128,1),0 0 85px rgba(34,197,94,.8),0 0 150px rgba(34,197,94,.35)',
   },
   chicken:{
     c1:'#f59e0b',c2:'#f97316',c3:'#fbbf24',
-    accent:'#f59e0b',al:'#fbbf24',rgb:'245,158,11',
-    logoBg:'rgba(245,158,11,.14)',logoBdr:'rgba(245,158,11,.46)',
+    accent:'#f59e0b',al:'#fde68a',rgb:'245,158,11',
+    logoBg:'rgba(245,158,11,.14)',logoBdr:'rgba(245,158,11,.48)',logoW:'82px',
     logoSrc:'/assets/chicken.png',
-    logoFilter:'drop-shadow(0 0 14px rgba(245,158,11,1)) drop-shadow(0 0 4px rgba(251,191,36,.7))',
-    name:'CHICKEN.GG',
+    logoFilter:'drop-shadow(0 0 14px rgba(245,158,11,1)) drop-shadow(0 0 5px rgba(253,230,138,.5))',
+    noLabel:false,name:'CHICKEN.GG',
     promoH:'650 Coin Weekly Leaderboard',
     promoS:'0.5% Wagerback - Up to 15% Lossback',
-    glo:'0 0 22px rgba(245,158,11,.55),0 0 55px rgba(245,158,11,.28)',
-    ghi:'0 0 42px rgba(251,191,36,1),0 0 85px rgba(245,158,11,.8),0 0 150px rgba(245,158,11,.35)',
   },
 };
 
 const key = new URLSearchParams(location.search).get('p') || 'cs2skin';
-const P   = PLATS[key] || PLATS.cs2skin;
-const B   = document.getElementById('B');
-const orb = document.getElementById('orb');
+const P = PLATS[key] || PLATS.cs2skin;
+const B = document.getElementById('B');
 
 /* set CSS vars */
-const vars = {
-  '--c1':P.c1,'--c2':P.c2,'--c3':P.c3,
-  '--accent':P.accent,'--al':P.al,
-  '--rgb':P.rgb,
-  '--glo':P.glo,'--ghi':P.ghi,
-};
-for(const [k,v] of Object.entries(vars)) B.style.setProperty(k,v);
+[['--c1',P.c1],['--c2',P.c2],['--c3',P.c3],
+ ['--accent',P.accent],['--al',P.al],['--rgb',P.rgb]
+].forEach(([k,v])=>B.style.setProperty(k,v));
 
-orb.style.background = P.accent;
-
-/* build content */
+/* build HTML */
 const logoW = P.logoW || '82px';
 document.getElementById('C').innerHTML = `
   <div class="logo-box" style="width:${logoW};background:${P.logoBg};border:1px solid ${P.logoBdr}">
-    <img src="${P.logoSrc}" style="max-width:calc(${logoW} - 16px);filter:${P.logoFilter}"/>
+    <img src="${P.logoSrc}" style="max-width:calc(${logoW} - 14px);max-height:58px;filter:${P.logoFilter}"/>
   </div>
-  ${P.noLabel ? '' : `<div class="plat-name">${P.name}</div>`}
+  ${P.noLabel?'':'<div class="plat-name">'+P.name+'</div>'}
   <div class="sep"></div>
   <div class="promo">
     <div class="promo-h">${P.promoH}</div>
     <div class="promo-s">${P.promoS}</div>
   </div>
-  <div class="code-box" style="border:2px solid ${P.accent};background:rgba(${P.rgb},.08)">
+  <div class="code-box" style="border:2px solid ${P.accent};background:rgba(${P.rgb},.09)">
     <div class="code-lbl">Use code</div>
     <div class="code-val" style="color:${P.al}">NIKSI</div>
   </div>
 `;
+
+/* ── canvas animation ── */
+const cnv = document.getElementById('bg');
+const ctx = cnv.getContext('2d');
+const [R,G,Bl] = P.rgb.split(',').map(Number);
+
+/* --- particles drifting left → right --- */
+const PCOUNT = 75;
+const parts = Array.from({length:PCOUNT},(_,i)=>({
+  x: Math.random()*1200,
+  y: Math.random()*100,
+  vx: 0.4 + Math.random()*1.8,
+  vy: (Math.random()-.5)*0.3,
+  sz: 0.6 + Math.random()*1.8,
+  phase: Math.random()*Math.PI*2,
+  phaseSpd: 0.015 + Math.random()*0.02,
+  alpha: Math.random()*0.7,
+}));
+
+/* --- horizontal energy streaks --- */
+const SCOUNT = 6;
+const streaks = Array.from({length:SCOUNT},()=>makeStreak(true));
+function makeStreak(init){
+  return{
+    x: init ? Math.random()*1400-200 : -400,
+    y: 5 + Math.random()*90,
+    spd: 9 + Math.random()*20,
+    len: 100 + Math.random()*280,
+    h: 0.6 + Math.random()*2,
+    a: 0.35 + Math.random()*0.55,
+  };
+}
+
+/* --- border travelling hotspot --- */
+let bT = 0;
+const PERIM = 2*(1196+96);
+function borderPos(t){
+  const d = ((t%1)+1)%1 * PERIM;
+  if(d < 1196)      return [14+d, 2];
+  if(d < 1196+96)   return [1198, 14+(d-1196)];
+  if(d < 2392)      return [1198-(d-1292), 98];
+  return [2, 98-(d-2392)];
+}
+
+/* --- periodic corner flares --- */
+let cornerT = 0;
+const corners = [[0,0],[1200,0],[1200,100],[0,100]];
+let activeCorner = 0;
+let cornerAlpha = 0;
+let cornerDir = 1;
+
+/* --- background radial bloom --- */
+
+function frame(){
+  ctx.clearRect(0,0,1200,100);
+
+  /* faint central bloom */
+  const bloom = ctx.createRadialGradient(600,50,0,600,50,650);
+  bloom.addColorStop(0,`rgba(${R},${G},${Bl},0.045)`);
+  bloom.addColorStop(1,`rgba(${R},${G},${Bl},0)`);
+  ctx.fillStyle=bloom; ctx.fillRect(0,0,1200,100);
+
+  /* particles */
+  for(const p of parts){
+    p.x += p.vx; p.y += p.vy; p.phase += p.phaseSpd;
+    if(p.x>1210){p.x=-10;p.y=Math.random()*100;}
+    const a = p.alpha * (0.5+0.5*Math.sin(p.phase));
+    ctx.beginPath();ctx.arc(p.x,p.y,p.sz,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${R},${G},${Bl},${a})`; ctx.fill();
+    if(p.sz>1){
+      ctx.beginPath();ctx.arc(p.x,p.y,p.sz*3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${R},${G},${Bl},${a*0.15})`; ctx.fill();
+    }
+  }
+
+  /* streaks */
+  for(let i=0;i<streaks.length;i++){
+    const s=streaks[i];
+    s.x+=s.spd;
+    if(s.x>1350) streaks[i]=makeStreak(false);
+    const g=ctx.createLinearGradient(s.x,0,s.x+s.len,0);
+    g.addColorStop(0,`rgba(${R},${G},${Bl},0)`);
+    g.addColorStop(.35,`rgba(${R},${G},${Bl},${s.a})`);
+    g.addColorStop(.65,`rgba(${R},${G},${Bl},${s.a})`);
+    g.addColorStop(1,`rgba(${R},${G},${Bl},0)`);
+    ctx.fillStyle=g;
+    ctx.fillRect(s.x,s.y-s.h/2,s.len,s.h);
+    /* white core */
+    const wg=ctx.createLinearGradient(s.x,0,s.x+s.len,0);
+    wg.addColorStop(0,'rgba(255,255,255,0)');
+    wg.addColorStop(.35,`rgba(255,255,255,${s.a*0.45})`);
+    wg.addColorStop(.65,`rgba(255,255,255,${s.a*0.45})`);
+    wg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=wg;
+    ctx.fillRect(s.x,s.y-0.6,s.len,1.2);
+  }
+
+  /* border travelling hotspot */
+  bT += 1/(3.5*60);
+  const [bx,by] = borderPos(bT);
+  const spot=ctx.createRadialGradient(bx,by,0,bx,by,28);
+  spot.addColorStop(0,'rgba(255,255,255,0.95)');
+  spot.addColorStop(.25,`rgba(${R},${G},${Bl},0.85)`);
+  spot.addColorStop(.7,`rgba(${R},${G},${Bl},0.25)`);
+  spot.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=spot; ctx.fillRect(0,0,1200,100);
+
+  /* corner flares */
+  cornerT++;
+  if(cornerDir===1){
+    cornerAlpha = Math.min(cornerAlpha+0.06, 1);
+    if(cornerAlpha>=1) cornerDir=-1;
+  } else {
+    cornerAlpha = Math.max(cornerAlpha-0.035, 0);
+    if(cornerAlpha<=0){
+      cornerDir=1;
+      activeCorner=(activeCorner+1)%4;
+    }
+  }
+  const [cx,cy]=corners[activeCorner];
+  const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,80);
+  cg.addColorStop(0,`rgba(${R},${G},${Bl},${cornerAlpha*0.55})`);
+  cg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=cg; ctx.fillRect(0,0,1200,100);
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
 </script>
 </body>
 </html>
