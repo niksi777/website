@@ -1993,8 +1993,9 @@ function Cs2skinLeaderboard() {
     fetch('/cs2skin-meta').then(r => r.json()).then(setMeta).catch(() => {});
   }, []);
 
-  const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')} coins` : '-';
-  const fmtWager = p => `${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} coins`;
+  const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')}` : '-';
+  const fmtWager = p => `${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  const cs2Coin = <img src="/assets/cs2skincoin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>;
 
   if (players === null || meta === null) return <div className="loading">Loading...</div>;
 
@@ -2034,7 +2035,7 @@ function Cs2skinLeaderboard() {
             const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
             return (
               <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor="var(--cs2skin)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>
+                <PodiumCard player={p} rank={rank} accentColor="var(--cs2skin)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/cs2skincoin.png" wagerIcon="/assets/cs2skincoin.png"/>
               </div>
             );
           })}
@@ -2062,8 +2063,8 @@ function Cs2skinLeaderboard() {
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
-                <td><span className="tr-prize"><Amt s={fmtPrize(p)}/></span></td>
+                <td><span className="tr-wager">{cs2Coin}{fmtWager(p)}</span></td>
+                <td><span className="tr-prize">{cs2Coin}{fmtPrize(p)}</span></td>
               </tr>
             ))}
           </tbody>
