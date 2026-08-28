@@ -1993,7 +1993,7 @@ function Cs2skinLeaderboard() {
     fetch('/cs2skin-meta').then(r => r.json()).then(setMeta).catch(() => {});
   }, []);
 
-  const fmtPrize = p => p.prize > 0 ? `$${Number(p.prize).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}` : '-';
+  const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')} coins` : '-';
   const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
 
   if (players === null || meta === null) return <div className="loading">Loading...</div>;
@@ -2003,7 +2003,7 @@ function Cs2skinLeaderboard() {
   if (!meta.active && !isEnded) {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
-        <div className="lb-prize-amt"><span style={{color:'var(--cs2skin)'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||750).toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><span style={{color:'var(--cs2skin)',fontSize:'0.5em',marginLeft:8,verticalAlign:'middle'}}>COINS</span></div>
         <div className="lb-prize-lbl">7-Day Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
       </div>
@@ -2023,7 +2023,7 @@ function Cs2skinLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'var(--cs2skin)'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||750).toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><span style={{color:'var(--cs2skin)',fontSize:'0.5em',marginLeft:8,verticalAlign:'middle'}}>COINS</span></div>
         <div className="lb-prize-lbl">7-Day Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
@@ -2072,7 +2072,7 @@ function Cs2skinLeaderboard() {
     </div>
   );
 }
-const CS2SKIN_PRIZES_FALLBACK = [300,150,100,75,50,35,25,15];
+const CS2SKIN_PRIZES_FALLBACK = [400,200,130,100,70,50,30,20];
 
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
@@ -2642,7 +2642,7 @@ function LeaderboardsPage() {
               <div className="ptab-top">
                 <img className="ptab-img" src="/assets/cs2skin.png" alt="CS2SKIN" onError={e=>e.target.style.display='none'} style={{filter:'brightness(0) invert(1)'}}/>
               </div>
-              {cs2skinAmt != null && <div className="ptab-amt"><span style={{color:'var(--cs2skin)'}}>$</span>{cs2skinAmt.toLocaleString('en-US')}</div>}
+              {cs2skinAmt != null && <div className="ptab-amt">{cs2skinAmt.toLocaleString('en-US')}<span style={{color:'var(--cs2skin)',marginLeft:3,fontSize:'0.85em'}}>coins</span></div>}
             </button>
           )}
         </div>

@@ -630,8 +630,8 @@ app.post("/admin/krush/start", (req, res) => {
 });
 
 // ─── CS2SKIN leaderboard ──────────────────────────────────────────────────
-const CS2SKIN_PRIZES = [300, 150, 100, 75, 50, 35, 25, 15];
-const CS2SKIN_POOL_TOTAL = CS2SKIN_PRIZES.reduce((s, p) => s + p, 0); // 750
+const CS2SKIN_PRIZES = [400, 200, 130, 100, 70, 50, 30, 20];
+const CS2SKIN_POOL_TOTAL = CS2SKIN_PRIZES.reduce((s, p) => s + p, 0); // 1000
 const CS2SKIN_PERIOD_PATH = require("path").join(__dirname, "../../cs2skin-period.json");
 const CS2SKIN_CACHE_PATH = require("path").join(__dirname, "../../cs2skin-cache.json");
 
