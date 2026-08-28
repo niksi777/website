@@ -204,30 +204,31 @@ const parts = Array.from({length:PCOUNT},()=>({
   vx: 0.4 + Math.random()*1.8,
   vy: (Math.random()-.5)*0.3,
   sz: 0.6 + Math.random()*1.8,
-  phase: Math.random()*Math.PI*2,
-  phaseSpd: 0.015 + Math.random()*0.02,
-  alpha: Math.random()*0.7,
+  alpha: 0.3 + Math.random()*0.5,
 }));
+
+let globalPhase = 0;
 
 function frame(){
   ctx.clearRect(0,0,1200,100);
+  globalPhase += 0.012;
+  const pulse = 0.7 + 0.3*Math.sin(globalPhase);
 
   /* faint central bloom */
   const bloom = ctx.createRadialGradient(600,50,0,600,50,650);
-  bloom.addColorStop(0,`rgba(${R},${G},${Bl},0.045)`);
+  bloom.addColorStop(0,`rgba(${R},${G},${Bl},${0.045*pulse})`);
   bloom.addColorStop(1,`rgba(${R},${G},${Bl},0)`);
   ctx.fillStyle=bloom; ctx.fillRect(0,0,1200,100);
 
-  /* particles */
+  /* particles - constant opacity, only movement */
   for(const p of parts){
-    p.x += p.vx; p.y += p.vy; p.phase += p.phaseSpd;
+    p.x += p.vx; p.y += p.vy;
     if(p.x>1210){p.x=-10;p.y=Math.random()*100;}
-    const a = p.alpha * (0.5+0.5*Math.sin(p.phase));
     ctx.beginPath();ctx.arc(p.x,p.y,p.sz,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${R},${G},${Bl},${a})`; ctx.fill();
+    ctx.fillStyle=`rgba(${R},${G},${Bl},${p.alpha})`; ctx.fill();
     if(p.sz>1){
       ctx.beginPath();ctx.arc(p.x,p.y,p.sz*3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${R},${G},${Bl},${a*0.15})`; ctx.fill();
+      ctx.fillStyle=`rgba(${R},${G},${Bl},${p.alpha*0.12})`; ctx.fill();
     }
   }
 
