@@ -686,7 +686,7 @@ async function updateCs2skinLeaderboard() {
   }
 }
 
-setInterval(updateCs2skinLeaderboard, 5 * 60 * 1000);
+setInterval(updateCs2skinLeaderboard, 2 * 60 * 1000);
 updateCs2skinLeaderboard();
 
 app.get('/cs2skin-leaderboard', (req, res) => {
