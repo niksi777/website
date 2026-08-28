@@ -88,7 +88,7 @@
       50%{background:rgba(var(--rgb),.7);box-shadow:0 0 12px rgba(var(--rgb),.8)}
     }
 
-    .promo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+    .promo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
     .promo-h{
       font-family:'Barlow Condensed',sans-serif;
       font-size:25px;font-weight:800;font-style:italic;
@@ -103,7 +103,7 @@
     .code-box{
       flex-shrink:0;border-radius:10px;padding:7px 22px;
       display:flex;flex-direction:column;align-items:center;gap:1px;
-      animation:codeGlow 2.5s ease-in-out infinite;
+      animation:codeGlow 3s ease-in-out infinite;
     }
     @keyframes codeGlow{
       0%,100%{box-shadow:0 0 14px rgba(var(--rgb),.45),inset 0 0 8px rgba(var(--rgb),.1)}
@@ -116,7 +116,7 @@
     .code-val{
       font-family:'Barlow Condensed',sans-serif;
       font-size:42px;font-weight:800;letter-spacing:.1em;line-height:1;
-      animation:niksiFlash 2s ease-in-out infinite;
+      animation:niksiFlash 3s ease-in-out infinite;
     }
     @keyframes niksiFlash{
       0%,100%{text-shadow:0 0 14px rgba(var(--rgb),.9),0 0 30px rgba(var(--rgb),.5)}
@@ -149,7 +149,7 @@ const PLATS = {
     logoW:'72px',logoH:'72px',
     logoSrc:'/assets/gamba2.png',
     logoFilter:'drop-shadow(0 0 14px rgba(34,197,94,1)) drop-shadow(0 0 5px rgba(134,239,172,.5))',
-    noLabel:false,name:'GAMBA',
+    noLabel:true,name:'GAMBA',
     promoH:'$750 Weekly Leaderboard',
     promoS:'10-20% Lossback',
   },
