@@ -88,11 +88,12 @@
       50%{background:rgba(var(--rgb),.7);box-shadow:0 0 12px rgba(var(--rgb),.8)}
     }
 
-    .promo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
+    .promo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center;transition:opacity .5s ease}
     .promo-h{
       font-family:'Barlow Condensed',sans-serif;
       font-size:25px;font-weight:800;font-style:italic;
       letter-spacing:.06em;text-transform:uppercase;color:#fff;white-space:nowrap;
+      display:flex;align-items:center;gap:7px;
     }
     .promo-s{
       font-size:12px;font-weight:600;letter-spacing:.1em;
@@ -134,6 +135,10 @@ const PLATS = {
     noLabel:true,
     promoH:'100% Deposit Bonus',
     promoS:'5% unlocked for every 1x of deposit wagered',
+    scenes:[
+      {h:'100% Deposit Bonus', s:'5% unlocked for every 1x of deposit wagered'},
+      {h:'<img src="/assets/cs2skincoin.png" style="height:22px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(124,58,237,.9))"/>1,000 Coin Weekly Leaderboard', s:'500 coins for 1st place - Use code NIKSI to qualify'},
+    ],
   },
   gamba:{
     c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
@@ -182,6 +187,23 @@ document.getElementById('C').innerHTML = `
     <div class="code-val" style="color:${P.al}">NIKSI</div>
   </div>
 `;
+
+/* scene cycling for platforms with multiple scenes */
+if (P.scenes && P.scenes.length > 1) {
+  const promoEl = document.querySelector('.promo');
+  const promoH = promoEl.querySelector('.promo-h');
+  const promoS = promoEl.querySelector('.promo-s');
+  let sceneIdx = 0;
+  setInterval(() => {
+    promoEl.style.opacity = '0';
+    setTimeout(() => {
+      sceneIdx = (sceneIdx + 1) % P.scenes.length;
+      promoH.innerHTML = P.scenes[sceneIdx].h;
+      promoS.textContent = P.scenes[sceneIdx].s;
+      promoEl.style.opacity = '1';
+    }, 500);
+  }, 6000);
+}
 
 /* canvas animation */
 const cnv = document.getElementById('bg');
