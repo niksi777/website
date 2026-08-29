@@ -95,6 +95,7 @@
       letter-spacing:.06em;text-transform:uppercase;color:#fff;white-space:nowrap;
       display:flex;align-items:center;gap:7px;
     }
+    .promo-div{width:70%;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--rgb),.45),transparent);margin:1px 0;flex-shrink:0}
     .promo-s{
       font-size:12px;font-weight:600;letter-spacing:.1em;
       text-transform:uppercase;color:rgba(200,215,240,.5);
@@ -133,12 +134,9 @@ const PLATS = {
     logoSrc:'/assets/cs2skin.png',
     logoFilter:'brightness(0) invert(1) drop-shadow(0 0 14px rgba(124,58,237,1))',
     noLabel:true,
-    promoH:'100% Deposit Bonus',
-    promoS:'5% unlocked for every 1x of deposit wagered',
-    scenes:[
-      {h:'100% Deposit Bonus', s:'5% unlocked for every 1x of deposit wagered'},
-      {h:'<img src="/assets/cs2skincoin.png" style="height:22px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(124,58,237,.9))"/>1,000 Coin Weekly Leaderboard', s:'500 coins for 1st place - Use code NIKSI to qualify'},
-    ],
+    promoH:'<img src="/assets/cs2skincoin.png" style="height:22px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(124,58,237,.9))"/> $750 Weekly Leaderboard',
+    promoS:'100% Deposit Bonus',
+    promoDiv:true,
   },
   gamba:{
     c1:'#22c55e',c2:'#06b6d4',c3:'#16a34a',
@@ -180,6 +178,7 @@ document.getElementById('C').innerHTML = `
   <div class="sep"></div>
   <div class="promo">
     <div class="promo-h">${P.promoH}</div>
+    ${P.promoDiv?'<div class="promo-div"></div>':''}
     <div class="promo-s">${P.promoS}</div>
   </div>
   <div class="code-box" style="border:2px solid ${P.accent};background:rgba(${P.rgb},.09)">
@@ -187,23 +186,6 @@ document.getElementById('C').innerHTML = `
     <div class="code-val" style="color:${P.al}">NIKSI</div>
   </div>
 `;
-
-/* scene cycling for platforms with multiple scenes */
-if (P.scenes && P.scenes.length > 1) {
-  const promoEl = document.querySelector('.promo');
-  const promoH = promoEl.querySelector('.promo-h');
-  const promoS = promoEl.querySelector('.promo-s');
-  let sceneIdx = 0;
-  setInterval(() => {
-    promoEl.style.opacity = '0';
-    setTimeout(() => {
-      sceneIdx = (sceneIdx + 1) % P.scenes.length;
-      promoH.innerHTML = P.scenes[sceneIdx].h;
-      promoS.textContent = P.scenes[sceneIdx].s;
-      promoEl.style.opacity = '1';
-    }, 500);
-  }, 6000);
-}
 
 /* canvas animation */
 const cnv = document.getElementById('bg');
