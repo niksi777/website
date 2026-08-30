@@ -40,13 +40,13 @@
 
     .sc-h{
       font-family:'Barlow Condensed',sans-serif;
-      font-size:46px;font-weight:800;font-style:italic;
+      font-size:64px;font-weight:800;font-style:italic;
       letter-spacing:.06em;text-transform:uppercase;
       color:#fff;line-height:1;
       text-shadow:0 0 28px rgba(34,197,94,.4);
     }
     .sc-s{
-      font-size:11px;font-weight:700;letter-spacing:.24em;
+      font-size:13px;font-weight:700;letter-spacing:.24em;
       text-transform:uppercase;color:rgba(134,239,172,.5);
     }
     .sc-h.green{
@@ -54,8 +54,8 @@
       text-shadow:0 0 22px rgba(34,197,94,.9),0 0 50px rgba(34,197,94,.45);
     }
     .sc-logo img{
-      height:72px;width:72px;object-fit:contain;
-      filter:drop-shadow(0 0 20px rgba(34,197,94,1)) drop-shadow(0 0 8px rgba(134,239,172,.5));
+      height:100px;width:100px;object-fit:contain;
+      filter:drop-shadow(0 0 24px rgba(34,197,94,1)) drop-shadow(0 0 10px rgba(134,239,172,.6));
     }
   </style>
 </head>
@@ -67,11 +67,11 @@
 
 <script>
 const SCREENS = [
-  { h:'$750 BI-WEEKLY',  s:'LEADERBOARD' },
-  { h:'WEEKLY MATCH',    s:'REWARDS' },
-  { h:'10-20%',          s:'LOSSBACK', green:true },
-  { h:'CUSTOM LOSSBACK', s:'EXCLUSIVE DEAL', green:true },
-  { h:'USE CODE',        s:'NIKSI', green:true },
+  { h:'$750 BI-WEEKLY',        s:'LEADERBOARD' },
+  { h:'WEEKLY MATCH',          s:'REWARDS' },
+  { h:'10-20%',                s:'LOSSBACK', green:true },
+  { h:'CUSTOM LOSSBACK',       s:'', green:true },
+  { h:'USE CODE NIKSI',        s:'', green:true },
   { logo:true },
 ];
 const INTERVAL = 4800;
