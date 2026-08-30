@@ -70,7 +70,7 @@
 <script>
 const SCREENS = [
   { h:'$750 BI-WEEKLY',        s:'LEADERBOARD' },
-  { h:'WEEKLY MATCH',          s:'REWARDS' },
+  { h:'100% MATCH ON',          s:'WEEKLY REWARD' },
   { h:'10-20%',                s:'LOSSBACK', green:true },
   { h:'CUSTOM LOSSBACK',       s:'', green:true },
   { h:'USE CODE NIKSI',        s:'', green:true },
@@ -83,12 +83,14 @@ const cnv = document.getElementById('bg');
 const ctx = cnv.getContext('2d');
 const CX = 250, CY = 55;
 
-const STARS = Array.from({length:130}, () => resetStar({}));
+const STARS = Array.from({length:120}, () => resetStar({}));
 function resetStar(s) {
-  s.angle = Math.random() * Math.PI * 2;
-  s.dist  = Math.random() * 8;
-  s.speed = 0.04 + Math.random() * 0.12; // much slower
-  s.base  = 0.2 + Math.random() * 0.6;
+  s.angle  = Math.random() * Math.PI * 2;
+  s.dist   = Math.random() * 6;
+  s.speed  = 0.04 + Math.random() * 0.11;
+  s.base   = 0.15 + Math.random() * 0.55;
+  s.phase  = Math.random() * Math.PI * 2;
+  s.tint   = Math.random(); // 0=white, 1=subtle green-white
   return s;
 }
 
@@ -98,16 +100,49 @@ function frame() {
   ctx.fillRect(0, 0, 500, 110);
 
   for (const s of STARS) {
-    s.dist += s.speed * (1 + s.dist / 500); // very gentle acceleration
+    const prevDist = s.dist;
+    s.dist  += s.speed * (1 + s.dist / 480);
+    s.phase += 0.018;
+
     const x = CX + Math.cos(s.angle) * s.dist;
     const y = CY + Math.sin(s.angle) * s.dist;
     if (x < -4 || x > 504 || y < -4 || y > 114) { resetStar(s); continue; }
-    const alpha = Math.min(0.85, s.dist / 50);
-    const sz    = Math.min(2, s.base + s.dist / 160);
+
+    const twinkle = 0.78 + 0.22 * Math.sin(s.phase);
+    const alpha   = Math.min(0.92, s.dist / 45) * twinkle;
+    const sz      = Math.min(1.9, s.base + s.dist / 170);
+
+    // color: white -> subtle green-white
+    const rb = Math.floor(195 + s.tint * 60);
+    const g  = 255;
+
+    // streak trail - grows with distance/speed
+    const trailLen = Math.min(12, s.dist / 12);
+    if (s.dist > 12 && trailLen > 0.5) {
+      const px = CX + Math.cos(s.angle) * prevDist;
+      const py = CY + Math.sin(s.angle) * prevDist;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = `rgba(${rb},${g},${rb},${alpha * 0.45})`;
+      ctx.lineWidth = sz * 0.7;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // star dot
     ctx.beginPath();
     ctx.arc(x, y, sz, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(134,239,172,${alpha})`;
+    ctx.fillStyle = `rgba(${rb},${g},${rb},${alpha})`;
     ctx.fill();
+
+    // soft glow on brighter stars
+    if (sz > 1.1) {
+      ctx.beginPath();
+      ctx.arc(x, y, sz * 2.8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(160,255,200,${alpha * 0.07})`;
+      ctx.fill();
+    }
   }
   requestAnimationFrame(frame);
 }
@@ -134,14 +169,20 @@ function buildScreen(sc) {
 function advance() {
   const next = (cur + 1) % SCREENS.length;
   const oldEl = sw.querySelector('.screen');
-  const newEl = buildScreen(SCREENS[next]);
-  newEl.classList.add('slide-in');
-  sw.appendChild(newEl);
+  cur = next;
   if (oldEl) {
     oldEl.classList.add('slide-out');
-    setTimeout(() => oldEl.remove(), 750);
+    setTimeout(() => {
+      oldEl.remove();
+      const newEl = buildScreen(SCREENS[next]);
+      newEl.classList.add('slide-in');
+      sw.appendChild(newEl);
+    }, 750);
+  } else {
+    const newEl = buildScreen(SCREENS[next]);
+    newEl.classList.add('slide-in');
+    sw.appendChild(newEl);
   }
-  cur = next;
 }
 
 sw.appendChild(buildScreen(SCREENS[0]));
