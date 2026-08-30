@@ -31,23 +31,25 @@
     .screen{
       position:absolute;inset:0;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:4px;
+      gap:2px;
     }
     .screen.slide-in {animation:slideIn 1s cubic-bezier(.22,.68,0,1.2) forwards}
     .screen.slide-out{animation:slideOut .75s cubic-bezier(.4,0,1,1) forwards}
     @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
     @keyframes slideOut{from{transform:translateY(0);opacity:1}to{transform:translateY(-100%);opacity:0}}
 
-    .sc-h{
+    .sc-h,.sc-s{
       font-family:'Barlow Condensed',sans-serif;
-      font-size:64px;font-weight:800;font-style:italic;
+      font-size:40px;font-weight:800;font-style:italic;
       letter-spacing:.06em;text-transform:uppercase;
-      color:#fff;line-height:1;white-space:nowrap;
+      line-height:1;white-space:nowrap;
+    }
+    .sc-h{
+      color:#fff;
       text-shadow:0 0 28px rgba(34,197,94,.4);
     }
     .sc-s{
-      font-size:13px;font-weight:700;letter-spacing:.24em;
-      text-transform:uppercase;color:rgba(134,239,172,.5);
+      color:rgba(134,239,172,.65);
     }
     .sc-h.green{
       color:#86efac;
