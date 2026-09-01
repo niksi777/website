@@ -213,61 +213,51 @@
 </div>
 
 <script>
-function makeParticles(canvas, W, H, colors) {
+function makeOrbs(canvas, W, H, orbDefs) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
-  const PARTICLES = Array.from({length: 55}, () => ({
-    x: Math.random() * W,
-    y: Math.random() * H,
-    vx: 0.3 + Math.random() * 1.4,
-    vy: (Math.random() - 0.5) * 0.3,
-    sz: 0.5 + Math.random() * 1.6,
-    alpha: 0.25 + Math.random() * 0.45,
-    col: colors[Math.floor(Math.random() * colors.length)],
-  }));
 
-  let phase = 0;
+  const orbs = orbDefs.map(o => ({...o}));
+
   function frame() {
     ctx.clearRect(0, 0, W, H);
-    phase += 0.01;
 
-    // central bloom
-    const bloom = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.8);
-    bloom.addColorStop(0, `rgba(124,58,237,${0.04 + 0.02 * Math.sin(phase)})`);
-    bloom.addColorStop(0.5, `rgba(236,72,153,${0.02 + 0.01 * Math.sin(phase + 1)})`);
-    bloom.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = bloom;
-    ctx.fillRect(0, 0, W, H);
+    for (const o of orbs) {
+      o.x += o.vx;
+      o.y += o.vy;
+      // wrap around softly
+      if (o.x - o.r > W) o.x = -o.r;
+      if (o.x + o.r < 0) o.x = W + o.r;
+      if (o.y - o.r > H) o.y = -o.r;
+      if (o.y + o.r < 0) o.y = H + o.r;
 
-    for (const p of PARTICLES) {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x > W + 6) { p.x = -6; p.y = Math.random() * H; }
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
-      ctx.fillStyle = p.col.replace('A', p.alpha.toFixed(2));
-      ctx.fill();
-      if (p.sz > 1.1) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.sz * 3, 0, Math.PI * 2);
-        ctx.fillStyle = p.col.replace('A', (p.alpha * 0.1).toFixed(2));
-        ctx.fill();
-      }
+      const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
+      g.addColorStop(0,   o.color.replace('$', '0.13'));
+      g.addColorStop(0.5, o.color.replace('$', '0.06'));
+      g.addColorStop(1,   o.color.replace('$', '0'));
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
     }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 }
 
-const COLORS = [
-  'rgba(124,58,237,A)',
-  'rgba(196,181,253,A)',
-  'rgba(236,72,153,A)',
-  'rgba(6,182,212,A)',
-];
+// sidebar orbs
+makeOrbs(document.getElementById('cvs-side'), 390, 896, [
+  { x:120, y:200, r:240, vx:0.18,  vy:0.12,  color:'rgba(124,58,237,$)' },
+  { x:300, y:600, r:200, vx:-0.14, vy:0.16,  color:'rgba(236,72,153,$)' },
+  { x:60,  y:750, r:180, vx:0.1,   vy:-0.13, color:'rgba(6,182,212,$)'  },
+]);
 
-makeParticles(document.getElementById('cvs-side'), 390, 896, COLORS);
-makeParticles(document.getElementById('cvs-bot'), 1920, 130, COLORS);
+// bottom strip orbs
+makeOrbs(document.getElementById('cvs-bot'), 1920, 130, [
+  { x:400,  y:65, r:220, vx:0.22,  vy:0.05,  color:'rgba(124,58,237,$)' },
+  { x:900,  y:65, r:200, vx:-0.18, vy:-0.04, color:'rgba(236,72,153,$)' },
+  { x:1400, y:65, r:220, vx:0.15,  vy:0.06,  color:'rgba(6,182,212,$)'  },
+  { x:1750, y:65, r:180, vx:-0.12, vy:-0.05, color:'rgba(124,58,237,$)' },
+]);
 </script>
 </body>
 </html>
