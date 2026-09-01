@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&display=swap" rel="stylesheet"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:1920px;height:1080px;overflow:hidden;background:#020c06}
+
+    .bg-glow{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 1100px 750px at 50% 120%, rgba(34,197,94,.22) 0%, transparent 60%),
+        radial-gradient(ellipse 700px 500px at 15% 90%, rgba(34,197,94,.08) 0%, transparent 70%),
+        radial-gradient(ellipse 700px 500px at 85% 90%, rgba(34,197,94,.08) 0%, transparent 70%);
+    }
+    .bg-grid{
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(34,197,94,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,.055) 1px, transparent 1px);
+      background-size:90px 90px;
+    }
+
+    canvas#sparks{position:absolute;inset:0;pointer-events:none;z-index:1}
+
+    /* floating card decorations */
+    .cw{position:absolute;animation:floatY 4s ease-in-out infinite;will-change:transform;z-index:2}
+    .card{
+      width:160px;height:215px;border-radius:22px;
+      border:3px solid rgba(34,197,94,.85);
+      background:linear-gradient(145deg,#0e2416 0%,#040e07 100%);
+      box-shadow:
+        0 0 30px rgba(34,197,94,.6),
+        0 0 70px rgba(34,197,94,.3),
+        0 0 130px rgba(34,197,94,.13),
+        inset 0 0 30px rgba(34,197,94,.09);
+      display:flex;align-items:center;justify-content:center;
+      font-size:108px;line-height:1;
+      color:#22c55e;
+      text-shadow:0 0 18px rgba(34,197,94,1),0 0 40px rgba(34,197,94,.65),0 0 80px rgba(34,197,94,.35);
+    }
+
+    .cw1{top:-65px;left:-55px;animation-duration:4.3s;animation-delay:0s}
+    .cw1 .card{transform:perspective(700px) rotateX(10deg) rotateY(28deg) rotateZ(-16deg)}
+    .cw2{top:-75px;right:-45px;animation-duration:3.8s;animation-delay:-.9s}
+    .cw2 .card{transform:perspective(700px) rotateX(12deg) rotateY(-32deg) rotateZ(14deg)}
+    .cw3{bottom:-60px;left:-50px;animation-duration:4.7s;animation-delay:-1.7s}
+    .cw3 .card{transform:perspective(700px) rotateX(-9deg) rotateY(24deg) rotateZ(22deg)}
+    .cw4{bottom:-50px;right:-55px;animation-duration:4s;animation-delay:-2.4s}
+    .cw4 .card{transform:perspective(700px) rotateX(-11deg) rotateY(-26deg) rotateZ(-12deg)}
+    .cw5{top:290px;left:-70px;animation-duration:4.9s;animation-delay:-.6s}
+    .cw5 .card{transform:perspective(700px) rotateX(6deg) rotateY(33deg) rotateZ(-6deg)}
+    .cw6{top:230px;right:-65px;animation-duration:4.1s;animation-delay:-3.2s}
+    .cw6 .card{transform:perspective(700px) rotateX(9deg) rotateY(-30deg) rotateZ(9deg)}
+
+    @keyframes floatY{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-20px)}
+    }
+
+    /* center */
+    .center{
+      position:absolute;inset:0;z-index:10;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      pointer-events:none;user-select:none;
+    }
+    .text-starting{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:158px;font-weight:800;font-style:italic;
+      letter-spacing:.05em;text-transform:uppercase;
+      color:#c4ff00;
+      text-shadow:
+        0 0 40px rgba(196,255,0,.65),
+        0 0 90px rgba(196,255,0,.3),
+        0 0 180px rgba(196,255,0,.15);
+      line-height:1;margin-bottom:-18px;
+    }
+    .text-soon{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:395px;font-weight:800;font-style:italic;
+      letter-spacing:.02em;text-transform:uppercase;
+      color:#fff;
+      text-shadow:
+        0 0 80px rgba(255,255,255,.22),
+        0 0 160px rgba(34,197,94,.18);
+      line-height:.82;
+    }
+
+    /* social row */
+    .social{
+      position:absolute;top:46px;left:50%;transform:translateX(-50%);
+      z-index:10;display:flex;align-items:center;gap:18px;white-space:nowrap;
+    }
+    .soc-icon{width:26px;height:26px;fill:rgba(255,255,255,.48);flex-shrink:0}
+    .soc-sep{width:1px;height:24px;background:rgba(255,255,255,.18)}
+    .soc-name{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:30px;font-weight:800;font-style:italic;
+      letter-spacing:.16em;text-transform:uppercase;
+      color:rgba(255,255,255,.48);
+    }
+
+    /* logo */
+    .logo-wrap{
+      position:absolute;bottom:54px;left:50%;transform:translateX(-50%);z-index:10;
+    }
+    .logo-wrap img{
+      height:105px;width:auto;
+      filter:drop-shadow(0 0 22px rgba(34,197,94,.65)) drop-shadow(0 0 55px rgba(34,197,94,.3));
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-grid"></div>
+<canvas id="sparks" width="1920" height="1080"></canvas>
+
+<!-- Floating cards -->
+<div class="cw cw1"><div class="card">&#9827;</div></div>
+<div class="cw cw2"><div class="card">&#9829;</div></div>
+<div class="cw cw3"><div class="card">&#9824;</div></div>
+<div class="cw cw4"><div class="card">&#9830;</div></div>
+<div class="cw cw5"><div class="card">&#9824;</div></div>
+<div class="cw cw6"><div class="card">&#9829;</div></div>
+
+<!-- Center text -->
+<div class="center">
+  <div class="text-starting">Starting</div>
+  <div class="text-soon">Soon</div>
+</div>
+
+<!-- Social handles -->
+<div class="social">
+  <svg class="soc-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+  <div class="soc-sep"></div>
+  <svg class="soc-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  <div class="soc-sep"></div>
+  <svg class="soc-icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+  <div class="soc-sep"></div>
+  <span class="soc-name">NIKSI777</span>
+</div>
+
+<!-- NIKSI logo -->
+<div class="logo-wrap">
+  <img src="/assets/niksi.png" alt="NIKSI777"/>
+</div>
+
+<script>
+const cnv = document.getElementById('sparks');
+const ctx = cnv.getContext('2d');
+
+const SPARKS = Array.from({length:70}, () => ({
+  x: Math.random() * 1920,
+  y: Math.random() * 1080,
+  sz: 0.6 + Math.random() * 2,
+  phase: Math.random() * Math.PI * 2,
+  speed: 0.025 + Math.random() * 0.04,
+  vx: (Math.random() - 0.5) * 0.25,
+  vy: -0.15 - Math.random() * 0.35,
+}));
+
+function frame() {
+  ctx.clearRect(0, 0, 1920, 1080);
+  for (const s of SPARKS) {
+    s.phase += s.speed;
+    s.x += s.vx;
+    s.y += s.vy;
+    if (s.y < -6) { s.y = 1086; s.x = Math.random() * 1920; }
+    const a = (0.25 + 0.65 * Math.abs(Math.sin(s.phase))) * 0.55;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.sz, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(34,197,94,${a})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
