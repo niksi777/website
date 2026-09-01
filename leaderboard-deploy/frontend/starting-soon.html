@@ -132,13 +132,12 @@
     }
     .logo-wrap img{
       height:105px;width:auto;display:block;
-      animation:logoSpin 9s linear infinite;
+      animation:logoSpin 4s linear infinite;
       filter:drop-shadow(0 0 26px rgba(220,38,38,.65)) drop-shadow(0 0 60px rgba(220,38,38,.3));
     }
     @keyframes logoSpin{
-      0%  {transform:perspective(500px) rotateY(0deg)   rotateX(10deg)}
-      50% {transform:perspective(500px) rotateY(180deg) rotateX(10deg)}
-      100%{transform:perspective(500px) rotateY(360deg) rotateX(10deg)}
+      from{transform:perspective(600px) rotateX(22deg) rotateZ(0deg)}
+      to  {transform:perspective(600px) rotateX(22deg) rotateZ(360deg)}
     }
   </style>
 </head>
