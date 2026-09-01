@@ -90,41 +90,29 @@
       0%,100%{transform:translateY(0)}
       50%{transform:translateY(-16px)}
     }
+    .text-unit{
+      display:flex;flex-direction:column;align-items:center;
+      animation:unitPulse 3s ease-in-out infinite;
+    }
+    @keyframes unitPulse{
+      0%,100%{transform:scale(1);filter:brightness(1)}
+      50%{transform:scale(1.022);filter:brightness(1.25)}
+    }
     .text-starting{
       font-family:'Barlow Condensed',sans-serif;
       font-size:158px;font-weight:800;font-style:italic;
       letter-spacing:.05em;text-transform:uppercase;
       color:#f87171;
+      text-shadow:0 0 40px rgba(220,38,38,.75),0 0 90px rgba(220,38,38,.35),0 0 180px rgba(220,38,38,.15);
       line-height:1;margin-bottom:-18px;
-      animation:startingPulse 3s ease-in-out infinite;
-    }
-    @keyframes startingPulse{
-      0%,100%{
-        text-shadow:0 0 40px rgba(220,38,38,.75),0 0 90px rgba(220,38,38,.35),0 0 180px rgba(220,38,38,.15);
-        letter-spacing:.05em;
-      }
-      50%{
-        text-shadow:0 0 60px rgba(220,38,38,1),0 0 130px rgba(220,38,38,.6),0 0 260px rgba(220,38,38,.3);
-        letter-spacing:.08em;
-      }
     }
     .text-soon{
       font-family:'Barlow Condensed',sans-serif;
       font-size:395px;font-weight:800;font-style:italic;
       letter-spacing:.02em;text-transform:uppercase;
       color:#fff;
+      text-shadow:0 0 80px rgba(255,255,255,.22),0 0 160px rgba(220,38,38,.2);
       line-height:.82;
-      animation:soonPulse 3s ease-in-out infinite;
-    }
-    @keyframes soonPulse{
-      0%,100%{
-        transform:scale(1);
-        text-shadow:0 0 80px rgba(255,255,255,.22),0 0 160px rgba(220,38,38,.2);
-      }
-      50%{
-        transform:scale(1.022);
-        text-shadow:0 0 120px rgba(255,255,255,.42),0 0 260px rgba(220,38,38,.38),0 0 380px rgba(220,38,38,.18);
-      }
     }
 
     /* social row */
@@ -201,8 +189,10 @@
 
 <!-- Center text -->
 <div class="center">
-  <div class="text-starting">Starting</div>
-  <div class="text-soon">Soon</div>
+  <div class="text-unit">
+    <div class="text-starting">Starting</div>
+    <div class="text-soon">Soon</div>
+  </div>
 </div>
 
 <!-- Social handles -->
