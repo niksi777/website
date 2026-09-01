@@ -13,7 +13,7 @@
     /* ── TOP BAR ──────────────────────────────── */
     .topbar{
       position:fixed;top:0;left:0;right:0;height:54px;
-      background:rgba(7,5,14,0.97);
+      background:#07050e;
       z-index:30;display:flex;align-items:center;
     }
     .topbar::after{
@@ -52,7 +52,7 @@
     /* ── LEFT EDGE ─────────────────────────────── */
     .edge-left{
       position:fixed;top:54px;left:0;width:6px;height:896px;
-      background:rgba(7,5,14,0.97);
+      background:#07050e;
       border-right:1px solid rgba(124,58,237,0.22);
       z-index:10;
     }
@@ -61,7 +61,7 @@
     .sidebar{
       position:fixed;top:54px;right:0;
       width:390px;height:896px;
-      background:rgba(7,5,14,0.97);
+      background:#07050e;
       z-index:20;display:flex;flex-direction:column;overflow:hidden;
     }
     .sidebar::before{
@@ -75,15 +75,6 @@
       background:radial-gradient(ellipse 300px 400px at 100% 50%, rgba(124,58,237,0.05) 0%, transparent 70%);
     }
 
-    .scan{
-      position:absolute;left:0;right:0;height:1px;
-      background:linear-gradient(to right,transparent,rgba(124,58,237,0.3),rgba(236,72,153,0.2),transparent);
-      animation:scan 10s linear infinite;pointer-events:none;z-index:5;
-    }
-    @keyframes scan{
-      0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:1}100%{top:900px;opacity:0}
-    }
-
     .brk{position:absolute;width:16px;height:16px}
     .brk.tl{top:12px;left:12px;border-top:2px solid rgba(124,58,237,0.6);border-left:2px solid rgba(124,58,237,0.6)}
     .brk.tr{top:12px;right:12px;border-top:2px solid rgba(124,58,237,0.6);border-right:2px solid rgba(124,58,237,0.6)}
@@ -91,20 +82,20 @@
     .brk.br{bottom:12px;right:12px;border-bottom:2px solid rgba(6,182,212,0.5);border-right:2px solid rgba(6,182,212,0.5)}
 
     .panel-hdr{
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      padding:10px 16px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      padding:5px 12px;flex-shrink:0;
       border-bottom:1px solid rgba(124,58,237,0.18);
       background:linear-gradient(to right,transparent,rgba(124,58,237,0.07),transparent);
     }
-    .panel-dot{width:5px;height:5px;border-radius:50%;background:#7c3aed;box-shadow:0 0 6px rgba(124,58,237,0.9);flex-shrink:0}
-    .panel-lbl{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,181,253,0.55)}
+    .panel-dot{width:4px;height:4px;border-radius:50%;background:#7c3aed;box-shadow:0 0 5px rgba(124,58,237,0.9);flex-shrink:0}
+    .panel-lbl{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,181,253,0.5)}
 
-    .chat-body{flex:1}
+    .chat-body{flex:1;background:#07050e}
 
     /* ── BOTTOM STRIP ──────────────────────────── */
     .bottom{
       position:fixed;bottom:0;left:0;right:0;height:130px;
-      background:rgba(7,5,14,0.97);
+      background:#07050e;
       z-index:20;display:flex;align-items:center;
     }
     .bottom::before{
@@ -175,7 +166,6 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="scan"></div>
   <div class="brk tl"></div>
   <div class="brk tr"></div>
   <div class="brk bl"></div>
