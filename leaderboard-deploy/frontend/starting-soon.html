@@ -29,30 +29,48 @@
     .cw{position:absolute;animation:floatY 4s ease-in-out infinite;will-change:transform;z-index:2}
     .card{
       width:160px;height:215px;border-radius:22px;
-      border:3px solid rgba(220,38,38,.8);
-      background:linear-gradient(145deg,#1e1018 0%,#0c0a10 100%);
+      border:2.5px solid rgba(255,255,255,.55);
+      background:linear-gradient(145deg,#1e2535 0%,#111825 55%,#1a1825 100%);
       box-shadow:
-        0 0 30px rgba(220,38,38,.55),
-        0 0 70px rgba(220,38,38,.28),
-        0 0 130px rgba(220,38,38,.12),
-        inset 0 0 30px rgba(220,38,38,.08);
-      display:flex;align-items:center;justify-content:center;
-      font-size:108px;line-height:1;
+        0 0 25px rgba(220,38,38,.45),
+        0 0 65px rgba(220,38,38,.22),
+        0 0 120px rgba(220,38,38,.1),
+        inset 0 0 30px rgba(255,255,255,.04);
+      position:relative;overflow:hidden;
+    }
+    /* subtle inner ring like the logo */
+    .card::after{
+      content:'';position:absolute;inset:5px;border-radius:17px;
+      border:1px solid rgba(255,255,255,.08);pointer-events:none;
+    }
+    .corner{
+      position:absolute;
+      display:flex;flex-direction:column;align-items:center;gap:0;
+      font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;
+      color:#f87171;text-shadow:0 0 10px rgba(220,38,38,.9);line-height:1;
+    }
+    .corner .rnk{font-size:30px;letter-spacing:-.01em}
+    .corner .mini{font-size:20px;line-height:.9}
+    .corner.tl{top:10px;left:12px}
+    .corner.br{bottom:10px;right:12px;transform:rotate(180deg)}
+    .suit-main{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+      font-size:98px;line-height:1;
       color:#f87171;
-      text-shadow:0 0 18px rgba(220,38,38,1),0 0 40px rgba(220,38,38,.7),0 0 80px rgba(220,38,38,.4);
+      text-shadow:0 0 18px rgba(220,38,38,1),0 0 40px rgba(220,38,38,.65),0 0 80px rgba(220,38,38,.35);
     }
 
-    .cw1{top:-65px;left:-55px;animation-duration:4.3s;animation-delay:0s}
+    .cw1{top:-28px;left:-22px;animation-duration:4.3s;animation-delay:0s}
     .cw1 .card{transform:perspective(700px) rotateX(10deg) rotateY(28deg) rotateZ(-16deg)}
-    .cw2{top:-75px;right:-45px;animation-duration:3.8s;animation-delay:-.9s}
+    .cw2{top:-28px;right:-22px;animation-duration:3.8s;animation-delay:-.9s}
     .cw2 .card{transform:perspective(700px) rotateX(12deg) rotateY(-32deg) rotateZ(14deg)}
-    .cw3{bottom:-60px;left:-50px;animation-duration:4.7s;animation-delay:-1.7s}
+    .cw3{bottom:-28px;left:-22px;animation-duration:4.7s;animation-delay:-1.7s}
     .cw3 .card{transform:perspective(700px) rotateX(-9deg) rotateY(24deg) rotateZ(22deg)}
-    .cw4{bottom:-50px;right:-55px;animation-duration:4s;animation-delay:-2.4s}
+    .cw4{bottom:-22px;right:-22px;animation-duration:4s;animation-delay:-2.4s}
     .cw4 .card{transform:perspective(700px) rotateX(-11deg) rotateY(-26deg) rotateZ(-12deg)}
-    .cw5{top:290px;left:-70px;animation-duration:4.9s;animation-delay:-.6s}
+    .cw5{top:290px;left:5px;animation-duration:4.9s;animation-delay:-.6s}
     .cw5 .card{transform:perspective(700px) rotateX(6deg) rotateY(33deg) rotateZ(-6deg)}
-    .cw6{top:230px;right:-65px;animation-duration:4.1s;animation-delay:-3.2s}
+    .cw6{top:230px;right:5px;animation-duration:4.1s;animation-delay:-3.2s}
     .cw6 .card{transform:perspective(700px) rotateX(9deg) rotateY(-30deg) rotateZ(9deg)}
 
     @keyframes floatY{
@@ -120,12 +138,36 @@
 <canvas id="sparks" width="1920" height="1080"></canvas>
 
 <!-- Floating cards -->
-<div class="cw cw1"><div class="card">&#9827;</div></div>
-<div class="cw cw2"><div class="card">&#9829;</div></div>
-<div class="cw cw3"><div class="card">&#9824;</div></div>
-<div class="cw cw4"><div class="card">&#9830;</div></div>
-<div class="cw cw5"><div class="card">&#9824;</div></div>
-<div class="cw cw6"><div class="card">&#9829;</div></div>
+<div class="cw cw1"><div class="card">
+  <div class="corner tl"><span class="rnk">A</span><span class="mini">&#9827;</span></div>
+  <div class="suit-main">&#9827;</div>
+  <div class="corner br"><span class="rnk">A</span><span class="mini">&#9827;</span></div>
+</div></div>
+<div class="cw cw2"><div class="card">
+  <div class="corner tl"><span class="rnk">K</span><span class="mini">&#9829;</span></div>
+  <div class="suit-main">&#9829;</div>
+  <div class="corner br"><span class="rnk">K</span><span class="mini">&#9829;</span></div>
+</div></div>
+<div class="cw cw3"><div class="card">
+  <div class="corner tl"><span class="rnk">7</span><span class="mini">&#9824;</span></div>
+  <div class="suit-main">&#9824;</div>
+  <div class="corner br"><span class="rnk">7</span><span class="mini">&#9824;</span></div>
+</div></div>
+<div class="cw cw4"><div class="card">
+  <div class="corner tl"><span class="rnk">Q</span><span class="mini">&#9830;</span></div>
+  <div class="suit-main">&#9830;</div>
+  <div class="corner br"><span class="rnk">Q</span><span class="mini">&#9830;</span></div>
+</div></div>
+<div class="cw cw5"><div class="card">
+  <div class="corner tl"><span class="rnk">J</span><span class="mini">&#9824;</span></div>
+  <div class="suit-main">&#9824;</div>
+  <div class="corner br"><span class="rnk">J</span><span class="mini">&#9824;</span></div>
+</div></div>
+<div class="cw cw6"><div class="card">
+  <div class="corner tl"><span class="rnk">10</span><span class="mini">&#9829;</span></div>
+  <div class="suit-main">&#9829;</div>
+  <div class="corner br"><span class="rnk">10</span><span class="mini">&#9829;</span></div>
+</div></div>
 
 <!-- Center text -->
 <div class="center">
