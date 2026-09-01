@@ -5,21 +5,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:1920px;height:1080px;overflow:hidden;background:#0f0204}
+    html,body{width:1920px;height:1080px;overflow:hidden;background:#0c0e14}
 
     .bg-glow{
       position:absolute;inset:0;
       background:
-        radial-gradient(ellipse 1200px 800px at 50% 115%, rgba(210,30,45,.22) 0%, transparent 60%),
-        radial-gradient(ellipse 700px 500px at 15% 90%, rgba(180,20,35,.1) 0%, transparent 70%),
-        radial-gradient(ellipse 700px 500px at 85% 90%, rgba(180,20,35,.1) 0%, transparent 70%),
-        radial-gradient(ellipse 1400px 600px at 50% 45%, rgba(18,2,6,.7) 0%, transparent 100%);
+        radial-gradient(ellipse 1100px 750px at 50% 120%, rgba(180,20,20,.28) 0%, transparent 60%),
+        radial-gradient(ellipse 700px 500px at 15% 90%, rgba(160,20,20,.1) 0%, transparent 70%),
+        radial-gradient(ellipse 700px 500px at 85% 90%, rgba(160,20,20,.1) 0%, transparent 70%),
+        radial-gradient(ellipse 1400px 600px at 50% 50%, rgba(30,35,55,.6) 0%, transparent 100%);
     }
     .bg-grid{
       position:absolute;inset:0;
       background-image:
-        linear-gradient(rgba(210,30,45,.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(210,30,45,.055) 1px, transparent 1px);
+        linear-gradient(rgba(220,38,38,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220,38,38,.06) 1px, transparent 1px);
       background-size:90px 90px;
     }
 
@@ -29,24 +29,24 @@
     .cw{position:absolute;animation:floatY 4s ease-in-out infinite;will-change:transform;z-index:2}
     .card{
       width:160px;height:215px;border-radius:22px;
-      border:2px solid rgba(210,30,45,.7);
-      background:linear-gradient(145deg,#1a0308 0%,#0e0204 55%,#160308 100%);
+      border:2.5px solid rgba(255,255,255,.55);
+      background:linear-gradient(145deg,#1e2535 0%,#111825 55%,#1a1825 100%);
       box-shadow:
-        0 0 25px rgba(210,30,45,.45),
-        0 0 65px rgba(210,30,45,.2),
-        0 0 120px rgba(210,30,45,.08),
-        inset 0 0 30px rgba(210,30,45,.06);
+        0 0 25px rgba(220,38,38,.45),
+        0 0 65px rgba(220,38,38,.22),
+        0 0 120px rgba(220,38,38,.1),
+        inset 0 0 30px rgba(255,255,255,.04);
       position:relative;overflow:hidden;
     }
     .card::after{
       content:'';position:absolute;inset:5px;border-radius:17px;
-      border:1px solid rgba(210,30,45,.12);pointer-events:none;
+      border:1px solid rgba(255,255,255,.08);pointer-events:none;
     }
     .corner{
       position:absolute;
       display:flex;flex-direction:column;align-items:center;gap:0;
       font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;
-      color:#f87171;text-shadow:0 0 10px rgba(210,30,45,.9);line-height:1;
+      color:#f87171;text-shadow:0 0 10px rgba(220,38,38,.9);line-height:1;
     }
     .corner .rnk{font-size:30px;letter-spacing:-.01em}
     .corner .mini{font-size:20px;line-height:.9}
@@ -56,7 +56,7 @@
       position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
       font-size:98px;line-height:1;
       color:#f87171;
-      text-shadow:0 0 18px rgba(210,30,45,1),0 0 40px rgba(210,30,45,.65),0 0 80px rgba(210,30,45,.35);
+      text-shadow:0 0 18px rgba(220,38,38,1),0 0 40px rgba(220,38,38,.65),0 0 80px rgba(220,38,38,.35);
     }
 
     .cw1{top:-28px;left:-22px;animation-duration:4.3s;animation-delay:0s}
@@ -102,7 +102,7 @@
       font-size:158px;font-weight:800;font-style:italic;
       letter-spacing:.05em;text-transform:uppercase;
       color:#f87171;
-      text-shadow:0 0 40px rgba(210,30,45,.75),0 0 90px rgba(210,30,45,.35),0 0 180px rgba(210,30,45,.15);
+      text-shadow:0 0 40px rgba(220,38,38,.75),0 0 90px rgba(220,38,38,.35),0 0 180px rgba(220,38,38,.15);
       line-height:1;margin-bottom:-18px;
     }
     .text-soon{
@@ -110,7 +110,7 @@
       font-size:395px;font-weight:800;font-style:italic;
       letter-spacing:.02em;text-transform:uppercase;
       color:#fff;
-      text-shadow:0 0 80px rgba(255,255,255,.22),0 0 160px rgba(210,30,45,.2);
+      text-shadow:0 0 80px rgba(255,255,255,.22),0 0 160px rgba(220,38,38,.2);
       line-height:.82;
     }
 
@@ -212,7 +212,7 @@ function frame() {
     const a = (0.25 + 0.65 * Math.abs(Math.sin(s.phase))) * 0.55;
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.sz, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(210,30,45,${a})`;
+    ctx.fillStyle = `rgba(220,38,38,${a})`;
     ctx.fill();
   }
   requestAnimationFrame(frame);
