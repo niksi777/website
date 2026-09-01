@@ -90,7 +90,13 @@
     .panel-dot{width:4px;height:4px;border-radius:50%;background:#7c3aed;box-shadow:0 0 5px rgba(124,58,237,0.9);flex-shrink:0}
     .panel-lbl{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,181,253,0.5)}
 
-    .chat-body{flex:1;background:#07050e}
+    .chat-body{flex:1;background:transparent}
+
+    canvas.bg-canvas{
+      position:absolute;inset:0;width:100%;height:100%;
+      pointer-events:none;z-index:0;
+    }
+    .panel-hdr,.brk,.chat-body,.bottom-inner{position:relative;z-index:1}
 
     /* ── BOTTOM STRIP ──────────────────────────── */
     .bottom{
@@ -166,6 +172,7 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
+  <canvas class="bg-canvas" id="cvs-side"></canvas>
   <div class="brk tl"></div>
   <div class="brk tr"></div>
   <div class="brk bl"></div>
@@ -180,6 +187,7 @@
 
 <!-- BOTTOM STRIP -->
 <div class="bottom">
+  <canvas class="bg-canvas" id="cvs-bot"></canvas>
   <div class="bottom-inner">
     <div class="use-code">
       <span class="use-lbl">Use code</span>
@@ -204,5 +212,62 @@
   </div>
 </div>
 
+<script>
+function makeParticles(canvas, W, H, colors) {
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const PARTICLES = Array.from({length: 55}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    vx: 0.3 + Math.random() * 1.4,
+    vy: (Math.random() - 0.5) * 0.3,
+    sz: 0.5 + Math.random() * 1.6,
+    alpha: 0.25 + Math.random() * 0.45,
+    col: colors[Math.floor(Math.random() * colors.length)],
+  }));
+
+  let phase = 0;
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    phase += 0.01;
+
+    // central bloom
+    const bloom = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.8);
+    bloom.addColorStop(0, `rgba(124,58,237,${0.04 + 0.02 * Math.sin(phase)})`);
+    bloom.addColorStop(0.5, `rgba(236,72,153,${0.02 + 0.01 * Math.sin(phase + 1)})`);
+    bloom.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = bloom;
+    ctx.fillRect(0, 0, W, H);
+
+    for (const p of PARTICLES) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x > W + 6) { p.x = -6; p.y = Math.random() * H; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+      ctx.fillStyle = p.col.replace('A', p.alpha.toFixed(2));
+      ctx.fill();
+      if (p.sz > 1.1) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.sz * 3, 0, Math.PI * 2);
+        ctx.fillStyle = p.col.replace('A', (p.alpha * 0.1).toFixed(2));
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+const COLORS = [
+  'rgba(124,58,237,A)',
+  'rgba(196,181,253,A)',
+  'rgba(236,72,153,A)',
+  'rgba(6,182,212,A)',
+];
+
+makeParticles(document.getElementById('cvs-side'), 390, 896, COLORS);
+makeParticles(document.getElementById('cvs-bot'), 1920, 130, COLORS);
+</script>
 </body>
 </html>
