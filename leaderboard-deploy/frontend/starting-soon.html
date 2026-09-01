@@ -123,11 +123,22 @@
 
     /* logo */
     .logo-wrap{
-      position:absolute;bottom:54px;left:50%;transform:translateX(-50%);z-index:10;
+      position:absolute;bottom:54px;left:50%;z-index:10;
+      animation:logoFloat 3.2s ease-in-out infinite;
+    }
+    @keyframes logoFloat{
+      0%,100%{transform:translateX(-50%) translateY(0)}
+      50%{transform:translateX(-50%) translateY(-10px)}
     }
     .logo-wrap img{
-      height:105px;width:auto;
-      filter:drop-shadow(0 0 22px rgba(220,38,38,.5)) drop-shadow(0 0 55px rgba(220,38,38,.25));
+      height:105px;width:auto;display:block;
+      animation:logoSpin 9s linear infinite;
+      filter:drop-shadow(0 0 26px rgba(220,38,38,.65)) drop-shadow(0 0 60px rgba(220,38,38,.3));
+    }
+    @keyframes logoSpin{
+      0%  {transform:perspective(500px) rotateY(0deg)   rotateX(10deg)}
+      50% {transform:perspective(500px) rotateY(180deg) rotateX(10deg)}
+      100%{transform:perspective(500px) rotateY(360deg) rotateX(10deg)}
     }
   </style>
 </head>
