@@ -121,8 +121,12 @@ function frame() {
     ctx.fillStyle = `rgba(${rb},255,${rb},${alpha.toFixed(2)})`;
     ctx.fill();
   }
+  requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+
+// keep OBS CEF renderer active - without this rAF gets throttled regardless of fps setting
+setInterval(() => { document.title = ' '; }, 500);
 
 /* --- screen rotation --- */
 const sw = document.getElementById('SW');
