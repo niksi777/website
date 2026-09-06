@@ -1871,9 +1871,9 @@ app.get('/api/spotify/current', async (req, res) => {
     });
     if (result.status === 204 || result.status === 404 || !result.data) return res.json({ playing: false });
     const d = result.data;
-    if (!d.is_playing || !d.item) return res.json({ playing: false });
+    if (!d.item) return res.json({ playing: false });
     res.json({
-      playing: true,
+      playing: d.is_playing,
       title: d.item.name,
       artist: d.item.artists.map(a => a.name).join(', '),
       album: d.item.album.name,

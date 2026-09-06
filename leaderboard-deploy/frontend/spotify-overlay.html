@@ -45,6 +45,7 @@
       background:#1DB954;
       animation:eqBounce 0.8s ease-in-out infinite alternate;
     }
+    .paused .eq span{ animation-play-state:paused; opacity:0.4; }
     .eq span:nth-child(1){height:5px;animation-delay:0s}
     .eq span:nth-child(2){height:10px;animation-delay:0.15s}
     .eq span:nth-child(3){height:7px;animation-delay:0.3s}
@@ -151,16 +152,18 @@ function tick() {
 }
 
 function render(data) {
-  const wasPlaying = current && current.playing;
+  const wasVisible = current && current.title;
   current = data;
 
-  if (!data.playing) {
+  if (!data.title) {
     wrap.classList.remove('visible');
     cancelAnimationFrame(raf);
     return;
   }
 
-  const titleChanged = !wasPlaying || titleEl.textContent !== data.title;
+  wrap.classList.toggle('paused', !data.playing);
+
+  const titleChanged = !wasVisible || titleEl.textContent !== data.title;
 
   if (titleChanged) {
     // fade out briefly then update
@@ -184,7 +187,7 @@ function render(data) {
       wrap.style.opacity = '';
       wrap.classList.add('visible');
       cancelAnimationFrame(raf);
-      tick();
+      if (data.playing) tick();
     }, titleChanged && wasPlaying ? 250 : 0);
   } else {
     progressMs = data.progress;
