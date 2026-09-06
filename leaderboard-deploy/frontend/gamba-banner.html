@@ -87,10 +87,11 @@ function resetStar(s) {
   return s;
 }
 
-let lastT = 0;
-function frame(ts) {
-  const dt = lastT ? Math.min((ts - lastT) / 16.67, 4) : 1;
-  lastT = ts;
+let lastT = Date.now();
+function frame() {
+  const now = Date.now();
+  const dt  = Math.min((now - lastT) / 16.67, 4);
+  lastT = now;
 
   ctx.fillStyle = '#04100a';
   ctx.fillRect(0, 0, 500, 110);
@@ -108,7 +109,6 @@ function frame(ts) {
     const sz    = Math.min(1.8, s.base + s.dist / 170);
     const rb    = Math.floor(195 + s.tint * 60);
 
-    // streak trail
     if (s.dist > 12) {
       const px = CX + Math.cos(s.angle) * prevDist;
       const py = CY + Math.sin(s.angle) * prevDist;
@@ -126,9 +126,8 @@ function frame(ts) {
     ctx.fillStyle = `rgba(${rb},255,${rb},${alpha.toFixed(2)})`;
     ctx.fill();
   }
-  requestAnimationFrame(frame);
 }
-requestAnimationFrame(frame);
+setInterval(frame, 16);
 
 /* --- screen rotation --- */
 const sw = document.getElementById('SW');
