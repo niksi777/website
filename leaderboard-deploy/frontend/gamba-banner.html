@@ -87,12 +87,7 @@ function resetStar(s) {
   return s;
 }
 
-let lastT = 0;
-function frame(ts) {
-  // cap to ~30fps in OBS
-  if (ts - lastT < 30) { requestAnimationFrame(frame); return; }
-  lastT = ts;
-
+function frame() {
   ctx.fillStyle = '#04100a';
   ctx.fillRect(0, 0, 500, 110);
 
