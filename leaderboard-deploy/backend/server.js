@@ -1785,6 +1785,7 @@ app.get('/overlay-giveaway', (req, res) => res.sendFile(path.join(__dirname, '..
 app.get('/stream-overlay', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay.html')));
 app.get('/stream-overlay-betfury', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay-betfury.html')));
 app.get('/stream-overlay-gamba', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay-gamba.html')));
+app.get('/stream-overlay-gamba-hunt', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay-gamba-hunt.html')));
 app.get('/stream-overlay-chicken', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay-chicken.html')));
 app.get('/stream-overlay-csgowin', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-overlay-csgowin.html')));
 app.get('/stream-bg', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-bg.html')));

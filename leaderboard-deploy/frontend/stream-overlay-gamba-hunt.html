@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      width:1920px;height:1080px;overflow:hidden;
+      background:transparent;
+      font-family:'Inter',sans-serif;
+    }
+
+    .topbar{
+      position:fixed;top:0;left:0;right:0;height:58px;
+      background:#030f07;
+      border-bottom:1px solid rgba(34,197,94,0.38);
+      display:flex;align-items:center;
+      z-index:30;
+    }
+    .topbar::after{
+      content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(34,197,94,0.95),rgba(20,160,60,0.55),transparent);
+    }
+
+    .tb-left{flex:1;display:flex;align-items:center;gap:14px;padding:0 22px}
+    .tb-center{position:absolute;left:748px;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:18px}
+    .tb-right{display:none}
+
+    .live-badge{display:flex;align-items:center;gap:5px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.5);border-radius:100px;padding:5px 12px;flex-shrink:0}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:#f87171;animation:blink 1.3s ease-in-out infinite;box-shadow:0 0 6px rgba(248,113,113,0.8)}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+    .live-txt{font-size:11px;font-weight:600;letter-spacing:.13em;color:#f87171;text-transform:uppercase}
+
+    .tb-logo{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(34,197,94,0.72))}
+    .pipe{width:1px;height:28px;background:rgba(34,197,94,0.32);flex-shrink:0}
+
+    .tb-soc{display:flex;align-items:center;gap:8px}
+    .tb-soc svg{width:16px;height:16px;flex-shrink:0;opacity:.9}
+    .tb-soc span{font-size:14px;font-weight:500;color:rgba(180,240,200,0.8);letter-spacing:.02em;white-space:nowrap}
+
+    .tb-deco{font-size:22px;font-weight:300;color:rgba(34,197,94,0.52);line-height:1}
+
+    .edge-left{
+      position:fixed;top:58px;left:0;width:6px;height:862px;
+      background:#030f07;z-index:10;
+    }
+
+    .sidebar{
+      position:fixed;
+      top:58px;right:0;
+      width:424px;height:862px;
+      background:#030f07;
+      border-left:1px solid rgba(34,197,94,0.38);
+      border-bottom:1px solid rgba(34,197,94,0.38);
+      box-shadow:-4px 0 40px rgba(0,15,5,0.7),inset 1px 0 0 rgba(34,197,94,0.07);
+      display:flex;flex-direction:column;
+      z-index:20;
+    }
+
+    .panel{
+      margin:12px 12px 0;
+      border:1px solid rgba(34,197,94,0.28);
+      border-radius:8px;
+      background:rgba(4,14,8,0.88);
+      display:flex;flex-direction:column;
+      overflow:hidden;
+      box-shadow:0 0 0 1px rgba(34,197,94,0.06),inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .panel-header{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      padding:9px 14px;
+      border-bottom:1px solid rgba(34,197,94,0.18);
+      background:rgba(34,197,94,0.09);
+      flex-shrink:0;
+    }
+    .panel-label{
+      font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(160,240,185,0.65);
+    }
+    .panel-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px rgba(34,197,94,0.85);flex-shrink:0}
+
+    .chat-panel{flex:1;margin-bottom:12px;}
+    .chat-body{flex:1}
+
+    .bottom-strip{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      height:160px;
+      background:#04100a;
+      border-top:1px solid rgba(34,197,94,0.38);
+      z-index:20;
+      overflow:hidden;
+    }
+    .bottom-strip::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(34,197,94,0.95),rgba(20,160,60,0.55),transparent);
+      z-index:2;
+    }
+    /* animated border sweep */
+    .bottom-strip::after{
+      content:'';position:absolute;inset:0;padding:2px;
+      background:linear-gradient(90deg,#22c55e,#86efac,#16a34a,#22c55e);
+      background-size:250% 100%;
+      animation:borderSweep 2.5s linear infinite;
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      pointer-events:none;z-index:3;
+    }
+    @keyframes borderSweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+    #bg-banner{position:absolute;inset:0;z-index:0;pointer-events:none;will-change:transform;transform:translateZ(0)}
+    .screen-wrap{position:absolute;inset:0;z-index:1;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    .screen{
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    }
+    .screen.slide-in{animation:slideIn 1s cubic-bezier(.22,.68,0,1.2) forwards}
+    .screen.slide-out{animation:slideOut .75s cubic-bezier(.4,0,1,1) forwards}
+    @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes slideOut{from{transform:translateY(0);opacity:1}to{transform:translateY(-100%);opacity:0}}
+    .sc-h,.sc-s{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:52px;font-weight:800;font-style:italic;
+      letter-spacing:.06em;text-transform:uppercase;line-height:1;white-space:nowrap;
+      color:#fff;text-shadow:0 0 28px rgba(34,197,94,.4);
+    }
+    .sc-logo img{height:140px;width:140px;object-fit:contain;filter:drop-shadow(0 0 24px rgba(34,197,94,1)) drop-shadow(0 0 10px rgba(134,239,172,.6));}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span class="live-txt">Live</span>
+    </div>
+  </div>
+
+  <div class="tb-center">
+    <div class="tb-soc">
+      <svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.464-.674.86-1.339 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.247-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+      <span>discord.gg/Gnyv25SHg7</span>
+    </div>
+    <span class="tb-deco">|</span>
+    <img class="tb-logo" src="/assets/niksi.png" alt="NIKSI777"/>
+    <span class="tb-deco">|</span>
+    <div class="tb-soc">
+      <svg viewBox="0 0 24 24" fill="rgba(180,240,200,0.85)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/></svg>
+      <span>@niksigamba</span>
+    </div>
+  </div>
+
+  <div class="tb-right"></div>
+</div>
+
+<div class="edge-left"></div>
+
+<div class="sidebar">
+  <div class="panel chat-panel">
+    <div class="panel-header">
+      <div class="panel-dot"></div>
+      <div class="panel-label">Live Chat</div>
+      <div class="panel-dot"></div>
+    </div>
+    <div class="chat-body"></div>
+  </div>
+</div>
+
+<div class="bottom-strip">
+  <canvas id="bg-banner" width="1920" height="160"></canvas>
+  <div class="screen-wrap" id="SW"></div>
+</div>
+
+<script>
+const SCREENS = [
+  { h:'$1.000 BI-WEEKLY',  s:'LEADERBOARD' },
+  { h:'100% MATCH ON',      s:'WEEKLY REWARD' },
+  { h:'10-20%',            s:'LOSSBACK', green:true },
+  { h:'CUSTOM LOSSBACK',   s:'', green:true },
+  { h:'USE CODE NIKSI',    s:'', green:true },
+  { logo:true },
+];
+const INTERVAL = 4800;
+
+const cnv = document.getElementById('bg-banner');
+const ctx = cnv.getContext('2d');
+const CX = 960, CY = 80;
+
+const STARS = Array.from({length:90}, () => resetStar({}));
+function resetStar(s) {
+  s.angle = Math.random() * Math.PI * 2;
+  s.dist  = Math.random() * 6;
+  s.speed = 0.05 + Math.random() * 0.12;
+  s.base  = 0.15 + Math.random() * 0.55;
+  s.phase = Math.random() * Math.PI * 2;
+  s.tint  = Math.random();
+  return s;
+}
+function frame() {
+  ctx.fillStyle = '#04100a';
+  ctx.fillRect(0, 0, 1920, 160);
+  for (const s of STARS) {
+    const prevDist = s.dist;
+    s.dist  += s.speed * (1 + s.dist / 700);
+    s.phase += 0.022;
+    const x = CX + Math.cos(s.angle) * s.dist;
+    const y = CY + Math.sin(s.angle) * s.dist;
+    if (x < -4 || x > 1924 || y < -4 || y > 164) { resetStar(s); continue; }
+    const alpha = Math.min(0.9, s.dist / 45) * (0.78 + 0.22 * Math.sin(s.phase));
+    const sz    = Math.min(1.8, s.base + s.dist / 170);
+    const rb    = Math.floor(195 + s.tint * 60);
+    if (s.dist > 12) {
+      const px = CX + Math.cos(s.angle) * prevDist;
+      const py = CY + Math.sin(s.angle) * prevDist;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(x,y);
+      ctx.strokeStyle = `rgba(${rb},255,${rb},${(alpha*.4).toFixed(2)})`;
+      ctx.lineWidth = sz * 0.7; ctx.lineCap = 'round'; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(x, y, sz, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${rb},255,${rb},${alpha.toFixed(2)})`; ctx.fill();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+setInterval(() => { document.title = ' '; }, 500);
+
+const sw = document.getElementById('SW');
+let cur = 0;
+function buildScreen(sc) {
+  const d = document.createElement('div');
+  d.className = 'screen';
+  if (sc.logo) {
+    d.innerHTML = `<div class="sc-logo"><img src="/assets/gamba2.png"/></div>`;
+  } else {
+    d.innerHTML = `<div class="sc-h">${sc.h}</div><div class="sc-s">${sc.s}</div>`;
+  }
+  return d;
+}
+function advance() {
+  const next = (cur + 1) % SCREENS.length;
+  const oldEl = sw.querySelector('.screen');
+  cur = next;
+  if (oldEl) {
+    oldEl.classList.add('slide-out');
+    setTimeout(() => {
+      oldEl.remove();
+      const newEl = buildScreen(SCREENS[next]);
+      newEl.classList.add('slide-in');
+      sw.appendChild(newEl);
+    }, 750);
+  } else {
+    const newEl = buildScreen(SCREENS[next]);
+    newEl.classList.add('slide-in');
+    sw.appendChild(newEl);
+  }
+}
+sw.appendChild(buildScreen(SCREENS[0]));
+setInterval(advance, INTERVAL);
+</script>
+</body>
+</html>
