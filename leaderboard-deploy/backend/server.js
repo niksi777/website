@@ -1791,6 +1791,7 @@ app.get('/stream-bg', (req, res) => res.sendFile(path.join(__dirname, '../fronte
 app.get('/stream-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-banner.html')));
 app.get('/stream-banner-cycle', (req, res) => res.sendFile(path.join(__dirname, '../frontend/stream-banner-cycle.html')));
 app.get('/gamba-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba-banner.html')));
+app.get('/gamba-banner-hunt', (req, res) => res.sendFile(path.join(__dirname, '../frontend/gamba-banner-hunt.html')));
 app.get('/csgowin-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/csgowin-banner.html')));
 app.get('/promo-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/promo-banner.html')));
 app.get('/chicken-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/chicken-banner.html')));

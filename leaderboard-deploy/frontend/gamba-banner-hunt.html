@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:1920px;height:110px;overflow:hidden;background:transparent}
+
+    .banner{
+      position:relative;width:1920px;height:110px;
+      border-radius:0;background:#04100a;overflow:hidden;
+    }
+    .banner::before{
+      content:'';position:absolute;inset:0;border-radius:14px;padding:2px;
+      background:linear-gradient(90deg,#22c55e,#86efac,#16a34a,#22c55e);
+      background-size:250% 100%;
+      animation:borderSweep 2.5s linear infinite;
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      z-index:30;pointer-events:none;
+    }
+    @keyframes borderSweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+    #bg{position:absolute;inset:0;z-index:1;pointer-events:none;will-change:transform;transform:translateZ(0)}
+
+    /* rotating screens fill the whole banner */
+    .screen-wrap{
+      position:absolute;inset:0;z-index:10;overflow:hidden;
+    }
+    .screen{
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:2px;
+    }
+    .screen.slide-in {animation:slideIn 1s cubic-bezier(.22,.68,0,1.2) forwards}
+    .screen.slide-out{animation:slideOut .75s cubic-bezier(.4,0,1,1) forwards}
+    @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes slideOut{from{transform:translateY(0);opacity:1}to{transform:translateY(-100%);opacity:0}}
+
+    .sc-h,.sc-s{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:40px;font-weight:800;font-style:italic;
+      letter-spacing:.06em;text-transform:uppercase;
+      line-height:1;white-space:nowrap;
+    }
+    .sc-h,.sc-s,.sc-h.green{
+      color:#fff;
+      text-shadow:0 0 28px rgba(34,197,94,.4);
+    }
+    .sc-logo img{
+      height:140px;width:140px;object-fit:contain;
+      filter:drop-shadow(0 0 24px rgba(34,197,94,1)) drop-shadow(0 0 10px rgba(134,239,172,.6));
+    }
+  </style>
+</head>
+<body>
+<div class="banner">
+  <canvas id="bg" width="1920" height="110"></canvas>
+  <div class="screen-wrap" id="SW"></div>
+</div>
+
+<script>
+const SCREENS = [
+  { h:'$1.000 BI-WEEKLY',      s:'LEADERBOARD' },
+  { h:'100% MATCH ON',          s:'WEEKLY REWARD' },
+  { h:'10-20%',                s:'LOSSBACK', green:true },
+  { h:'CUSTOM LOSSBACK',       s:'', green:true },
+  { h:'USE CODE NIKSI',        s:'', green:true },
+  { logo:true },
+];
+const INTERVAL = 4800;
+
+/* --- starfield --- */
+const cnv = document.getElementById('bg');
+const ctx = cnv.getContext('2d');
+const CX = 960, CY = 55;
+
+const STARS = Array.from({length:55}, () => resetStar({}));
+function resetStar(s) {
+  s.angle = Math.random() * Math.PI * 2;
+  s.dist  = Math.random() * 6;
+  s.speed = 0.05 + Math.random() * 0.12;
+  s.base  = 0.15 + Math.random() * 0.55;
+  s.phase = Math.random() * Math.PI * 2;
+  s.tint  = Math.random();
+  return s;
+}
+
+function frame() {
+  ctx.fillStyle = '#04100a';
+  ctx.fillRect(0, 0, 1920, 110);
+
+  for (const s of STARS) {
+    const prevDist = s.dist;
+    s.dist  += s.speed * (1 + s.dist / 480);
+    s.phase += 0.022;
+
+    const x = CX + Math.cos(s.angle) * s.dist;
+    const y = CY + Math.sin(s.angle) * s.dist;
+    if (x < -4 || x > 1924 || y < -4 || y > 114) { resetStar(s); continue; }
+
+    const alpha = Math.min(0.9, s.dist / 45) * (0.78 + 0.22 * Math.sin(s.phase));
+    const sz    = Math.min(1.8, s.base + s.dist / 170);
+    const rb    = Math.floor(195 + s.tint * 60);
+
+    if (s.dist > 12) {
+      const px = CX + Math.cos(s.angle) * prevDist;
+      const py = CY + Math.sin(s.angle) * prevDist;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = `rgba(${rb},255,${rb},${(alpha * 0.4).toFixed(2)})`;
+      ctx.lineWidth = sz * 0.7;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.arc(x, y, sz, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${rb},255,${rb},${alpha.toFixed(2)})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// keep OBS CEF renderer active - without this rAF gets throttled regardless of fps setting
+setInterval(() => { document.title = ' '; }, 500);
+
+/* --- screen rotation --- */
+const sw = document.getElementById('SW');
+let cur = 0;
+
+function buildScreen(sc) {
+  const d = document.createElement('div');
+  d.className = 'screen';
+  if (sc.logo) {
+    d.innerHTML = `<div class="sc-logo"><img src="/assets/gamba2.png"/></div>`;
+  } else {
+    d.innerHTML = `
+      <div class="sc-h${sc.green?' green':''}">${sc.h}</div>
+      <div class="sc-s">${sc.s}</div>
+    `;
+  }
+  return d;
+}
+
+function advance() {
+  const next = (cur + 1) % SCREENS.length;
+  const oldEl = sw.querySelector('.screen');
+  cur = next;
+  if (oldEl) {
+    oldEl.classList.add('slide-out');
+    setTimeout(() => {
+      oldEl.remove();
+      const newEl = buildScreen(SCREENS[next]);
+      newEl.classList.add('slide-in');
+      sw.appendChild(newEl);
+    }, 750);
+  } else {
+    const newEl = buildScreen(SCREENS[next]);
+    newEl.classList.add('slide-in');
+    sw.appendChild(newEl);
+  }
+}
+
+sw.appendChild(buildScreen(SCREENS[0]));
+setInterval(advance, INTERVAL);
+</script>
+</body>
+</html>
