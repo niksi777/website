@@ -22,7 +22,7 @@
     }
     @keyframes borderSweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
 
-    #bg{position:absolute;inset:0;z-index:1;pointer-events:none}
+    #bg{position:absolute;inset:0;z-index:1;pointer-events:none;will-change:transform;transform:translateZ(0)}
 
     /* rotating screens fill the whole banner */
     .screen-wrap{
@@ -76,66 +76,56 @@ const cnv = document.getElementById('bg');
 const ctx = cnv.getContext('2d');
 const CX = 250, CY = 55;
 
-const STARS = Array.from({length:120}, () => resetStar({}));
+const STARS = Array.from({length:55}, () => resetStar({}));
 function resetStar(s) {
-  s.angle  = Math.random() * Math.PI * 2;
-  s.dist   = Math.random() * 6;
-  s.speed  = 0.04 + Math.random() * 0.11;
-  s.base   = 0.15 + Math.random() * 0.55;
-  s.phase  = Math.random() * Math.PI * 2;
-  s.tint   = Math.random(); // 0=white, 1=subtle green-white
+  s.angle = Math.random() * Math.PI * 2;
+  s.dist  = Math.random() * 6;
+  s.speed = 0.05 + Math.random() * 0.12;
+  s.base  = 0.15 + Math.random() * 0.55;
+  s.phase = Math.random() * Math.PI * 2;
+  s.tint  = Math.random();
   return s;
 }
 
-function frame() {
-  ctx.clearRect(0, 0, 500, 110);
+let lastT = 0;
+function frame(ts) {
+  // cap to ~30fps in OBS
+  if (ts - lastT < 30) { requestAnimationFrame(frame); return; }
+  lastT = ts;
+
   ctx.fillStyle = '#04100a';
   ctx.fillRect(0, 0, 500, 110);
 
   for (const s of STARS) {
     const prevDist = s.dist;
     s.dist  += s.speed * (1 + s.dist / 480);
-    s.phase += 0.018;
+    s.phase += 0.022;
 
     const x = CX + Math.cos(s.angle) * s.dist;
     const y = CY + Math.sin(s.angle) * s.dist;
     if (x < -4 || x > 504 || y < -4 || y > 114) { resetStar(s); continue; }
 
-    const twinkle = 0.78 + 0.22 * Math.sin(s.phase);
-    const alpha   = Math.min(0.92, s.dist / 45) * twinkle;
-    const sz      = Math.min(1.9, s.base + s.dist / 170);
+    const alpha = Math.min(0.9, s.dist / 45) * (0.78 + 0.22 * Math.sin(s.phase));
+    const sz    = Math.min(1.8, s.base + s.dist / 170);
+    const rb    = Math.floor(195 + s.tint * 60);
 
-    // color: white -> subtle green-white
-    const rb = Math.floor(195 + s.tint * 60);
-    const g  = 255;
-
-    // streak trail - grows with distance/speed
-    const trailLen = Math.min(12, s.dist / 12);
-    if (s.dist > 12 && trailLen > 0.5) {
+    // streak trail
+    if (s.dist > 12) {
       const px = CX + Math.cos(s.angle) * prevDist;
       const py = CY + Math.sin(s.angle) * prevDist;
       ctx.beginPath();
       ctx.moveTo(px, py);
       ctx.lineTo(x, y);
-      ctx.strokeStyle = `rgba(${rb},${g},${rb},${alpha * 0.45})`;
+      ctx.strokeStyle = `rgba(${rb},255,${rb},${(alpha * 0.4).toFixed(2)})`;
       ctx.lineWidth = sz * 0.7;
       ctx.lineCap = 'round';
       ctx.stroke();
     }
 
-    // star dot
     ctx.beginPath();
     ctx.arc(x, y, sz, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${rb},${g},${rb},${alpha})`;
+    ctx.fillStyle = `rgba(${rb},255,${rb},${alpha.toFixed(2)})`;
     ctx.fill();
-
-    // soft glow on brighter stars
-    if (sz > 1.1) {
-      ctx.beginPath();
-      ctx.arc(x, y, sz * 2.8, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(160,255,200,${alpha * 0.07})`;
-      ctx.fill();
-    }
   }
   requestAnimationFrame(frame);
 }
