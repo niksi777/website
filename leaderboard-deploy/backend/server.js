@@ -1836,7 +1836,7 @@ app.get('/spotify/auth', (req, res) => {
   const params = new URLSearchParams({
     client_id: process.env.SPOTIFY_CLIENT_ID,
     response_type: 'code',
-    redirect_uri: 'http://niksi777.com/spotify/callback',
+    redirect_uri: 'https://niksi777.com/spotify/callback',
     scope: 'user-read-currently-playing user-read-playback-state',
   });
   res.redirect('https://accounts.spotify.com/authorize?' + params);
@@ -1848,7 +1848,7 @@ app.get('/spotify/callback', async (req, res) => {
       new URLSearchParams({
         grant_type: 'authorization_code',
         code: req.query.code,
-        redirect_uri: 'http://niksi777.com/spotify/callback',
+        redirect_uri: 'https://niksi777.com/spotify/callback',
       }).toString(),
       { headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
