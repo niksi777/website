@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;1,800&display=swap" rel="stylesheet"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:460px;height:110px;overflow:hidden;background:transparent}
+
+    .wrap{
+      position:relative;width:460px;height:110px;
+      background:rgba(8,6,14,0.92);
+      border-radius:14px;overflow:hidden;
+      border:1.5px solid rgba(255,255,255,0.07);
+      display:flex;align-items:center;
+      gap:14px;padding:13px 16px 13px 13px;
+      opacity:0;transform:translateY(12px);
+      transition:opacity 0.5s ease, transform 0.5s ease;
+      backdrop-filter:blur(8px);
+    }
+    .wrap.visible{opacity:1;transform:translateY(0)}
+
+    /* album art */
+    .art{
+      width:84px;height:84px;flex-shrink:0;
+      border-radius:8px;overflow:hidden;
+      background:#1a1a2a;position:relative;
+    }
+    .art img{width:100%;height:100%;object-fit:cover;display:block}
+    .art-fallback{
+      width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+      font-size:36px;
+    }
+
+    /* text section */
+    .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+
+    .label{
+      display:flex;align-items:center;gap:6px;
+      margin-bottom:2px;
+    }
+    .eq{display:flex;align-items:flex-end;gap:2px;height:12px}
+    .eq span{
+      display:block;width:3px;border-radius:2px;
+      background:#1DB954;
+      animation:eqBounce 0.8s ease-in-out infinite alternate;
+    }
+    .eq span:nth-child(1){height:5px;animation-delay:0s}
+    .eq span:nth-child(2){height:10px;animation-delay:0.15s}
+    .eq span:nth-child(3){height:7px;animation-delay:0.3s}
+    .eq span:nth-child(4){height:12px;animation-delay:0.1s}
+    .eq span:nth-child(5){height:4px;animation-delay:0.25s}
+    @keyframes eqBounce{
+      0%{transform:scaleY(0.3)}
+      100%{transform:scaleY(1)}
+    }
+    .now-label{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+      color:#1DB954;
+    }
+
+    .title{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:24px;font-weight:800;font-style:italic;
+      letter-spacing:.02em;color:#fff;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      line-height:1.1;
+    }
+    .artist{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:15px;font-weight:600;
+      color:rgba(255,255,255,0.52);letter-spacing:.03em;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      line-height:1.1;
+    }
+
+    /* progress */
+    .progress-row{
+      display:flex;align-items:center;gap:8px;margin-top:4px;
+    }
+    .bar-track{
+      flex:1;height:3px;border-radius:2px;
+      background:rgba(255,255,255,0.12);overflow:hidden;
+    }
+    .bar-fill{
+      height:100%;border-radius:2px;
+      background:#1DB954;
+      transition:width 1s linear;
+    }
+    .time{
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:11px;font-weight:600;
+      color:rgba(255,255,255,0.38);letter-spacing:.04em;
+      white-space:nowrap;flex-shrink:0;
+    }
+
+    /* left accent line */
+    .wrap::before{
+      content:'';position:absolute;left:0;top:16px;bottom:16px;width:3px;
+      border-radius:0 3px 3px 0;background:#1DB954;opacity:0.7;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="art" id="art">
+    <div class="art-fallback">&#9834;</div>
+  </div>
+  <div class="info">
+    <div class="label">
+      <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="now-label">Now Playing</span>
+    </div>
+    <div class="title" id="title">-</div>
+    <div class="artist" id="artist">-</div>
+    <div class="progress-row">
+      <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+      <span class="time" id="time">0:00 / 0:00</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const wrap   = document.getElementById('wrap');
+const artEl  = document.getElementById('art');
+const titleEl= document.getElementById('title');
+const artistEl=document.getElementById('artist');
+const barEl  = document.getElementById('bar');
+const timeEl = document.getElementById('time');
+
+let current = null;
+let progressMs = 0;
+let lastFetch = 0;
+let raf = null;
+
+function fmt(ms) {
+  const s = Math.floor(ms / 1000);
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
+
+function tick() {
+  if (!current || !current.playing) return;
+  progressMs = Math.min(current.duration, progressMs + (Date.now() - lastFetch));
+  lastFetch = Date.now();
+  const pct = current.duration > 0 ? (progressMs / current.duration * 100).toFixed(2) : 0;
+  barEl.style.transition = 'width 0.9s linear';
+  barEl.style.width = pct + '%';
+  timeEl.textContent = fmt(progressMs) + ' / ' + fmt(current.duration);
+  raf = requestAnimationFrame(() => setTimeout(tick, 900));
+}
+
+function render(data) {
+  const wasPlaying = current && current.playing;
+  current = data;
+
+  if (!data.playing) {
+    wrap.classList.remove('visible');
+    cancelAnimationFrame(raf);
+    return;
+  }
+
+  const titleChanged = !wasPlaying || titleEl.textContent !== data.title;
+
+  if (titleChanged) {
+    // fade out briefly then update
+    wrap.style.opacity = wasPlaying ? '0.4' : '0';
+    setTimeout(() => {
+      titleEl.textContent  = data.title;
+      artistEl.textContent = data.artist;
+
+      if (data.albumArt) {
+        artEl.innerHTML = `<img src="${data.albumArt}" alt=""/>`;
+      } else {
+        artEl.innerHTML = '<div class="art-fallback">&#9834;</div>';
+      }
+
+      progressMs = data.progress;
+      lastFetch  = Date.now();
+      barEl.style.transition = 'none';
+      barEl.style.width = (data.progress / data.duration * 100).toFixed(2) + '%';
+      timeEl.textContent = fmt(data.progress) + ' / ' + fmt(data.duration);
+
+      wrap.style.opacity = '';
+      wrap.classList.add('visible');
+      cancelAnimationFrame(raf);
+      tick();
+    }, titleChanged && wasPlaying ? 250 : 0);
+  } else {
+    progressMs = data.progress;
+    lastFetch  = Date.now();
+  }
+}
+
+async function poll() {
+  try {
+    const r = await fetch('/api/spotify/current');
+    const d = await r.json();
+    render(d);
+  } catch(e) {}
+  setTimeout(poll, 5000);
+}
+
+poll();
+</script>
+</body>
+</html>

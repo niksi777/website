@@ -1795,6 +1795,90 @@ app.get('/gamba-weekly-banner', (req, res) => res.sendFile(path.join(__dirname, 
 app.get('/krush-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/krush-banner.html')));
 app.get('/betfury-banner', (req, res) => res.sendFile(path.join(__dirname, '../frontend/betfury-banner.html')));
 app.get('/cashout-promo', (req, res) => res.sendFile(path.join(__dirname, '../frontend/cashout-promo.html')));
+app.get('/spotify-overlay', (req, res) => res.sendFile(path.join(__dirname, '../frontend/spotify-overlay.html')));
+
+// ── Spotify Now Playing ──────────────────────────────────────────────────────
+const SPOTIFY_TOKENS_PATH = require("path").join(__dirname, "../../spotify-tokens.json");
+const fs_sp = require("fs");
+let spotifyTokens = { access_token: null, refresh_token: null, expires_at: 0 };
+try {
+  if (fs_sp.existsSync(SPOTIFY_TOKENS_PATH)) {
+    spotifyTokens = { ...spotifyTokens, ...JSON.parse(fs_sp.readFileSync(SPOTIFY_TOKENS_PATH, "utf-8")) };
+  }
+} catch (e) {}
+
+async function refreshSpotifyToken() {
+  if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) return false;
+  if (!spotifyTokens.refresh_token) return false;
+  if (Date.now() < spotifyTokens.expires_at - 60000) return true;
+  try {
+    const { data } = await axios.post('https://accounts.spotify.com/api/token',
+      new URLSearchParams({ grant_type: 'refresh_token', refresh_token: spotifyTokens.refresh_token }).toString(),
+      { headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'),
+      }}
+    );
+    spotifyTokens.access_token = data.access_token;
+    spotifyTokens.expires_at = Date.now() + data.expires_in * 1000;
+    if (data.refresh_token) spotifyTokens.refresh_token = data.refresh_token;
+    fs_sp.writeFileSync(SPOTIFY_TOKENS_PATH, JSON.stringify(spotifyTokens, null, 2));
+    return true;
+  } catch (e) { console.log('Spotify refresh error:', e.message); return false; }
+}
+
+app.get('/spotify/auth', (req, res) => {
+  if (!process.env.SPOTIFY_CLIENT_ID) return res.status(500).send('SPOTIFY_CLIENT_ID not set in .env');
+  const params = new URLSearchParams({
+    client_id: process.env.SPOTIFY_CLIENT_ID,
+    response_type: 'code',
+    redirect_uri: 'http://niksi777.com/spotify/callback',
+    scope: 'user-read-currently-playing user-read-playback-state',
+  });
+  res.redirect('https://accounts.spotify.com/authorize?' + params);
+});
+
+app.get('/spotify/callback', async (req, res) => {
+  try {
+    const { data } = await axios.post('https://accounts.spotify.com/api/token',
+      new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: req.query.code,
+        redirect_uri: 'http://niksi777.com/spotify/callback',
+      }).toString(),
+      { headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'),
+      }}
+    );
+    spotifyTokens = { access_token: data.access_token, refresh_token: data.refresh_token, expires_at: Date.now() + data.expires_in * 1000 };
+    fs_sp.writeFileSync(SPOTIFY_TOKENS_PATH, JSON.stringify(spotifyTokens, null, 2));
+    res.send('<h2 style="font-family:sans-serif;padding:40px">Spotify connected! You can close this tab.</h2>');
+  } catch (e) { console.log('Spotify callback error:', e.message); res.status(500).send('Error: ' + e.message); }
+});
+
+app.get('/api/spotify/current', async (req, res) => {
+  try {
+    const ok = await refreshSpotifyToken();
+    if (!ok || !spotifyTokens.access_token) return res.json({ playing: false });
+    const result = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: { Authorization: 'Bearer ' + spotifyTokens.access_token },
+      validateStatus: () => true,
+    });
+    if (result.status === 204 || result.status === 404 || !result.data) return res.json({ playing: false });
+    const d = result.data;
+    if (!d.is_playing || !d.item) return res.json({ playing: false });
+    res.json({
+      playing: true,
+      title: d.item.name,
+      artist: d.item.artists.map(a => a.name).join(', '),
+      album: d.item.album.name,
+      albumArt: d.item.album.images[0]?.url || null,
+      progress: d.progress_ms,
+      duration: d.item.duration_ms,
+    });
+  } catch (e) { console.log('Spotify current error:', e.message); res.json({ playing: false }); }
+});
 
 // Points API
 app.get('/points/:username', (req, res) => {
