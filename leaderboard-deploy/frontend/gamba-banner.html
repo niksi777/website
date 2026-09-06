@@ -87,19 +87,14 @@ function resetStar(s) {
   return s;
 }
 
-let lastT = Date.now();
 function frame() {
-  const now = Date.now();
-  const dt  = Math.min((now - lastT) / 16.67, 4);
-  lastT = now;
-
   ctx.fillStyle = '#04100a';
   ctx.fillRect(0, 0, 500, 110);
 
   for (const s of STARS) {
     const prevDist = s.dist;
-    s.dist  += s.speed * dt * (1 + s.dist / 480);
-    s.phase += 0.022 * dt;
+    s.dist  += s.speed * (1 + s.dist / 480);
+    s.phase += 0.022;
 
     const x = CX + Math.cos(s.angle) * s.dist;
     const y = CY + Math.sin(s.angle) * s.dist;
@@ -127,7 +122,7 @@ function frame() {
     ctx.fill();
   }
 }
-setInterval(frame, 16);
+requestAnimationFrame(frame);
 
 /* --- screen rotation --- */
 const sw = document.getElementById('SW');
