@@ -87,14 +87,18 @@ function resetStar(s) {
   return s;
 }
 
-function frame() {
+let lastT = 0;
+function frame(ts) {
+  const dt = lastT ? Math.min((ts - lastT) / 16.67, 4) : 1;
+  lastT = ts;
+
   ctx.fillStyle = '#04100a';
   ctx.fillRect(0, 0, 500, 110);
 
   for (const s of STARS) {
     const prevDist = s.dist;
-    s.dist  += s.speed * (1 + s.dist / 480);
-    s.phase += 0.022;
+    s.dist  += s.speed * dt * (1 + s.dist / 480);
+    s.phase += 0.022 * dt;
 
     const x = CX + Math.cos(s.angle) * s.dist;
     const y = CY + Math.sin(s.angle) * s.dist;
