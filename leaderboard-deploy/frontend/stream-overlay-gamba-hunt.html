@@ -27,7 +27,7 @@
 
     /* bottom bar — positioned just below game content (~590px from top) */
     .bottom-strip{
-      position:fixed;top:590px;left:0;right:0;height:58px;
+      position:fixed;top:590px;left:0;right:0;bottom:0;
       background:#0a1f3d;
       border-top:1px solid rgba(6,182,212,0.38);
       z-index:30;
@@ -97,7 +97,7 @@ const ctx = cnv.getContext('2d');
 // top bar and bottom bar only
 const REGIONS = [
   {x1:0, y1:0,   x2:1920, y2:58,  w:1},
-  {x1:0, y1:590, x2:1920, y2:648, w:1},
+  {x1:0, y1:590, x2:1920, y2:1080, w:1},
 ];
 
 function pickRegion() {
