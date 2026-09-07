@@ -1904,11 +1904,6 @@ app.get('/leaderboard', (req, res) => {
 });
 
 // Store Redemption
-const { Client: DClient2, GatewayIntentBits: GI2 } = require("discord.js");
-const discordClient = new DClient2({ intents: [GI2.Guilds] });
-discordClient.login(process.env.DISCORD_BOT_TOKEN).catch(err => console.error('[discord bot] Login failed:', err.message));
-discordClient.on("ready", () => console.log("[discord] Bot ready:", discordClient.user.tag));
-
 const REDEMPTION_ITEMS = [
   { id:1, title:'$10 Tip', cost:600 },
   { id:2, title:'$15 Tip', cost:850 },
