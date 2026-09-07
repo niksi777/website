@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const cron = require('node-cron');
 const fs = require('fs');
 const path = require('path');
@@ -82,28 +82,6 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once('ready', async () => {
   console.log(`[DiscordBot] Logged in as ${client.user.tag}`);
-
-  const rest = new REST().setToken(process.env.DISCORD_BOT_TOKEN);
-  const redeemCmd = new SlashCommandBuilder()
-    .setName('redeem')
-    .setDescription('Log a giveaway redemption')
-    .addNumberOption(o => o.setName('amount').setDescription('Amount in $').setRequired(true))
-    .addStringOption(o => o.setName('platform').setDescription('Platform').setRequired(true)
-      .addChoices(
-        { name: 'Gamba',   value: 'gamba' },
-        { name: 'CS2SKIN', value: 'cs2skin' },
-        { name: 'Chicken', value: 'chicken' },
-        { name: 'Betfury', value: 'betfury' },
-      ))
-    .toJSON();
-
-  const logsCmd = new SlashCommandBuilder()
-    .setName('logs')
-    .setDescription('Show redeem stats (daily, weekly, all-time)')
-    .toJSON();
-
-  await rest.put(Routes.applicationGuildCommands(client.user.id, GUILD_ID), { body: [redeemCmd, logsCmd] });
-  console.log('[DiscordBot] Slash commands registered');
 
   // Daily at 18:00 CET+1 = 17:00 UTC
   cron.schedule('0 17 * * *', () => postDailySummary(client), { timezone: 'UTC' });
