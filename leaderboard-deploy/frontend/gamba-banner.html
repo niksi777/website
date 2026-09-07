@@ -69,57 +69,51 @@ const SCREENS = [
   { h:'USE CODE NIKSI',        s:'', green:true },
   { logo:true },
 ];
-const INTERVAL = 4800;
+const INTERVAL = 8000;
 
-/* --- starfield --- */
+/* --- particles (same system as stream overlays) --- */
 const cnv = document.getElementById('bg');
 const ctx = cnv.getContext('2d');
-const CX = 250, CY = 55;
 
-const STARS = Array.from({length:55}, () => resetStar({}));
-function resetStar(s) {
-  s.angle = Math.random() * Math.PI * 2;
-  s.dist  = Math.random() * 6;
-  s.speed = 0.05 + Math.random() * 0.12;
-  s.base  = 0.15 + Math.random() * 0.55;
-  s.phase = Math.random() * Math.PI * 2;
-  s.tint  = Math.random();
-  return s;
+function rnd(min, max) { return min + Math.random() * (max - min); }
+
+function makeParticle() {
+  const angle = -Math.PI/2 + rnd(-0.9, 0.9);
+  const spd   = rnd(0.05, 0.55);
+  return {
+    x: rnd(0, 500),
+    y: rnd(0, 110),
+    sz: rnd(0.3, 2.4),
+    phase: rnd(0, Math.PI * 2),
+    pulseSpeed: rnd(0.008, 0.06),
+    vx: Math.cos(angle) * spd,
+    vy: Math.sin(angle) * spd,
+    maxA: rnd(0.25, 0.9),
+    wobble: rnd(0, Math.PI * 2),
+    wobbleSpeed: rnd(0.01, 0.04),
+    wobbleAmp: rnd(0, 0.18),
+  };
 }
+
+const SPARKS = Array.from({length: 70}, makeParticle);
 
 function frame() {
   ctx.fillStyle = '#0a1f3d';
   ctx.fillRect(0, 0, 500, 110);
 
-  for (const s of STARS) {
-    const prevDist = s.dist;
-    s.dist  += s.speed * (1 + s.dist / 480);
-    s.phase += 0.022;
-
-    const x = CX + Math.cos(s.angle) * s.dist;
-    const y = CY + Math.sin(s.angle) * s.dist;
-    if (x < -4 || x > 504 || y < -4 || y > 114) { resetStar(s); continue; }
-
-    const alpha = Math.min(0.9, s.dist / 45) * (0.78 + 0.22 * Math.sin(s.phase));
-    const sz    = Math.min(1.8, s.base + s.dist / 170);
-    const cg    = Math.floor(170 + s.tint * 42);
-    const cb    = Math.floor(200 + s.tint * 45);
-
-    if (s.dist > 12) {
-      const px = CX + Math.cos(s.angle) * prevDist;
-      const py = CY + Math.sin(s.angle) * prevDist;
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      ctx.lineTo(x, y);
-      ctx.strokeStyle = `rgba(6,${cg},${cb},${(alpha * 0.4).toFixed(2)})`;
-      ctx.lineWidth = sz * 0.7;
-      ctx.lineCap = 'round';
-      ctx.stroke();
+  for (const s of SPARKS) {
+    s.phase  += s.pulseSpeed;
+    s.wobble += s.wobbleSpeed;
+    s.x += s.vx + Math.sin(s.wobble) * s.wobbleAmp;
+    s.y += s.vy;
+    if (s.x < -4 || s.x > 504 || s.y < -4 || s.y > 114) {
+      Object.assign(s, makeParticle());
+      continue;
     }
-
+    const a = s.maxA * (0.25 + 0.75 * Math.abs(Math.sin(s.phase)));
     ctx.beginPath();
-    ctx.arc(x, y, sz, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(6,${cg},${cb},${alpha.toFixed(2)})`;
+    ctx.arc(s.x, s.y, s.sz, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(6,182,212,${a.toFixed(2)})`;
     ctx.fill();
   }
   requestAnimationFrame(frame);
