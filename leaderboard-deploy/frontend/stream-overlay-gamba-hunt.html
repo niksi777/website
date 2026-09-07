@@ -94,10 +94,10 @@
 const cnv = document.getElementById('sparks');
 const ctx = cnv.getContext('2d');
 
-// top bar and bottom bar only
+// topbar thin (w:2), bottom panel large so gets more particles (w:8)
 const REGIONS = [
-  {x1:0, y1:0,   x2:1920, y2:58,  w:1},
-  {x1:0, y1:590, x2:1920, y2:1080, w:1},
+  {x1:0, y1:0,   x2:1920, y2:58,   w:2},
+  {x1:0, y1:590, x2:1920, y2:1080, w:8},
 ];
 
 function pickRegion() {
@@ -117,19 +117,19 @@ function makeParticle() {
     x: rnd(r.x1, r.x2),
     y: rnd(r.y1, r.y2),
     r,
-    sz: rnd(0.3, 3.2),
+    sz: rnd(0.4, 3.2),
     phase: rnd(0, Math.PI * 2),
     pulseSpeed: rnd(0.008, 0.06),
     vx: Math.cos(angle) * spd,
     vy: Math.sin(angle) * spd,
-    maxA: rnd(0.15, 0.85),
+    maxA: rnd(0.25, 0.9),
     wobble: rnd(0, Math.PI * 2),
     wobbleSpeed: rnd(0.01, 0.04),
     wobbleAmp: rnd(0, 0.18),
   };
 }
 
-const SPARKS = Array.from({length: 80}, makeParticle);
+const SPARKS = Array.from({length: 180}, makeParticle);
 
 function frame() {
   ctx.clearRect(0, 0, 1920, 1080);
