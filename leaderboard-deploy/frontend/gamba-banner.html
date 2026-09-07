@@ -109,7 +109,7 @@ const CX = 250, CY = 55;
 function resetStar(s) {
   s.angle = Math.random() * Math.PI * 2;
   s.dist  = Math.random() * 8;
-  s.speed = 0.4 + Math.random() * 1.1;
+  s.speed = 0.2 + Math.random() * 0.55;
   s.size  = 0.2 + Math.random() * 0.6;
   s.alpha = 0.3 + Math.random() * 0.7;
   return s;
@@ -124,7 +124,7 @@ function frame() {
 
   for (const s of STARS) {
     const prevDist = s.dist;
-    s.dist += s.speed * (1 + s.dist / 60);
+    s.dist += s.speed * (1 + s.dist / 120);
 
     const x  = CX + Math.cos(s.angle) * s.dist;
     const y  = CY + Math.sin(s.angle) * s.dist;
