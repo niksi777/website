@@ -167,7 +167,6 @@ function render(data) {
 
   if (titleChanged) {
     // fade out briefly then update
-    wrap.style.opacity = wasPlaying ? '0.4' : '0';
     setTimeout(() => {
       titleEl.textContent  = data.title;
       artistEl.textContent = data.artist;
@@ -184,11 +183,10 @@ function render(data) {
       barEl.style.width = (data.progress / data.duration * 100).toFixed(2) + '%';
       timeEl.textContent = fmt(data.progress) + ' / ' + fmt(data.duration);
 
-      wrap.style.opacity = '';
       wrap.classList.add('visible');
       cancelAnimationFrame(raf);
       if (data.playing) tick();
-    }, titleChanged && wasPlaying ? 250 : 0);
+    }, wasVisible ? 250 : 0);
   } else {
     progressMs = data.progress;
     lastFetch  = Date.now();
