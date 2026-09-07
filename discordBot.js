@@ -84,7 +84,7 @@ client.once('ready', async () => {
   console.log(`[DiscordBot] Logged in as ${client.user.tag}`);
 
   const rest = new REST().setToken(process.env.DISCORD_BOT_TOKEN);
-  const cmd = new SlashCommandBuilder()
+  const redeemCmd = new SlashCommandBuilder()
     .setName('redeem')
     .setDescription('Log a giveaway redemption')
     .addNumberOption(o => o.setName('amount').setDescription('Amount in $').setRequired(true))
@@ -97,7 +97,12 @@ client.once('ready', async () => {
       ))
     .toJSON();
 
-  await rest.put(Routes.applicationGuildCommands(client.user.id, GUILD_ID), { body: [cmd] });
+  const logsCmd = new SlashCommandBuilder()
+    .setName('logs')
+    .setDescription('Show redeem stats (daily, weekly, all-time)')
+    .toJSON();
+
+  await rest.put(Routes.applicationGuildCommands(client.user.id, GUILD_ID), { body: [redeemCmd, logsCmd] });
   console.log('[DiscordBot] Slash commands registered');
 
   // Daily at 18:00 CET+1 = 17:00 UTC
@@ -107,22 +112,62 @@ client.once('ready', async () => {
 });
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isChatInputCommand() || interaction.commandName !== 'redeem') return;
+  if (!interaction.isChatInputCommand()) return;
 
   if (interaction.user.id !== OWNER_ID) {
     await interaction.reply({ content: 'You do not have permission to use this command.', ephemeral: true });
     return;
   }
 
-  const amount   = interaction.options.getNumber('amount');
-  const platform = interaction.options.getString('platform');
-  const label    = PLATFORM_LABELS[platform] || platform;
+  if (interaction.commandName === 'redeem') {
+    const amount   = interaction.options.getNumber('amount');
+    const platform = interaction.options.getString('platform');
+    const label    = PLATFORM_LABELS[platform] || platform;
 
-  const redeems = loadRedeems();
-  redeems.push({ timestamp: Date.now(), amount, platform });
-  saveRedeems(redeems);
+    const redeems = loadRedeems();
+    redeems.push({ timestamp: Date.now(), amount, platform });
+    saveRedeems(redeems);
 
-  await interaction.reply({ content: `Logged **$${amount}** for **${label}**`, ephemeral: true });
+    await interaction.reply({ content: `Logged **$${amount}** for **${label}**`, ephemeral: true });
+    return;
+  }
+
+  if (interaction.commandName === 'logs') {
+    const now      = Date.now();
+    const dayStart = startOfDay(now);
+    const weekAgo  = now - 7 * 24 * 60 * 60 * 1000;
+    const all      = loadRedeems();
+
+    const todayEntries  = all.filter(e => e.timestamp >= dayStart);
+    const weekEntries   = all.filter(e => e.timestamp >= weekAgo);
+
+    function summaryBlock(entries) {
+      if (!entries.length) return '_None_';
+      const totals = {};
+      for (const e of entries) totals[e.platform] = (totals[e.platform] || 0) + e.amount;
+      const lines = Object.entries(totals).map(([p, amt]) => `${PLATFORM_LABELS[p] || p} - $${amt}`);
+      const total = entries.reduce((s, e) => s + e.amount, 0);
+      lines.push(`**Total: $${total}**`);
+      return lines.join('\n');
+    }
+
+    const date = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+    const msg = [
+      `**Redeem Logs - ${date}**`,
+      '',
+      '**Today**',
+      summaryBlock(todayEntries),
+      '',
+      '**This Week**',
+      summaryBlock(weekEntries),
+      '',
+      '**All Time**',
+      summaryBlock(all),
+    ].join('\n');
+
+    await interaction.reply({ content: msg, ephemeral: true });
+    return;
+  }
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
