@@ -52,11 +52,37 @@
       height:140px;width:140px;object-fit:contain;
       filter:drop-shadow(0 0 24px rgba(6,182,212,1)) drop-shadow(0 0 10px rgba(103,232,249,.6));
     }
+
+    /* intro logo split */
+    .intro{
+      position:absolute;inset:0;z-index:40;pointer-events:none;
+    }
+    .intro-half{
+      position:absolute;top:0;height:110px;overflow:hidden;
+    }
+    .intro-half.left { left:0;width:250px; }
+    .intro-half.right{ left:250px;width:250px; }
+    .intro-half img{
+      position:absolute;
+      width:84px;height:84px;object-fit:contain;
+      top:13px;
+      filter:drop-shadow(0 0 18px rgba(6,182,212,0.95));
+    }
+    .intro-half.left  img{ left:83px; }
+    .intro-half.right img{ left:-83px; }
+    .intro-half.fade-in{
+      animation:introFade 0.5s ease forwards;
+    }
+    @keyframes introFade{from{opacity:0}to{opacity:1}}
   </style>
 </head>
 <body>
 <div class="banner">
   <canvas id="bg" width="500" height="110"></canvas>
+  <div class="intro" id="INTRO">
+    <div class="intro-half left fade-in" id="IL"><img src="/assets/niksi.png"/></div>
+    <div class="intro-half right fade-in" id="IR"><img src="/assets/niksi.png"/></div>
+  </div>
   <div class="screen-wrap" id="SW"></div>
 </div>
 
@@ -166,8 +192,27 @@ function advance() {
   }
 }
 
-sw.appendChild(buildScreen(SCREENS[0]));
-setInterval(advance, INTERVAL);
+/* --- intro split then start rotation --- */
+const introEl = document.getElementById('INTRO');
+const halfL   = document.getElementById('IL');
+const halfR   = document.getElementById('IR');
+
+// hold logo for 1.4s, then split outward
+setTimeout(() => {
+  halfL.style.transition = 'transform 0.65s cubic-bezier(.6,0,1,1)';
+  halfR.style.transition = 'transform 0.65s cubic-bezier(.6,0,1,1)';
+  halfL.style.transform  = 'translateX(-100%)';
+  halfR.style.transform  = 'translateX(100%)';
+
+  // once split is done, hide intro and begin screens
+  setTimeout(() => {
+    introEl.style.display = 'none';
+    const first = buildScreen(SCREENS[0]);
+    first.classList.add('slide-in');
+    sw.appendChild(first);
+    setInterval(advance, INTERVAL);
+  }, 680);
+}, 1400);
 </script>
 </body>
 </html>
