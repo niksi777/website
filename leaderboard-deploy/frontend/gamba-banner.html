@@ -56,32 +56,35 @@
     /* intro logo split */
     .intro{
       position:absolute;inset:0;z-index:40;pointer-events:none;
-    }
-    .intro-half{
-      position:absolute;top:0;height:110px;overflow:hidden;
-    }
-    .intro-half.left { left:0;width:250px; }
-    .intro-half.right{ left:250px;width:250px; }
-    .intro-half img{
-      position:absolute;
-      width:84px;height:84px;object-fit:contain;
-      top:13px;
-      filter:drop-shadow(0 0 18px rgba(6,182,212,0.95));
-    }
-    .intro-half.left  img{ left:83px; }
-    .intro-half.right img{ left:-83px; }
-    .intro-half.fade-in{
+      display:flex;align-items:center;justify-content:center;
       animation:introFade 0.5s ease forwards;
     }
     @keyframes introFade{from{opacity:0}to{opacity:1}}
+    .logo-wrap{
+      position:relative;width:84px;height:84px;
+    }
+    .logo-half{
+      position:absolute;top:0;height:84px;width:42px;overflow:hidden;
+    }
+    .logo-half.left { left:0; }
+    .logo-half.right{ right:0; }
+    .logo-half img{
+      position:absolute;top:0;
+      width:84px;height:84px;object-fit:contain;
+      filter:drop-shadow(0 0 18px rgba(6,182,212,0.95));
+    }
+    .logo-half.left  img{ left:0; }
+    .logo-half.right img{ right:0; }
   </style>
 </head>
 <body>
 <div class="banner">
   <canvas id="bg" width="500" height="110"></canvas>
   <div class="intro" id="INTRO">
-    <div class="intro-half left fade-in" id="IL"><img src="/assets/niksi.png"/></div>
-    <div class="intro-half right fade-in" id="IR"><img src="/assets/niksi.png"/></div>
+    <div class="logo-wrap">
+      <div class="logo-half left"  id="IL"><img src="/assets/niksi.png"/></div>
+      <div class="logo-half right" id="IR"><img src="/assets/niksi.png"/></div>
+    </div>
   </div>
   <div class="screen-wrap" id="SW"></div>
 </div>
@@ -201,8 +204,8 @@ const halfR   = document.getElementById('IR');
 setTimeout(() => {
   halfL.style.transition = 'transform 0.65s cubic-bezier(.6,0,1,1)';
   halfR.style.transition = 'transform 0.65s cubic-bezier(.6,0,1,1)';
-  halfL.style.transform  = 'translateX(-100%)';
-  halfR.style.transform  = 'translateX(100%)';
+  halfL.style.transform  = 'translateX(-400px)';
+  halfR.style.transform  = 'translateX(400px)';
 
   // once split is done, hide intro and begin screens
   setTimeout(() => {
