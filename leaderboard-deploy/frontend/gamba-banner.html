@@ -9,11 +9,11 @@
 
     .banner{
       position:relative;width:500px;height:110px;
-      border-radius:14px;background:#04100a;overflow:hidden;
+      border-radius:14px;background:#0a1f3d;overflow:hidden;
     }
     .banner::before{
       content:'';position:absolute;inset:0;border-radius:14px;padding:2px;
-      background:linear-gradient(90deg,#22c55e,#86efac,#16a34a,#22c55e);
+      background:linear-gradient(90deg,#06b6d4,#67e8f9,#0891b2,#06b6d4);
       background-size:250% 100%;
       animation:borderSweep 2.5s linear infinite;
       -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
@@ -46,11 +46,11 @@
     }
     .sc-h,.sc-s,.sc-h.green{
       color:#fff;
-      text-shadow:0 0 28px rgba(34,197,94,.4);
+      text-shadow:0 0 28px rgba(6,182,212,.5);
     }
     .sc-logo img{
       height:140px;width:140px;object-fit:contain;
-      filter:drop-shadow(0 0 24px rgba(34,197,94,1)) drop-shadow(0 0 10px rgba(134,239,172,.6));
+      filter:drop-shadow(0 0 24px rgba(6,182,212,1)) drop-shadow(0 0 10px rgba(103,232,249,.6));
     }
   </style>
 </head>
@@ -88,7 +88,7 @@ function resetStar(s) {
 }
 
 function frame() {
-  ctx.fillStyle = '#04100a';
+  ctx.fillStyle = '#0a1f3d';
   ctx.fillRect(0, 0, 500, 110);
 
   for (const s of STARS) {
@@ -102,7 +102,8 @@ function frame() {
 
     const alpha = Math.min(0.9, s.dist / 45) * (0.78 + 0.22 * Math.sin(s.phase));
     const sz    = Math.min(1.8, s.base + s.dist / 170);
-    const rb    = Math.floor(195 + s.tint * 60);
+    const cg    = Math.floor(170 + s.tint * 42);
+    const cb    = Math.floor(200 + s.tint * 45);
 
     if (s.dist > 12) {
       const px = CX + Math.cos(s.angle) * prevDist;
@@ -110,7 +111,7 @@ function frame() {
       ctx.beginPath();
       ctx.moveTo(px, py);
       ctx.lineTo(x, y);
-      ctx.strokeStyle = `rgba(${rb},255,${rb},${(alpha * 0.4).toFixed(2)})`;
+      ctx.strokeStyle = `rgba(6,${cg},${cb},${(alpha * 0.4).toFixed(2)})`;
       ctx.lineWidth = sz * 0.7;
       ctx.lineCap = 'round';
       ctx.stroke();
@@ -118,7 +119,7 @@ function frame() {
 
     ctx.beginPath();
     ctx.arc(x, y, sz, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${rb},255,${rb},${alpha.toFixed(2)})`;
+    ctx.fillStyle = `rgba(6,${cg},${cb},${alpha.toFixed(2)})`;
     ctx.fill();
   }
   requestAnimationFrame(frame);
