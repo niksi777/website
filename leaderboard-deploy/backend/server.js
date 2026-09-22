@@ -1254,6 +1254,33 @@ app.get("/ip", async (req, res) => {
   }
 });
 
+// Auto-deploy webhook
+const { createHmac } = require('crypto');
+const { exec } = require('child_process');
+const WEBHOOK_SECRET = process.env.DEPLOY_WEBHOOK_SECRET || 'niksi-deploy-2026';
+
+app.post('/deploy/:repo', express.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['x-hub-signature-256'];
+  const expected = 'sha256=' + createHmac('sha256', WEBHOOK_SECRET).update(req.body).digest('hex');
+  if (sig !== expected) return res.status(401).send('Unauthorized');
+
+  const repo = req.params.repo;
+  let cmd;
+  if (repo === 'website') {
+    cmd = 'cd /root/website && git pull origin main && pm2 restart server && pm2 restart niksibot';
+  } else if (repo === 'ticket-bot') {
+    cmd = 'cd /root/ticket-bot && git pull origin main && pm2 restart ticket-bot';
+  } else {
+    return res.status(400).send('Unknown repo');
+  }
+
+  res.status(200).send('Deploying...');
+  exec(cmd, (err, stdout, stderr) => {
+    if (err) console.error(`[deploy:${repo}] Error:`, stderr);
+    else console.log(`[deploy:${repo}] Done:`, stdout.trim());
+  });
+});
+
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
