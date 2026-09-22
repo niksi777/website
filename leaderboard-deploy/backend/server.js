@@ -7,7 +7,7 @@ const axios = require("axios");
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
 
 // SPA root route
 app.get('/', (req,res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
@@ -1259,9 +1259,9 @@ const { createHmac } = require('crypto');
 const { exec } = require('child_process');
 const WEBHOOK_SECRET = process.env.DEPLOY_WEBHOOK_SECRET || 'niksi-deploy-2026';
 
-app.post('/deploy/:repo', express.raw({ type: 'application/json' }), (req, res) => {
+app.post('/deploy/:repo', (req, res) => {
   const sig = req.headers['x-hub-signature-256'];
-  const expected = 'sha256=' + createHmac('sha256', WEBHOOK_SECRET).update(req.body).digest('hex');
+  const expected = 'sha256=' + createHmac('sha256', WEBHOOK_SECRET).update(req.rawBody || '').digest('hex');
   if (sig !== expected) return res.status(401).send('Unauthorized');
 
   const repo = req.params.repo;
