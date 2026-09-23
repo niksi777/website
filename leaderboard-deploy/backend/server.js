@@ -1281,15 +1281,6 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
-// One-time period correction - remove after deploy
-app.post('/internal/fix-chicken-period', (req, res) => {
-  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
-  const newEnd = 1790186403001 + 7 * 24 * 60 * 60 * 1000;
-  chickenPeriod = { start: 1790186403001, end: newEnd };
-  fs_lb.writeFileSync(CHICKEN_PERIOD_PATH, JSON.stringify(chickenPeriod, null, 2));
-  res.json({ ok: true, period: chickenPeriod });
-});
-
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
