@@ -1281,35 +1281,6 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
-// Temporary internal endpoint - chicken snapshot + period restart
-app.post('/internal/chicken-cycle', (req, res) => {
-  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
-  try {
-    // Save snapshot
-    const rows = chickenReferrals
-      .filter(r => Number(r.wagerAmount || 0) > 0)
-      .slice().sort((a, b) => Number(b.wagerAmount || 0) - Number(a.wagerAmount || 0))
-      .slice(0, CHICKEN_PRIZES.length)
-      .map((r, i) => ({ position: i + 1, username: r.displayName || 'Hidden', avatar: r.imageUrl || null, wager: Number(r.wagerAmount || 0), prize: CHICKEN_PRIZES[i] || 0 }));
-    let history = [];
-    try { history = fs_lb.existsSync(CHICKEN_HISTORY_PATH) ? JSON.parse(fs_lb.readFileSync(CHICKEN_HISTORY_PATH, 'utf-8')) : []; } catch {}
-    const nextId = history.length ? Math.max(...history.map(h => h.id || 0)) + 1 : 1;
-    const prevEnd = history.length ? history[history.length - 1].end : null;
-    history.push({ id: nextId, label: `Chicken Leaderboard #${nextId}`, start: prevEnd || new Date(chickenPeriod.start).toISOString().slice(0, 10), end: new Date(chickenPeriod.end).toISOString().slice(0, 10), prizePool: CHICKEN_POOL_TOTAL, totalWagered: rows.reduce((s, r) => s + r.wager, 0), totalUsers: rows.length, entries: rows });
-    fs_lb.writeFileSync(CHICKEN_HISTORY_PATH, JSON.stringify(history, null, 2));
-    // Start new period 1ms after old end
-    const newStart = chickenPeriod.end + 1;
-    const newEnd = newStart + CHICKEN_DURATION_MS;
-    chickenPeriod = { start: newStart, end: newEnd };
-    fs_lb.writeFileSync(CHICKEN_PERIOD_PATH, JSON.stringify(chickenPeriod, null, 2));
-    chickenReferrals = [];
-    updateChickenLeaderboard();
-    res.json({ ok: true, snapshot: history[history.length - 1], newPeriod: chickenPeriod });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
