@@ -317,7 +317,7 @@ app.post("/admin/gamba/hidden/remove", (req, res) => {
 // ── Chicken.gg affiliate referrals ──────────────────────────────────────────
 const CHICKEN_CACHE_PATH = require("path").join(__dirname, "../../chicken-cache.json");
 const CHICKEN_PERIOD_PATH = require("path").join(__dirname, "../../chicken-period.json");
-const CHICKEN_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+const CHICKEN_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 let chickenReferrals = [];
 let chickenLastUpdated = null;
 let chickenPeriod = { start: null, end: null };
@@ -1279,6 +1279,15 @@ app.post('/deploy/:repo', (req, res) => {
     if (err) console.error(`[deploy:${repo}] Error:`, stderr);
     else console.log(`[deploy:${repo}] Done:`, stdout.trim());
   });
+});
+
+// One-time period correction - remove after deploy
+app.post('/internal/fix-chicken-period', (req, res) => {
+  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  const newEnd = 1790186403001 + 7 * 24 * 60 * 60 * 1000;
+  chickenPeriod = { start: 1790186403001, end: newEnd };
+  fs_lb.writeFileSync(CHICKEN_PERIOD_PATH, JSON.stringify(chickenPeriod, null, 2));
+  res.json({ ok: true, period: chickenPeriod });
 });
 
 // Start server
