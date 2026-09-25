@@ -1367,6 +1367,14 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
+// Temp: update clash period
+app.post('/internal/fix-clash-period-2', (req, res) => {
+  if ((req.body && req.body.secret) !== 'niksi-deploy-2026') return res.status(401).send('Unauthorized');
+  const fs = require('fs');
+  fs.writeFileSync(CLASH_PERIOD_PATH, JSON.stringify({ start: 1790270400000, end: 1790875200000 }));
+  res.json({ ok: true, start: new Date(1790270400000).toISOString(), end: new Date(1790875200000).toISOString() });
+});
+
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
