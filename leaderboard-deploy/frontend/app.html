@@ -184,6 +184,7 @@
     .ptab.active-krush{border-color:rgba(155,92,255,.5);background:rgba(155,92,255,.08);box-shadow:0 0 18px rgba(155,92,255,.12)}
     .ptab.active-csgowin{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.08);box-shadow:0 0 18px rgba(245,158,11,.12)}
     .ptab.active-cs2skin{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.08);box-shadow:0 0 18px rgba(124,58,237,.12)}
+    .ptab.active-clash{border-color:rgba(229,50,46,.5);background:rgba(229,50,46,.08);box-shadow:0 0 18px rgba(229,50,46,.12)}
     .ptab-img{height:34px;object-fit:contain}
     .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
     .ptab{flex-direction:column;gap:6px}
@@ -2076,6 +2077,95 @@ function Cs2skinLeaderboard() {
 }
 const CS2SKIN_PRIZES_FALLBACK = [500,200,120,80,50,30,15,5];
 
+function ClashLeaderboard() {
+  const [players, setPlayers] = React.useState(null);
+  const [meta, setMeta] = React.useState(null);
+  React.useEffect(() => {
+    fetch('/clash-leaderboard?limit=7').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
+    fetch('/clash-meta').then(r => r.json()).then(setMeta).catch(() => {});
+  }, []);
+
+  const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')}` : '-';
+  const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  const CLASH_COLOR = '#E5322E';
+
+  if (players === null || meta === null) return <div className="loading">Loading...</div>;
+
+  const isEnded = meta.end && Date.now() > meta.end;
+
+  if (!meta.active && !isEnded) {
+    return (
+      <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><span style={{fontSize:'0.5em',marginLeft:6,color:CLASH_COLOR,fontWeight:700}}>GEMS</span></div>
+        <div className="lb-prize-lbl">7-Day Wager Race</div>
+        <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
+      </div>
+    );
+  }
+
+  const prizes = meta.prizes || [540,135,90,54,36,27,18];
+  const displayRows = prizes.map((amt, i) => {
+    const existing = players.find(r => r.position === i + 1);
+    return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
+  });
+
+  const top3 = displayRows.slice(0, 3);
+  const rest = displayRows.slice(3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+
+  return (
+    <div className="f2">
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><span style={{fontSize:'0.5em',marginLeft:6,color:CLASH_COLOR,fontWeight:700}}>GEMS</span></div>
+        <div className="lb-prize-lbl">7-Day Wager Race</div>
+        <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
+      </div>
+
+      {top3.length > 0 && (
+        <div className="lb-podium">
+          {podiumOrder.map((p, i) => {
+            const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
+            return (
+              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
+                <PodiumCard player={p} rank={rank} accentColor={CLASH_COLOR} fmtPrize={q => `${fmtPrize(q)} gems`} fmtWager={fmtWager}/>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
+      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:CLASH_COLOR,color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
+
+      <div className="lb-cta-row" style={{marginBottom:28}}>
+        <a href="https://clash.gg/r/NIKSI" target="_blank" rel="noreferrer" className="lb-cta-btn" style={{background:CLASH_COLOR,color:'#fff'}}>
+          Sign Up Here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      {rest.length > 0 && (
+        <table className="lb-table">
+          <thead><tr>
+            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
+          </tr></thead>
+          <tbody>
+            {rest.map((p, i) => (
+              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
+                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
+                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
+                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
+                <td><span className="tr-wager">{fmtWager(p)}</span></td>
+                <td><span className="tr-prize">{fmtPrize(p)} gems</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
+
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
   React.useEffect(() => {
@@ -2564,7 +2654,7 @@ function CsgowinLeaderboard() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
-  const VALID_TABS = ['krush', 'chicken', 'chickenrace', 'cs2skin'];
+  const VALID_TABS = ['krush', 'chicken', 'chickenrace', 'cs2skin', 'clash'];
   const [tab, setTab] = React.useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
     return VALID_TABS.includes(t) ? t : 'gamba';
@@ -2578,6 +2668,8 @@ function LeaderboardsPage() {
   const [chickenAmt, setChickenAmt] = React.useState(null);
   const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
   const [cs2skinAmt, setCs2skinAmt] = React.useState(null);
+  const [clashActive, setClashActive] = React.useState(false);
+  const [clashAmt, setClashAmt] = React.useState(null);
 
   function changeTab(t) {
     setTab(t);
@@ -2618,6 +2710,12 @@ function LeaderboardsPage() {
       if (d.totalPool) setCs2skinAmt(Math.round(d.totalPool));
       if (!d.active && !ended && tab === 'cs2skin') setTab('gamba');
     }).catch(() => {});
+    fetch('/clash-meta').then(r => r.json()).then(d => {
+      const ended = !!(d.end && Date.now() > d.end);
+      setClashActive(!!d.active);
+      if (d.totalPool) setClashAmt(Math.round(d.totalPool));
+      if (!d.active && !ended && tab === 'clash') setTab('gamba');
+    }).catch(() => {});
   }, []);
 
   return (
@@ -2647,12 +2745,21 @@ function LeaderboardsPage() {
               {cs2skinAmt != null && <div className="ptab-amt"><img src="/assets/cs2skincoin.png" alt="" className="ptab-coin" onError={e=>e.target.style.display='none'}/>{cs2skinAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
+          {clashActive && (
+            <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')}>
+              <div className="ptab-top">
+                <img className="ptab-img" src="/assets/clash.png" alt="Clash.gg" onError={e=>e.target.style.display='none'}/>
+              </div>
+              {clashAmt != null && <div className="ptab-amt"><span style={{color:'#E5322E',fontSize:12,fontWeight:700}}>💎</span>{clashAmt.toLocaleString('en-US')}</div>}
+            </button>
+          )}
         </div>
 
         <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
         <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
         <div style={{display: tab === 'cs2skin' ? 'block' : 'none'}}><Cs2skinLeaderboard/></div>
+        <div style={{display: tab === 'clash' ? 'block' : 'none'}}><ClashLeaderboard/></div>
       </div>
 
       <footer>

@@ -629,6 +629,92 @@ app.post("/admin/krush/start", (req, res) => {
   res.json({ ok: true, start, end });
 });
 
+// ─── Clash.gg leaderboard ─────────────────────────────────────────────────
+const CLASH_BEARER = process.env.CLASH_BEARER;
+const CLASH_COOKIE = process.env.CLASH_COOKIE;
+const CLASH_PRIZES = [540, 135, 90, 54, 36, 27, 18];
+const CLASH_POOL_TOTAL = CLASH_PRIZES.reduce((s, p) => s + p, 0); // 900 gems
+const CLASH_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
+const CLASH_PERIOD_PATH = require("path").join(__dirname, "../../clash-period.json");
+const CLASH_CACHE_PATH = require("path").join(__dirname, "../../clash-cache.json");
+
+let clashPeriod = { start: null, end: null };
+let clashPlayers = [];
+let clashLastUpdated = null;
+try {
+  if (fs_lb.existsSync(CLASH_PERIOD_PATH)) clashPeriod = JSON.parse(fs_lb.readFileSync(CLASH_PERIOD_PATH, "utf-8"));
+} catch (e) {}
+try {
+  if (fs_lb.existsSync(CLASH_CACHE_PATH)) {
+    const cached = JSON.parse(fs_lb.readFileSync(CLASH_CACHE_PATH, "utf-8"));
+    clashPlayers = cached.players || [];
+    clashLastUpdated = cached.lastUpdated || null;
+  }
+} catch (e) {}
+
+async function updateClashLeaderboard() {
+  try {
+    if (!clashPeriod.start || !CLASH_BEARER) return;
+    const sinceDate = new Date(clashPeriod.start).toISOString().slice(0, 10);
+    const response = await fetch(
+      `https://api.clash.gg/affiliates/detailed-summary/v2/${sinceDate}`,
+      { headers: { "Authorization": `Bearer ${CLASH_BEARER}`, "Cookie": CLASH_COOKIE, "Content-Type": "application/json" } }
+    );
+    const data = await response.json();
+    const raw = Array.isArray(data) ? data : (data.users || data.data || data.referrals || []);
+    clashPlayers = raw;
+    clashLastUpdated = Date.now();
+    fs_lb.writeFileSync(CLASH_CACHE_PATH, JSON.stringify({ players: clashPlayers, lastUpdated: clashLastUpdated }, null, 2));
+    console.log("Clash.gg leaderboard updated:", clashPlayers.length, "players");
+  } catch (err) {
+    console.log("Clash.gg update error:", err.message);
+  }
+}
+
+setInterval(updateClashLeaderboard, 5 * 60 * 1000);
+updateClashLeaderboard();
+
+app.get("/clash-leaderboard", (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  const rows = clashPlayers
+    .filter(r => Number(r.wagered || r.wager || r.totalWagered || 0) > 0)
+    .slice().sort((a, b) => Number(b.wagered || b.wager || b.totalWagered || 0) - Number(a.wagered || a.wager || a.totalWagered || 0))
+    .slice(0, limit)
+    .map((r, i) => ({
+      position: i + 1,
+      username: r.username || r.name || r.displayName || "Hidden",
+      avatar: r.avatar || r.avatarUrl || r.profileImage || null,
+      wager: Number(r.wagered || r.wager || r.totalWagered || 0),
+      prize: CLASH_PRIZES[i] || 0,
+    }));
+  res.json({ leaderboard: rows });
+});
+
+app.get("/clash-meta", (req, res) => {
+  const now = Date.now();
+  res.json({
+    start: clashPeriod.start,
+    end: clashPeriod.end,
+    active: !!(clashPeriod.start && clashPeriod.end && now < clashPeriod.end),
+    totalPool: CLASH_POOL_TOTAL,
+    prizes: CLASH_PRIZES,
+    lastUpdated: clashLastUpdated,
+  });
+});
+
+app.post("/admin/clash/start", (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
+  const end = (req.body && req.body.end) ? new Date(req.body.end).getTime() : start + CLASH_DURATION_MS;
+  clashPeriod = { start, end };
+  fs_lb.writeFileSync(CLASH_PERIOD_PATH, JSON.stringify(clashPeriod, null, 2));
+  clashPlayers = [];
+  updateClashLeaderboard();
+  res.json({ ok: true, start, end });
+});
+
 // ─── CS2SKIN leaderboard ──────────────────────────────────────────────────
 const CS2SKIN_PRIZES = [500, 200, 120, 80, 50, 30, 15, 5];
 const CS2SKIN_POOL_TOTAL = CS2SKIN_PRIZES.reduce((s, p) => s + p, 0); // 1000
@@ -1279,6 +1365,22 @@ app.post('/deploy/:repo', (req, res) => {
     if (err) console.error(`[deploy:${repo}] Error:`, stderr);
     else console.log(`[deploy:${repo}] Done:`, stdout.trim());
   });
+});
+
+// Temporary - write Clash.gg credentials to .env, remove after use
+app.post('/internal/set-clash-env', (req, res) => {
+  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  const { bearer, cookie } = req.body;
+  if (!bearer || !cookie) return res.status(400).json({ error: 'Missing bearer or cookie' });
+  const envPath = require('path').join(__dirname, '../../.env');
+  let existing = '';
+  try { existing = require('fs').readFileSync(envPath, 'utf8'); } catch {}
+  existing = existing.replace(/^CLASH_BEARER=.*$/m, '').replace(/^CLASH_COOKIE=.*$/m, '').replace(/\n{3,}/g, '\n\n').trimEnd();
+  const toAppend = `\nCLASH_BEARER=${bearer}\nCLASH_COOKIE=${cookie}\n`;
+  require('fs').writeFileSync(envPath, existing + toAppend);
+  process.env.CLASH_BEARER = bearer;
+  process.env.CLASH_COOKIE = cookie;
+  res.json({ ok: true });
 });
 
 // Start server
