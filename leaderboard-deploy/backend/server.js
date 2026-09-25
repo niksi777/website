@@ -1372,10 +1372,10 @@ app.get('/internal/clash-refresh', async (req, res) => {
   await updateClashLeaderboard();
   const top = clashPlayers.slice(0, 5).map(r => ({
     username: r.username || r.name || r.displayName,
-    raw_wagered: r.wagered,
-    raw_wager: r.wager,
-    raw_totalWagered: r.totalWagered,
-    all_keys: Object.keys(r),
+    wagered: r.wagered,
+    deposited: r.deposited,
+    earned: r.earned,
+    xp: r.xp,
   }));
   res.json({ refreshed: true, players: top });
 });
