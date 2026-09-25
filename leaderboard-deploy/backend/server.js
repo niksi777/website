@@ -1367,16 +1367,6 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
-// Temporary - set Clash period to Sep 26 13:00 CEST - Oct 3 13:00 CEST
-app.post('/internal/fix-clash-period', (req, res) => {
-  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
-  const start = new Date('2026-09-26T11:00:00Z').getTime();
-  const end   = new Date('2026-10-03T11:00:00Z').getTime();
-  clashPeriod = { start, end };
-  fs_lb.writeFileSync(CLASH_PERIOD_PATH, JSON.stringify(clashPeriod, null, 2));
-  res.json({ ok: true, startStr: new Date(start).toISOString(), endStr: new Date(end).toISOString() });
-});
-
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
