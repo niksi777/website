@@ -1386,10 +1386,11 @@ function HeroCarousel() {
 
     const platforms = [
       ...(clashActive ? [{
-        logo:'/assets/clashgg.png', color:'#FF5722', isNew:true,
+        logo:'/assets/clashgg.png', color:'#F0A020', isNew:true,
         prize:'900', prizeIcon:<img src="/assets/gems.png" alt="" style={{height:'0.75em',verticalAlign:'middle',objectFit:'contain'}}/>, lbType:'WEEKLY',
         perks:['5% DEPOSIT BONUS'],
         bigImg:'/assets/clashgg.png',
+        logoStyle:{height:'58px',width:'180px',objectFit:'cover',objectPosition:'center'},
         signupHref:'https://clash.gg/r/NIKSI', signupExt:true,
         lbHref:'/leaderboards?tab=clash',
         btnLabel:'CLAIM OFFER',
@@ -1424,7 +1425,7 @@ function HeroCarousel() {
               </div>}
               <div className="plat-card-logo-wrap">
                 <img src={p.logo} className="plat-card-logo" alt=""
-                  style={p.logoFilter?{filter:p.logoFilter}:{}}
+                  style={Object.assign({}, p.logoFilter?{filter:p.logoFilter}:{}, p.logoStyle||{})}
                   onError={e=>e.target.style.display='none'}/>
               </div>
               <div className="plat-card-title-wrap">
