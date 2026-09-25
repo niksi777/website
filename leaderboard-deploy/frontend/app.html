@@ -2747,9 +2747,9 @@ function LeaderboardsPage() {
             </button>
           )}
           {clashActive && (
-            <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')}>
+            <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')} style={{minWidth:120}}>
               <div className="ptab-top">
-                <img className="ptab-img" src="/assets/clashgg.png" alt="Clash.gg" onError={e=>e.target.style.display='none'} style={{mixBlendMode:'screen'}}/>
+                <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,letterSpacing:'.1em',color:'#FF5722',textTransform:'uppercase',whiteSpace:'nowrap'}}>CLASH.GG</span>
               </div>
               {clashAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/gems.png" alt="" onError={e=>e.target.style.display='none'}/>{clashAmt.toLocaleString('en-US')}</div>}
             </button>
