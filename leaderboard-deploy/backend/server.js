@@ -1367,18 +1367,6 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
-// Temporary - start Clash.gg period, remove after use
-app.post('/internal/start-clash', (req, res) => {
-  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
-  const start = Date.now();
-  const end = start + CLASH_DURATION_MS;
-  clashPeriod = { start, end };
-  fs_lb.writeFileSync(CLASH_PERIOD_PATH, JSON.stringify(clashPeriod, null, 2));
-  clashPlayers = [];
-  updateClashLeaderboard();
-  res.json({ ok: true, start, end });
-});
-
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
