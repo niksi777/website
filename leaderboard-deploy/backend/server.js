@@ -684,7 +684,7 @@ app.get("/clash-leaderboard", (req, res) => {
       position: i + 1,
       username: r.username || r.name || r.displayName || "Hidden",
       avatar: r.avatar || r.avatarUrl || r.profileImage || null,
-      wager: Number(r.wagered || r.wager || r.totalWagered || 0),
+      wager: Math.round(Number(r.wagered || r.wager || r.totalWagered || 0) / 67.7 * 100) / 100,
       prize: CLASH_PRIZES[i] || 0,
     }));
   res.json({ leaderboard: rows });
@@ -1365,19 +1365,6 @@ app.post('/deploy/:repo', (req, res) => {
     if (err) console.error(`[deploy:${repo}] Error:`, stderr);
     else console.log(`[deploy:${repo}] Done:`, stdout.trim());
   });
-});
-
-// Temp: force clash refresh + show raw top 5
-app.get('/internal/clash-refresh', async (req, res) => {
-  await updateClashLeaderboard();
-  const top = clashPlayers.slice(0, 5).map(r => ({
-    username: r.username || r.name || r.displayName,
-    wagered: r.wagered,
-    deposited: r.deposited,
-    earned: r.earned,
-    xp: r.xp,
-  }));
-  res.json({ refreshed: true, players: top });
 });
 
 // Start server
