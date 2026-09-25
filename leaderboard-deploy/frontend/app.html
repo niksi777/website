@@ -88,7 +88,7 @@
     .plat-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:4px}
     .plat-sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:28px}
     .plat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,300px));gap:16px;justify-content:center}
-    .plat-card{background:#0d0c12;border:1px solid rgba(255,255,255,.08);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:30px 24px 24px;position:relative;transition:border-color .2s,box-shadow .2s}
+    .plat-card{background:#161520;border:1px solid rgba(255,255,255,.18);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:30px 24px 24px;position:relative;transition:border-color .2s,box-shadow .2s}
     .plat-card:hover{border-color:rgba(255,255,255,.15);box-shadow:0 8px 40px rgba(0,0,0,.45)}
     .plat-card-logo-wrap{height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;width:100%}
     .plat-card-logo{max-height:58px;max-width:180px;width:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,255,255,.15))}
@@ -1419,7 +1419,7 @@ function HeroCarousel() {
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         <div className="plat-grid">
           {platforms.map((p,i) => (
-            <div key={i} className="plat-card" style={{borderBottom:'2px solid rgba(255,255,255,0.12)'}}>
+            <div key={i} className="plat-card" style={{borderBottom:'2px solid rgba(255,255,255,0.3)'}}>
               {p.isNew && <div style={{position:'absolute',top:-13,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',background:p.color,borderRadius:100,padding:'4px 14px',boxShadow:`0 0 16px ${p.color}cc`,whiteSpace:'nowrap'}}>
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:800,letterSpacing:'.22em',color:'#fff',textTransform:'uppercase'}}>New</span>
               </div>}
@@ -1447,12 +1447,12 @@ function HeroCarousel() {
               <div className="plat-divider" style={{background:`linear-gradient(90deg,transparent,${p.color}55,transparent)`}}/>
               <div className="plat-card-spacer"/>
               {p.lbHref && (
-                <a className="plat-card-btn2" style={{color:'#fff',borderColor:'rgba(255,255,255,0.35)'}}
+                <a className="plat-card-btn2" style={{color:'#fff',borderColor:'rgba(255,255,255,0.55)'}}
                    href={p.lbHref}>
                   LEADERBOARD <Arr/>
                 </a>
               )}
-              <a className="plat-card-btn" style={{background:'rgba(255,255,255,0.22)',border:'1px solid rgba(255,255,255,0.4)',marginTop:p.lbHref?'10px':'0'}}
+              <a className="plat-card-btn" style={{background:'rgba(255,255,255,0.14)',border:'1px solid rgba(255,255,255,0.55)',marginTop:p.lbHref?'10px':'0'}}
                  href={p.signupExt ? p.signupHref : '#'}
                  target={p.signupExt ? '_blank' : undefined}
                  rel={p.signupExt ? 'noreferrer' : undefined}>
