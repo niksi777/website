@@ -2749,7 +2749,7 @@ function LeaderboardsPage() {
           {clashActive && (
             <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')}>
               <div className="ptab-top">
-                <img className="ptab-img" src="/assets/clashgg.png" alt="Clash.gg" onError={e=>e.target.style.display='none'}/>
+                <img className="ptab-img" src="/assets/clashgg.png" alt="Clash.gg" onError={e=>e.target.style.display='none'} style={{mixBlendMode:'lighten'}}/>
               </div>
               {clashAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/gems.png" alt="" onError={e=>e.target.style.display='none'}/>{clashAmt.toLocaleString('en-US')}</div>}
             </button>
