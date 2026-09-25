@@ -1367,6 +1367,16 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
+// Temporary - fix Clash period to clean week boundary
+app.post('/internal/fix-clash-period', (req, res) => {
+  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  const start = new Date('2026-09-25T00:00:00Z').getTime();
+  const end   = new Date('2026-10-02T00:00:00Z').getTime();
+  clashPeriod = { start, end };
+  fs_lb.writeFileSync(CLASH_PERIOD_PATH, JSON.stringify(clashPeriod, null, 2));
+  res.json({ ok: true, start, end, startStr: new Date(start).toISOString(), endStr: new Date(end).toISOString() });
+});
+
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
