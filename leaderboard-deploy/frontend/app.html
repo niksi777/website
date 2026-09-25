@@ -184,7 +184,7 @@
     .ptab.active-krush{border-color:rgba(155,92,255,.5);background:rgba(155,92,255,.08);box-shadow:0 0 18px rgba(155,92,255,.12)}
     .ptab.active-csgowin{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.08);box-shadow:0 0 18px rgba(245,158,11,.12)}
     .ptab.active-cs2skin{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.08);box-shadow:0 0 18px rgba(124,58,237,.12)}
-    .ptab.active-clash{border-color:rgba(229,50,46,.5);background:rgba(229,50,46,.08);box-shadow:0 0 18px rgba(229,50,46,.12)}
+    .ptab.active-clash{border-color:rgba(255,87,34,.5);background:rgba(255,87,34,.08);box-shadow:0 0 18px rgba(255,87,34,.12)}
     .ptab-img{height:34px;object-fit:contain}
     .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
     .ptab{flex-direction:column;gap:6px}
@@ -2086,8 +2086,9 @@ function ClashLeaderboard() {
   }, []);
 
   const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')}` : '-';
-  const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-  const CLASH_COLOR = '#E5322E';
+  const fmtWager = p => `${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  const CLASH_COLOR = '#FF5722';
+  const gemIcon = <img src="/assets/gems.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>;
 
   if (players === null || meta === null) return <div className="loading">Loading...</div>;
 
@@ -2096,7 +2097,7 @@ function ClashLeaderboard() {
   if (!meta.active && !isEnded) {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><span style={{fontSize:'0.5em',marginLeft:6,color:CLASH_COLOR,fontWeight:700}}>GEMS</span></div>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><img src="/assets/gems.png" alt="gems" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
         <div className="lb-prize-lbl">7-Day Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
       </div>
@@ -2116,7 +2117,7 @@ function ClashLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><span style={{fontSize:'0.5em',marginLeft:6,color:CLASH_COLOR,fontWeight:700}}>GEMS</span></div>
+        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><img src="/assets/gems.png" alt="gems" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
         <div className="lb-prize-lbl">7-Day Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
@@ -2127,7 +2128,7 @@ function ClashLeaderboard() {
             const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
             return (
               <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor={CLASH_COLOR} fmtPrize={q => `${fmtPrize(q)} gems`} fmtWager={fmtWager}/>
+                <PodiumCard player={p} rank={rank} accentColor={CLASH_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/gems.png" wagerIcon="/assets/gems.png"/>
               </div>
             );
           })}
@@ -2155,8 +2156,8 @@ function ClashLeaderboard() {
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager">{fmtWager(p)}</span></td>
-                <td><span className="tr-prize">{fmtPrize(p)} gems</span></td>
+                <td><span className="tr-wager">{gemIcon}{fmtWager(p)}</span></td>
+                <td><span className="tr-prize">{gemIcon}{fmtPrize(p)}</span></td>
               </tr>
             ))}
           </tbody>
@@ -2748,9 +2749,9 @@ function LeaderboardsPage() {
           {clashActive && (
             <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')}>
               <div className="ptab-top">
-                <img className="ptab-img" src="/assets/clash.png" alt="Clash.gg" onError={e=>e.target.style.display='none'}/>
+                <img className="ptab-img" src="/assets/clashgg.png" alt="Clash.gg" onError={e=>e.target.style.display='none'}/>
               </div>
-              {clashAmt != null && <div className="ptab-amt"><span style={{color:'#E5322E',fontSize:12,fontWeight:700}}>💎</span>{clashAmt.toLocaleString('en-US')}</div>}
+              {clashAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/gems.png" alt="" onError={e=>e.target.style.display='none'}/>{clashAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
         </div>
