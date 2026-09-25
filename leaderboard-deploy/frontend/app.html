@@ -1243,25 +1243,25 @@ function HeroCarousel() {
         <div className="carousel-wrap">
         <div className="c-track" style={{transform:`translateX(-${slide*100}%)`}}>
 
-          {/* Slide 0 - CS2SKIN */}
+          {/* Slide 0 - CLASH.GG */}
           <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(167,139,250,.55) 0%, rgba(124,58,237,.22) 38%, transparent 62%)',
-            'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(124,58,237,.2) 0%, transparent 55%)',
-            'radial-gradient(ellipse 40% 50% at 5% 100%, rgba(109,40,217,.18) 0%, transparent 52%)',
+            'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(255,87,34,.45) 0%, rgba(255,87,34,.18) 38%, transparent 62%)',
+            'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(255,87,34,.15) 0%, transparent 55%)',
+            'radial-gradient(ellipse 40% 50% at 5% 100%, rgba(200,60,10,.12) 0%, transparent 52%)',
             'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.018) 24px,rgba(255,255,255,.018) 25px)',
-            'linear-gradient(140deg,#0c0718 0%,#090514 55%,#0e0820 100%)'
-          ].join(','),borderTop:'3px solid rgba(167,139,250,.85)',outline:'1px solid rgba(124,58,237,.22)',outlineOffset:'-1px'}}>
-            <img src="/assets/cs2skin.png" aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'68%',width:'auto',maxWidth:'36%',objectFit:'contain',opacity:.72,pointerEvents:'none',filter:'brightness(0) invert(1) drop-shadow(0 0 32px rgba(167,139,250,.75)) drop-shadow(0 0 80px rgba(124,58,237,.45))'}}/>
-            <div style={{position:'absolute',inset:0,background:fade(12,7,24),pointerEvents:'none'}}/>
+            'linear-gradient(140deg,#180a04 0%,#120803 55%,#1a0d06 100%)'
+          ].join(','),borderTop:'3px solid rgba(255,87,34,.85)'}}>
+            {logo('/assets/clashgg.png',.58,'rgba(255,87,34,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(24,10,4),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(124,58,237,.28)',border:'1px solid rgba(167,139,250,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
-                <span style={{width:6,height:6,borderRadius:'50%',background:'#a78bfa',boxShadow:'0 0 6px rgba(167,139,250,1)',display:'inline-block',flexShrink:0}}></span>
-                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#c4b5fd',textTransform:'uppercase'}}>New Partner</span>
+              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(255,87,34,.22)',border:'1px solid rgba(255,87,34,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:'#FF5722',boxShadow:'0 0 6px rgba(255,87,34,1)',display:'inline-block',flexShrink:0}}></span>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#ff8a65',textTransform:'uppercase'}}>New Partner</span>
               </div>
-              <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>100% DEPOSIT</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BONUS ON CS2SKIN</div>
-              <div style={sub}>Unlocks 5% of bonus for each 1x of deposit wagered - Use code NIKSI</div>
-              <a href="/leaderboards?tab=cs2skin" style={btn('#7c3aed','rgba(124,58,237,.55)')}>GO TO LEADERBOARD <Arr/></a>
+              <div style={txt('#FF5722','clamp(44px,6vw,68px)',.88,6)}>900 GEMS</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>WEEKLY LEADERBOARD</div>
+              <div style={sub}>5% deposit bonus - Use code NIKSI</div>
+              <a href="/leaderboards?tab=clash" style={btn('#FF5722','rgba(255,87,34,.55)')}>GO TO LEADERBOARD <Arr/></a>
             </div>
           </div>
 
@@ -1379,16 +1379,21 @@ function HeroCarousel() {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
 
+    const [clashActive, setClashActive] = React.useState(false);
+    React.useEffect(() => {
+      fetch('/clash-meta').then(r => r.json()).then(d => setClashActive(!!d.active || true)).catch(() => {});
+    }, []);
+
     const platforms = [
-      {
-        logo:'/assets/cs2skin.png', logoFilter:'brightness(0) invert(1) drop-shadow(0 0 12px rgba(124,58,237,0.85))',
-        color:'#7c3aed', isNew:true,
-        title:'$750 WEEKLY', subtitle:'LEADERBOARD',
-        perks:['100% DEPOSIT BONUS'],
-        bigImg:'/assets/cs2skin.png', bigImgFilter:'brightness(0) invert(1)',
-        signupHref:CS2SKIN_URL, signupExt:true,
-        lbHref:'/leaderboards?tab=cs2skin',
-      },
+      ...(clashActive ? [{
+        logo:'/assets/clashgg.png', color:'#FF5722', isNew:true,
+        prize:'900', prizeIcon:<img src="/assets/gems.png" alt="" style={{height:'0.75em',verticalAlign:'middle',objectFit:'contain'}}/>, lbType:'WEEKLY',
+        perks:['5% DEPOSIT BONUS'],
+        bigImg:'/assets/clashgg.png',
+        signupHref:'https://clash.gg/r/NIKSI', signupExt:true,
+        lbHref:'/leaderboards?tab=clash',
+        btnLabel:'CLAIM OFFER',
+      }] : []),
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
         prize:'$1,000', lbType:'BI-WEEKLY',
@@ -1414,7 +1419,7 @@ function HeroCarousel() {
         <div className="plat-grid">
           {platforms.map((p,i) => (
             <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`}}>
-              {p.isNew && <div style={{position:'absolute',top:-13,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',background:'#7c3aed',borderRadius:100,padding:'4px 14px',boxShadow:'0 0 16px rgba(124,58,237,.85)',whiteSpace:'nowrap'}}>
+              {p.isNew && <div style={{position:'absolute',top:-13,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',background:p.color,borderRadius:100,padding:'4px 14px',boxShadow:`0 0 16px ${p.color}cc`,whiteSpace:'nowrap'}}>
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:800,letterSpacing:'.22em',color:'#fff',textTransform:'uppercase'}}>New</span>
               </div>}
               <div className="plat-card-logo-wrap">
@@ -1450,7 +1455,7 @@ function HeroCarousel() {
                  href={p.signupExt ? p.signupHref : '#'}
                  target={p.signupExt ? '_blank' : undefined}
                  rel={p.signupExt ? 'noreferrer' : undefined}>
-                CLAIM <Ext/>
+                {p.btnLabel || 'CLAIM'} <Ext/>
               </a>
               <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
             </div>
