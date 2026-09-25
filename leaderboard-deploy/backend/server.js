@@ -1367,22 +1367,6 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
-// Temporary - write Clash.gg credentials to .env, remove after use
-app.post('/internal/set-clash-env', (req, res) => {
-  if ((req.body && req.body.secret) !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
-  const { bearer, cookie } = req.body;
-  if (!bearer || !cookie) return res.status(400).json({ error: 'Missing bearer or cookie' });
-  const envPath = require('path').join(__dirname, '../../.env');
-  let existing = '';
-  try { existing = require('fs').readFileSync(envPath, 'utf8'); } catch {}
-  existing = existing.replace(/^CLASH_BEARER=.*$/m, '').replace(/^CLASH_COOKIE=.*$/m, '').replace(/\n{3,}/g, '\n\n').trimEnd();
-  const toAppend = `\nCLASH_BEARER=${bearer}\nCLASH_COOKIE=${cookie}\n`;
-  require('fs').writeFileSync(envPath, existing + toAppend);
-  process.env.CLASH_BEARER = bearer;
-  process.env.CLASH_COOKIE = cookie;
-  res.json({ ok: true });
-});
-
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
