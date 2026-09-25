@@ -1367,6 +1367,17 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
+// Temp: raw clash data
+app.get('/internal/clash-raw', (req, res) => {
+  const top = clashPlayers.slice(0, 3).map(r => ({
+    username: r.username || r.name || r.displayName,
+    raw_wagered: r.wagered,
+    raw_wager: r.wager,
+    raw_totalWagered: r.totalWagered,
+  }));
+  res.json(top);
+});
+
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
