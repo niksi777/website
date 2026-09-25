@@ -1419,7 +1419,7 @@ function HeroCarousel() {
         <div className="plat-sub">Exclusive bonuses &amp; rewards</div>
         <div className="plat-grid">
           {platforms.map((p,i) => (
-            <div key={i} className="plat-card" style={{borderBottom:`2px solid ${p.color}70`}}>
+            <div key={i} className="plat-card" style={{borderBottom:'2px solid rgba(255,255,255,0.12)'}}>
               {p.isNew && <div style={{position:'absolute',top:-13,left:'50%',transform:'translateX(-50%)',zIndex:10,display:'inline-flex',alignItems:'center',background:p.color,borderRadius:100,padding:'4px 14px',boxShadow:`0 0 16px ${p.color}cc`,whiteSpace:'nowrap'}}>
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:800,letterSpacing:'.22em',color:'#fff',textTransform:'uppercase'}}>New</span>
               </div>}
@@ -1458,7 +1458,7 @@ function HeroCarousel() {
                  rel={p.signupExt ? 'noreferrer' : undefined}>
                 {p.btnLabel || 'SIGN UP'}
               </a>
-              <div className="plat-card-code">USE CODE <strong style={{color:p.color,letterSpacing:'.1em'}}>NIKSI</strong></div>
+              <div className="plat-card-code">USE CODE <strong style={{color:'#fff',letterSpacing:'.1em'}}>NIKSI</strong></div>
             </div>
           ))}
         </div>
