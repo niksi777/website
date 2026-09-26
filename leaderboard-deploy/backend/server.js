@@ -655,7 +655,7 @@ try {
 async function updateClashLeaderboard() {
   try {
     if (!clashPeriod.start || !CLASH_BEARER) return;
-    const sinceDate = new Date(clashPeriod.start).toISOString().slice(0, 10);
+    const sinceDate = new Date(clashPeriod.start).toISOString().replace('.000Z', '').replace('Z', '');
     const response = await fetch(
       `https://api.clash.gg/affiliates/detailed-summary/v2/${sinceDate}`,
       { headers: { "Authorization": `Bearer ${CLASH_BEARER}`, "Cookie": CLASH_COOKIE, "Content-Type": "application/json" } }
