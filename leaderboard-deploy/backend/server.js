@@ -1387,11 +1387,11 @@ app.post('/admin/timed-commands', (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'];
   const session = sessions[sessionId];
   if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
-  const { text } = req.body;
+  const { text, intervalMinutes } = req.body;
   if (!text || !text.trim()) return res.status(400).json({ error: 'text required' });
   const cmds = loadTimedCmds();
   const id = Date.now().toString();
-  cmds.push({ id, text: text.trim(), enabled: true });
+  cmds.push({ id, text: text.trim(), enabled: true, intervalMinutes: Number(intervalMinutes) || 20 });
   saveTimedCmds(cmds);
   res.json({ ok: true, id });
 });
@@ -1405,6 +1405,7 @@ app.put('/admin/timed-commands/:id', (req, res) => {
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
   if (req.body.text !== undefined) cmds[idx].text = req.body.text;
   if (req.body.enabled !== undefined) cmds[idx].enabled = req.body.enabled;
+  if (req.body.intervalMinutes !== undefined) cmds[idx].intervalMinutes = Number(req.body.intervalMinutes) || 20;
   saveTimedCmds(cmds);
   res.json({ ok: true });
 });
