@@ -1367,6 +1367,59 @@ app.post('/deploy/:repo', (req, res) => {
   });
 });
 
+// ─── Timed Commands ───────────────────────────────────────────────────────────
+const TIMED_CMDS_PATH = require('path').join(__dirname, '../../timed-commands.json');
+function loadTimedCmds() {
+  try { return JSON.parse(require('fs').readFileSync(TIMED_CMDS_PATH, 'utf8')); } catch { return []; }
+}
+function saveTimedCmds(data) {
+  require('fs').writeFileSync(TIMED_CMDS_PATH, JSON.stringify(data, null, 2));
+}
+
+app.get('/admin/timed-commands', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  res.json(loadTimedCmds());
+});
+
+app.post('/admin/timed-commands', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const { text } = req.body;
+  if (!text || !text.trim()) return res.status(400).json({ error: 'text required' });
+  const cmds = loadTimedCmds();
+  const id = Date.now().toString();
+  cmds.push({ id, text: text.trim(), enabled: true });
+  saveTimedCmds(cmds);
+  res.json({ ok: true, id });
+});
+
+app.put('/admin/timed-commands/:id', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const cmds = loadTimedCmds();
+  const idx = cmds.findIndex(c => c.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+  if (req.body.text !== undefined) cmds[idx].text = req.body.text;
+  if (req.body.enabled !== undefined) cmds[idx].enabled = req.body.enabled;
+  saveTimedCmds(cmds);
+  res.json({ ok: true });
+});
+
+app.delete('/admin/timed-commands/:id', (req, res) => {
+  const sessionId = req.query.session || req.headers['x-session-id'];
+  const session = sessions[sessionId];
+  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
+  const cmds = loadTimedCmds();
+  const filtered = cmds.filter(c => c.id !== req.params.id);
+  if (filtered.length === cmds.length) return res.status(404).json({ error: 'Not found' });
+  saveTimedCmds(filtered);
+  res.json({ ok: true });
+});
+
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");

@@ -3489,6 +3489,110 @@ function fmtDate(iso) {
     return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
   }
 
+  function TimedCommandsManager({ sessionId }) {
+    const [cmds, setCmds] = React.useState(null);
+    const [newText, setNewText] = React.useState('');
+    const [editingId, setEditingId] = React.useState(null);
+    const [editText, setEditText] = React.useState('');
+    const [busy, setBusy] = React.useState(false);
+    const [msg, setMsg] = React.useState('');
+
+    function flash(m) { setMsg(m); setTimeout(() => setMsg(''), 3000); }
+
+    function load() {
+      fetch('/admin/timed-commands', { headers: { 'x-session-id': sessionId } })
+        .then(r => r.json()).then(d => Array.isArray(d) && setCmds(d)).catch(() => {});
+    }
+    React.useEffect(() => { load(); }, [sessionId]);
+
+    async function add() {
+      if (!newText.trim() || busy) return;
+      setBusy(true);
+      const r = await fetch('/admin/timed-commands', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId }, body: JSON.stringify({ text: newText.trim() }) });
+      setBusy(false);
+      if (r.ok) { setNewText(''); load(); flash('Command added.'); }
+    }
+
+    async function toggle(id, enabled) {
+      await fetch(`/admin/timed-commands/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId }, body: JSON.stringify({ enabled: !enabled }) });
+      load();
+    }
+
+    async function save(id) {
+      if (!editText.trim() || busy) return;
+      setBusy(true);
+      await fetch(`/admin/timed-commands/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'x-session-id': sessionId }, body: JSON.stringify({ text: editText.trim() }) });
+      setBusy(false);
+      setEditingId(null);
+      load();
+      flash('Saved.');
+    }
+
+    async function del(id) {
+      if (!confirm('Delete this command?')) return;
+      await fetch(`/admin/timed-commands/${id}`, { method: 'DELETE', headers: { 'x-session-id': sessionId } });
+      load();
+      flash('Deleted.');
+    }
+
+    if (!cmds) return <div style={{color:'var(--mu)',padding:24,textAlign:'center'}}>Loading...</div>;
+
+    return (
+      <div style={{marginTop:24}}>
+        {msg && <div style={{background:'rgba(34,197,94,.12)',border:'1px solid rgba(34,197,94,.3)',borderRadius:8,padding:'10px 16px',marginBottom:16,color:'#22c55e',fontSize:13,fontWeight:600}}>{msg}</div>}
+
+        {/* Add new */}
+        <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'18px 20px',marginBottom:20}}>
+          <div className="admin-input-lbl" style={{marginBottom:10}}>Add Timed Command</div>
+          <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+            <input
+              className="admin-input"
+              style={{width:'100%',maxWidth:600,textAlign:'left',fontSize:14}}
+              placeholder="Message text to send in Kick chat..."
+              value={newText}
+              onChange={e => setNewText(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && add()}
+            />
+            <button className="admin-btn" style={{background:'rgba(34,197,94,.15)',border:'1px solid rgba(34,197,94,.35)',color:'#22c55e'}} onClick={add} disabled={busy || !newText.trim()}>Add</button>
+          </div>
+        </div>
+
+        {/* List */}
+        {cmds.length === 0 && <div style={{color:'var(--mu)',textAlign:'center',padding:32}}>No timed commands yet.</div>}
+        {cmds.map(c => (
+          <div key={c.id} style={{background:'var(--s1)',border:`1px solid ${c.enabled ? 'var(--b2)' : 'rgba(255,255,255,.06)'}`,borderRadius:12,padding:'14px 18px',marginBottom:12,opacity:c.enabled ? 1 : 0.5,transition:'opacity .2s'}}>
+            {editingId === c.id ? (
+              <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center'}}>
+                <input
+                  className="admin-input"
+                  style={{flex:1,minWidth:200,textAlign:'left',fontSize:14}}
+                  value={editText}
+                  onChange={e => setEditText(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && save(c.id)}
+                  autoFocus
+                />
+                <button className="admin-btn" style={{background:'rgba(34,197,94,.15)',border:'1px solid rgba(34,197,94,.35)',color:'#22c55e'}} onClick={() => save(c.id)} disabled={busy}>Save</button>
+                <button className="admin-btn" style={{background:'rgba(255,255,255,.06)',border:'1px solid rgba(255,255,255,.12)',color:'var(--mu)'}} onClick={() => setEditingId(null)}>Cancel</button>
+              </div>
+            ) : (
+              <div style={{display:'flex',gap:10,alignItems:'flex-start',flexWrap:'wrap'}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:14,color:'#e8eaf0',wordBreak:'break-word',lineHeight:1.5}}>{c.text}</div>
+                  <div style={{fontSize:11,color:'var(--mu)',marginTop:4,letterSpacing:'.05em'}}>{c.enabled ? 'ACTIVE' : 'PAUSED'}</div>
+                </div>
+                <div style={{display:'flex',gap:8,flexShrink:0}}>
+                  <button className="admin-btn" style={{background:'rgba(255,255,255,.06)',border:'1px solid rgba(255,255,255,.12)',color:'#e8eaf0',fontSize:12}} onClick={() => { setEditingId(c.id); setEditText(c.text); }}>Edit</button>
+                  <button className="admin-btn" style={{background:c.enabled ? 'rgba(251,191,36,.1)' : 'rgba(34,197,94,.1)',border:`1px solid ${c.enabled ? 'rgba(251,191,36,.3)' : 'rgba(34,197,94,.3)'}`,color:c.enabled ? '#fbbf24' : '#22c55e',fontSize:12}} onClick={() => toggle(c.id, c.enabled)}>{c.enabled ? 'Pause' : 'Resume'}</button>
+                  <button className="admin-btn" style={{background:'rgba(217,79,79,.1)',border:'1px solid rgba(217,79,79,.3)',color:'rgba(217,79,79,.9)',fontSize:12}} onClick={() => del(c.id)}>Delete</button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   function AdminPage() {
     const { user, sessionId, loading } = useUser();
     const [tab, setTab] = React.useState('users');
@@ -3540,9 +3644,10 @@ function fmtDate(iso) {
             <button className={`tab-btn${tab==='users'?' on':''}`} onClick={()=>setTab('users')}>Users</button>
             <button className={`tab-btn${tab==='cases'?' on':''}`} onClick={()=>setTab('cases')}>Cases</button>
             <button className={`tab-btn${tab==='leaderboard'?' on':''}`} onClick={()=>setTab('leaderboard')}>Leaderboard</button>
+            <button className={`tab-btn${tab==='timed'?' on':''}`} onClick={()=>setTab('timed')}>Timed Commands</button>
           </div>
 
-          {tab==='cases' ? <CasesEditor sessionId={sessionId}/> : tab==='leaderboard' ? <LeaderboardManager sessionId={sessionId}/> : <>
+          {tab==='cases' ? <CasesEditor sessionId={sessionId}/> : tab==='leaderboard' ? <LeaderboardManager sessionId={sessionId}/> : tab==='timed' ? <TimedCommandsManager sessionId={sessionId}/> : <>
 
           {/* Points Manager - top bar */}
           <div style={{background:'var(--s1)',border:'1px solid var(--b2)',borderRadius:12,padding:'16px 20px',marginBottom:24}} className="f1">
