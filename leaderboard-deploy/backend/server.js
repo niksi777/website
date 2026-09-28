@@ -684,7 +684,7 @@ app.get("/clash-leaderboard", (req, res) => {
       position: i + 1,
       username: r.username || r.name || r.displayName || "Hidden",
       avatar: r.avatar || r.avatarUrl || r.profileImage || null,
-      wager: Math.round(Number(r.wagered || r.wager || r.totalWagered || 0) / 67.7 * 100) / 100,
+      wager: Math.round(Number(r.wagered || r.wager || r.totalWagered || 0) / 73.3 * 100) / 100,
       prize: CLASH_PRIZES[i] || 0,
     }));
   res.json({ leaderboard: rows });
