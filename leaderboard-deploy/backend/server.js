@@ -632,7 +632,7 @@ app.post("/admin/krush/start", (req, res) => {
 // ─── Clash.gg leaderboard ─────────────────────────────────────────────────
 const CLASH_BEARER = process.env.CLASH_BEARER;
 const CLASH_COOKIE = process.env.CLASH_COOKIE;
-const CLASH_PRIZES = [540, 135, 90, 54, 36, 27, 18];
+const CLASH_PRIZES = [540, 135, 90, 60, 35, 25, 15];
 const CLASH_POOL_TOTAL = CLASH_PRIZES.reduce((s, p) => s + p, 0); // 900 gems
 const CLASH_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 const CLASH_PERIOD_PATH = require("path").join(__dirname, "../../clash-period.json");
