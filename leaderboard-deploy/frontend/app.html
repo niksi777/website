@@ -2676,6 +2676,7 @@ function LeaderboardsPage() {
   const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
   const [cs2skinAmt, setCs2skinAmt] = React.useState(null);
   const [clashActive, setClashActive] = React.useState(false);
+  const [clashEnded, setClashEnded] = React.useState(false);
   const [clashAmt, setClashAmt] = React.useState(null);
 
   function changeTab(t) {
@@ -2720,6 +2721,7 @@ function LeaderboardsPage() {
     fetch('/clash-meta').then(r => r.json()).then(d => {
       const ended = !!(d.end && Date.now() > d.end);
       setClashActive(!!d.active);
+      setClashEnded(ended);
       if (d.totalPool) setClashAmt(Math.round(d.totalPool));
       if (!d.active && !ended && tab === 'clash') setTab('gamba');
     }).catch(() => {});
@@ -2752,7 +2754,7 @@ function LeaderboardsPage() {
               {cs2skinAmt != null && <div className="ptab-amt"><img src="/assets/cs2skincoin.png" alt="" className="ptab-coin" onError={e=>e.target.style.display='none'}/>{cs2skinAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {clashActive && (
+          {(clashActive || clashEnded) && (
             <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')} style={{minWidth:120}}>
               <div className="ptab-top">
                 <img src="/assets/clashgg.png" alt="Clash.gg" onError={e=>e.target.style.display='none'} style={{height:34,width:130,objectFit:'cover',borderRadius:4}}/>
