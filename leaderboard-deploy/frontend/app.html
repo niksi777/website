@@ -1259,7 +1259,7 @@ function HeroCarousel() {
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#86efac',textTransform:'uppercase'}}>New Partner</span>
               </div>
               <div style={txt('#22c55e','clamp(44px,6vw,68px)',.88,6)}>DICEY.COM</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>WEEKLY LEADERBOARD</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY LEADERBOARD</div>
               <div style={sub}>Sign up with code NIKSI</div>
               <a href="/leaderboards?tab=dicey" style={btn('#22c55e','rgba(34,197,94,.55)')}>GO TO LEADERBOARD <Arr/></a>
             </div>
@@ -1382,7 +1382,7 @@ function HeroCarousel() {
     const platforms = [
       {
         logo:'/assets/dicey.png', color:'#22c55e', isNew:true,
-        prize:'DICEY', lbType:'WEEKLY',
+        prize:'DICEY', lbType:'BI-WEEKLY',
         perks:['SIGN UP WITH CODE NIKSI'],
         bigImg:'/assets/dicey.png',
         logoStyle:{height:'58px',width:'58px',objectFit:'contain'},
@@ -2098,7 +2098,7 @@ function DiceyLeaderboard() {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
         <div className="lb-prize-amt"><span style={{color:'var(--ac)'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
-        <div className="lb-prize-lbl">Weekly Wager Race</div>
+        <div className="lb-prize-lbl">Bi-Weekly Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
         <div style={{marginTop:24}}>
           <a href="https://dicey.com/signup?ref=Niksi" target="_blank" rel="noreferrer" className="lb-cta-btn" style={{background:DICEY_COLOR,color:'#fff'}}>
@@ -2123,7 +2123,7 @@ function DiceyLeaderboard() {
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
         <div className="lb-prize-amt"><span style={{color:'var(--ac)'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
-        <div className="lb-prize-lbl">Weekly Wager Race</div>
+        <div className="lb-prize-lbl">Bi-Weekly Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
 
