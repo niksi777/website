@@ -629,89 +629,79 @@ app.post("/admin/krush/start", (req, res) => {
   res.json({ ok: true, start, end });
 });
 
-// ─── Clash.gg leaderboard ─────────────────────────────────────────────────
-const CLASH_BEARER = process.env.CLASH_BEARER;
-const CLASH_COOKIE = process.env.CLASH_COOKIE;
-const CLASH_PRIZES = [540, 135, 90, 60, 35, 25, 15];
-const CLASH_POOL_TOTAL = CLASH_PRIZES.reduce((s, p) => s + p, 0); // 900 gems
-const CLASH_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
-const CLASH_PERIOD_PATH = require("path").join(__dirname, "../../clash-period.json");
-const CLASH_CACHE_PATH = require("path").join(__dirname, "../../clash-cache.json");
+// ─── Dicey leaderboard ────────────────────────────────────────────────────
+const DICEY_API_KEY = process.env.DICEY_API_KEY;
+const DICEY_PRIZES = [300, 150, 75, 50, 30, 20, 10];
+const DICEY_POOL_TOTAL = DICEY_PRIZES.reduce((s, p) => s + p, 0);
+const DICEY_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
+const DICEY_PERIOD_PATH = require("path").join(__dirname, "../../dicey-period.json");
+const DICEY_CACHE_PATH = require("path").join(__dirname, "../../dicey-cache.json");
 
-let clashPeriod = { start: null, end: null };
-let clashPlayers = [];
-let clashLastUpdated = null;
+let diceyPeriod = { start: null, end: null };
+let diceyPlayers = [];
+let diceyLastUpdated = null;
 try {
-  if (fs_lb.existsSync(CLASH_PERIOD_PATH)) clashPeriod = JSON.parse(fs_lb.readFileSync(CLASH_PERIOD_PATH, "utf-8"));
+  if (fs_lb.existsSync(DICEY_PERIOD_PATH)) diceyPeriod = JSON.parse(fs_lb.readFileSync(DICEY_PERIOD_PATH, "utf-8"));
 } catch (e) {}
 try {
-  if (fs_lb.existsSync(CLASH_CACHE_PATH)) {
-    const cached = JSON.parse(fs_lb.readFileSync(CLASH_CACHE_PATH, "utf-8"));
-    clashPlayers = cached.players || [];
-    clashLastUpdated = cached.lastUpdated || null;
+  if (fs_lb.existsSync(DICEY_CACHE_PATH)) {
+    const cached = JSON.parse(fs_lb.readFileSync(DICEY_CACHE_PATH, "utf-8"));
+    diceyPlayers = cached.players || [];
+    diceyLastUpdated = cached.lastUpdated || null;
   }
 } catch (e) {}
 
-async function updateClashLeaderboard() {
+async function updateDiceyLeaderboard() {
   try {
-    if (!clashPeriod.start || !CLASH_BEARER) return;
-    const sinceDate = new Date(clashPeriod.start).toISOString().replace('.000Z', '').replace('Z', '');
-    const response = await fetch(
-      `https://api.clash.gg/affiliates/detailed-summary/v2/${sinceDate}`,
-      { headers: { "Authorization": `Bearer ${CLASH_BEARER}`, "Cookie": CLASH_COOKIE, "Content-Type": "application/json" } }
-    );
-    const data = await response.json();
-    const raw = Array.isArray(data) ? data : (data.users || data.data || data.referrals || []);
-    clashPlayers = raw;
-    clashLastUpdated = Date.now();
-    fs_lb.writeFileSync(CLASH_CACHE_PATH, JSON.stringify({ players: clashPlayers, lastUpdated: clashLastUpdated }, null, 2));
-    console.log("Clash.gg leaderboard updated:", clashPlayers.length, "players");
+    if (!DICEY_API_KEY) return;
+    // Placeholder: update when Dicey provides API details
+    console.log("Dicey leaderboard: API key present, awaiting endpoint details");
   } catch (err) {
-    console.log("Clash.gg update error:", err.message);
+    console.log("Dicey update error:", err.message);
   }
 }
 
-setInterval(updateClashLeaderboard, 5 * 60 * 1000);
-updateClashLeaderboard();
+setInterval(updateDiceyLeaderboard, 5 * 60 * 1000);
+updateDiceyLeaderboard();
 
-app.get("/clash-leaderboard", (req, res) => {
+app.get("/dicey-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
-  const rows = clashPlayers
-    .filter(r => Number(r.wagered || r.wager || r.totalWagered || 0) > 0)
-    .slice().sort((a, b) => Number(b.wagered || b.wager || b.totalWagered || 0) - Number(a.wagered || a.wager || a.totalWagered || 0))
+  const rows = diceyPlayers
+    .filter(r => Number(r.wager || r.wagered || 0) > 0)
+    .slice().sort((a, b) => Number(b.wager || b.wagered || 0) - Number(a.wager || a.wagered || 0))
     .slice(0, limit)
     .map((r, i) => ({
       position: i + 1,
-      username: r.username || r.name || r.displayName || "Hidden",
-      avatar: r.avatar || r.avatarUrl || r.profileImage || null,
-      wager: Math.round(Number(r.wagered || r.wager || r.totalWagered || 0) / 73.3 * 100) / 100,
-      prize: CLASH_PRIZES[i] || 0,
+      username: r.username || r.name || "Hidden",
+      avatar: r.avatar || r.avatarUrl || null,
+      wager: Number(r.wager || r.wagered || 0),
+      prize: DICEY_PRIZES[i] || 0,
     }));
   res.json({ leaderboard: rows });
 });
 
-app.get("/clash-meta", (req, res) => {
+app.get("/dicey-meta", (req, res) => {
   const now = Date.now();
   res.json({
-    start: clashPeriod.start,
-    end: clashPeriod.end,
-    active: !!(clashPeriod.start && clashPeriod.end && now < clashPeriod.end),
-    totalPool: CLASH_POOL_TOTAL,
-    prizes: CLASH_PRIZES,
-    lastUpdated: clashLastUpdated,
+    start: diceyPeriod.start,
+    end: diceyPeriod.end,
+    active: !!(diceyPeriod.start && diceyPeriod.end && now < diceyPeriod.end),
+    totalPool: DICEY_POOL_TOTAL,
+    prizes: DICEY_PRIZES,
+    lastUpdated: diceyLastUpdated,
   });
 });
 
-app.post("/admin/clash/start", (req, res) => {
+app.post("/admin/dicey/start", (req, res) => {
   const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
   const session = sessions[sessionId];
   if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
   const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
-  const end = (req.body && req.body.end) ? new Date(req.body.end).getTime() : start + CLASH_DURATION_MS;
-  clashPeriod = { start, end };
-  fs_lb.writeFileSync(CLASH_PERIOD_PATH, JSON.stringify(clashPeriod, null, 2));
-  clashPlayers = [];
-  updateClashLeaderboard();
+  const end = (req.body && req.body.end) ? new Date(req.body.end).getTime() : start + DICEY_DURATION_MS;
+  diceyPeriod = { start, end };
+  fs_lb.writeFileSync(DICEY_PERIOD_PATH, JSON.stringify(diceyPeriod, null, 2));
+  diceyPlayers = [];
+  updateDiceyLeaderboard();
   res.json({ ok: true, start, end });
 });
 

@@ -184,7 +184,7 @@
     .ptab.active-krush{border-color:rgba(155,92,255,.5);background:rgba(155,92,255,.08);box-shadow:0 0 18px rgba(155,92,255,.12)}
     .ptab.active-csgowin{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.08);box-shadow:0 0 18px rgba(245,158,11,.12)}
     .ptab.active-cs2skin{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.08);box-shadow:0 0 18px rgba(124,58,237,.12)}
-    .ptab.active-clash{border-color:rgba(255,87,34,.5);background:rgba(255,87,34,.08);box-shadow:0 0 18px rgba(255,87,34,.12)}
+    .ptab.active-dicey{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.08);box-shadow:0 0 18px rgba(34,197,94,.12)}
     .ptab-img{height:34px;object-fit:contain}
     .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
     .ptab{flex-direction:column;gap:6px}
@@ -1243,25 +1243,25 @@ function HeroCarousel() {
         <div className="carousel-wrap">
         <div className="c-track" style={{transform:`translateX(-${slide*100}%)`}}>
 
-          {/* Slide 0 - CLASH.GG */}
+          {/* Slide 0 - DICEY */}
           <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(255,87,34,.45) 0%, rgba(255,87,34,.18) 38%, transparent 62%)',
-            'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(255,87,34,.15) 0%, transparent 55%)',
-            'radial-gradient(ellipse 40% 50% at 5% 100%, rgba(200,60,10,.12) 0%, transparent 52%)',
+            'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(34,197,94,.45) 0%, rgba(34,197,94,.18) 38%, transparent 62%)',
+            'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(34,197,94,.15) 0%, transparent 55%)',
+            'radial-gradient(ellipse 40% 50% at 5% 100%, rgba(20,160,70,.12) 0%, transparent 52%)',
             'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.018) 24px,rgba(255,255,255,.018) 25px)',
-            'linear-gradient(140deg,#180a04 0%,#120803 55%,#1a0d06 100%)'
-          ].join(','),borderTop:'3px solid rgba(255,87,34,.85)'}}>
-            {logo('/assets/clashgg.png',.58,'rgba(255,87,34,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(24,10,4),pointerEvents:'none'}}/>
+            'linear-gradient(140deg,#031208 0%,#020e06 55%,#031409 100%)'
+          ].join(','),borderTop:'3px solid rgba(34,197,94,.85)'}}>
+            {logo('/assets/dicey.png',.58,'rgba(34,197,94,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(3,18,8),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(255,87,34,.22)',border:'1px solid rgba(255,87,34,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
-                <span style={{width:6,height:6,borderRadius:'50%',background:'#FF5722',boxShadow:'0 0 6px rgba(255,87,34,1)',display:'inline-block',flexShrink:0}}></span>
-                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#ff8a65',textTransform:'uppercase'}}>New Partner</span>
+              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(34,197,94,.22)',border:'1px solid rgba(34,197,94,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:'#22c55e',boxShadow:'0 0 6px rgba(34,197,94,1)',display:'inline-block',flexShrink:0}}></span>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#86efac',textTransform:'uppercase'}}>New Partner</span>
               </div>
-              <div style={txt('#FF5722','clamp(44px,6vw,68px)',.88,6)}>900 <img src="/assets/gems.png" alt="" style={{height:'0.75em',verticalAlign:'middle',objectFit:'contain'}}/></div>
+              <div style={txt('#22c55e','clamp(44px,6vw,68px)',.88,6)}>DICEY.COM</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>WEEKLY LEADERBOARD</div>
-              <div style={sub}>5% deposit bonus - Use code NIKSI</div>
-              <a href="/leaderboards?tab=clash" style={btn('#FF5722','rgba(255,87,34,.55)')}>GO TO LEADERBOARD <Arr/></a>
+              <div style={sub}>Sign up with code NIKSI</div>
+              <a href="/leaderboards?tab=dicey" style={btn('#22c55e','rgba(34,197,94,.55)')}>GO TO LEADERBOARD <Arr/></a>
             </div>
           </div>
 
@@ -1379,22 +1379,17 @@ function HeroCarousel() {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
 
-    const [clashActive, setClashActive] = React.useState(false);
-    React.useEffect(() => {
-      fetch('/clash-meta').then(r => r.json()).then(d => setClashActive(!!d.active || true)).catch(() => {});
-    }, []);
-
     const platforms = [
-      ...(clashActive ? [{
-        logo:'/assets/clashgg.png', color:'#F0A020', isNew:true,
-        prize:'900', prizeIcon:<img src="/assets/gems.png" alt="" style={{height:'0.75em',verticalAlign:'middle',objectFit:'contain'}}/>, lbType:'WEEKLY',
-        perks:['5% DEPOSIT BONUS'],
-        bigImg:'/assets/clashgg.png',
-        logoStyle:{height:'58px',width:'180px',objectFit:'cover',objectPosition:'center'},
-        signupHref:'https://clash.gg/r/NIKSI', signupExt:true,
-        lbHref:'/leaderboards?tab=clash',
+      {
+        logo:'/assets/dicey.png', color:'#22c55e', isNew:true,
+        prize:'DICEY', lbType:'WEEKLY',
+        perks:['SIGN UP WITH CODE NIKSI'],
+        bigImg:'/assets/dicey.png',
+        logoStyle:{height:'58px',width:'58px',objectFit:'contain'},
+        signupHref:'https://dicey.com/signup?ref=Niksi', signupExt:true,
+        lbHref:'/leaderboards?tab=dicey',
         btnLabel:'SIGN UP',
-      }] : []),
+      },
       {
         logo:'/assets/gamba2.png', color:'#22c55e',
         prize:'$1,000', lbType:'BI-WEEKLY',
@@ -2083,18 +2078,17 @@ function Cs2skinLeaderboard() {
 }
 const CS2SKIN_PRIZES_FALLBACK = [500,200,120,80,50,30,15,5];
 
-function ClashLeaderboard() {
+function DiceyLeaderboard() {
   const [players, setPlayers] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
   React.useEffect(() => {
-    fetch('/clash-leaderboard?limit=7').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
-    fetch('/clash-meta').then(r => r.json()).then(setMeta).catch(() => {});
+    fetch('/dicey-leaderboard?limit=7').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
+    fetch('/dicey-meta').then(r => r.json()).then(setMeta).catch(() => setMeta({}));
   }, []);
 
-  const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')}` : '-';
-  const fmtWager = p => `${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-  const CLASH_COLOR = '#FF5722';
-  const gemIcon = <img src="/assets/gems.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>;
+  const fmtPrize = p => p.prize > 0 ? `$${Number(p.prize).toLocaleString('en-US')}` : '-';
+  const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  const DICEY_COLOR = '#22c55e';
 
   if (players === null || meta === null) return <div className="loading">Loading...</div>;
 
@@ -2103,14 +2097,19 @@ function ClashLeaderboard() {
   if (!meta.active && !isEnded) {
     return (
       <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><img src="/assets/gems.png" alt="gems" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
-        <div className="lb-prize-lbl">7-Day Wager Race</div>
+        <div className="lb-prize-amt"><span style={{color:'var(--ac)'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-lbl">Weekly Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
+        <div style={{marginTop:24}}>
+          <a href="https://dicey.com/signup?ref=Niksi" target="_blank" rel="noreferrer" className="lb-cta-btn" style={{background:DICEY_COLOR,color:'#fff'}}>
+            Sign Up on Dicey <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+        </div>
       </div>
     );
   }
 
-  const prizes = meta.prizes || [540,135,90,54,36,27,18];
+  const prizes = meta.prizes || [300,150,75,50,30,20,10];
   const displayRows = prizes.map((amt, i) => {
     const existing = players.find(r => r.position === i + 1);
     return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
@@ -2123,8 +2122,8 @@ function ClashLeaderboard() {
   return (
     <div className="f2">
       <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||900).toLocaleString('en-US')}</span><img src="/assets/gems.png" alt="gems" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
-        <div className="lb-prize-lbl">7-Day Wager Race</div>
+        <div className="lb-prize-amt"><span style={{color:'var(--ac)'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
+        <div className="lb-prize-lbl">Weekly Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
       </div>
 
@@ -2134,7 +2133,7 @@ function ClashLeaderboard() {
             const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
             return (
               <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor={CLASH_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/gems.png" wagerIcon="/assets/gems.png"/>
+                <PodiumCard player={p} rank={rank} accentColor={DICEY_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon={null} wagerIcon={null}/>
               </div>
             );
           })}
@@ -2142,12 +2141,12 @@ function ClashLeaderboard() {
       )}
 
       {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
-      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:CLASH_COLOR,color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
+      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:DICEY_COLOR,color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
 
       <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://clash.gg/r/NIKSI" target="_blank" rel="noreferrer" className="lb-cta-btn" style={{background:CLASH_COLOR,color:'#fff'}}>
+        <a href="https://dicey.com/signup?ref=Niksi" target="_blank" rel="noreferrer" className="lb-cta-btn" style={{background:DICEY_COLOR,color:'#fff'}}>
           Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
         </a>
       </div>
 
@@ -2162,8 +2161,8 @@ function ClashLeaderboard() {
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
                 <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager">{gemIcon}{fmtWager(p)}</span></td>
-                <td><span className="tr-prize">{gemIcon}{fmtPrize(p)}</span></td>
+                <td><span className="tr-wager">{fmtWager(p)}</span></td>
+                <td><span className="tr-prize">{fmtPrize(p)}</span></td>
               </tr>
             ))}
           </tbody>
@@ -2661,7 +2660,7 @@ function CsgowinLeaderboard() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
-  const VALID_TABS = ['krush', 'chicken', 'chickenrace', 'cs2skin', 'clash'];
+  const VALID_TABS = ['krush', 'chicken', 'chickenrace', 'cs2skin', 'dicey'];
   const [tab, setTab] = React.useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
     return VALID_TABS.includes(t) ? t : 'gamba';
@@ -2675,9 +2674,9 @@ function LeaderboardsPage() {
   const [chickenAmt, setChickenAmt] = React.useState(null);
   const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
   const [cs2skinAmt, setCs2skinAmt] = React.useState(null);
-  const [clashActive, setClashActive] = React.useState(false);
-  const [clashEnded, setClashEnded] = React.useState(false);
-  const [clashAmt, setClashAmt] = React.useState(null);
+  const [diceyActive, setDiceyActive] = React.useState(true);
+  const [diceyEnded, setDiceyEnded] = React.useState(false);
+  const [diceyAmt, setDiceyAmt] = React.useState(null);
 
   function changeTab(t) {
     setTab(t);
@@ -2718,12 +2717,12 @@ function LeaderboardsPage() {
       if (d.totalPool) setCs2skinAmt(Math.round(d.totalPool));
       if (!d.active && !ended && tab === 'cs2skin') setTab('gamba');
     }).catch(() => {});
-    fetch('/clash-meta').then(r => r.json()).then(d => {
+    fetch('/dicey-meta').then(r => r.json()).then(d => {
       const ended = !!(d.end && Date.now() > d.end);
-      setClashActive(!!d.active);
-      setClashEnded(ended);
-      if (d.totalPool) setClashAmt(Math.round(d.totalPool));
-      if (!d.active && !ended && tab === 'clash') setTab('gamba');
+      setDiceyActive(!!d.active);
+      setDiceyEnded(ended);
+      if (d.totalPool) setDiceyAmt(Math.round(d.totalPool));
+      if (!d.active && !ended && tab === 'dicey') setTab('gamba');
     }).catch(() => {});
   }, []);
 
@@ -2754,12 +2753,12 @@ function LeaderboardsPage() {
               {cs2skinAmt != null && <div className="ptab-amt"><img src="/assets/cs2skincoin.png" alt="" className="ptab-coin" onError={e=>e.target.style.display='none'}/>{cs2skinAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
-          {(clashActive || clashEnded) && (
-            <button className={`ptab${tab==='clash'?' active-clash':''}`} onClick={() => changeTab('clash')} style={{minWidth:120}}>
+          {(diceyActive || diceyEnded) && (
+            <button className={`ptab${tab==='dicey'?' active-dicey':''}`} onClick={() => changeTab('dicey')} style={{minWidth:90}}>
               <div className="ptab-top">
-                <img src="/assets/clashgg.png" alt="Clash.gg" onError={e=>e.target.style.display='none'} style={{height:34,width:130,objectFit:'cover',borderRadius:4}}/>
+                <img src="/assets/dicey.png" alt="Dicey" onError={e=>e.target.style.display='none'} style={{height:34,width:34,objectFit:'contain',borderRadius:6}}/>
               </div>
-              {clashAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/gems.png" alt="" onError={e=>e.target.style.display='none'}/>{clashAmt.toLocaleString('en-US')}</div>}
+              {diceyAmt != null && <div className="ptab-amt"><span style={{color:'var(--ac)'}}>$</span>{diceyAmt.toLocaleString('en-US')}</div>}
             </button>
           )}
         </div>
@@ -2768,7 +2767,7 @@ function LeaderboardsPage() {
         <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
         <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
         <div style={{display: tab === 'cs2skin' ? 'block' : 'none'}}><Cs2skinLeaderboard/></div>
-        <div style={{display: tab === 'clash' ? 'block' : 'none'}}><ClashLeaderboard/></div>
+        <div style={{display: tab === 'dicey' ? 'block' : 'none'}}><DiceyLeaderboard/></div>
       </div>
 
       <footer>
