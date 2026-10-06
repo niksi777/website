@@ -631,8 +631,8 @@ app.post("/admin/krush/start", (req, res) => {
 
 // ─── Dicey leaderboard ────────────────────────────────────────────────────
 const DICEY_API_KEY = process.env.DICEY_API_KEY;
-const DICEY_PRIZES = [300, 150, 75, 50, 30, 20, 10];
-const DICEY_POOL_TOTAL = DICEY_PRIZES.reduce((s, p) => s + p, 0);
+const DICEY_PRIZES = [200, 100, 75, 50, 35, 25, 15];
+const DICEY_POOL_TOTAL = DICEY_PRIZES.reduce((s, p) => s + p, 0); // $500
 const DICEY_DURATION_MS = 14 * 24 * 60 * 60 * 1000;
 const DICEY_PERIOD_PATH = require("path").join(__dirname, "../../dicey-period.json");
 const DICEY_CACHE_PATH = require("path").join(__dirname, "../../dicey-cache.json");
