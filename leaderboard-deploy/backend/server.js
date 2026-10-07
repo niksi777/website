@@ -631,31 +631,32 @@ app.post("/admin/krush/start", (req, res) => {
 
 // ─── Dicey leaderboard ────────────────────────────────────────────────────
 const DICEY_API_KEY = process.env.DICEY_API_KEY;
-const DICEY_PRIZES = [200, 100, 75, 50, 35, 25, 15];
-const DICEY_POOL_TOTAL = DICEY_PRIZES.reduce((s, p) => s + p, 0); // $500
-const DICEY_DURATION_MS = 14 * 24 * 60 * 60 * 1000;
-const DICEY_PERIOD_PATH = require("path").join(__dirname, "../../dicey-period.json");
+const DICEY_RACE_URL = 'https://api.dicey.com/v1/streamer-races/06246577-aaca-416e-ae9b-7df632214cb1/leaderboard';
 const DICEY_CACHE_PATH = require("path").join(__dirname, "../../dicey-cache.json");
 
-let diceyPeriod = { start: null, end: null };
-let diceyPlayers = [];
-let diceyLastUpdated = null;
-try {
-  if (fs_lb.existsSync(DICEY_PERIOD_PATH)) diceyPeriod = JSON.parse(fs_lb.readFileSync(DICEY_PERIOD_PATH, "utf-8"));
-} catch (e) {}
+let diceyCache = { leaderboard: [], prizes: [], start: null, end: null, totalPool: 500, lastUpdated: null };
 try {
   if (fs_lb.existsSync(DICEY_CACHE_PATH)) {
     const cached = JSON.parse(fs_lb.readFileSync(DICEY_CACHE_PATH, "utf-8"));
-    diceyPlayers = cached.players || [];
-    diceyLastUpdated = cached.lastUpdated || null;
+    diceyCache = { ...diceyCache, ...cached };
   }
 } catch (e) {}
 
 async function updateDiceyLeaderboard() {
   try {
     if (!DICEY_API_KEY) return;
-    // Placeholder: update when Dicey provides API details
-    console.log("Dicey leaderboard: API key present, awaiting endpoint details");
+    const response = await fetch(DICEY_RACE_URL, { headers: { "Authorization": `Bearer ${DICEY_API_KEY}` } });
+    const json = await response.json();
+    const d = json.data;
+    if (!d) return;
+    diceyCache.start = d.startsAt ? new Date(d.startsAt).getTime() : null;
+    diceyCache.end = d.endsAt ? new Date(d.endsAt).getTime() : null;
+    diceyCache.totalPool = d.prizePoolAmount ? Math.round(Number(d.prizePoolAmount)) : 500;
+    diceyCache.prizes = (d.prizeBreakdown || []).map(p => Number(p.payoutAmountUsd));
+    diceyCache.leaderboard = d.leaderboard || [];
+    diceyCache.lastUpdated = Date.now();
+    fs_lb.writeFileSync(DICEY_CACHE_PATH, JSON.stringify(diceyCache, null, 2));
+    console.log("Dicey leaderboard updated:", diceyCache.leaderboard.length, "players");
   } catch (err) {
     console.log("Dicey update error:", err.message);
   }
@@ -666,43 +667,26 @@ updateDiceyLeaderboard();
 
 app.get("/dicey-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
-  const rows = diceyPlayers
-    .filter(r => Number(r.wager || r.wagered || 0) > 0)
-    .slice().sort((a, b) => Number(b.wager || b.wagered || 0) - Number(a.wager || a.wagered || 0))
-    .slice(0, limit)
-    .map((r, i) => ({
-      position: i + 1,
-      username: r.username || r.name || "Hidden",
-      avatar: r.avatar || r.avatarUrl || null,
-      wager: Number(r.wager || r.wagered || 0),
-      prize: DICEY_PRIZES[i] || 0,
-    }));
+  const rows = diceyCache.leaderboard.slice(0, limit).map((r, i) => ({
+    position: r.rank || i + 1,
+    username: r.username || r.displayName || r.name || "Hidden",
+    avatar: r.avatarUrl || r.avatar || null,
+    wager: Number(r.totalWagered || r.wagered || r.wager || 0),
+    prize: diceyCache.prizes[i] || 0,
+  }));
   res.json({ leaderboard: rows });
 });
 
 app.get("/dicey-meta", (req, res) => {
   const now = Date.now();
   res.json({
-    start: diceyPeriod.start,
-    end: diceyPeriod.end,
-    active: !!(diceyPeriod.start && diceyPeriod.end && now < diceyPeriod.end),
-    totalPool: DICEY_POOL_TOTAL,
-    prizes: DICEY_PRIZES,
-    lastUpdated: diceyLastUpdated,
+    start: diceyCache.start,
+    end: diceyCache.end,
+    active: !!(diceyCache.start && diceyCache.end && now >= diceyCache.start && now < diceyCache.end),
+    totalPool: diceyCache.totalPool,
+    prizes: diceyCache.prizes,
+    lastUpdated: diceyCache.lastUpdated,
   });
-});
-
-app.post("/admin/dicey/start", (req, res) => {
-  const sessionId = req.query.session || req.headers['x-session-id'] || req.body.session;
-  const session = sessions[sessionId];
-  if (!session || !isAdminUser(session.username)) return res.status(403).json({ error: 'Forbidden' });
-  const start = (req.body && req.body.start) ? new Date(req.body.start).getTime() : Date.now();
-  const end = (req.body && req.body.end) ? new Date(req.body.end).getTime() : start + DICEY_DURATION_MS;
-  diceyPeriod = { start, end };
-  fs_lb.writeFileSync(DICEY_PERIOD_PATH, JSON.stringify(diceyPeriod, null, 2));
-  diceyPlayers = [];
-  updateDiceyLeaderboard();
-  res.json({ ok: true, start, end });
 });
 
 // ─── CS2SKIN leaderboard ──────────────────────────────────────────────────
