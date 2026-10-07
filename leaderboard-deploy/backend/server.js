@@ -671,7 +671,7 @@ app.get("/dicey-leaderboard", (req, res) => {
     position: r.rank || i + 1,
     username: r.username || r.displayName || r.name || "Hidden",
     avatar: r.avatarUrl || r.avatar || null,
-    wager: Number(r.totalWagered || r.wagered || r.wager || 0),
+    wager: Number(r.score || r.totalWagered || r.wagered || r.wager || 0),
     prize: diceyCache.prizes[i] || 0,
   }));
   res.json({ leaderboard: rows });
