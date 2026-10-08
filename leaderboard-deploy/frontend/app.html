@@ -1528,14 +1528,14 @@ function Avatar({ src, className }) {
   return <img className={className} src={src} alt="" onError={() => setErr(true)}/>;
 }
 
-function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, prizeIcon, wagerIcon }) {
+function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, prizeIcon, wagerIcon, avatarOverride }) {
   const cls = rank === 1 ? 'podium-card first' : rank === 2 ? 'podium-card second' : 'podium-card third';
   const badgeCls = `rank-badge r${rank}`;
   return (
     <div className={cls}>
       <div className={badgeCls}>{rank}</div>
       {rank === 1 && <div className="crown">👑</div>}
-      <Avatar src={player.avatar || player.image_url} className={`pod-avatar${rank===1?' first':''}`}/>
+      {avatarOverride || <Avatar src={player.avatar || player.image_url} className={`pod-avatar${rank===1?' first':''}`}/>}
       <div className={`pod-name${rank===1?' first':''}`} style={rank===1?{color:accentColor}:{}}>{player.username || player.display_name || 'Hidden'}</div>
       <div className="pod-stats-row">
         <div className="pod-stat">
@@ -2179,8 +2179,7 @@ function DiceyLeaderboard() {
             const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
             return (
               <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor={DICEY_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon={null} wagerIcon={null}/>
-                {!p.placeholder && !p.avatar && p.vipLevel && p.vipLevel !== 'None' && <div style={{display:'flex',justifyContent:'center',marginTop:6}}><DiceyRankBadge level={p.vipLevel} sublevel={p.vipSublevel} size={28}/></div>}
+                <PodiumCard player={p} rank={rank} accentColor={DICEY_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon={null} wagerIcon={null} avatarOverride={(!p.avatar && p.vipLevel && p.vipLevel !== 'None') ? <DiceyRankBadge level={p.vipLevel} sublevel={p.vipSublevel} size={rank===1?88:72}/> : null}/>
               </div>
             );
           })}
