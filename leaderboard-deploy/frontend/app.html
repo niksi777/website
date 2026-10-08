@@ -2150,11 +2150,13 @@ function DiceyLeaderboard() {
           </div>
         </div>
       )}
-      <div style={{textAlign:'center',marginBottom:40,position:'relative'}}>
-        <div className="lb-prize-amt"><span style={{color:'#22c55e'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div style={{display:'inline-flex',alignItems:'center',gap:8}}>
+          <div className="lb-prize-amt"><span style={{color:'#22c55e'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
+          <button onClick={() => setShowInfo(true)} title="How is wager contribution calculated?" style={{background:'rgba(34,197,94,.12)',border:'1px solid rgba(34,197,94,.3)',borderRadius:'50%',width:26,height:26,cursor:'pointer',color:'#22c55e',fontSize:13,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',lineHeight:1,flexShrink:0}}>?</button>
+        </div>
         <div className="lb-prize-lbl">Bi-Weekly Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
-        <button onClick={() => setShowInfo(true)} title="How is wager contribution calculated?" style={{position:'absolute',top:0,right:0,background:'rgba(34,197,94,.12)',border:'1px solid rgba(34,197,94,.3)',borderRadius:'50%',width:26,height:26,cursor:'pointer',color:'#22c55e',fontSize:13,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>?</button>
       </div>
 
       {top3.length > 0 && (
