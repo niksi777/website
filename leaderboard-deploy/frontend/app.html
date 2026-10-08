@@ -1902,7 +1902,6 @@ function CsgowinRaceLeaderboard() {
 function KrushLeaderboard() {
   const [players, setPlayers] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
-  const [showInfo, setShowInfo] = React.useState(false);
   React.useEffect(() => {
     fetch('/krush-leaderboard?limit=10').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
     fetch('/krush-meta').then(r => r.json()).then(setMeta).catch(() => {});
@@ -2086,6 +2085,7 @@ function DiceyLeaderboard() {
     fetch('/dicey-leaderboard?limit=7').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
     fetch('/dicey-meta').then(r => r.json()).then(setMeta).catch(() => setMeta({}));
   }, []);
+  const [showInfo, setShowInfo] = React.useState(false);
 
   const fmtPrize = p => p.prize > 0 ? `$${Number(p.prize).toLocaleString('en-US')}` : '-';
   const fmtWager = p => `$${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
@@ -2125,11 +2125,11 @@ function DiceyLeaderboard() {
       {showInfo && (
         <div onClick={() => setShowInfo(false)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,.7)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:'0 16px'}}>
           <div onClick={e => e.stopPropagation()} style={{background:'#161520',border:'1px solid rgba(255,255,255,.15)',borderRadius:14,padding:'28px 28px 24px',maxWidth:480,width:'100%',position:'relative'}}>
-            <button onClick={() => setShowInfo(false)} style={{position:'absolute',top:12,right:14,background:'none',border:'none',color:'rgba(255,255,255,.5)',fontSize:20,cursor:'pointer',lineHeight:1}}>✕</button>
+            <button onClick={() => setShowInfo(false)} style={{position:'absolute',top:12,right:14,background:'none',border:'none',color:'rgba(255,255,255,.5)',fontSize:20,cursor:'pointer',lineHeight:1}}>&#x2715;</button>
             <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,letterSpacing:'.04em',textTransform:'uppercase',color:'#fff',marginBottom:12}}>How is contribution calculated?</div>
             <div style={{fontSize:14,color:'rgba(221,227,239,.75)',lineHeight:1.6,marginBottom:14}}>
               Games with an RTP of <strong style={{color:'#fff'}}>96% or lower</strong> contribute the full 100% toward wager race points.<br/><br/>
-              Games <strong style={{color:'#fff'}}>above 96% RTP</strong> contribute at a reduced rate — the higher the RTP, the lower the contribution.
+              Games <strong style={{color:'#fff'}}>above 96% RTP</strong> contribute at a reduced rate - the higher the RTP, the lower the contribution.
             </div>
             <table style={{width:'100%',borderCollapse:'collapse',fontSize:14}}>
               <thead>
