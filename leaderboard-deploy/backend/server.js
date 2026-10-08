@@ -673,6 +673,8 @@ app.get("/dicey-leaderboard", (req, res) => {
     avatar: r.avatarUrl || r.avatar || null,
     wager: Number(r.score || r.totalWagered || r.wagered || r.wager || 0),
     prize: diceyCache.prizes[i] || 0,
+    vipLevel: r.vipLevel || null,
+    vipSublevel: r.vipSublevel || null,
   }));
   res.json({ leaderboard: rows });
 });

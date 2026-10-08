@@ -2078,6 +2078,19 @@ function Cs2skinLeaderboard() {
 }
 const CS2SKIN_PRIZES_FALLBACK = [500,200,120,80,50,30,15,5];
 
+function DiceyRankBadge({level, sublevel, size}) {
+  size = size || 44;
+  var colors = {Bronze:'#cd7f32',Silver:'#9aaab8',Gold:'#d4af5a',Platinum:'#e2e2e8',Diamond:'#4dd9ff',None:'#4a5568'};
+  var bg = colors[level] || colors['None'];
+  var lv = level && level !== 'None' ? level.slice(0,3) : '?';
+  var sub = sublevel && sublevel !== 'None' ? sublevel : '';
+  return (
+    <div style={{width:size,height:size,borderRadius:'50%',background:'rgba(0,0,0,.4)',border:'2px solid '+bg,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 0 8px '+bg+'44'}}>
+      <span style={{fontSize:Math.round(size*.22),fontWeight:700,color:bg,letterSpacing:'.03em',lineHeight:1,fontFamily:"'Barlow Condensed',sans-serif",textTransform:'uppercase'}}>{lv}</span>
+      {sub && <span style={{fontSize:Math.round(size*.18),color:bg,opacity:.8,lineHeight:1,fontFamily:"'Barlow Condensed',sans-serif"}}>{sub}</span>}
+    </div>
+  );
+}
 function DiceyLeaderboard() {
   const [players, setPlayers] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
@@ -2167,6 +2180,7 @@ function DiceyLeaderboard() {
             return (
               <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
                 <PodiumCard player={p} rank={rank} accentColor={DICEY_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon={null} wagerIcon={null}/>
+                {!p.placeholder && !p.avatar && p.vipLevel && p.vipLevel !== 'None' && <div style={{display:'flex',justifyContent:'center',marginTop:6}}><DiceyRankBadge level={p.vipLevel} sublevel={p.vipSublevel} size={28}/></div>}
               </div>
             );
           })}
@@ -2192,7 +2206,7 @@ function DiceyLeaderboard() {
             {rest.map((p, i) => (
               <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
                 <td><span className="tr-rank">#{p.position || i + 4}</span></td>
-                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
+                <td className="col-av">{p.avatar ? <Avatar src={p.avatar} className="tr-av"/> : <DiceyRankBadge level={p.vipLevel} sublevel={p.vipSublevel} size={36}/>}</td>
                 <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
                 <td><span className="tr-wager">{fmtWager(p)}</span></td>
                 <td><span className="tr-prize">{fmtPrize(p)}</span></td>
