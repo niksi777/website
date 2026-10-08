@@ -1902,6 +1902,7 @@ function CsgowinRaceLeaderboard() {
 function KrushLeaderboard() {
   const [players, setPlayers] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
+  const [showInfo, setShowInfo] = React.useState(false);
   React.useEffect(() => {
     fetch('/krush-leaderboard?limit=10').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
     fetch('/krush-meta').then(r => r.json()).then(setMeta).catch(() => {});
@@ -2121,10 +2122,39 @@ function DiceyLeaderboard() {
 
   return (
     <div className="f2">
-      <div style={{textAlign:'center',marginBottom:40}}>
+      {showInfo && (
+        <div onClick={() => setShowInfo(false)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,.7)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:'0 16px'}}>
+          <div onClick={e => e.stopPropagation()} style={{background:'#161520',border:'1px solid rgba(255,255,255,.15)',borderRadius:14,padding:'28px 28px 24px',maxWidth:480,width:'100%',position:'relative'}}>
+            <button onClick={() => setShowInfo(false)} style={{position:'absolute',top:12,right:14,background:'none',border:'none',color:'rgba(255,255,255,.5)',fontSize:20,cursor:'pointer',lineHeight:1}}>✕</button>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:20,fontWeight:800,letterSpacing:'.04em',textTransform:'uppercase',color:'#fff',marginBottom:12}}>How is contribution calculated?</div>
+            <div style={{fontSize:14,color:'rgba(221,227,239,.75)',lineHeight:1.6,marginBottom:14}}>
+              Games with an RTP of <strong style={{color:'#fff'}}>96% or lower</strong> contribute the full 100% toward wager race points.<br/><br/>
+              Games <strong style={{color:'#fff'}}>above 96% RTP</strong> contribute at a reduced rate — the higher the RTP, the lower the contribution.
+            </div>
+            <table style={{width:'100%',borderCollapse:'collapse',fontSize:14}}>
+              <thead>
+                <tr style={{borderBottom:'1px solid rgba(255,255,255,.1)'}}>
+                  <th style={{textAlign:'left',padding:'6px 10px',color:'rgba(221,227,239,.5)',fontWeight:600,letterSpacing:'.08em',fontSize:11,textTransform:'uppercase'}}>Game RTP</th>
+                  <th style={{textAlign:'left',padding:'6px 10px',color:'rgba(221,227,239,.5)',fontWeight:600,letterSpacing:'.08em',fontSize:11,textTransform:'uppercase'}}>Contribution</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[['96% or lower','100%'],['97%','75%'],['98%','50%'],['99%','25%']].map(([rtp,pct]) => (
+                  <tr key={rtp} style={{borderBottom:'1px solid rgba(255,255,255,.06)'}}>
+                    <td style={{padding:'8px 10px',color:'rgba(221,227,239,.85)'}}>{rtp}</td>
+                    <td style={{padding:'8px 10px',color:'#22c55e',fontWeight:700}}>{pct}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+      <div style={{textAlign:'center',marginBottom:40,position:'relative'}}>
         <div className="lb-prize-amt"><span style={{color:'#22c55e'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
         <div className="lb-prize-lbl">Bi-Weekly Wager Race</div>
         <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
+        <button onClick={() => setShowInfo(true)} title="How is wager contribution calculated?" style={{position:'absolute',top:0,right:0,background:'rgba(34,197,94,.12)',border:'1px solid rgba(34,197,94,.3)',borderRadius:'50%',width:26,height:26,cursor:'pointer',color:'#22c55e',fontSize:13,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',lineHeight:1}}>?</button>
       </div>
 
       {top3.length > 0 && (
