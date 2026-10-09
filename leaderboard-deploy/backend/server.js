@@ -693,7 +693,7 @@ app.get("/dicey-meta", (req, res) => {
 
 // ─── CS2SKIN leaderboard ──────────────────────────────────────────────────
 const CS2SKIN_PRIZES = [333.33, 166.67, 66.67, 33.33, 20, 13.33, 10, 10, 6.67, 6.67];
-const CS2SKIN_POOL_TOTAL = 500;
+const CS2SKIN_POOL_TOTAL = CS2SKIN_PRIZES.reduce((s, p) => s + p, 0);
 const CS2SKIN_PERIOD_PATH = require("path").join(__dirname, "../../cs2skin-period.json");
 const CS2SKIN_CACHE_PATH = require("path").join(__dirname, "../../cs2skin-cache.json");
 
