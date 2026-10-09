@@ -1335,7 +1335,7 @@ function HeroCarousel() {
             {logo('/assets/cs2skin.png',.55,'rgba(124,58,237,.5)')}
             <div style={{position:'absolute',inset:0,background:fade(10,6,20),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>{cs2skinPool.toLocaleString('en-US')} COINS RACE</div>
+              <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>$500 RACE</div>
               <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CS2SKIN.COM</div>
               <div style={sub}>Wager your way to the top of the leaderboard!</div>
               <a href="/leaderboards?tab=cs2skin" style={btn('#7c3aed','rgba(124,58,237,.4)')}>VIEW LEADERBOARD <Arr/></a>
@@ -1432,7 +1432,7 @@ function HeroCarousel() {
       }] : []),
       ...(cs2skinActive ? [{
         logo:'/assets/cs2skin.png', color:'#7c3aed',
-        prize:'$1,000', lbType:'BI-WEEKLY',
+        prize:'$500', lbType:'WEEKLY',
         perks:['WAGER RACE PRIZES','USE CODE NIKSI'],
         logoStyle:{height:'58px',width:'58px',objectFit:'contain'},
         bigImg:'/assets/cs2skin.png',
