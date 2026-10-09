@@ -227,10 +227,13 @@
   function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
     const [chickenActive, setChickenActive] = React.useState(false);
+    const [cs2skinActive, setCs2skinActive] = React.useState(false);
+    const [cs2skinPool, setCs2skinPool] = React.useState(1000);
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
+      fetch('/cs2skin-meta').then(r => r.json()).then(d => { setCs2skinActive(!!d.active); if (d.totalPool) setCs2skinPool(d.totalPool); }).catch(() => {});
     }, []);
-    const total = 3 + (chickenActive ? 1 : 0);
+    const total = 3 + (chickenActive ? 1 : 0) + (cs2skinActive ? 1 : 0);
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -327,6 +330,26 @@
           </div>
           )}
 
+
+          {cs2skinActive && (
+          <div className="c-slide" style={{background:[
+            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(124,58,237,.34) 0%, rgba(124,58,237,.07) 50%, transparent 70%)',
+            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(124,58,237,.14) 0%, transparent 58%)',
+            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(124,58,237,.08) 0%, transparent 55%)',
+            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
+            'linear-gradient(140deg,#0a0614 0%,#08040f 55%,#090613 100%)'
+          ].join(','),borderTop:'3px solid rgba(124,58,237,.65)'}}>
+            {logo('/assets/cs2skin.png',.55,'rgba(124,58,237,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(10,6,20),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>{cs2skinPool.toLocaleString('en-US'){'}'} RACE</div>
+              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CS2SKIN.COM</div>
+              <div style={sub}>Wager your way to the top of the leaderboard!</div>
+              <a href="/leaderboards?tab=cs2skin" style={btn('#7c3aed','rgba(124,58,237,.4)')}>VIEW LEADERBOARD <Arr/></a>
+            </div>
+          </div>
+          )}
+
         </div>
 
         <div className="c-dots">
@@ -382,8 +405,10 @@
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
     const [chickenActive, setChickenActive] = React.useState(false);
+    const [cs2skinActive, setCs2skinActive] = React.useState(false);
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
+      fetch('/cs2skin-meta').then(r => r.json()).then(d => setCs2skinActive(!!d.active)).catch(() => {});
     }, []);
 
     const platforms = [
@@ -396,6 +421,11 @@
         logo:'/assets/chicken.png', color:'#f2a93b',
         perks:['UP TO 15% LOSSBACK','REQUEST IN DISCORD','1,000 COIN LEADERBOARD'],
         cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=chicken', ext:false,
+      }] : []),
+      ...(cs2skinActive ? [{
+        logo:'/assets/cs2skin.png', color:'#7c3aed',
+        perks:['EXCLUSIVE LEADERBOARD','WAGER RACE PRIZES','USE CODE NIKSI'],
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=cs2skin', ext:false,
       }] : []),
     ];
 
