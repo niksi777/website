@@ -1,4 +1,4 @@
-﻿require('dotenv').config();
+require('dotenv').config({ override: true });
 const axios = require('axios');
 const WebSocket = require('ws');
 const fs = require('fs');
@@ -86,6 +86,7 @@ async function sendMessage(text) {
       { type: 'user', content: text, broadcaster_user_id: BROADCASTER_ID },
       { headers: { Authorization: `Bearer ${BOT_TOKEN}`, 'Content-Type': 'application/json', 'Accept': 'application/json' } }
     );
+    console.log('[send ok]', text.slice(0, 80));
   } catch (err) {
     // If unauthorized, try refreshing token and retry once
     if (err?.response?.status === 401) {
@@ -134,7 +135,7 @@ let earlyRaffle = null; // { entries: Set, timeout }
 // â”€â”€â”€ CUSTOM COMMANDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const CMDS_PATH = path.join(__dirname, 'commands.json');
 function loadCmds() {
-  try { return JSON.parse(fs.readFileSync(CMDS_PATH, 'utf8')); } catch { return {}; }
+  try { return JSON.parse(fs.readFileSync(CMDS_PATH, 'utf8').replace(/^﻿/, '')); } catch { return {}; }
 }
 function saveCmds(cmds) {
   fs.writeFileSync(CMDS_PATH, JSON.stringify(cmds, null, 2));
@@ -318,6 +319,7 @@ function connectWebSocket(chatroomId) {
   ws.on('message', (raw) => {
     try {
       const packet = JSON.parse(raw.toString());
+      if (packet.event !== 'pusher:ping' && packet.event !== 'pusher:connection_established' && packet.event !== 'pusher_internal:subscription_succeeded') console.log('[ws event]', packet.event, JSON.stringify(packet.data || '').slice(0,80));
       if (packet.event === 'pusher:ping') { ws.send(JSON.stringify({ event: 'pusher:pong', data: {} })); return; }
       if (packet.event === 'App\\Events\\ChatMessageEvent') {
         const data = JSON.parse(packet.data);
@@ -372,15 +374,14 @@ setInterval(async () => {
   } catch {}
 }, 4000);
 
-// --- ROTATING COMMAND TIMERS -------------------------------------------
-// Cycles through !gamba, !web every 20 minutes (each fires ~every 60 min)
-// Only posts when the stream is live.
-const TIMER_INTERVAL = 20 * 60 * 1000;
-const TIMER_COMMANDS = [
-  () => { const c = loadCmds(); return c['!gamba'] || null; },
-  () => { const c = loadCmds(); return c['!web']   || null; },
-];
-let timerIndex = 0;
+﻿﻿// --- ROTATING COMMAND TIMERS -------------------------------------------
+// Reads from timed-commands.json, fires each enabled command on its own interval.
+const TIMED_CMDS_PATH = path.join(__dirname, 'timed-commands.json');
+const lastFired = {};
+function loadTimedCmds() {
+  try { return JSON.parse(fs.readFileSync(TIMED_CMDS_PATH, 'utf8')); }
+  catch { return []; }
+}
 async function isStreamLive() {
   try {
     const r = await axios.get(`https://kick.com/api/v2/channels/${CHANNEL}`, { timeout: 5000 });
@@ -390,12 +391,20 @@ async function isStreamLive() {
 function startTimers() {
   setInterval(async () => {
     if (!(await isStreamLive())) return;
-    const getText = TIMER_COMMANDS[timerIndex % TIMER_COMMANDS.length];
-    timerIndex++;
-    const text = getText();
-    if (text) await sendMessage(text);
-  }, TIMER_INTERVAL);
+    const now = Date.now();
+    const cmds = loadTimedCmds();
+    for (const cmd of cmds) {
+      if (!cmd.enabled || !cmd.text) continue;
+      const interval = (cmd.intervalMinutes || 20) * 60 * 1000;
+      const last = lastFired[cmd.id] || 0;
+      if (now - last >= interval) {
+        lastFired[cmd.id] = now;
+        await sendMessage(cmd.text);
+      }
+    }
+  }, 60 * 1000);
 }
+
 
 async function start() {
   console.log(`[bot] Starting for channel: ${CHANNEL}`);
