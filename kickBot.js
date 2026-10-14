@@ -306,30 +306,82 @@ async function handleCommand(username, message, isBadgeMod = false) {
 
 }
 
-// ─── WEBSOCKET ────────────────────────────────────────────────────────────────
-let wsReconnectTimer = null;
-let wsMessageId = 0;
+// ─── WEBSOCKET (polling via kick.com/api/v2) ──────────────────────────────────────────
+let pollTimer = null;
+let lastSeenMsgId = 0;
+let pollInitialized = false;
 
-async function negotiateKickConn() {
-  for (const host of ['web.kick.com', 'kick.com']) {
-    try {
-      const r = await axios.post(`https://${host}/api/v1/realtime/connection`, {}, {
-        headers: {
-          Authorization: `Bearer ${BOT_TOKEN}`,
-          'Content-Type': 'application/json',
-          Origin: 'https://kick.com',
-          Referer: 'https://kick.com/',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36'
-        },
-        timeout: 8000
-      });
-      console.log('[ws] Negotiate ok from', host, ':', JSON.stringify(r.data).slice(0, 200));
-      return r.data;
-    } catch(e) {
-      console.log('[ws] Negotiate failed for', host, ':', e?.response?.status, e?.response?.data?.message || e.message);
+async function pollChatMessages(chatroomId) {
+  try {
+    const r = await axios.get(`https://kick.com/api/v2/channels/${chatroomId}/messages`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',
+        Accept: 'application/json'
+      },
+      timeout: 8000
+    });
+
+    const messages = (r.data?.data?.messages || []).sort((a, b) => (a.id || 0) - (b.id || 0));
+
+    if (!pollInitialized) {
+      if (messages.length > 0) {
+        lastSeenMsgId = Math.max(...messages.map(m => m.id || 0));
+        console.log('[poll] Initialized at message ID', lastSeenMsgId);
+      } else {
+        console.log('[poll] Started (no messages yet)');
+      }
+      pollInitialized = true;
+    } else {
+      for (const msg of messages) {
+        if (!msg.id || msg.id <= lastSeenMsgId) continue;
+        if (lastSeenMsgId === 0) { lastSeenMsgId = msg.id; continue; } // skip first batch
+        lastSeenMsgId = Math.max(lastSeenMsgId, msg.id);
+
+        const username = msg.sender?.username || msg.sender?.slug;
+        const content = msg.content;
+        if (!username || !content) continue;
+
+        const badges = msg.sender?.identity?.badges || msg.sender?.badges || [];
+        const isBadgeMod = badges.some(b => b.type === 'moderator' || b.type === 'broadcaster');
+
+        if (content.startsWith('!')) console.log('[cmd]', username, content.slice(0, 60));
+
+        fetch('http://localhost:4000/giveaway/chat-message', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, content, ts: Date.now() })
+        }).catch(() => {});
+
+        if (content.startsWith('!')) handleCommand(username, content, isBadgeMod);
+
+        fetch('http://localhost:4000/giveaway/state')
+          .then(res => res.json())
+          .then(state => {
+            if (state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
+              const kw = state.giveaway.keyword.toLowerCase().trim();
+              if (content.toLowerCase().trim() === kw) {
+                fetch('http://localhost:4000/giveaway/enter', {
+                  method: 'POST', headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ username })
+                }).catch(() => {});
+              }
+            }
+          }).catch(() => {});
+      }
     }
+  } catch(e) {
+    const status = e?.response?.status;
+    if (status && status !== 200) console.log('[poll] HTTP', status, e.message.slice(0, 60));
   }
-  return null;
+
+  pollTimer = setTimeout(() => pollChatMessages(chatroomId), 2000);
+}
+
+function connectWebSocket(chatroomId) {
+  console.log('[poll] Starting chat polling for chatroom', chatroomId);
+  pollInitialized = false;
+  lastSeenMsgId = 0;
+  clearTimeout(pollTimer);
+  pollChatMessages(chatroomId);
 }
 
 async function connectWebSocket(chatroomId) {
