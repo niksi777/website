@@ -1,0 +1,727 @@
+[
+  {
+    "id": 3,
+    "label": "aug lb",
+    "start": "2026-07-29",
+    "end": "2026-08-05",
+    "prizePool": 500,
+    "totalWagered": 23718.06,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 12775.54,
+        "prize": 250
+      },
+      {
+        "position": 2,
+        "username": "sisterleft",
+        "avatar": "https://static.chicken.gg/avatars/MjOmpt1z45CjfWJPnlcaptxi.jpg",
+        "wager": 7521.96,
+        "prize": 100
+      },
+      {
+        "position": 3,
+        "username": "oliverzzzboss",
+        "avatar": "https://static.chicken.gg/avatars-default/009.jpg",
+        "wager": 1135.59,
+        "prize": 50
+      },
+      {
+        "position": 4,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 563.43,
+        "prize": 25
+      },
+      {
+        "position": 5,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/z6csaUVzkk0KFWYIbuVjv9S4.jpg",
+        "wager": 469.25,
+        "prize": 20
+      },
+      {
+        "position": 6,
+        "username": "astonstendahli",
+        "avatar": "https://static.chicken.gg/avatars/uZWtcRCK61JPHobGRWedHmrL.jpg",
+        "wager": 323.36,
+        "prize": 15
+      },
+      {
+        "position": 7,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 292.52,
+        "prize": 15
+      },
+      {
+        "position": 8,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 272.48,
+        "prize": 10
+      },
+      {
+        "position": 9,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/zpoWWqHXXqQfPbfiAkcCgSDK.jpg",
+        "wager": 266.94,
+        "prize": 10
+      },
+      {
+        "position": 10,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 96.99,
+        "prize": 5
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "label": "june/july lb",
+    "start": "2026-06-22",
+    "end": "2026-07-22",
+    "prizePool": 1000,
+    "totalWagered": 255248.74,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/Tl5XwSaX0r9HGhLxEc2lo0Ax.jpg",
+        "wager": 192045.54,
+        "prize": 600
+      },
+      {
+        "position": 2,
+        "username": "sisterleft",
+        "avatar": "https://static.chicken.gg/avatars/MjOmpt1z45CjfWJPnlcaptxi.jpg",
+        "wager": 33805.57,
+        "prize": 160
+      },
+      {
+        "position": 3,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/z6csaUVzkk0KFWYIbuVjv9S4.jpg",
+        "wager": 11114.78,
+        "prize": 80
+      },
+      {
+        "position": 4,
+        "username": "Nesloking",
+        "avatar": "https://static.chicken.gg/avatars-default/009.jpg",
+        "wager": 5363.85,
+        "prize": 48
+      },
+      {
+        "position": 5,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 3755.71,
+        "prize": 32
+      },
+      {
+        "position": 6,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 2684.03,
+        "prize": 24
+      },
+      {
+        "position": 7,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/zpoWWqHXXqQfPbfiAkcCgSDK.jpg",
+        "wager": 1982.72,
+        "prize": 20
+      },
+      {
+        "position": 8,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 1822.49,
+        "prize": 16
+      },
+      {
+        "position": 9,
+        "username": "backasa",
+        "avatar": "https://static.chicken.gg/avatars-default/016.jpg",
+        "wager": 1403,
+        "prize": 12
+      },
+      {
+        "position": 10,
+        "username": "astonstendahli",
+        "avatar": "https://static.chicken.gg/avatars/uZWtcRCK61JPHobGRWedHmrL.jpg",
+        "wager": 1271.05,
+        "prize": 8
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "label": "1week lb",
+    "start": "2026-07-22",
+    "end": "2026-08-05",
+    "prizePool": 500,
+    "totalWagered": 12463.769999999997,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 10966.77,
+        "prize": 250
+      },
+      {
+        "position": 2,
+        "username": "sisterleft",
+        "avatar": "https://static.chicken.gg/avatars/MjOmpt1z45CjfWJPnlcaptxi.jpg",
+        "wager": 849.9,
+        "prize": 100
+      },
+      {
+        "position": 3,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/z6csaUVzkk0KFWYIbuVjv9S4.jpg",
+        "wager": 186.92,
+        "prize": 50
+      },
+      {
+        "position": 4,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/zpoWWqHXXqQfPbfiAkcCgSDK.jpg",
+        "wager": 141.3,
+        "prize": 25
+      },
+      {
+        "position": 5,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 128.06,
+        "prize": 20
+      },
+      {
+        "position": 6,
+        "username": "astonstendahli",
+        "avatar": "https://static.chicken.gg/avatars/uZWtcRCK61JPHobGRWedHmrL.jpg",
+        "wager": 72.55,
+        "prize": 15
+      },
+      {
+        "position": 7,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 53.64,
+        "prize": 15
+      },
+      {
+        "position": 8,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 51.4,
+        "prize": 10
+      },
+      {
+        "position": 9,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 13.09,
+        "prize": 10
+      },
+      {
+        "position": 10,
+        "username": "oliverzzzboss",
+        "avatar": "https://static.chicken.gg/avatars-default/009.jpg",
+        "wager": 0.14,
+        "prize": 5
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "label": "aug lb 2",
+    "start": "2026-08-05",
+    "end": "2026-08-12",
+    "prizePool": 500,
+    "totalWagered": 46913.6,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 25870.81,
+        "prize": 250
+      },
+      {
+        "position": 2,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 8783.7,
+        "prize": 100
+      },
+      {
+        "position": 3,
+        "username": "sisterleft",
+        "avatar": "https://static.chicken.gg/avatars/MjOmpt1z45CjfWJPnlcaptxi.jpg",
+        "wager": 5573.66,
+        "prize": 50
+      },
+      {
+        "position": 4,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 2739.04,
+        "prize": 25
+      },
+      {
+        "position": 5,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 1762.63,
+        "prize": 20
+      },
+      {
+        "position": 6,
+        "username": "astonstendahli",
+        "avatar": "https://static.chicken.gg/avatars/uZWtcRCK61JPHobGRWedHmrL.jpg",
+        "wager": 659.12,
+        "prize": 15
+      },
+      {
+        "position": 7,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/zpoWWqHXXqQfPbfiAkcCgSDK.jpg",
+        "wager": 550.6,
+        "prize": 15
+      },
+      {
+        "position": 8,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/z6csaUVzkk0KFWYIbuVjv9S4.jpg",
+        "wager": 530.32,
+        "prize": 10
+      },
+      {
+        "position": 9,
+        "username": "oliverzzzboss",
+        "avatar": "https://static.chicken.gg/avatars-default/009.jpg",
+        "wager": 344.63,
+        "prize": 10
+      },
+      {
+        "position": 10,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 99.09,
+        "prize": 5
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "label": "aug lb 3",
+    "start": "2026-08-12",
+    "end": "2026-08-19",
+    "prizePool": 650,
+    "totalWagered": 15275.69,
+    "totalUsers": 9,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 7395.57,
+        "prize": 325
+      },
+      {
+        "position": 2,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 4565.78,
+        "prize": 130
+      },
+      {
+        "position": 3,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 1092.11,
+        "prize": 65
+      },
+      {
+        "position": 4,
+        "username": "StormNomad1572",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 961.62,
+        "prize": 32
+      },
+      {
+        "position": 5,
+        "username": "astonstendahli",
+        "avatar": "https://static.chicken.gg/avatars/Pbm3UqJiqErKdY2qYPtbZdW3.jpg",
+        "wager": 778.04,
+        "prize": 26
+      },
+      {
+        "position": 6,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/z6csaUVzkk0KFWYIbuVjv9S4.jpg",
+        "wager": 241.78,
+        "prize": 20
+      },
+      {
+        "position": 7,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 95.64,
+        "prize": 20
+      },
+      {
+        "position": 8,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/zpoWWqHXXqQfPbfiAkcCgSDK.jpg",
+        "wager": 74.94,
+        "prize": 13
+      },
+      {
+        "position": 9,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 70.21,
+        "prize": 13
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "label": "aug lb 4",
+    "start": "2026-08-19",
+    "end": "2026-08-26",
+    "prizePool": 650,
+    "totalWagered": 18643.51,
+    "totalUsers": 9,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 8997.26,
+        "prize": 325
+      },
+      {
+        "position": 2,
+        "username": "ImBLACKANDGAY",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 6559.79,
+        "prize": 130
+      },
+      {
+        "position": 3,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 1238.48,
+        "prize": 65
+      },
+      {
+        "position": 4,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/z6csaUVzkk0KFWYIbuVjv9S4.jpg",
+        "wager": 734.44,
+        "prize": 32
+      },
+      {
+        "position": 5,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 720.72,
+        "prize": 26
+      },
+      {
+        "position": 6,
+        "username": "astonstendahli",
+        "avatar": "https://static.chicken.gg/avatars/Pbm3UqJiqErKdY2qYPtbZdW3.jpg",
+        "wager": 296.96,
+        "prize": 20
+      },
+      {
+        "position": 7,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/zpoWWqHXXqQfPbfiAkcCgSDK.jpg",
+        "wager": 45.46,
+        "prize": 20
+      },
+      {
+        "position": 8,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 26.86,
+        "prize": 13
+      },
+      {
+        "position": 9,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 23.74,
+        "prize": 13
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "label": "Chicken Leaderboard #7",
+    "start": "2026-08-26",
+    "end": "2026-09-02",
+    "prizePool": 650,
+    "totalWagered": 17431.270000000004,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 8456.91,
+        "prize": 325
+      },
+      {
+        "position": 2,
+        "username": "ImBLACKANDGAY",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 2991.16,
+        "prize": 130
+      },
+      {
+        "position": 3,
+        "username": "lokeGamblelife",
+        "avatar": "https://static.chicken.gg/avatars-default/012.jpg",
+        "wager": 1915.2,
+        "prize": 65
+      },
+      {
+        "position": 4,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/XhB8Oho4IdYnEcNY6UxyZAJQ.jpg",
+        "wager": 1358.1,
+        "prize": 32
+      },
+      {
+        "position": 5,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 1315.93,
+        "prize": 26
+      },
+      {
+        "position": 6,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 615.91,
+        "prize": 20
+      },
+      {
+        "position": 7,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 460.38,
+        "prize": 20
+      },
+      {
+        "position": 8,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/pvPHuXChGA3NOpLgafChaoEL.jpg",
+        "wager": 298.04,
+        "prize": 13
+      },
+      {
+        "position": 9,
+        "username": "icedout",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 16.62,
+        "prize": 13
+      },
+      {
+        "position": 10,
+        "username": "backasa",
+        "avatar": "https://static.chicken.gg/avatars-default/016.jpg",
+        "wager": 3.02,
+        "prize": 6
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "label": "Chicken Leaderboard #8",
+    "start": "2026-09-02",
+    "end": "2026-09-23",
+    "prizePool": 650,
+    "totalWagered": 15258.460000000005,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "goofygooner",
+        "avatar": "https://static.chicken.gg/avatars/E5yyrogwU2S6kaUfQZlUjGfF.jpg",
+        "wager": 4444.67,
+        "prize": 325
+      },
+      {
+        "position": 2,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/fk9J2i1FidK7egQQY0OVGL3e.jpg",
+        "wager": 3438.27,
+        "prize": 130
+      },
+      {
+        "position": 3,
+        "username": "LokeisGAY",
+        "avatar": "https://static.chicken.gg/avatars-default/011.jpg",
+        "wager": 3101.76,
+        "prize": 65
+      },
+      {
+        "position": 4,
+        "username": "ImBLACKANDGAY",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 2006.26,
+        "prize": 32
+      },
+      {
+        "position": 5,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 761.95,
+        "prize": 26
+      },
+      {
+        "position": 6,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 757.2,
+        "prize": 20
+      },
+      {
+        "position": 7,
+        "username": "backasa",
+        "avatar": "https://static.chicken.gg/avatars-default/016.jpg",
+        "wager": 428.34,
+        "prize": 20
+      },
+      {
+        "position": 8,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 167.77,
+        "prize": 13
+      },
+      {
+        "position": 9,
+        "username": "humanity",
+        "avatar": "https://static.chicken.gg/avatars-default/012.jpg",
+        "wager": 94.79,
+        "prize": 13
+      },
+      {
+        "position": 10,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/pvPHuXChGA3NOpLgafChaoEL.jpg",
+        "wager": 57.45,
+        "prize": 6
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "label": "Chicken Leaderboard #9",
+    "start": "2026-09-23",
+    "end": "2026-10-07",
+    "prizePool": 650,
+    "totalWagered": 0,
+    "totalUsers": 0,
+    "entries": []
+  },
+  {
+    "id": 10,
+    "label": "Chicken Leaderboard #10",
+    "start": "2026-10-07",
+    "end": "2026-10-14",
+    "prizePool": 650,
+    "totalWagered": 83495.78,
+    "totalUsers": 10,
+    "entries": [
+      {
+        "position": 1,
+        "username": "WhoIsThat",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 66659.55,
+        "prize": 325
+      },
+      {
+        "position": 2,
+        "username": "morasti",
+        "avatar": "https://static.chicken.gg/avatars/fk9J2i1FidK7egQQY0OVGL3e.jpg",
+        "wager": 13398.94,
+        "prize": 130
+      },
+      {
+        "position": 3,
+        "username": "GiveMaxWin",
+        "avatar": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+        "wager": 2247.03,
+        "prize": 65
+      },
+      {
+        "position": 4,
+        "username": "BigNIg2000",
+        "avatar": "https://static.chicken.gg/avatars-default/007.jpg",
+        "wager": 500.36,
+        "prize": 32
+      },
+      {
+        "position": 5,
+        "username": "Niksfan112",
+        "avatar": "https://static.chicken.gg/avatars-default/001.jpg",
+        "wager": 217.58,
+        "prize": 26
+      },
+      {
+        "position": 6,
+        "username": "LokeisGAY",
+        "avatar": "https://static.chicken.gg/avatars-default/011.jpg",
+        "wager": 147.01,
+        "prize": 20
+      },
+      {
+        "position": 7,
+        "username": "Niksifan123",
+        "avatar": "https://static.chicken.gg/avatars-default/008.jpg",
+        "wager": 115.51,
+        "prize": 20
+      },
+      {
+        "position": 8,
+        "username": "SolarHawk1732",
+        "avatar": "https://static.chicken.gg/avatars-default/004.jpg",
+        "wager": 99.1,
+        "prize": 13
+      },
+      {
+        "position": 9,
+        "username": "haruto",
+        "avatar": "https://static.chicken.gg/avatars/pvPHuXChGA3NOpLgafChaoEL.jpg",
+        "wager": 63.3,
+        "prize": 13
+      },
+      {
+        "position": 10,
+        "username": "backasa",
+        "avatar": "https://static.chicken.gg/avatars-default/016.jpg",
+        "wager": 47.4,
+        "prize": 6
+      }
+    ]
+  }
+]
