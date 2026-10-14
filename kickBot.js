@@ -306,53 +306,127 @@ async function handleCommand(username, message, isBadgeMod = false) {
 
 }
 
-// â”€â”€â”€ WEBSOCKET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function connectWebSocket(chatroomId) {
-  const ws = new WebSocket('wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.4.0-rc2&flash=false');
+// ─── WEBSOCKET ────────────────────────────────────────────────────────────────
+let wsReconnectTimer = null;
+let wsMessageId = 0;
 
-  ws.on('open', () => {
-    console.log('[ws] Connected to Pusher');
-    ws.send(JSON.stringify({ event: 'pusher:subscribe', data: { auth: '', channel: `chatrooms.${chatroomId}.v2` } }));
-    console.log(`[ws] Subscribed to chatroom ${chatroomId}`);
+async function negotiateKickConn() {
+  for (const host of ['web.kick.com', 'kick.com']) {
+    try {
+      const r = await axios.post(`https://${host}/api/v1/realtime/connection`, {}, {
+        headers: {
+          Authorization: `Bearer ${BOT_TOKEN}`,
+          'Content-Type': 'application/json',
+          Origin: 'https://kick.com',
+          Referer: 'https://kick.com/',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36'
+        },
+        timeout: 8000
+      });
+      console.log('[ws] Negotiate ok from', host, ':', JSON.stringify(r.data).slice(0, 200));
+      return r.data;
+    } catch(e) {
+      console.log('[ws] Negotiate failed for', host, ':', e?.response?.status, e?.response?.data?.message || e.message);
+    }
+  }
+  return null;
+}
+
+async function connectWebSocket(chatroomId) {
+  clearTimeout(wsReconnectTimer);
+  wsMessageId = 0;
+
+  const negData = await negotiateKickConn();
+  let wsUrl = 'wss://realtime.us-west-2.platform.kick.com/connection/websocket';
+  let connToken = null;
+
+  if (negData) {
+    if (negData.url) wsUrl = negData.url;
+    if (negData.token) connToken = negData.token;
+  }
+
+  if (!connToken) {
+    try {
+      const r = await axios.post('https://kick.com/api/v1/realtime/auth/connection', {}, {
+        headers: {
+          Authorization: `Bearer ${BOT_TOKEN}`,
+          'Content-Type': 'application/json',
+          Origin: 'https://kick.com',
+          'User-Agent': 'Mozilla/5.0'
+        },
+        timeout: 8000
+      });
+      connToken = r.data?.token || r.data?.data?.token;
+      console.log('[ws] Auth token:', r.status, connToken ? 'obtained' : 'not in response');
+    } catch(e) {
+      console.log('[ws] Auth token failed:', e?.response?.status, e.message);
+    }
+  }
+
+  console.log('[ws] Connecting to:', wsUrl);
+
+  const wsConn = new WebSocket(wsUrl, {
+    headers: {
+      Origin: 'https://kick.com',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36'
+    }
   });
 
-  ws.on('message', (raw) => {
-    try {
-      const packet = JSON.parse(raw.toString());
-      if (packet.event !== 'pusher:ping' && packet.event !== 'pusher:connection_established' && packet.event !== 'pusher_internal:subscription_succeeded') console.log('[ws event]', packet.event, JSON.stringify(packet.data || '').slice(0,80));
-      if (packet.event === 'pusher:ping') { ws.send(JSON.stringify({ event: 'pusher:pong', data: {} })); return; }
-      if (packet.event === 'App\\Events\\ChatMessageEvent') {
-        const data = JSON.parse(packet.data);
+  wsConn.on('open', () => {
+    console.log('[ws] WebSocket opened');
+    wsConn.send(JSON.stringify({
+      id: ++wsMessageId,
+      connect: connToken
+        ? { token: connToken, name: 'js' }
+        : { token: BOT_TOKEN, name: 'js' }
+    }));
+  });
+
+  wsConn.on('message', (raw) => {
+    let msg;
+    try { msg = JSON.parse(raw.toString()); } catch { return; }
+
+    if (msg.connect !== undefined) {
+      console.log('[ws] Centrifugo connected, client:', msg.connect?.client || '?');
+      wsConn.send(JSON.stringify({ id: ++wsMessageId, subscribe: { channel: `chatrooms.${chatroomId}.v2` } }));
+    }
+
+    if (msg.subscribe !== undefined && !msg.error) {
+      console.log('[ws] Subscribed to chatroom', chatroomId);
+    }
+
+    if (msg.push && msg.push.pub) {
+      const data = msg.push.pub.data;
+      if (data) {
         const username = data?.sender?.username || data?.sender?.slug;
         const content = data?.content;
-        const badges = data?.sender?.badges || [];
+        const badges = data?.sender?.identity?.badges || data?.sender?.badges || [];
         const isBadgeMod = badges.some(b => b.type === 'moderator' || b.type === 'broadcaster');
         if (username && content) {
-          fetch('http://localhost:4000/giveaway/chat-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,content,ts:Date.now()})}).catch(()=>{});
+          fetch('http://localhost:4000/giveaway/chat-message', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, content, ts: Date.now() }) }).catch(() => {});
           if (content.startsWith('!')) handleCommand(username, content, isBadgeMod);
-          // Giveaway keyword check
           fetch('http://localhost:4000/giveaway/state')
-            .then(r=>r.json())
-            .then(state=>{
-              if(state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
+            .then(r => r.json())
+            .then(state => {
+              if (state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
                 const kw = state.giveaway.keyword.toLowerCase().trim();
-                const msg = content.toLowerCase().trim();
-                if(msg === kw) {
-                  fetch('http://localhost:4000/giveaway/enter', {
-                    method:'POST',
-                    headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({username})
-                  }).catch(()=>{});
-                }
+                const msgTxt = content.toLowerCase().trim();
+                if (msgTxt === kw) fetch('http://localhost:4000/giveaway/enter', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username }) }).catch(() => {});
               }
-            }).catch(()=>{});
+            }).catch(() => {});
         }
       }
-    } catch {}
+    }
+
+    if (msg.error) console.log('[ws] Centrifugo error:', JSON.stringify(msg.error));
   });
 
-  ws.on('close', () => { console.log('[ws] Disconnected. Reconnecting in 5s...'); setTimeout(() => connectWebSocket(chatroomId), 5000); });
-  ws.on('error', (err) => { console.error('[ws error]', err.message); });
+  wsConn.on('close', (code, reason) => {
+    console.log('[ws] Disconnected:', code, reason?.toString().slice(0, 60) || '', '- reconnect in 10s');
+    wsReconnectTimer = setTimeout(() => connectWebSocket(chatroomId), 10000);
+  });
+
+  wsConn.on('error', (err) => { console.error('[ws error]', err.message); });
 }
 
 // â”€â”€â”€ START â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
