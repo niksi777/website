@@ -775,7 +775,7 @@ app.get('/cs2skin-meta', (req, res) => {
   res.json({
     start: cs2skinPeriod.start,
     end: cs2skinPeriod.end,
-    active: !!(cs2skinPeriod.start && cs2skinPeriod.end && now < cs2skinPeriod.end),
+    active: !!(cs2skinPeriod.start && cs2skinPeriod.end),
     totalPool: CS2SKIN_POOL_TOTAL,
     prizes: CS2SKIN_PRIZES,
     lastUpdated: cs2skinLastUpdated,
