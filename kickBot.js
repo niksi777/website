@@ -306,14 +306,15 @@ async function handleCommand(username, message, isBadgeMod = false) {
 
 }
 
-// ─── WEBSOCKET (polling via kick.com/api/v2) ──────────────────────────────────────────
+// ─── WEBSOCKET (polling via kick.com/api/v2) ──────────────────────────────────────────────────────
+const KICK_CHANNEL_ID = 36768327; // channel ID (different from chatroom ID 36479996)
 let pollTimer = null;
-let lastSeenMsgId = 0;
+let seenMsgIds = new Set();
 let pollInitialized = false;
 
-async function pollChatMessages(chatroomId) {
+async function pollChatMessages() {
   try {
-    const r = await axios.get(`https://kick.com/api/v2/channels/${chatroomId}/messages`, {
+    const r = await axios.get(`https://kick.com/api/v2/channels/${KICK_CHANNEL_ID}/messages`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',
         'Referer': 'https://kick.com/niksi777',
@@ -323,27 +324,29 @@ async function pollChatMessages(chatroomId) {
       timeout: 8000
     });
 
-    const messages = (r.data?.data?.messages || []).sort((a, b) => (a.id || 0) - (b.id || 0));
+    const messages = r.data?.data?.messages || [];
+    messages.sort((a, b) => {
+      try {
+        const refA = JSON.parse(a.metadata || '{}').message_ref || 0;
+        const refB = JSON.parse(b.metadata || '{}').message_ref || 0;
+        return refA - refB;
+      } catch { return 0; }
+    });
 
     if (!pollInitialized) {
-      if (messages.length > 0) {
-        lastSeenMsgId = Math.max(...messages.map(m => m.id || 0));
-        console.log('[poll] Initialized at message ID', lastSeenMsgId);
-      } else {
-        lastSeenMsgId = -1; // no messages at startup - process all new messages immediately
-        console.log('[poll] Started (no messages yet)');
-      }
+      for (const msg of messages) seenMsgIds.add(msg.id);
+      console.log('[poll] Initialized, marked', messages.length, 'existing msgs as seen');
       pollInitialized = true;
     } else {
       for (const msg of messages) {
-        if (!msg.id || msg.id <= lastSeenMsgId) continue;
-        lastSeenMsgId = Math.max(lastSeenMsgId, msg.id);
+        if (seenMsgIds.has(msg.id)) continue;
+        seenMsgIds.add(msg.id);
 
         const username = msg.sender?.username || msg.sender?.slug;
         const content = msg.content;
         if (!username || !content) continue;
 
-        const badges = msg.sender?.identity?.badges || msg.sender?.badges || [];
+        const badges = msg.sender?.identity?.badges || [];
         const isBadgeMod = badges.some(b => b.type === 'moderator' || b.type === 'broadcaster');
 
         if (content.startsWith('!')) console.log('[cmd]', username, content.slice(0, 60));
@@ -369,40 +372,26 @@ async function pollChatMessages(chatroomId) {
             }
           }).catch(() => {});
       }
+
+      if (seenMsgIds.size > 200) {
+        const arr = [...seenMsgIds];
+        seenMsgIds = new Set(arr.slice(-100));
+      }
     }
   } catch(e) {
     const status = e?.response?.status;
     if (status && status !== 200) console.log('[poll] HTTP', status, e.message.slice(0, 60));
   }
 
-  pollTimer = setTimeout(() => pollChatMessages(chatroomId), 2000);
+  pollTimer = setTimeout(() => pollChatMessages(), 2000);
 }
 
 function connectWebSocket(chatroomId) {
-  console.log('[poll] Starting chat polling for chatroom', chatroomId);
+  console.log('[poll] Starting chat polling for channel', KICK_CHANNEL_ID);
   pollInitialized = false;
-  lastSeenMsgId = 0;
+  seenMsgIds = new Set();
   clearTimeout(pollTimer);
-  pollChatMessages(chatroomId);
-}
-
-// â”€â”€â”€ START â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// â”€â”€â”€ GIVEAWAY ANNOUNCER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-let lastAnnouncedKeyword = null;
-setInterval(async () => {
-  try {
-    const r = await fetch('http://localhost:4000/giveaway/state');
-    const state = await r.json();
-    if (state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
-      if (state.giveaway.keyword !== lastAnnouncedKeyword) {
-        lastAnnouncedKeyword = state.giveaway.keyword;
-        const prize = state.giveaway.prize ? ` Prize: ${state.giveaway.prize}` : '';
-        await sendMessage(`Giveaway started! Type "${state.giveaway.keyword}" in chat to enter!${prize}`);
-      }
-    } else if (!state.giveaway) {
-      lastAnnouncedKeyword = null;
-    }
-  } catch {}
+  pollChatMessages();
 }, 4000);
 
 ﻿﻿// --- ROTATING COMMAND TIMERS -------------------------------------------
