@@ -316,6 +316,8 @@ async function pollChatMessages(chatroomId) {
     const r = await axios.get(`https://kick.com/api/v2/channels/${chatroomId}/messages`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36',
+        'Referer': 'https://kick.com/niksi777',
+        'Origin': 'https://kick.com',
         Accept: 'application/json'
       },
       timeout: 8000
