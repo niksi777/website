@@ -330,13 +330,13 @@ async function pollChatMessages(chatroomId) {
         lastSeenMsgId = Math.max(...messages.map(m => m.id || 0));
         console.log('[poll] Initialized at message ID', lastSeenMsgId);
       } else {
+        lastSeenMsgId = -1; // no messages at startup - process all new messages immediately
         console.log('[poll] Started (no messages yet)');
       }
       pollInitialized = true;
     } else {
       for (const msg of messages) {
         if (!msg.id || msg.id <= lastSeenMsgId) continue;
-        if (lastSeenMsgId === 0) { lastSeenMsgId = msg.id; continue; } // skip first batch
         lastSeenMsgId = Math.max(lastSeenMsgId, msg.id);
 
         const username = msg.sender?.username || msg.sender?.slug;
