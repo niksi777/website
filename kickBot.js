@@ -306,13 +306,13 @@ async function handleCommand(username, message, isBadgeMod = false) {
 
 }
 
-// ─── WEBSOCKET (polling via kick.com/api/v2) ──────────────────────────────────────────────────────
-const KICK_CHANNEL_ID = 36768327; // channel ID (different from chatroom ID 36479996)
+// ─── WEBSOCKET (polling via kick.com/api/v2) ──────────────────────────────────────────
+const KICK_CHANNEL_ID = 36768327;
 let pollTimer = null;
 let seenMsgIds = new Set();
 let pollInitialized = false;
 
-async function pollChatMessages() {
+async function pollChatMessages(chatroomId) {
   try {
     const r = await axios.get(`https://kick.com/api/v2/channels/${KICK_CHANNEL_ID}/messages`, {
       headers: {
@@ -327,9 +327,9 @@ async function pollChatMessages() {
     const messages = r.data?.data?.messages || [];
     messages.sort((a, b) => {
       try {
-        const refA = JSON.parse(a.metadata || '{}').message_ref || 0;
-        const refB = JSON.parse(b.metadata || '{}').message_ref || 0;
-        return refA - refB;
+        const ra = JSON.parse(a.metadata || '{}').message_ref || 0;
+        const rb = JSON.parse(b.metadata || '{}').message_ref || 0;
+        return ra - rb;
       } catch { return 0; }
     });
 
@@ -346,7 +346,7 @@ async function pollChatMessages() {
         const content = msg.content;
         if (!username || !content) continue;
 
-        const badges = msg.sender?.identity?.badges || [];
+        const badges = msg.sender?.identity?.badges || msg.sender?.badges || [];
         const isBadgeMod = badges.some(b => b.type === 'moderator' || b.type === 'broadcaster');
 
         if (content.startsWith('!')) console.log('[cmd]', username, content.slice(0, 60));
@@ -374,8 +374,7 @@ async function pollChatMessages() {
       }
 
       if (seenMsgIds.size > 200) {
-        const arr = [...seenMsgIds];
-        seenMsgIds = new Set(arr.slice(-100));
+        seenMsgIds = new Set([...seenMsgIds].slice(-100));
       }
     }
   } catch(e) {
@@ -383,7 +382,7 @@ async function pollChatMessages() {
     if (status && status !== 200) console.log('[poll] HTTP', status, e.message.slice(0, 60));
   }
 
-  pollTimer = setTimeout(() => pollChatMessages(), 2000);
+  pollTimer = setTimeout(() => pollChatMessages(chatroomId), 2000);
 }
 
 function connectWebSocket(chatroomId) {
@@ -391,7 +390,26 @@ function connectWebSocket(chatroomId) {
   pollInitialized = false;
   seenMsgIds = new Set();
   clearTimeout(pollTimer);
-  pollChatMessages();
+  pollChatMessages(chatroomId);
+}
+
+// â”€â”€â”€ START â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€â”€ GIVEAWAY ANNOUNCER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+let lastAnnouncedKeyword = null;
+setInterval(async () => {
+  try {
+    const r = await fetch('http://localhost:4000/giveaway/state');
+    const state = await r.json();
+    if (state.giveaway && state.giveaway.keyword && !state.giveaway.winner) {
+      if (state.giveaway.keyword !== lastAnnouncedKeyword) {
+        lastAnnouncedKeyword = state.giveaway.keyword;
+        const prize = state.giveaway.prize ? ` Prize: ${state.giveaway.prize}` : '';
+        await sendMessage(`Giveaway started! Type "${state.giveaway.keyword}" in chat to enter!${prize}`);
+      }
+    } else if (!state.giveaway) {
+      lastAnnouncedKeyword = null;
+    }
+  } catch {}
 }, 4000);
 
 ﻿﻿// --- ROTATING COMMAND TIMERS -------------------------------------------
