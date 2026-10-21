@@ -723,5 +723,88 @@
         "prize": 6
       }
     ]
+  },
+  {
+    "id": 11,
+    "label": "Chicken Leaderboard #11",
+    "start": "2026-10-14",
+    "end": "2026-10-21",
+    "prizePool": 1000,
+    "totalWagered": 30762.49,
+    "totalUsers": 12,
+    "entries": [
+      {
+        "position": 1,
+        "username": "WhoIsThat",
+        "wager": 18492.43,
+        "prize": 500
+      },
+      {
+        "position": 2,
+        "username": "morasti",
+        "wager": 7223.55,
+        "prize": 200
+      },
+      {
+        "position": 3,
+        "username": "Bufff",
+        "wager": 2601.95,
+        "prize": 100
+      },
+      {
+        "position": 4,
+        "username": "GiveMaxWin",
+        "wager": 1086.36,
+        "prize": 50
+      },
+      {
+        "position": 5,
+        "username": "BigNIg2000",
+        "wager": 451.4,
+        "prize": 40
+      },
+      {
+        "position": 6,
+        "username": "chongu",
+        "wager": 253,
+        "prize": 30
+      },
+      {
+        "position": 7,
+        "username": "LokeisGAY",
+        "wager": 251.43,
+        "prize": 30
+      },
+      {
+        "position": 8,
+        "username": "backasa",
+        "wager": 114.9,
+        "prize": 20
+      },
+      {
+        "position": 9,
+        "username": "SolarHawk1732",
+        "wager": 105.89,
+        "prize": 20
+      },
+      {
+        "position": 10,
+        "username": "Niksifan123",
+        "wager": 85,
+        "prize": 10
+      },
+      {
+        "position": 11,
+        "username": "Niksfan112",
+        "wager": 61.56,
+        "prize": 0
+      },
+      {
+        "position": 12,
+        "username": "haruto",
+        "wager": 35.02,
+        "prize": 0
+      }
+    ]
   }
 ]
