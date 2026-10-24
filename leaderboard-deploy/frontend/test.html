@@ -16,11 +16,10 @@
   --text: #d8e8ff;
   --text-dim: #5a7090;
   --gold: #f5a623;
-  --silver: #b0bec5;
-  --bronze: #c87941;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -38,25 +37,13 @@ body::before {
     radial-gradient(ellipse 60% 50% at 15% 20%, rgba(30,80,200,0.18) 0%, transparent 60%),
     radial-gradient(ellipse 50% 40% at 85% 75%, rgba(20,60,180,0.14) 0%, transparent 55%),
     radial-gradient(ellipse 80% 60% at 50% 5%, rgba(40,100,220,0.10) 0%, transparent 50%),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 60px,
-      rgba(61,142,255,0.025) 60px,
-      rgba(61,142,255,0.025) 61px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 60px,
-      rgba(61,142,255,0.025) 60px,
-      rgba(61,142,255,0.025) 61px
-    );
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(61,142,255,0.025) 60px, rgba(61,142,255,0.025) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(61,142,255,0.025) 60px, rgba(61,142,255,0.025) 61px);
   pointer-events: none;
   z-index: 0;
 }
-.page { position: relative; z-index: 1; }
-.page { max-width: 780px; margin: 0 auto; }
+
+.page { max-width: 780px; margin: 0 auto; position: relative; z-index: 1; }
 
 .header {
   text-align: center;
@@ -87,13 +74,18 @@ body::before {
   overflow: hidden;
 }
 
+/* ─── Tabs ─── */
 .tabs {
   display: flex;
   justify-content: center;
   border-bottom: 1px solid var(--border);
-  padding: 0 20px;
+  padding: 0 12px;
   gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.tabs::-webkit-scrollbar { display: none; }
+
 .tab {
   background: none;
   border: none;
@@ -101,14 +93,16 @@ body::before {
   padding: 10px 16px 8px;
   cursor: pointer;
   transition: border-color 0.15s, opacity 0.15s;
-  opacity: 0.45;
+  opacity: 0.4;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
-.tab:hover { opacity: 0.75; }
+.tab:hover { opacity: 0.7; }
 .tab.active { border-bottom-color: var(--accent); opacity: 1; }
-.tab img { height: 28px; width: auto; object-fit: contain; display: block; }
+.tab img { height: 28px; width: auto; object-fit: contain; display: block; max-width: 90px; }
 
+/* ─── Timer (stacked) ─── */
 .race-meta {
   display: flex;
   justify-content: center;
@@ -118,28 +112,26 @@ body::before {
 }
 .timer {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 7px;
-  font-size: 0.8rem;
+  gap: 3px;
+}
+.timer-label {
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.timer-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
   color: var(--text);
-  background: var(--accent-dim);
-  border: 1px solid rgba(61,142,255,0.2);
-  border-radius: 20px;
-  padding: 5px 12px;
 }
-.timer-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #4cff9a;
-  box-shadow: 0 0 6px #4cff9a;
-  animation: blink 1.4s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.timer-label { color: var(--text-dim); font-weight: 500; }
 
-
+/* ─── Table ─── */
 .tbl-head {
   display: grid;
   grid-template-columns: 70px 1fr 130px 100px;
@@ -182,7 +174,7 @@ body::before {
   font-size: 1rem;
   flex-shrink: 0;
 }
-.rank-badge.gold { background: linear-gradient(135deg, #f5a623, #c97f00); color: #1a0e00; box-shadow: 0 0 12px rgba(245,166,35,0.4); }
+.rank-badge.gold   { background: linear-gradient(135deg, #f5a623, #c97f00); color: #1a0e00; box-shadow: 0 0 12px rgba(245,166,35,0.4); }
 .rank-badge.silver { background: linear-gradient(135deg, #c8d0d8, #8090a0); color: #1a1a1a; }
 .rank-badge.bronze { background: linear-gradient(135deg, #cd7941, #904f1a); color: #fff; box-shadow: 0 0 10px rgba(200,120,60,0.3); }
 .rank-num { color: var(--text-dim); font-size: 0.85rem; font-weight: 500; }
@@ -205,6 +197,7 @@ body::before {
   font-weight: 700; font-size: 1rem; letter-spacing: 0.12em;
   text-transform: uppercase; cursor: pointer;
   transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none; text-align: center;
 }
 .join-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 </style>
@@ -212,21 +205,17 @@ body::before {
 <body>
 <div class="page">
   <div class="header">
-    <h1 class="title">1,000 COIN LEADERBOARD</h1>
+    <h1 class="title">LEADERBOARD</h1>
     <p class="subtitle">Wager using code <span class="code">NIKSI</span> to compete for prizes</p>
   </div>
 
   <div class="card">
-    <div class="tabs">
-      <button class="tab active" id="tab-chicken" onclick="switchTab('chicken')"><img src="/assets/chicken.png" alt="Chicken.gg"></button>
-      <button class="tab" id="tab-dicey" onclick="switchTab('dicey')"><img src="/assets/dicey.png" alt="Dicey"></button>
-    </div>
+    <div class="tabs" id="tabs"></div>
 
     <div class="race-meta">
       <div class="timer">
-        <span class="timer-dot"></span>
-        <span class="timer-label">ENDS IN:</span>
-        <span id="countdown">Loading...</span>
+        <span class="timer-label">ENDS IN</span>
+        <span class="timer-value" id="countdown">–</span>
       </div>
     </div>
 
@@ -242,88 +231,165 @@ body::before {
     </div>
 
     <div class="footer">
-      <button class="join-btn" id="join-btn">SIGN UP &amp; JOIN RACE</button>
+      <a class="join-btn" id="join-btn" href="#" target="_blank" rel="noreferrer">SIGN UP &amp; JOIN RACE</a>
     </div>
   </div>
 </div>
 
 <script>
-let currentTab = 'chicken';
-let data = { chicken: [], dicey: [] };
-let chickenEnd = null;
-let diceyEnd = null;
+const PLATFORMS = [
+  {
+    id: 'chicken',
+    logo: '/assets/chicken.png',
+    alt: 'Chicken.gg',
+    lbUrl: '/chicken-leaderboard',
+    metaUrl: '/chicken-meta',
+    prizeField: 'prize',
+    wagerField: 'wager',
+    endField: 'end',
+    signupUrl: 'https://chicken.gg?ref=niksi',
+    btnLabel: 'SIGN UP ON CHICKEN.GG',
+  },
+  {
+    id: 'dicey',
+    logo: '/assets/dicey.png',
+    alt: 'Dicey',
+    lbUrl: '/dicey-leaderboard',
+    metaUrl: '/dicey-meta',
+    prizeField: 'prize',
+    wagerField: 'wager',
+    endField: 'end',
+    signupUrl: 'https://dicey.com/signup?ref=Niksi',
+    btnLabel: 'SIGN UP ON DICEY',
+  },
+  {
+    id: 'gamba',
+    logo: '/assets/gamba2.png',
+    alt: 'Gamba',
+    lbUrl: '/players',
+    metaUrl: '/gamba-meta',
+    prizeField: 'reward',
+    wagerField: 'wager',
+    endField: 'endDate',
+    listKey: null,
+    signupUrl: 'https://gamba.com?c=niksi',
+    btnLabel: 'SIGN UP ON GAMBA',
+  },
+  {
+    id: 'krush',
+    logo: '/assets/krush.png',
+    alt: 'Krush.gg',
+    lbUrl: '/krush-leaderboard',
+    metaUrl: '/krush-meta',
+    prizeField: 'prize',
+    wagerField: 'wager',
+    endField: 'end',
+    signupUrl: 'https://krush.gg?ref=niksi',
+    btnLabel: 'SIGN UP ON KRUSH.GG',
+  },
+];
 
-const BADGE = ['gold','silver','bronze'];
-const HREF = { chicken: 'https://chicken.gg?ref=niksi', dicey: 'https://dicey.com/signup?ref=Niksi' };
+let currentId = 'chicken';
+let cache = {};
+let endTimes = {};
 
 function fmt(n) {
   return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function renderRows(rows) {
+const BADGES = ['gold', 'silver', 'bronze'];
+
+function renderRows(entries, prizeField, wagerField) {
   const container = document.getElementById('rows-container');
-  if (!rows.length) {
+  if (!entries || !entries.length) {
     container.innerHTML = '<div class="loading">No entries yet.</div>';
     return;
   }
-  container.innerHTML = rows.map((e, i) => {
-    const rank = e.position || (i + 1);
+  container.innerHTML = entries.map((e, i) => {
+    const rank = e.position || e.rank || (i + 1);
     const badge = rank <= 3
-      ? `<span class="rank-badge ${BADGE[rank-1]}">${rank}</span>`
+      ? `<span class="rank-badge ${BADGES[rank-1]}">${rank}</span>`
       : `<span class="rank-num">#${rank}</span>`;
     const cls = rank <= 3 ? 'row top3' : 'row';
-    return `<div class="${cls}" data-name="${(e.username||'').toLowerCase()}">
+    const prize = e[prizeField] != null ? Number(e[prizeField]).toFixed(2) : '–';
+    return `<div class="${cls}">
       <div>${badge}</div>
       <div class="username">${e.username || '?'}</div>
-      <div class="wagered">${fmt(e.wager || e.score || 0)}</div>
-      <div class="prize">${e.prize || 0}</div>
+      <div class="wagered">${fmt(e[wagerField] || 0)}</div>
+      <div class="prize">${prize}</div>
     </div>`;
   }).join('');
 }
 
-
-function switchTab(tab) {
-  currentTab = tab;
-  document.getElementById('tab-chicken').classList.toggle('active', tab === 'chicken');
-  document.getElementById('tab-dicey').classList.toggle('active', tab === 'dicey');
-  document.getElementById('join-btn').textContent = tab === 'chicken' ? 'SIGN UP ON CHICKEN.GG' : 'SIGN UP ON DICEY';
-  document.getElementById('search').value = '';
-  renderRows(data[tab]);
-  updateCountdownDisplay();
-}
-
-function updateCountdownDisplay() {
-  const end = currentTab === 'chicken' ? chickenEnd : diceyEnd;
-  if (!end) { document.getElementById('countdown').textContent = '–'; return; }
-  const diff = end - Date.now();
-  if (diff <= 0) { document.getElementById('countdown').textContent = 'ENDED'; return; }
+function updateCountdown() {
+  const end = endTimes[currentId];
+  const el = document.getElementById('countdown');
+  if (!end) { el.textContent = '–'; return; }
+  const diff = new Date(end).getTime() - Date.now();
+  if (diff <= 0) { el.textContent = 'ENDED'; return; }
   const d = Math.floor(diff / 86400000);
   const h = Math.floor((diff % 86400000) / 3600000);
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
-  document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m ${s}s`;
+  el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+}
+
+function switchTab(id) {
+  currentId = id;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.id === id));
+  const p = PLATFORMS.find(p => p.id === id);
+  if (!p) return;
+  document.getElementById('join-btn').textContent = p.btnLabel;
+  document.getElementById('join-btn').href = p.signupUrl;
+  const entries = cache[id] || [];
+  renderRows(entries, p.prizeField, p.wagerField);
+  updateCountdown();
+}
+
+function buildTabs() {
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = PLATFORMS.map(p =>
+    `<button class="tab${p.id === currentId ? ' active' : ''}" data-id="${p.id}" onclick="switchTab('${p.id}')">
+      <img src="${p.logo}" alt="${p.alt}">
+    </button>`
+  ).join('');
 }
 
 async function loadAll() {
-  try {
-    const [clb, dlb, cp, dm] = await Promise.all([
-      fetch('/chicken-leaderboard').then(r => r.json()),
-      fetch('/dicey-leaderboard').then(r => r.json()),
-      fetch('/chicken-period').then(r => r.json()).catch(() => null),
-      fetch('/dicey-meta').then(r => r.json()).catch(() => null),
-    ]);
-    data.chicken = clb.leaderboard || [];
-    data.dicey = dlb.leaderboard || [];
-    if (cp && cp.end) chickenEnd = cp.end;
-    if (dm && dm.end) diceyEnd = dm.end;
-    renderRows(data[currentTab]);
-  } catch(e) {
-    document.getElementById('rows-container').innerHTML = '<div class="loading">Failed to load data.</div>';
+  buildTabs();
+  await Promise.all(PLATFORMS.map(async p => {
+    try {
+      const [lbRes, metaRes] = await Promise.all([
+        fetch(p.lbUrl).then(r => r.json()),
+        fetch(p.metaUrl).then(r => r.json()).catch(() => null),
+      ]);
+      // Leaderboard entries
+      if (Array.isArray(lbRes)) {
+        cache[p.id] = lbRes;
+      } else {
+        cache[p.id] = lbRes.leaderboard || lbRes.entries || [];
+      }
+      // End time
+      if (metaRes) {
+        const endVal = metaRes[p.endField];
+        if (endVal) endTimes[p.id] = endVal;
+      }
+    } catch(e) {
+      cache[p.id] = [];
+    }
+  }));
+  // Render current tab
+  const p = PLATFORMS.find(p => p.id === currentId);
+  if (p) {
+    renderRows(cache[currentId], p.prizeField, p.wagerField);
+    document.getElementById('join-btn').textContent = p.btnLabel;
+    document.getElementById('join-btn').href = p.signupUrl;
   }
+  updateCountdown();
 }
 
 loadAll();
-setInterval(updateCountdownDisplay, 1000);
+setInterval(updateCountdown, 1000);
 </script>
 </body>
 </html>
