@@ -129,7 +129,7 @@
 /* ---- LeaderboardsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,0.07);--b2:rgba(61,142,255,0.13);--b3:rgba(61,142,255,0.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--gold:#f5a623;--silver:#b8c5d0;--bronze:#cd7941;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;--cs2skin:#7c3aed}
+    .lb-wrap{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,0.07);--b2:rgba(61,142,255,0.13);--b3:rgba(61,142,255,0.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--gold:#f5a623;--silver:#b8c5d0;--bronze:#cd7941;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;--cs2skin:#7c3aed;background:var(--bg);color:var(--tx);min-height:100vh}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -175,7 +175,7 @@
     .wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
     /* New unified leaderboard card */
-    .lb-card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;margin-bottom:48px}
+    .lb-card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;margin:0 auto 48px;max-width:860px}
     .lb-tabs{display:flex;justify-content:center;border-bottom:1px solid var(--b2);padding:0 12px;gap:4px;overflow-x:auto;scrollbar-width:none}
     .lb-tabs::-webkit-scrollbar{display:none}
     .lb-tab{background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px 8px;cursor:pointer;transition:border-color .15s,opacity .15s;opacity:.4;display:flex;align-items:center;flex-shrink:0;margin-bottom:-1px}
@@ -1191,7 +1191,7 @@ function Navbar() {
   const [open, setOpen] = React.useState(false);
   const isOn = (href) => href === '/' ? path === '/' : path.startsWith(href);
   return (
-    <>
+    <div className="lb-wrap">
       <nav>
         <div className="ni">
           <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
@@ -2744,7 +2744,7 @@ function LeaderboardsPage() {
           <div style={{textAlign:'center',marginTop:10,paddingBottom:4,fontSize:11,color:'var(--mu)',letterSpacing:'.08em',fontFamily:"'Inter',sans-serif"}}>Created by <strong style={{color:'var(--ac)'}}>@niksiii</strong> on Discord</div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 
