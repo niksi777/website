@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -129,7 +129,7 @@
 /* ---- LeaderboardsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.6);--ac:#4a9eff;--gold:#d4af5a;--silver:#9aaab8;--bronze:#a0714a;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;--cs2skin:#7c3aed}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,0.07);--b2:rgba(61,142,255,0.13);--b3:rgba(61,142,255,0.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--gold:#f5a623;--silver:#b8c5d0;--bronze:#cd7941;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;--cs2skin:#7c3aed}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -174,23 +174,58 @@
 
     .wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-    /* Platform tabs */
-    .platform-tabs{display:flex;align-items:stretch;justify-content:center;gap:12px;padding:32px 0 24px;flex-wrap:wrap}
-    .ptab{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;min-width:110px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;transition:all .2s;text-decoration:none}
-    .ptab:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
-    .ptab.active-gamba{border-color:rgba(74,158,255,.5);background:rgba(74,158,255,.08);box-shadow:0 0 18px rgba(74,158,255,.12)}
-    .ptab.active-points{border-color:rgba(212,175,90,.5);background:rgba(212,175,90,.08);box-shadow:0 0 18px rgba(212,175,90,.12)}
-    .ptab.active-chicken{border-color:rgba(242,169,59,.5);background:rgba(242,169,59,.08);box-shadow:0 0 18px rgba(242,169,59,.12)}
-    .ptab.active-krush{border-color:rgba(155,92,255,.5);background:rgba(155,92,255,.08);box-shadow:0 0 18px rgba(155,92,255,.12)}
-    .ptab.active-csgowin{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.08);box-shadow:0 0 18px rgba(245,158,11,.12)}
-    .ptab.active-cs2skin{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.08);box-shadow:0 0 18px rgba(124,58,237,.12)}
-    .ptab.active-dicey{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.08);box-shadow:0 0 18px rgba(34,197,94,.12)}
-    .ptab-img{height:34px;width:110px;object-fit:contain}
-    .ptab-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase}
-    .ptab{flex-direction:column;gap:6px}
-    .ptab-top{display:flex;align-items:center;gap:10px}
-    .ptab-amt{display:flex;align-items:center;gap:4px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#fff}
-    .ptab-coin{height:14px;width:14px;object-fit:contain}
+    /* New unified leaderboard card */
+    .lb-card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;margin-bottom:48px}
+    .lb-tabs{display:flex;justify-content:center;border-bottom:1px solid var(--b2);padding:0 12px;gap:4px;overflow-x:auto;scrollbar-width:none}
+    .lb-tabs::-webkit-scrollbar{display:none}
+    .lb-tab{background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px 8px;cursor:pointer;transition:border-color .15s,opacity .15s;opacity:.4;display:flex;align-items:center;flex-shrink:0;margin-bottom:-1px}
+    .lb-tab:hover{opacity:.7}
+    .lb-tab.active{border-bottom-color:var(--ac);opacity:1}
+    .lb-tab img{height:28px;width:auto;object-fit:contain;display:block;max-width:90px}
+    .lb-race-meta{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--b2);gap:12px;flex-wrap:wrap}
+    .lb-meta-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:8px 16px;border-radius:8px;white-space:nowrap;transition:opacity .15s,transform .1s;display:flex;align-items:center;gap:6px;cursor:pointer;border:none}
+    .lb-meta-btn:hover{opacity:.85;transform:translateY(-1px)}
+    .lb-meta-btn-signup{background:linear-gradient(90deg,#1a4eb5,#2d7aff);color:#fff;box-shadow:0 2px 12px rgba(45,122,255,.3)}
+    .lb-meta-btn-sec{background:transparent;color:var(--mu);border:1px solid var(--b2)}
+    .lb-meta-btn-sec:hover{color:var(--tx);border-color:var(--ac);opacity:1;transform:none}
+    .lb-meta-right{display:flex;gap:8px;align-items:center}
+    .lb-compact-timer{display:flex;gap:6px;align-items:flex-start}
+    .lb-tseg{display:flex;flex-direction:column;align-items:center;width:64px}
+    .lb-tnum{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.6rem;line-height:1;color:var(--tx);width:100%;text-align:center;font-variant-numeric:tabular-nums}
+    .lb-tunit{font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-top:3px}
+    .lb-tsep{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.4rem;color:var(--mu);padding-top:2px;line-height:1}
+    .lb-tblhead{display:grid;grid-template-columns:70px 1fr 130px 100px;padding:8px 20px;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--b2)}
+    .lb-tblhead span:nth-child(3),.lb-tblhead span:nth-child(4){text-align:right}
+    .lb-rows-wrap{max-height:460px;overflow-y:auto;scrollbar-width:none}
+    .lb-rows-wrap::-webkit-scrollbar{display:none}
+    .lb-urow{display:grid;grid-template-columns:70px 1fr 130px 100px;align-items:center;padding:11px 20px;border-bottom:1px solid var(--b2);transition:background .12s;font-variant-numeric:tabular-nums}
+    .lb-urow:last-child{border-bottom:none}
+    .lb-urow:hover{background:var(--s2)}
+    .lb-urow.top3{background:rgba(255,255,255,.025)}
+    .lb-urow.top3:hover{background:rgba(255,255,255,.04)}
+    .lb-urow.medal-1{box-shadow:inset 3px 0 0 #f5a623}
+    .lb-urow.medal-2{box-shadow:inset 3px 0 0 #b8c5d0}
+    .lb-urow.medal-3{box-shadow:inset 3px 0 0 #cd7941}
+    .lb-rank-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+    .lb-crown-ic{width:16px;height:auto;display:block}
+    .lb-rbadge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;flex-shrink:0}
+    .lb-rbadge.gold{background:linear-gradient(145deg,#ffe066,#f5a623 50%,#c97f00);color:#2a1500}
+    .lb-rbadge.silver{background:linear-gradient(145deg,#e8edf2,#b8c5d0 50%,#7890a5);color:#182030}
+    .lb-rbadge.bronze{background:linear-gradient(145deg,#e8924a,#cd7941 50%,#8a4010);color:#fff}
+    .lb-rnum{color:var(--mu);font-size:.85rem;font-weight:500}
+    .lb-ucell{display:flex;align-items:center;gap:10px;min-width:0}
+    .lb-av{width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--s2);border:1px solid var(--b2)}
+    .lb-av-ph{width:32px;height:32px;border-radius:50%;background:var(--s2);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.85rem;color:var(--mu);flex-shrink:0;text-transform:uppercase}
+    .lb-av.m1,.lb-av-ph.m1{border:2px solid #f5a623}
+    .lb-av.m2,.lb-av-ph.m2{border:2px solid #b8c5d0}
+    .lb-av.m3,.lb-av-ph.m3{border:2px solid #cd7941}
+    .lb-uname{font-weight:600;font-size:.92rem;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+    .lb-urow.top3 .lb-uname{color:#fff}
+    .lb-wag{text-align:right;font-size:.88rem;color:var(--mu);font-weight:500;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+    .lb-urow.top3 .lb-wag{color:var(--tx)}
+    .lb-prz{text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.02em;color:var(--ac);display:flex;align-items:center;justify-content:flex-end;gap:4px}
+    .lb-urow.top3 .lb-prz{color:var(--gold);font-size:1.1rem}
+    .lb-coin-ic{height:1em;width:auto;object-fit:contain;vertical-align:middle;flex-shrink:0}
 
     /* NiksiPoints leaderboard */
     .statsbar{background:var(--s1);border:1px solid var(--b1);border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:28px}
@@ -1561,6 +1596,86 @@ function Avatar({ src, className }) {
   return <img className={className} src={src} alt="" onError={() => setErr(true)}/>;
 }
 
+function CompactTimer({ endDate }) {
+  const calc = () => {
+    if (!endDate) return { d: '-', h: '--', m: '--' };
+    const diff = Math.max(0, new Date(endDate) - Date.now());
+    if (!diff) return { d: '0', h: '00', m: '00' };
+    const pad = n => String(n).padStart(2,'0');
+    return { d: Math.floor(diff/86400000), h: pad(Math.floor((diff%86400000)/3600000)), m: pad(Math.floor((diff%3600000)/60000)) };
+  };
+  const [t, setT] = React.useState(calc);
+  React.useEffect(() => {
+    if (!endDate) return;
+    const iv = setInterval(() => setT(calc()), 1000);
+    return () => clearInterval(iv);
+  }, [endDate]);
+  return (
+    <div className="lb-compact-timer">
+      <div className="lb-tseg"><span className="lb-tnum">{t.d}</span><span className="lb-tunit">DAYS</span></div>
+      <span className="lb-tsep">:</span>
+      <div className="lb-tseg"><span className="lb-tnum">{t.h}</span><span className="lb-tunit">HOURS</span></div>
+      <span className="lb-tsep">:</span>
+      <div className="lb-tseg"><span className="lb-tnum">{t.m}</span><span className="lb-tunit">MINUTES</span></div>
+    </div>
+  );
+}
+
+function NewAvatar({ src, name, medalCls }) {
+  const [err, setErr] = React.useState(false);
+  if (!src || err) return <div className={`lb-av-ph${medalCls||''}`}>{(name||'?')[0].toUpperCase()}</div>;
+  return <img className={`lb-av${medalCls||''}`} src={src} alt="" onError={() => setErr(true)}/>;
+}
+
+const LB_BADGE_CLS = ['gold','silver','bronze'];
+function NewLbRows({ rows, prizeField, wagerField, currency }) {
+  if (!rows || !rows.length) return <div style={{padding:'40px',textAlign:'center',color:'var(--mu)',fontSize:13}}>No entries yet.</div>;
+  const fmtVal = (v, forceInt) => {
+    const num = Number(v||0).toLocaleString('en-US',{minimumFractionDigits:forceInt?0:2,maximumFractionDigits:forceInt?0:2});
+    if (currency.type==='coin') return <><img className="lb-coin-ic" src={currency.icon} alt=""/>{num}</>;
+    return <><span style={{color:'var(--green)'}}>$</span><span style={{color:'inherit'}}>{num}</span></>;
+  };
+  return rows.map((e, i) => {
+    const rank = e.position || e.rank || (i+1);
+    const isMedal = rank <= 3;
+    const name = e.username || '?';
+    const mc = isMedal ? ` m${rank}` : '';
+    const rowCls = `lb-urow${isMedal?` top3 medal-${rank}`:''}`;
+    const forceInt = currency.type === 'coin';
+    const badge = isMedal ? (
+      <div className="lb-rank-wrap">
+        {rank===1 && <svg className="lb-crown-ic" viewBox="0 0 20 12" xmlns="http://www.w3.org/2000/svg"><path d="M1 11 L4 3.5 L8 7.5 L10 0 L12 7.5 L16 3.5 L19 11 Z" fill="#f5a623"/><rect x="1" y="10" width="18" height="2" rx="1" fill="#f5a623"/></svg>}
+        <span className={`lb-rbadge ${LB_BADGE_CLS[rank-1]}`}>{rank}</span>
+      </div>
+    ) : <span className="lb-rnum">#{rank}</span>;
+    return (
+      <div key={e.id||e.position||i} className={rowCls} style={e.placeholder?{opacity:.45}:undefined}>
+        <div>{badge}</div>
+        <div className="lb-ucell"><NewAvatar src={e.avatar} name={name} medalCls={mc}/><span className="lb-uname">{name}</span></div>
+        <div className="lb-wag">{fmtVal(e[wagerField], forceInt)}</div>
+        <div className="lb-prz">{fmtVal(e[prizeField], forceInt)}</div>
+      </div>
+    );
+  });
+}
+
+function LbCardContent({ endDate, signupUrl, btnLabel, histBtn, children }) {
+  return (
+    <>
+      <div className="lb-race-meta">
+        <a className="lb-meta-btn lb-meta-btn-signup" href={signupUrl} target="_blank" rel="noreferrer">{btnLabel}</a>
+        <CompactTimer endDate={endDate}/>
+        <div className="lb-meta-right">
+          {histBtn}
+          <a className="lb-meta-btn lb-meta-btn-sec" href="/store">REWARDS</a>
+        </div>
+      </div>
+      <div className="lb-tblhead"><span>RANK</span><span>USERNAME</span><span>WAGERED</span><span>PRIZE</span></div>
+      <div className="lb-rows-wrap">{children}</div>
+    </>
+  );
+}
+
 function PodiumCard({ player, rank, accentColor, fmtPrize, fmtWager, fmtNP, prizeIcon, wagerIcon, avatarOverride }) {
   const cls = rank === 1 ? 'podium-card first' : rank === 2 ? 'podium-card second' : 'podium-card third';
   const badgeCls = `rank-badge r${rank}`;
@@ -1619,80 +1734,13 @@ function GambaLeaderboard() {
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
-    <div className="f2">
-      <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'var(--green)'}}>$</span><span style={{color:'#fff'}}>{gambaMeta ? Math.round(gambaMeta.prizePool).toLocaleString('en-US') : '...'}</span></div>
-        <div className="lb-prize-lbl">Bi-Weekly Prize</div>
-        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
-      </div>
-
-      {top3.length > 0 && (
-        <div className="lb-podium">
-          {podiumOrder.map((p, i) => {
-            const rank = i === 1 ? 1 : i === 0 ? 2 : 3;
-            return <PodiumCard key={rank} player={p} rank={rank} accentColor="var(--ac)" fmtPrize={fmtPrize} fmtWager={fmtWager}/>;
-          })}
-        </div>
-      )}
-
-      {gambaMeta && gambaMeta.endDate && <Countdown endDate={gambaMeta.endDate}/>}
-
-      <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://gamba.com/promotions/exclusive-leaderboards/24619" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba-sec">
-          View Leaderboard on Gamba
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        </a>
-        <a href="https://gamba.com?c=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-gamba">
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <div className="announce-bar blue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        70% commission + 10-20% lossback - claim via live support
-      </div>
-      <LbMetaBar/>
-
-      {rest.length > 0 && (
-        <table className="lb-table">
-          <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
-          </tr></thead>
-          <tbody>
-            {rest.map((p, i) => (
-              <tr key={p.id || i}>
-                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
-                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
-                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager"><Amt s={fmtWager(p)}/></span></td>
-                <td>
-                  <span className="tr-prize"><Amt s={fmtPrize(p, p.position || i+4)}/></span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      <div className="prize-section">
-        <div className="prize-title">// Prize Structure</div>
-        <div className="prize-tiers">
-          {players.filter(p => p.reward > 0).map(p => (
-            <div key={p.position} className="prize-tier">
-              <div className="prize-tier-pos">{['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][p.position-1]||`#${p.position}`}</div>
-              <div className={`prize-tier-amt${p.position===1?' p1':p.position===2?' p2':p.position===3?' p3':''}`}>{fmtMoney(p.reward)}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{textAlign:'center',padding:'20px 0 4px',borderTop:'1px solid var(--b1)',marginTop:8,fontSize:13,color:'var(--mu)'}}>
-        Total Wagered - <span style={{color:'var(--green)'}}>$</span><strong style={{color:'#fff'}}>{players.reduce((s,p)=>s+Number(p.wager||0),0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong>
-      </div>
-    </div>
+    <LbCardContent endDate={gambaMeta && gambaMeta.endDate} signupUrl="https://gamba.com?c=niksi" btnLabel="SIGN UP ON GAMBA" histBtn={
+      <a href="https://gamba.com/promotions/exclusive-leaderboards/24619" target="_blank" rel="noreferrer" className="lb-meta-btn lb-meta-btn-sec">VIEW ON GAMBA</a>
+    }>
+      <NewLbRows rows={players} prizeField="reward" wagerField="wager" currency={{type:'usd'}}/>
+    </LbCardContent>
   );
 }
-
 
 function ChickenLeaderboard() {
   const [rows, setRows] = React.useState(null);
@@ -1724,78 +1772,16 @@ function ChickenLeaderboard() {
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
-    <div className="f2">
+    <>
       {histOpen && <ChickenHistoryModal onClose={() => setHistOpen(false)}/>}
-      <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt">
-          <img src="/assets/coin.png" className="lb-coin-icon" alt="" onError={e=>e.target.style.display='none'}/>
-          <span style={{color:'#fff'}}>{meta ? Math.round(meta.totalPool).toLocaleString('en-US') : '...'}</span>
-        </div>
-        <div className="lb-prize-lbl">Total Prize Pool</div>
-        <div className="lb-code" style={{marginTop:10}}>Use code <strong>NIKSI</strong> to qualify</div>
-      </div>
-
-      {top3.length > 0 && (
-        <div className="lb-podium">
-          {podiumOrder.map((p, i) => {
-            const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
-            return (
-              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor="var(--chicken)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/coin.png" wagerIcon="/assets/coin.png"/>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {meta && meta.end && <Countdown endDate={meta.end}/>}
-
-      <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://chicken.gg?ref=niksi" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-chicken">
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <button onClick={() => setHistOpen(true)} className="lb-hist-btn">
-          Previous Leaderboards
-        </button>
-      </div>
-
-      {rest.length > 0 && (
-        <table className="lb-table">
-          <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
-          </tr></thead>
-          <tbody>
-            {rest.map((p, i) => (
-              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
-                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
-                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager"><img src="/assets/coin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmtWager(p)}</span></td>
-                <td><span className="tr-prize"><img src="/assets/coin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>{fmtPrize(p)}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      {meta && meta.totalWagered > 0 && (
-        <div style={{textAlign:'center',marginTop:24,padding:'14px 0',borderTop:'1px solid var(--b1)'}}>
-          <div style={{fontSize:11,fontWeight:600,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--mu)',marginBottom:4}}>Total Wagered</div>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:26,fontWeight:800,color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>
-            <img src="/assets/coin.png" style={{height:20,width:20,objectFit:'contain'}} alt="" onError={e=>e.target.style.display='none'}/>
-            {Number(meta.totalWagered).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
-          </div>
-        </div>
-      )}
-
-      <div style={{textAlign:'center',marginTop:12,fontSize:12,color:'var(--mu)'}}>
-        {meta && meta.lastUpdated ? `Updated ${Math.max(1,Math.floor((Date.now()-meta.lastUpdated)/60000))}m ago` : ''}
-      </div>
-    </div>
+      <LbCardContent endDate={meta && meta.end} signupUrl="https://chicken.gg?ref=niksi" btnLabel="SIGN UP ON CHICKEN.GG" histBtn={
+        <button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setHistOpen(true)}>HISTORY</button>
+      }>
+        <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'coin',icon:'/assets/coin.png'}}/>
+      </LbCardContent>
+    </>
   );
 }
-
 function ChickenRaceLeaderboard() {
   const [race, setRace] = React.useState(null);
   React.useEffect(() => {
@@ -2058,55 +2044,9 @@ function Cs2skinLeaderboard() {
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
-    <div className="f2">
-      <div style={{textAlign:'center',marginBottom:40}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><img src="/assets/cs2skincoin.png" alt="coins" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
-        <div className="lb-prize-lbl">7-Day Wager Race</div>
-        <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
-      </div>
-
-      {top3.length > 0 && (
-        <div className="lb-podium">
-          {podiumOrder.map((p, i) => {
-            const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
-            return (
-              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor="var(--cs2skin)" fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon="/assets/cs2skincoin.png" wagerIcon="/assets/cs2skincoin.png"/>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
-      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:'var(--cs2skin)',color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
-
-      <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://cs2skin.com/r/NIKSI" target="_blank" rel="noreferrer" className="lb-cta-btn lb-cta-cs2skin">
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      {rest.length > 0 && (
-        <table className="lb-table">
-          <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
-          </tr></thead>
-          <tbody>
-            {rest.map((p, i) => (
-              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
-                <td className="col-av"><Avatar src={p.avatar} className="tr-av"/></td>
-                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager">{cs2Coin}{fmtWager(p)}</span></td>
-                <td><span className="tr-prize">{cs2Coin}{fmtPrize(p)}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+    <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://cs2skin.com/r/NIKSI" btnLabel="SIGN UP ON CS2SKIN">
+      <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'coin',icon:'/assets/cs2skincoin.png'}}/>
+    </LbCardContent>
   );
 }
 const CS2SKIN_PRIZES_FALLBACK = [500,200,120,80,50,30,15,5];
@@ -2167,7 +2107,7 @@ function DiceyLeaderboard() {
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
-    <div className="f2">
+    <>
       {showInfo && ReactDOM.createPortal(
         <div onClick={() => setShowInfo(false)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,.75)',zIndex:9999,display:'flex',alignItems:'flex-start',justifyContent:'center',padding:'80px 16px 0'}}>
           <div onClick={e => e.stopPropagation()} style={{background:'#161520',border:'1px solid rgba(255,255,255,.15)',borderRadius:14,padding:'28px 28px 24px',maxWidth:480,width:'100%',position:'relative'}}>
@@ -2197,60 +2137,14 @@ function DiceyLeaderboard() {
         </div>,
         document.body
       )}
-      <div style={{textAlign:'center',marginBottom:40}}>
-        <div style={{display:'inline-flex',alignItems:'center',gap:8}}>
-          <div className="lb-prize-amt"><span style={{color:'#22c55e'}}>$</span><span style={{color:'#fff'}}>{(meta.totalPool||0).toLocaleString('en-US')}</span></div>
-          <button onClick={() => setShowInfo(true)} title="How is wager contribution calculated?" style={{background:'rgba(34,197,94,.12)',border:'1px solid rgba(34,197,94,.3)',borderRadius:'50%',width:34,height:34,cursor:'pointer',color:'#22c55e',fontSize:17,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',lineHeight:1,flexShrink:0}}>?</button>
-        </div>
-        <div className="lb-prize-lbl">Bi-Weekly Wager Race</div>
-        <div className="lb-code" style={{marginTop:10}}>{isEnded ? 'Final Results' : <>Use code <strong>NIKSI</strong> to qualify</>}</div>
-      </div>
-
-      {top3.length > 0 && (
-        <div className="lb-podium">
-          {podiumOrder.map((p, i) => {
-            const rank = top3.length >= 3 ? (i === 1 ? 1 : i === 0 ? 2 : 3) : i + 1;
-            return (
-              <div key={rank} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <PodiumCard player={p} rank={rank} accentColor={DICEY_COLOR} fmtPrize={fmtPrize} fmtWager={fmtWager} prizeIcon={null} wagerIcon={null} avatarOverride={(!p.avatar && p.vipLevel && p.vipLevel !== 'None') ? <DiceyRankBadge level={p.vipLevel} sublevel={p.vipSublevel} size={rank===1?88:72}/> : null}/>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {meta.end && !isEnded && <Countdown endDate={meta.end}/>}
-      {isEnded && <div style={{textAlign:'center',margin:'16px 0 28px'}}><span style={{background:DICEY_COLOR,color:'#fff',padding:'6px 20px',borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:'.06em',fontSize:13}}>LEADERBOARD ENDED</span></div>}
-
-      <div className="lb-cta-row" style={{marginBottom:28}}>
-        <a href="https://dicey.com/signup?ref=Niksi" target="_blank" rel="noreferrer" className="lb-cta-btn" style={{background:DICEY_COLOR,color:'#fff'}}>
-          Sign Up Here
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width:11,height:11}}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        </a>
-      </div>
-
-      {rest.length > 0 && (
-        <table className="lb-table">
-          <thead><tr>
-            <th>Place</th><th className="col-av"></th><th>Player</th><th>Wagered</th><th>Prize</th>
-          </tr></thead>
-          <tbody>
-            {rest.map((p, i) => (
-              <tr key={p.position || i} style={p.placeholder ? {opacity:0.45} : undefined}>
-                <td><span className="tr-rank">#{p.position || i + 4}</span></td>
-                <td className="col-av">{p.avatar ? <Avatar src={p.avatar} className="tr-av"/> : <DiceyRankBadge level={p.vipLevel} sublevel={p.vipSublevel} size={36}/>}</td>
-                <td><span className="tr-name">{p.username || 'Hidden'}</span></td>
-                <td><span className="tr-wager">{fmtWager(p)}</span></td>
-                <td><span className="tr-prize">{fmtPrize(p)}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP ON DICEY" histBtn={
+        <button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setShowInfo(true)}>WAGER INFO</button>
+      }>
+        <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'usd'}}/>
+      </LbCardContent>
+    </>
   );
 }
-
 function useLastUpdated() {
   const [ts, setTs] = React.useState(null);
   React.useEffect(() => {
@@ -2809,44 +2703,33 @@ function LeaderboardsPage() {
     <>
       
       <div className="wrap">
-        <div className="platform-tabs f1">
-          <button className={`ptab${tab==='gamba'?' active-gamba':''}`} onClick={() => changeTab('gamba')}>
-            <div className="ptab-top">
-              <img className="ptab-img" src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
-            </div>
-            {gambaAmt != null && <div className="ptab-amt"><span style={{color:'#22c55e'}}>$</span>{gambaAmt.toLocaleString('en-US')}</div>}
-          </button>
-          {chickenActive && (
-            <button className={`ptab${tab==='chicken'?' active-chicken':''}`} onClick={() => changeTab('chicken')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
-              </div>
-              {chickenAmt != null && <div className="ptab-amt"><img className="ptab-coin" src="/assets/coin.png" alt="" onError={e=>e.target.style.display='none'}/>{chickenAmt.toLocaleString('en-US')}</div>}
+        <div className="lb-card f1">
+          <div className="lb-tabs">
+            <button className={`lb-tab${tab==='gamba'?' active':''}`} onClick={() => changeTab('gamba')}>
+              <img src="/assets/gamba2.png" alt="Gamba" onError={e=>e.target.style.display='none'}/>
             </button>
-          )}
-          {cs2skinActive && (
-            <button className={`ptab${tab==='cs2skin'?' active-cs2skin':''}`} onClick={() => changeTab('cs2skin')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/cs2skin.png" alt="CS2SKIN" onError={e=>e.target.style.display='none'} style={{filter:'brightness(0) invert(1)'}}/>
-              </div>
-              {cs2skinAmt != null && <div className="ptab-amt"><img src="/assets/cs2skincoin.png" alt="" className="ptab-coin" onError={e=>e.target.style.display='none'}/>{cs2skinAmt.toLocaleString('en-US')}</div>}
-            </button>
-          )}
-          {(diceyActive || diceyEnded) && (
-            <button className={`ptab${tab==='dicey'?' active-dicey':''}`} onClick={() => changeTab('dicey')}>
-              <div className="ptab-top">
-                <img className="ptab-img" src="/assets/dicey.png" alt="Dicey" onError={e=>e.target.style.display='none'}/>
-              </div>
-              {diceyAmt != null && <div className="ptab-amt"><span style={{color:'#22c55e'}}>$</span>{diceyAmt.toLocaleString('en-US')}</div>}
-            </button>
-          )}
+            {chickenActive && (
+              <button className={`lb-tab${tab==='chicken'?' active':''}`} onClick={() => changeTab('chicken')}>
+                <img src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
+              </button>
+            )}
+            {cs2skinActive && (
+              <button className={`lb-tab${tab==='cs2skin'?' active':''}`} onClick={() => changeTab('cs2skin')}>
+                <img src="/assets/cs2skin.png" alt="CS2Skin" onError={e=>e.target.style.display='none'} style={{filter:'brightness(0) invert(1)'}}/>
+              </button>
+            )}
+            {(diceyActive || diceyEnded) && (
+              <button className={`lb-tab${tab==='dicey'?' active':''}`} onClick={() => changeTab('dicey')}>
+                <img src="/assets/dicey.png" alt="Dicey" onError={e=>e.target.style.display='none'}/>
+              </button>
+            )}
+          </div>
+          <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
+          <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
+          <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
+          <div style={{display: tab === 'cs2skin' ? 'block' : 'none'}}><Cs2skinLeaderboard/></div>
+          <div style={{display: tab === 'dicey' ? 'block' : 'none'}}><DiceyLeaderboard/></div>
         </div>
-
-        <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
-        <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
-        <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
-        <div style={{display: tab === 'cs2skin' ? 'block' : 'none'}}><Cs2skinLeaderboard/></div>
-        <div style={{display: tab === 'dicey' ? 'block' : 'none'}}><DiceyLeaderboard/></div>
       </div>
 
       <footer>
