@@ -94,21 +94,19 @@ body::before {
   gap: 4px;
 }
 .tab {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-dim);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  padding: 14px 16px 12px;
+  padding: 10px 16px 8px;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition: border-color 0.15s, opacity 0.15s;
+  opacity: 0.45;
+  display: flex;
+  align-items: center;
 }
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.tab:hover { opacity: 0.75; }
+.tab.active { border-bottom-color: var(--accent); opacity: 1; }
+.tab img { height: 28px; width: auto; object-fit: contain; display: block; }
 
 .race-meta {
   display: flex;
@@ -229,8 +227,8 @@ body::before {
 
   <div class="card">
     <div class="tabs">
-      <button class="tab active" id="tab-chicken" onclick="switchTab('chicken')">CHICKEN.GG</button>
-      <button class="tab" id="tab-dicey" onclick="switchTab('dicey')">DICEY</button>
+      <button class="tab active" id="tab-chicken" onclick="switchTab('chicken')"><img src="/assets/chicken.png" alt="Chicken.gg"></button>
+      <button class="tab" id="tab-dicey" onclick="switchTab('dicey')"><img src="/assets/dicey.png" alt="Dicey"></button>
     </div>
 
     <div class="race-meta">
