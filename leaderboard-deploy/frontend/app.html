@@ -1673,12 +1673,15 @@ function NewLbRows({ rows, prizeField, wagerField, currency }) {
   });
 }
 
-function LbCardContent({ endDate, signupUrl, btnLabel, histBtn, children }) {
+function LbCardContent({ endDate, signupUrl, btnLabel, histBtn, timerSub, children }) {
   return (
     <>
       <div className="lb-race-meta">
         <a className="lb-meta-btn lb-meta-btn-signup" href={signupUrl} target="_blank" rel="noreferrer">{btnLabel}</a>
-        <CompactTimer endDate={endDate}/>
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+          <CompactTimer endDate={endDate}/>
+          {timerSub}
+        </div>
         <div className="lb-meta-right">
           {histBtn}
           <a className="lb-meta-btn lb-meta-btn-sec" href="/store">REWARDS</a>
@@ -2151,9 +2154,7 @@ function DiceyLeaderboard() {
         </div>,
         document.body
       )}
-      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP" histBtn={
-        <button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setShowInfo(true)}>WAGER INFO</button>
-      }>
+      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP" timerSub={<button className="lb-meta-btn lb-meta-btn-sec" style={{fontSize:'.75rem',padding:'4px 12px'}} onClick={() => setShowInfo(true)}>WAGER INFO</button>}>
         <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'usd'}}/>
       </LbCardContent>
     </>
