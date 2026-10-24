@@ -12,7 +12,7 @@
   <style>
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--rd:#e03535;--gold:#f5a623}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;scrollbar-gutter:stable}
     body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:linear-gradient(to bottom,transparent 18%,black 27%,black 73%,transparent 82%);mask-image:linear-gradient(to bottom,transparent 18%,black 27%,black 73%,transparent 82%);pointer-events:none;z-index:0}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
@@ -47,6 +47,10 @@
     .ndrop-item{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(221,227,239,.75);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:6px;transition:background .1s;box-sizing:border-box}
     .ndrop-item:hover{background:rgba(255,255,255,.06)}
     .ndrop-logout{color:rgba(217,79,79,.8)}
+    .nsocials{display:flex;align-items:center;gap:2px;padding-right:10px;margin-right:6px;border-right:1px solid var(--b2,rgba(255,255,255,.1))}
+    .nsocials a{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s;text-decoration:none}
+    .nsocials a:hover{opacity:1;background:rgba(255,255,255,.06)}
+    .nsocials svg{width:14px;height:14px}
     .nlogin-btn{display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:7px;background:#22c55e;color:#fff;border:none;cursor:pointer;transition:opacity .15s;text-decoration:none;white-space:nowrap;flex-shrink:0}
     .nlogin-btn:hover{opacity:.85}
     .nuser{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;background:var(--s1);border:1px solid var(--b2);cursor:pointer;transition:border-color .15s}
@@ -203,6 +207,18 @@
     .lb-urow:hover{background:var(--s2)}
     .lb-urow.top3{background:rgba(255,255,255,.025)}
     .lb-urow.top3:hover{background:rgba(255,255,255,.04)}
+    @media(max-width:600px){
+      .lb-tblhead{grid-template-columns:44px 1fr 80px 70px;padding:6px 12px;font-size:.66rem}
+      .lb-urow{grid-template-columns:44px 1fr 80px 70px;padding:9px 12px}
+      .lb-rbadge{width:26px;height:26px;font-size:.7rem}
+      .lb-av{width:28px;height:28px}
+      .nsocials{display:none}
+      .nuser-NP{display:none}
+    }
+    @media(max-width:400px){
+      .lb-tblhead{grid-template-columns:40px 1fr 60px 62px;padding:5px 8px}
+      .lb-urow{grid-template-columns:40px 1fr 60px 62px;padding:8px 8px}
+    }
     .lb-urow.medal-1{box-shadow:inset 3px 0 0 #f5a623}
     .lb-urow.medal-2{box-shadow:inset 3px 0 0 #b8c5d0}
     .lb-urow.medal-3{box-shadow:inset 3px 0 0 #cd7941}
@@ -426,7 +442,7 @@
 /* ---- StorePage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--mu2:rgba(180,210,255,.7);--ac:#3d8eff;--rd:#e03535;--gold:#f5a623}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -551,7 +567,7 @@
 /* ---- SettingsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--rd:#e03535;--gold:#f5a623}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}
@@ -608,7 +624,7 @@
 /* ---- PredictorPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--s3:#111828;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--mu2:rgba(221,227,239,.85);--ac:#4a9eff;--gold:#d4af5a;--green:#22c55e;--red:#ef4444}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--mu2:rgba(180,210,255,.7);--ac:#3d8eff;--gold:#f5a623;--green:#22c55e;--red:#ef4444}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -769,7 +785,7 @@
 /* ---- AdminPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535;--gold:#d4af5a}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--rd:#e03535;--gold:#f5a623}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .f1{animation:fu .5s ease both}.f2{animation:fu .5s .1s ease both}
@@ -846,7 +862,7 @@
 /* ---- GiveawayPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#080808;--s1:#0e0e0e;--s2:#131313;--b1:rgba(255,255,255,.04);--b2:rgba(255,255,255,.08);--b3:rgba(255,255,255,.14);--tx:#dde3ef;--mu:rgba(221,227,239,.65);--ac:#4a9eff;--rd:#e03535}
+    :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--rd:#e03535}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -1200,9 +1216,10 @@ function Navbar() {
             <a href="/leaderboards" className={isOn('/leaderboards') ? 'on' : ''}>LEADERBOARDS</a>
             <a href="/store" className={isOn('/store') ? 'on' : ''}>STORE</a>
             <a href="/cases" className={isOn('/cases') ? 'on' : ''}>CASES</a>
-            <a href="/predict" className={isOn('/predict') ? 'on' : ''}>PREDICT</a>
+            
           </div>
           <div className="nauth">
+            <div className="nsocials">{SOCIALS}</div>
             {user ? (
               <div className="ndrop">
                 <div className="nuser">
@@ -1236,7 +1253,7 @@ function Navbar() {
         <a href="/leaderboards" className={isOn('/leaderboards') ? 'on' : ''}>LEADERBOARDS</a>
         <a href="/store" className={isOn('/store') ? 'on' : ''}>STORE</a>
         <a href="/cases" className={isOn('/cases') ? 'on' : ''}>CASES</a>
-        <a href="/predict" className={isOn('/predict') ? 'on' : ''}>PREDICT</a>
+        
         {user ? <a href="/settings">Settings</a> : <a href="/auth/login">Login with Kick</a>}
       </div>
     </>
