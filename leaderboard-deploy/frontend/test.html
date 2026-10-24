@@ -38,10 +38,15 @@
 }
 .nav-links a:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
 .nav-links a.active { color: #fff; }
-.nav-socials { display: flex; align-items: center; gap: 10px; justify-self: end; }
-.nav-socials a { display: flex; align-items: center; opacity: 0.5; transition: opacity 0.15s; }
-.nav-socials a:hover { opacity: 1; }
-.nav-socials svg { width: 22px; height: 22px; }
+.nav-socials { display: flex; align-items: center; gap: 6px; justify-self: end; }
+.nav-socials a {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  transition: background 0.15s;
+}
+.nav-socials a:hover { background: rgba(255,255,255,0.14); }
+.nav-socials svg { width: 18px; height: 18px; }
 
 :root {
   --bg: #07091c;
