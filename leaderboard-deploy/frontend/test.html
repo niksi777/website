@@ -199,10 +199,11 @@ body::before {
 
 .username { font-weight: 600; font-size: 0.92rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .row.top3 .username { color: #fff; }
-.wagered { text-align: right; font-size: 0.88rem; color: var(--text-dim); font-weight: 500; }
+.wagered { text-align: right; font-size: 0.88rem; color: var(--text-dim); font-weight: 500; display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
 .row.top3 .wagered { color: var(--text); }
-.prize { text-align: right; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; color: var(--accent); }
+.prize { text-align: right; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; color: var(--accent); display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
 .row.top3 .prize { color: var(--gold); font-size: 1.1rem; }
+.cur-icon { height: 1em; width: auto; object-fit: contain; vertical-align: middle; flex-shrink: 0; }
 
 .loading { padding: 40px; text-align: center; color: var(--text-dim); font-size: 0.9rem; }
 
@@ -268,6 +269,7 @@ body::before {
 </div>
 
 <script>
+// currency: { type:'coin', icon:'/assets/x.png' } or { type:'usd' }
 const PLATFORMS = [
   {
     id: 'chicken',
@@ -278,6 +280,7 @@ const PLATFORMS = [
     prizeField: 'prize',
     wagerField: 'wager',
     endField: 'end',
+    currency: { type: 'coin', icon: '/assets/coin.png' },
     signupUrl: 'https://chicken.gg?ref=niksi',
     btnLabel: 'SIGN UP ON CHICKEN.GG',
   },
@@ -290,6 +293,7 @@ const PLATFORMS = [
     prizeField: 'prize',
     wagerField: 'wager',
     endField: 'end',
+    currency: { type: 'usd' },
     signupUrl: 'https://dicey.com/signup?ref=Niksi',
     btnLabel: 'SIGN UP ON DICEY',
   },
@@ -302,7 +306,7 @@ const PLATFORMS = [
     prizeField: 'reward',
     wagerField: 'wager',
     endField: 'endDate',
-    listKey: null,
+    currency: { type: 'usd' },
     signupUrl: 'https://gamba.com?c=niksi',
     btnLabel: 'SIGN UP ON GAMBA',
   },
@@ -315,6 +319,7 @@ const PLATFORMS = [
     prizeField: 'prize',
     wagerField: 'wager',
     endField: 'end',
+    currency: { type: 'coin', icon: '/assets/cs2skincoin.png' },
     signupUrl: 'https://cs2skin.com/r/NIKSI',
     btnLabel: 'SIGN UP ON CS2SKIN',
   },
@@ -330,7 +335,15 @@ function fmt(n) {
 
 const BADGES = ['gold', 'silver', 'bronze'];
 
-function renderRows(entries, prizeField, wagerField) {
+function currencyHtml(value, currency, decimals = 2) {
+  const num = Number(value || 0).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  if (currency.type === 'coin') {
+    return `<img class="cur-icon" src="${currency.icon}" alt="">${num}`;
+  }
+  return `$${num}`;
+}
+
+function renderRows(entries, prizeField, wagerField, currency) {
   const container = document.getElementById('rows-container');
   if (!entries || !entries.length) {
     container.innerHTML = '<div class="loading">No entries yet.</div>';
@@ -342,12 +355,11 @@ function renderRows(entries, prizeField, wagerField) {
       ? `<span class="rank-badge ${BADGES[rank-1]}">${rank}</span>`
       : `<span class="rank-num">#${rank}</span>`;
     const cls = rank <= 3 ? 'row top3' : 'row';
-    const prize = e[prizeField] != null ? Number(e[prizeField]).toFixed(2) : '–';
     return `<div class="${cls}">
       <div>${badge}</div>
       <div class="username">${e.username || '?'}</div>
-      <div class="wagered">${fmt(e[wagerField] || 0)}</div>
-      <div class="prize">${prize}</div>
+      <div class="wagered">${currencyHtml(e[wagerField], currency)}</div>
+      <div class="prize">${currencyHtml(e[prizeField], currency)}</div>
     </div>`;
   }).join('');
 }
@@ -378,7 +390,7 @@ function switchTab(id) {
   document.getElementById('join-btn').textContent = p.btnLabel;
   document.getElementById('join-btn').href = p.signupUrl;
   const entries = cache[id] || [];
-  renderRows(entries, p.prizeField, p.wagerField);
+  renderRows(entries, p.prizeField, p.wagerField, p.currency);
   updateCountdown();
 }
 
@@ -417,7 +429,7 @@ async function loadAll() {
   // Render current tab
   const p = PLATFORMS.find(p => p.id === currentId);
   if (p) {
-    renderRows(cache[currentId], p.prizeField, p.wagerField);
+    renderRows(cache[currentId], p.prizeField, p.wagerField, p.currency);
     document.getElementById('join-btn').textContent = p.btnLabel;
     document.getElementById('join-btn').href = p.signupUrl;
   }
