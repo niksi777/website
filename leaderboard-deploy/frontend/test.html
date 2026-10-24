@@ -89,6 +89,7 @@ body::before {
 
 .tabs {
   display: flex;
+  justify-content: center;
   border-bottom: 1px solid var(--border);
   padding: 0 20px;
   gap: 4px;
@@ -110,20 +111,10 @@ body::before {
 
 .race-meta {
   display: flex;
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
   padding: 14px 20px;
   border-bottom: 1px solid var(--border);
-}
-.race-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-right: auto;
 }
 .timer {
   display: flex;
@@ -232,7 +223,6 @@ body::before {
     </div>
 
     <div class="race-meta">
-      <span class="race-label" id="race-label">CHICKEN.GG RACE</span>
       <div class="timer">
         <span class="timer-dot"></span>
         <span class="timer-label">ENDS IN:</span>
@@ -296,7 +286,6 @@ function switchTab(tab) {
   currentTab = tab;
   document.getElementById('tab-chicken').classList.toggle('active', tab === 'chicken');
   document.getElementById('tab-dicey').classList.toggle('active', tab === 'dicey');
-  document.getElementById('race-label').textContent = tab === 'chicken' ? 'CHICKEN.GG RACE' : 'DICEY RACE';
   document.getElementById('join-btn').textContent = tab === 'chicken' ? 'SIGN UP ON CHICKEN.GG' : 'SIGN UP ON DICEY';
   document.getElementById('search').value = '';
   renderRows(data[tab]);
