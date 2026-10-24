@@ -4919,7 +4919,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   });
   function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
   function mkSym(){
-    var sz=Math.random()*40+30;
+    var sz=Math.random()*80+80;
     return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.14,vy:(Math.random()-.5)*.14,
       rot:Math.random()*Math.PI*2,vr:(Math.random()-.5)*.004,sz:sz,
       img:imgs[Math.floor(Math.random()*imgs.length)],o:Math.random()*.07+.05};
