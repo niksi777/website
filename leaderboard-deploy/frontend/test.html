@@ -34,11 +34,10 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(30,80,200,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 85% 75%, rgba(20,60,180,0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 60% at 50% 5%, rgba(40,100,220,0.10) 0%, transparent 50%),
-    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(61,142,255,0.025) 60px, rgba(61,142,255,0.025) 61px),
-    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(61,142,255,0.025) 60px, rgba(61,142,255,0.025) 61px);
+    radial-gradient(ellipse 55% 40% at 18% 55%, rgba(30,80,200,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 82% 70%, rgba(20,60,180,0.11) 0%, transparent 55%),
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(61,142,255,0.022) 60px, rgba(61,142,255,0.022) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(61,142,255,0.022) 60px, rgba(61,142,255,0.022) 61px);
   pointer-events: none;
   z-index: 0;
 }
@@ -48,7 +47,7 @@ body::before {
 .header {
   text-align: center;
   padding: 40px 24px 32px;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(40,100,220,0.35) 0%, transparent 70%);
+  background: none;
   border-radius: 16px 16px 0 0;
 }
 .title {
@@ -102,33 +101,50 @@ body::before {
 .tab.active { border-bottom-color: var(--accent); opacity: 1; }
 .tab img { height: 28px; width: auto; object-fit: contain; display: block; max-width: 90px; }
 
-/* ─── Timer (stacked) ─── */
+/* ─── Timer ─── */
 .race-meta {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 14px 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border);
 }
 .timer {
   display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.timer-seg {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  width: 64px;
 }
-.timer-label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.timer-value {
+.timer-num {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0.06em;
+  font-size: 1.6rem;
+  line-height: 1;
   color: var(--text);
+  width: 100%;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.timer-unit {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+.timer-sep {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text-dim);
+  padding-top: 2px;
+  line-height: 1;
 }
 
 /* ─── Table ─── */
@@ -188,24 +204,25 @@ body::before {
 
 .loading { padding: 40px; text-align: center; color: var(--text-dim); font-size: 0.9rem; }
 
-.footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+.footer { padding: 20px; border-top: 1px solid var(--border); }
 .join-btn {
-  display: block; width: 100%; padding: 14px;
+  display: block; width: 100%; padding: 16px;
   background: linear-gradient(90deg, #1a4eb5, #2d7aff);
-  border: none; border-radius: 8px; color: #fff;
+  border: none; border-radius: 10px; color: #fff;
   font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 1rem; letter-spacing: 0.12em;
+  font-weight: 700; font-size: 1.2rem; letter-spacing: 0.14em;
   text-transform: uppercase; cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
   text-decoration: none; text-align: center;
+  box-shadow: 0 4px 20px rgba(45,122,255,0.35);
 }
-.join-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.join-btn:hover { opacity: 0.92; transform: translateY(-2px); box-shadow: 0 6px 28px rgba(45,122,255,0.5); }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="header">
-    <h1 class="title">LEADERBOARD</h1>
+    <h1 class="title">LEADERBOARDS</h1>
     <p class="subtitle">Wager using code <span class="code">NIKSI</span> to compete for prizes</p>
   </div>
 
@@ -214,8 +231,20 @@ body::before {
 
     <div class="race-meta">
       <div class="timer">
-        <span class="timer-label">ENDS IN</span>
-        <span class="timer-value" id="countdown">–</span>
+        <div class="timer-seg">
+          <span class="timer-num" id="t-days">–</span>
+          <span class="timer-unit">DAYS</span>
+        </div>
+        <span class="timer-sep">:</span>
+        <div class="timer-seg">
+          <span class="timer-num" id="t-hours">–</span>
+          <span class="timer-unit">HOURS</span>
+        </div>
+        <span class="timer-sep">:</span>
+        <div class="timer-seg">
+          <span class="timer-num" id="t-mins">–</span>
+          <span class="timer-unit">MINUTES</span>
+        </div>
       </div>
     </div>
 
@@ -276,16 +305,16 @@ const PLATFORMS = [
     btnLabel: 'SIGN UP ON GAMBA',
   },
   {
-    id: 'krush',
-    logo: '/assets/krush.png',
-    alt: 'Krush.gg',
-    lbUrl: '/krush-leaderboard',
-    metaUrl: '/krush-meta',
+    id: 'cs2skin',
+    logo: '/assets/cs2skin.png',
+    alt: 'CS2Skin',
+    lbUrl: '/cs2skin-leaderboard',
+    metaUrl: '/cs2skin-meta',
     prizeField: 'prize',
     wagerField: 'wager',
     endField: 'end',
-    signupUrl: 'https://krush.gg?ref=niksi',
-    btnLabel: 'SIGN UP ON KRUSH.GG',
+    signupUrl: 'https://cs2skin.com/r/NIKSI',
+    btnLabel: 'SIGN UP ON CS2SKIN',
   },
 ];
 
@@ -321,17 +350,22 @@ function renderRows(entries, prizeField, wagerField) {
   }).join('');
 }
 
+function pad(n) { return String(n).padStart(2, '0'); }
+
 function updateCountdown() {
   const end = endTimes[currentId];
-  const el = document.getElementById('countdown');
-  if (!end) { el.textContent = '–'; return; }
+  const dEl = document.getElementById('t-days');
+  const hEl = document.getElementById('t-hours');
+  const mEl = document.getElementById('t-mins');
+  if (!end) { dEl.textContent = '–'; hEl.textContent = '–'; mEl.textContent = '–'; return; }
   const diff = new Date(end).getTime() - Date.now();
-  if (diff <= 0) { el.textContent = 'ENDED'; return; }
+  if (diff <= 0) { dEl.textContent = '0'; hEl.textContent = '00'; mEl.textContent = '00'; return; }
   const d = Math.floor(diff / 86400000);
   const h = Math.floor((diff % 86400000) / 3600000);
   const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+  dEl.textContent = d;
+  hEl.textContent = pad(h);
+  mEl.textContent = pad(m);
 }
 
 function switchTab(id) {
