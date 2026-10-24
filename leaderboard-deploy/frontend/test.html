@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaderboard Test</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #07091c;
+  --surface: #0d1430;
+  --surface2: #131c3e;
+  --border: #1c2a50;
+  --accent: #3d8eff;
+  --accent-dim: rgba(61,142,255,0.12);
+  --text: #d8e8ff;
+  --text-dim: #5a7090;
+  --gold: #f5a623;
+  --silver: #b0bec5;
+  --bronze: #c87941;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  padding: 32px 16px 48px;
+}
+.page { max-width: 780px; margin: 0 auto; }
+
+.header {
+  text-align: center;
+  padding: 40px 24px 32px;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(40,100,220,0.35) 0%, transparent 70%);
+  border-radius: 16px 16px 0 0;
+}
+.title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(80,160,255,0.5), 0 2px 0 rgba(0,0,20,0.6);
+}
+.subtitle {
+  margin-top: 10px;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+.subtitle .code { color: var(--accent); font-weight: 600; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  gap: 4px;
+}
+.tab {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 14px 16px 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--text); border-bottom-color: var(--accent); }
+
+.race-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.race-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-right: auto;
+}
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  background: var(--accent-dim);
+  border: 1px solid rgba(61,142,255,0.2);
+  border-radius: 20px;
+  padding: 5px 12px;
+}
+.timer-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #4cff9a;
+  box-shadow: 0 0 6px #4cff9a;
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.timer-label { color: var(--text-dim); font-weight: 500; }
+
+.search-wrap { position: relative; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-dim); pointer-events: none; font-size: 0.9rem; }
+.search-input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  padding: 6px 12px 6px 30px;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-input::placeholder { color: var(--text-dim); }
+.search-input:focus { border-color: var(--accent); }
+
+.tbl-head {
+  display: grid;
+  grid-template-columns: 70px 1fr 130px 100px;
+  padding: 8px 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+.tbl-head span:nth-child(3),
+.tbl-head span:nth-child(4) { text-align: right; }
+
+.rows { max-height: 440px; overflow-y: auto; }
+.rows::-webkit-scrollbar { width: 4px; }
+.rows::-webkit-scrollbar-track { background: transparent; }
+.rows::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.row {
+  display: grid;
+  grid-template-columns: 70px 1fr 130px 100px;
+  align-items: center;
+  padding: 11px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+  font-variant-numeric: tabular-nums;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--surface2); }
+.row.top3 { background: rgba(255,255,255,0.025); }
+.row.top3:hover { background: rgba(255,255,255,0.04); }
+
+.rank-badge {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.rank-badge.gold { background: linear-gradient(135deg, #f5a623, #c97f00); color: #1a0e00; box-shadow: 0 0 12px rgba(245,166,35,0.4); }
+.rank-badge.silver { background: linear-gradient(135deg, #c8d0d8, #8090a0); color: #1a1a1a; }
+.rank-badge.bronze { background: linear-gradient(135deg, #cd7941, #904f1a); color: #fff; box-shadow: 0 0 10px rgba(200,120,60,0.3); }
+.rank-num { color: var(--text-dim); font-size: 0.85rem; font-weight: 500; }
+
+.username { font-weight: 600; font-size: 0.92rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.row.top3 .username { color: #fff; }
+.wagered { text-align: right; font-size: 0.88rem; color: var(--text-dim); font-weight: 500; }
+.row.top3 .wagered { color: var(--text); }
+.prize { text-align: right; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; color: var(--accent); }
+.row.top3 .prize { color: var(--gold); font-size: 1.1rem; }
+
+.loading { padding: 40px; text-align: center; color: var(--text-dim); font-size: 0.9rem; }
+
+.footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+.join-btn {
+  display: block; width: 100%; padding: 14px;
+  background: linear-gradient(90deg, #1a4eb5, #2d7aff);
+  border: none; border-radius: 8px; color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 1rem; letter-spacing: 0.12em;
+  text-transform: uppercase; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.join-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1 class="title">1,000 COIN LEADERBOARD</h1>
+    <p class="subtitle">Wager using code <span class="code">NIKSI</span> to compete for prizes</p>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" id="tab-chicken" onclick="switchTab('chicken')">CHICKEN.GG</button>
+      <button class="tab" id="tab-dicey" onclick="switchTab('dicey')">DICEY</button>
+    </div>
+
+    <div class="race-meta">
+      <span class="race-label" id="race-label">CHICKEN.GG RACE</span>
+      <div class="timer">
+        <span class="timer-dot"></span>
+        <span class="timer-label">ENDS IN:</span>
+        <span id="countdown">Loading...</span>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">&#9906;</span>
+        <input class="search-input" placeholder="Search player..." id="search" oninput="filterRows()">
+      </div>
+    </div>
+
+    <div class="tbl-head">
+      <span>RANK</span>
+      <span>USERNAME</span>
+      <span>WAGERED</span>
+      <span>PRIZE</span>
+    </div>
+
+    <div id="rows-container">
+      <div class="loading">Loading leaderboard...</div>
+    </div>
+
+    <div class="footer">
+      <button class="join-btn" id="join-btn">SIGN UP &amp; JOIN RACE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentTab = 'chicken';
+let data = { chicken: [], dicey: [] };
+let chickenEnd = null;
+let diceyEnd = null;
+
+const BADGE = ['gold','silver','bronze'];
+const HREF = { chicken: 'https://chicken.gg?ref=niksi', dicey: 'https://dicey.com/signup?ref=Niksi' };
+
+function fmt(n) {
+  return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function renderRows(rows) {
+  const container = document.getElementById('rows-container');
+  if (!rows.length) {
+    container.innerHTML = '<div class="loading">No entries yet.</div>';
+    return;
+  }
+  container.innerHTML = rows.map((e, i) => {
+    const rank = e.position || (i + 1);
+    const badge = rank <= 3
+      ? `<span class="rank-badge ${BADGE[rank-1]}">${rank}</span>`
+      : `<span class="rank-num">#${rank}</span>`;
+    const cls = rank <= 3 ? 'row top3' : 'row';
+    return `<div class="${cls}" data-name="${(e.username||'').toLowerCase()}">
+      <div>${badge}</div>
+      <div class="username">${e.username || '?'}</div>
+      <div class="wagered">${fmt(e.wager || e.score || 0)}</div>
+      <div class="prize">${e.prize || 0}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterRows() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('#rows-container .row').forEach(row => {
+    row.style.display = (!q || (row.dataset.name || '').includes(q)) ? '' : 'none';
+  });
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-chicken').classList.toggle('active', tab === 'chicken');
+  document.getElementById('tab-dicey').classList.toggle('active', tab === 'dicey');
+  document.getElementById('race-label').textContent = tab === 'chicken' ? 'CHICKEN.GG RACE' : 'DICEY RACE';
+  document.getElementById('join-btn').textContent = tab === 'chicken' ? 'SIGN UP ON CHICKEN.GG' : 'SIGN UP ON DICEY';
+  document.getElementById('search').value = '';
+  renderRows(data[tab]);
+  updateCountdownDisplay();
+}
+
+function updateCountdownDisplay() {
+  const end = currentTab === 'chicken' ? chickenEnd : diceyEnd;
+  if (!end) { document.getElementById('countdown').textContent = '–'; return; }
+  const diff = end - Date.now();
+  if (diff <= 0) { document.getElementById('countdown').textContent = 'ENDED'; return; }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m ${s}s`;
+}
+
+async function loadAll() {
+  try {
+    const [clb, dlb, cp, dm] = await Promise.all([
+      fetch('/chicken-leaderboard').then(r => r.json()),
+      fetch('/dicey-leaderboard').then(r => r.json()),
+      fetch('/chicken-period').then(r => r.json()).catch(() => null),
+      fetch('/dicey-meta').then(r => r.json()).catch(() => null),
+    ]);
+    data.chicken = clb.leaderboard || [];
+    data.dicey = dlb.leaderboard || [];
+    if (cp && cp.end) chickenEnd = cp.end;
+    if (dm && dm.end) diceyEnd = dm.end;
+    renderRows(data[currentTab]);
+  } catch(e) {
+    document.getElementById('rows-container').innerHTML = '<div class="loading">Failed to load data.</div>';
+  }
+}
+
+loadAll();
+setInterval(updateCountdownDisplay, 1000);
+</script>
+</body>
+</html>

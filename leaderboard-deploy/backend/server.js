@@ -1915,6 +1915,7 @@ app.delete('/predictor/history/:id', (req, res) => {
   res.json({ ok: true });
 });
 // Clean URLs
+app.get('/test', (req, res) => res.sendFile(path.join(__dirname, '../frontend/test.html')));
 app.get('/leaderboards', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
 app.get('/points', (req, res) => res.redirect(301, '/leaderboards?tab=points'));
 app.get('/store', (req, res) => res.sendFile(path.join(__dirname, '../frontend/app.html')));
