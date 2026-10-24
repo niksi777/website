@@ -1191,7 +1191,7 @@ function Navbar() {
   const [open, setOpen] = React.useState(false);
   const isOn = (href) => href === '/' ? path === '/' : path.startsWith(href);
   return (
-    <div className="lb-wrap">
+    <>
       <nav>
         <div className="ni">
           <a href="/" className="nlogo"><img src="/assets/niksi.png" alt="NIKSI777"/><span className="nname">NIKSI777</span></a>
@@ -2700,7 +2700,7 @@ function LeaderboardsPage() {
   }, []);
 
   return (
-    <>
+    <div className="lb-wrap">
       
       <div className="wrap">
         <div className="lb-card f1">
