@@ -27,7 +27,35 @@ body {
   font-family: 'DM Sans', system-ui, sans-serif;
   min-height: 100vh;
   padding: 32px 16px 48px;
+  position: relative;
+  overflow-x: hidden;
 }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(30,80,200,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 75%, rgba(20,60,180,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 5%, rgba(40,100,220,0.10) 0%, transparent 50%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(61,142,255,0.025) 60px,
+      rgba(61,142,255,0.025) 61px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(61,142,255,0.025) 60px,
+      rgba(61,142,255,0.025) 61px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+.page { position: relative; z-index: 1; }
 .page { max-width: 780px; margin: 0 auto; }
 
 .header {
@@ -122,22 +150,6 @@ body {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 .timer-label { color: var(--text-dim); font-weight: 500; }
 
-.search-wrap { position: relative; }
-.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-dim); pointer-events: none; font-size: 0.9rem; }
-.search-input {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.82rem;
-  padding: 6px 12px 6px 30px;
-  width: 160px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.search-input::placeholder { color: var(--text-dim); }
-.search-input:focus { border-color: var(--accent); }
 
 .tbl-head {
   display: grid;
@@ -228,10 +240,6 @@ body {
         <span class="timer-label">ENDS IN:</span>
         <span id="countdown">Loading...</span>
       </div>
-      <div class="search-wrap">
-        <span class="search-icon">&#9906;</span>
-        <input class="search-input" placeholder="Search player..." id="search" oninput="filterRows()">
-      </div>
     </div>
 
     <div class="tbl-head">
@@ -285,12 +293,6 @@ function renderRows(rows) {
   }).join('');
 }
 
-function filterRows() {
-  const q = document.getElementById('search').value.toLowerCase();
-  document.querySelectorAll('#rows-container .row').forEach(row => {
-    row.style.display = (!q || (row.dataset.name || '').includes(q)) ? '' : 'none';
-  });
-}
 
 function switchTab(tab) {
   currentTab = tab;
