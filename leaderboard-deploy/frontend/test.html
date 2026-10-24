@@ -197,6 +197,28 @@ body::before {
 .rank-badge.bronze { background: linear-gradient(135deg, #cd7941, #904f1a); color: #fff; box-shadow: 0 0 10px rgba(200,120,60,0.3); }
 .rank-num { color: var(--text-dim); font-size: 0.85rem; font-weight: 500; }
 
+.user-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+.avatar-placeholder {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
 .username { font-weight: 600; font-size: 0.92rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .row.top3 .username { color: #fff; }
 .wagered { text-align: right; font-size: 0.88rem; color: var(--text-dim); font-weight: 500; display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
@@ -355,9 +377,14 @@ function renderRows(entries, prizeField, wagerField, currency) {
       ? `<span class="rank-badge ${BADGES[rank-1]}">${rank}</span>`
       : `<span class="rank-num">#${rank}</span>`;
     const cls = rank <= 3 ? 'row top3' : 'row';
+    const name = e.username || '?';
+    const avatarHtml = e.avatar
+      ? `<img class="avatar" src="${e.avatar}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        + `<div class="avatar-placeholder" style="display:none">${name[0]}</div>`
+      : `<div class="avatar-placeholder">${name[0]}</div>`;
     return `<div class="${cls}">
       <div>${badge}</div>
-      <div class="username">${e.username || '?'}</div>
+      <div class="user-cell">${avatarHtml}<span class="username">${name}</span></div>
       <div class="wagered">${currencyHtml(e[wagerField], currency)}</div>
       <div class="prize">${currencyHtml(e[prizeField], currency)}</div>
     </div>`;
