@@ -13,7 +13,7 @@
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--b1:rgba(61,142,255,.07);--b2:rgba(61,142,255,.13);--b3:rgba(61,142,255,.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--rd:#e03535;--gold:#f5a623}
-    html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;scrollbar-gutter:stable}
+    html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:linear-gradient(to bottom,transparent 18%,black 27%,black 73%,transparent 82%);mask-image:linear-gradient(to bottom,transparent 18%,black 27%,black 73%,transparent 82%);pointer-events:none;z-index:0}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
