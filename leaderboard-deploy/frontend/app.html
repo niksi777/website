@@ -1138,7 +1138,7 @@ html{overflow-y:scroll;}
     .rw-head h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,58px);font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:.95;color:#fff;margin:0 0 10px}
     .rw-head p{font-size:14px;color:var(--mu);max-width:480px;margin:0 auto;line-height:1.6}
     .rw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:48px}
-    .rw-card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;transition:border-color .15s}
+    .rw-card{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;transition:border-color .15s;display:flex;flex-direction:column}
     .rw-card:hover{border-color:var(--b3)}
     .rw-card-top{padding:24px 22px 18px;border-bottom:1px solid var(--b2)}
     .rw-card-logo{height:38px;width:auto;object-fit:contain;display:block;margin-bottom:14px}
@@ -1148,7 +1148,7 @@ html{overflow-y:scroll;}
     .rw-perk{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--tx);line-height:1.4}
     .rw-perk-ic{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
     .rw-perk-ic svg{width:10px;height:10px}
-    .rw-card-foot{padding:0 22px 20px}
+    .rw-card-foot{padding:0 22px 20px;margin-top:auto}
     .rw-signup-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:10px 0;border-radius:9px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:opacity .15s}
     .rw-signup-btn:hover{opacity:.85}
     @media(max-width:720px){.nmob-links{display:flex}.nlogin-btn{display:none}}
@@ -4840,7 +4840,8 @@ function RewardsPage() {
     {
       logo: '/assets/chicken.png', color: '#f2a93b',
       prize: '1,000', raceType: 'WEEKLY WAGER RACE', coinIcon: '/assets/coin.png',
-      signupHref: 'https://chicken.gg?ref=niksi',
+      signupHref: 'https://discord.com/invite/Gnyv25SHg7',
+      signupLabel: 'CREATE TICKET TO CLAIM',
       perks: [
         '0.5% Wagerback on every bet',
         'Up to 15% Lossback',
@@ -4887,7 +4888,7 @@ function RewardsPage() {
               </div>
               <div className="rw-card-foot">
                 <a href={p.signupHref} target="_blank" rel="noreferrer" className="rw-signup-btn" style={{background:p.color,color:'#fff'}}>
-                  SIGN UP <ExtIc/>
+                  {p.signupLabel||'SIGN UP'} <ExtIc/>
                 </a>
               </div>
             </div>
