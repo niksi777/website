@@ -186,6 +186,9 @@
     .lb-tab:hover{opacity:.7}
     .lb-tab.active{border-bottom-color:var(--ac);opacity:1}
     .lb-tab img{height:28px;width:auto;object-fit:contain;display:block;max-width:90px}
+    .lb-prize-hdr{display:flex;flex-direction:column;align-items:center;gap:3px;padding-bottom:4px}
+    .lb-prize-hdr-amt{font-family:'Barlow Condensed',sans-serif;font-size:2.4rem;font-weight:800;letter-spacing:.03em;line-height:1;display:flex;align-items:baseline;gap:3px}
+    .lb-prize-hdr-lbl{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mu)}
     .lb-race-meta{display:flex;flex-direction:column;align-items:center;padding:22px 20px 18px;border-bottom:1px solid var(--b2);gap:12px;background:linear-gradient(160deg,rgba(61,142,255,.09) 0%,rgba(61,142,255,.03) 50%,transparent 100%);position:relative}
     .lb-meta-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:8px 16px;border-radius:8px;white-space:nowrap;transition:opacity .15s,transform .1s;display:flex;align-items:center;gap:6px;cursor:pointer;border:none}
     .lb-meta-btn:hover{opacity:.85;transform:translateY(-1px)}
@@ -1663,10 +1666,11 @@ function NewLbRows({ rows, prizeField, wagerField, currency }) {
   });
 }
 
-function LbCardContent({ endDate, signupUrl, btnLabel, histBtn, timerSub, children }) {
+function LbCardContent({ endDate, signupUrl, btnLabel, histBtn, timerSub, prizeAmt, prizeColor, raceLbl, children }) {
   return (
     <>
       <div className="lb-race-meta">
+        {prizeAmt && <div className="lb-prize-hdr"><div className="lb-prize-hdr-amt" style={{color:prizeColor||'#fff'}}>{prizeAmt}</div>{raceLbl && <div className="lb-prize-hdr-lbl">{raceLbl}</div>}</div>}
         <CompactTimer endDate={endDate}/>
         {timerSub}
         <div className="lb-meta-btns">
@@ -1739,7 +1743,7 @@ function GambaLeaderboard() {
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
-    <LbCardContent endDate={gambaMeta && gambaMeta.endDate} signupUrl="https://gamba.com?c=niksi" btnLabel="SIGN UP" histBtn={
+    <LbCardContent endDate={gambaMeta && gambaMeta.endDate} signupUrl="https://gamba.com?c=niksi" btnLabel="SIGN UP" prizeAmt={<><span style={{color:'#22c55e'}}>$</span>{(gambaMeta?.prizePool||1000).toLocaleString('en-US')}</>} prizeColor="#fff" raceLbl="BI-WEEKLY WAGER RACE" histBtn={
       <a href="https://gamba.com/promotions/exclusive-leaderboards/24619" target="_blank" rel="noreferrer" className="lb-meta-btn lb-meta-btn-sec">VIEW ON GAMBA</a>
     }>
       <NewLbRows rows={players} prizeField="reward" wagerField="wager" currency={{type:'usd'}}/>
@@ -1779,7 +1783,7 @@ function ChickenLeaderboard() {
   return (
     <>
       {histOpen && <ChickenHistoryModal onClose={() => setHistOpen(false)}/>}
-      <LbCardContent endDate={meta && meta.end} signupUrl="https://chicken.gg?ref=niksi" btnLabel="SIGN UP" histBtn={
+      <LbCardContent endDate={meta && meta.end} signupUrl="https://chicken.gg?ref=niksi" btnLabel="SIGN UP" prizeAmt={<>{(meta?.totalPool||1000).toLocaleString('en-US')}<img src="/assets/coin.png" alt="" style={{height:'0.7em',marginLeft:4,verticalAlign:'middle',objectFit:'contain'}}/></>} prizeColor="#f2a93b" raceLbl="WEEKLY WAGER RACE" histBtn={
         <button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setHistOpen(true)}>HISTORY</button>
       }>
         <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'coin',icon:'/assets/coin.png'}}/>
@@ -2100,7 +2104,7 @@ function DiceyLeaderboard() {
         </div>,
         document.body
       )}
-      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP" histBtn={<button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setShowInfo(true)}>WAGER INFO</button>}>
+      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP" prizeAmt={<><span style={{color:'#22c55e'}}>$</span>{(meta.totalPool||1000).toLocaleString('en-US')}</>} prizeColor="#fff" raceLbl="BI-WEEKLY WAGER RACE" histBtn={<button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setShowInfo(true)}>WAGER INFO</button>}>
         <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'usd'}}/>
       </LbCardContent>
     </>
