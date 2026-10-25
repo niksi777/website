@@ -4887,12 +4887,12 @@ function RewardsPage() {
                 ))}
               </div>
               <div className="rw-card-foot">
+                {p.discordHref && <a href={p.discordHref} target="_blank" rel="noreferrer" className="rw-signup-btn" style={{background:'rgba(88,101,242,.15)',border:'1px solid rgba(88,101,242,.35)',color:'#a5b4fc',marginBottom:8}}>
+                  CREATE TICKET TO CLAIM <ExtIc/>
+                </a>}
                 <a href={p.signupHref} target="_blank" rel="noreferrer" className="rw-signup-btn" style={{background:p.color,color:'#fff'}}>
                   SIGN UP <ExtIc/>
                 </a>
-                {p.discordHref && <a href={p.discordHref} target="_blank" rel="noreferrer" className="rw-signup-btn" style={{background:'rgba(88,101,242,.15)',border:'1px solid rgba(88,101,242,.35)',color:'#a5b4fc',marginTop:8}}>
-                  CREATE TICKET TO CLAIM <ExtIc/>
-                </a>}
               </div>
             </div>
           ))}
