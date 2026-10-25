@@ -2096,7 +2096,7 @@ function DiceyLeaderboard() {
         </div>,
         document.body
       )}
-      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP" timerSub={<button className="lb-meta-btn lb-meta-btn-sec" style={{fontSize:'.75rem',padding:'4px 12px'}} onClick={() => setShowInfo(true)}>WAGER INFO</button>}>
+      <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://dicey.com/signup?ref=Niksi" btnLabel="SIGN UP" histBtn={<button className="lb-meta-btn lb-meta-btn-sec" onClick={() => setShowInfo(true)}>WAGER INFO</button>}>
         <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'usd'}}/>
       </LbCardContent>
     </>
