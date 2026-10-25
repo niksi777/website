@@ -4840,8 +4840,8 @@ function RewardsPage() {
     {
       logo: '/assets/chicken.png', color: '#f2a93b',
       prize: '1,000', raceType: 'WEEKLY WAGER RACE', coinIcon: '/assets/coin.png',
-      signupHref: 'https://discord.com/invite/Gnyv25SHg7',
-      signupLabel: 'CREATE TICKET TO CLAIM',
+      signupHref: 'https://chicken.gg?ref=niksi',
+      discordHref: 'https://discord.com/invite/Gnyv25SHg7',
       perks: [
         '0.5% Wagerback on every bet',
         'Up to 15% Lossback',
@@ -4864,7 +4864,7 @@ function RewardsPage() {
       <div className="wrap">
         <div className="rw-head f1">
           <h1>Platform<br/><em style={{color:'var(--ac)',fontStyle:'normal'}}>Rewards</em></h1>
-          <p>Sign up on any partnered platform through Niksi's links and unlock exclusive bonuses on top of the leaderboard races.</p>
+          <p>Sign up through my links and unlock exclusive bonuses on top of what I already offer on each platform.</p>
         </div>
 
         <div className="rw-grid f2">
@@ -4888,8 +4888,11 @@ function RewardsPage() {
               </div>
               <div className="rw-card-foot">
                 <a href={p.signupHref} target="_blank" rel="noreferrer" className="rw-signup-btn" style={{background:p.color,color:'#fff'}}>
-                  {p.signupLabel||'SIGN UP'} <ExtIc/>
+                  SIGN UP <ExtIc/>
                 </a>
+                {p.discordHref && <a href={p.discordHref} target="_blank" rel="noreferrer" className="rw-signup-btn" style={{background:'rgba(88,101,242,.15)',border:'1px solid rgba(88,101,242,.35)',color:'#a5b4fc',marginTop:8}}>
+                  CREATE TICKET TO CLAIM <ExtIc/>
+                </a>}
               </div>
             </div>
           ))}
