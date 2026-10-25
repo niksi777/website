@@ -4817,14 +4817,6 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
     </>);
   }
 
-// ====== APP ROUTER ======
-function AppInner() {
-  const session = useSession();
-  const path    = usePath();
-  const pathname = path.split('?')[0].split('#')[0];
-  let Page;
-  if      (pathname === '/')                                     Page = <HomePage/>;
-  else if (pathname === '/leaderboards')                         Page = <LeaderboardsPage/>;
 function RewardsPage() {
   const Check = ({color}) => (
     <div className="rw-perk-ic" style={{background:`${color}22`,border:`1px solid ${color}55`}}>
@@ -4914,7 +4906,15 @@ function RewardsPage() {
   );
 }
 
-    else if (pathname === '/store')                                Page = <StorePage/>;
+// ====== APP ROUTER ======
+function AppInner() {
+  const session = useSession();
+  const path    = usePath();
+  const pathname = path.split('?')[0].split('#')[0];
+  let Page;
+  if      (pathname === '/')                                     Page = <HomePage/>;
+  else if (pathname === '/leaderboards')                         Page = <LeaderboardsPage/>;
+  else if (pathname === '/store')                                Page = <StorePage/>;
   else if (pathname === '/rewards')                              Page = <RewardsPage/> ;
   else if (pathname === '/predict' || pathname === '/predictor') Page = <PredictorPage/>;
   else if (pathname === '/settings')                             Page = <SettingsPage/>;
