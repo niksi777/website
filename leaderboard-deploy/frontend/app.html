@@ -1123,6 +1123,10 @@ html{overflow-y:scroll;}
       .stat{border-right:none;border-bottom:1px solid var(--b1)}
       .stat:last-child{border-bottom:none}
     }
+    .nmob-links{display:none;align-items:center;gap:2px;flex:1;justify-content:center;overflow:hidden}
+    .nmob-links a{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);text-decoration:none;padding:6px 9px;border-radius:6px;white-space:nowrap;transition:color .15s,background .15s}
+    .nmob-links a.on,.nmob-links a:hover{color:var(--tx);background:rgba(255,255,255,.06)}
+    @media(max-width:720px){.nmob-links{display:flex}.nlogin-btn{display:none}}
   </style>
 </head>
 <body>
@@ -1217,6 +1221,12 @@ function Navbar() {
             <a href="/store" className={isOn('/store') ? 'on' : ''}>STORE</a>
             <a href="/cases" className={isOn('/cases') ? 'on' : ''}>CASES</a>
             
+          </div>
+          <div className="nmob-links">
+            <a href="/" className={isOn('/') ? 'on' : ''}>HOME</a>
+            <a href="/leaderboards" className={isOn('/leaderboards') ? 'on' : ''}>LEADERBOARDS</a>
+            <a href="/store" className={isOn('/store') ? 'on' : ''}>STORE</a>
+            <a href="/cases" className={isOn('/cases') ? 'on' : ''}>CASES</a>
           </div>
           <div className="nauth">
             <div className="nsocials">{SOCIALS}</div>
