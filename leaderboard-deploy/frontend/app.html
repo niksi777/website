@@ -133,7 +133,7 @@
 /* ---- LeaderboardsPage ---- */
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    .lb-wrap{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,0.07);--b2:rgba(61,142,255,0.13);--b3:rgba(61,142,255,0.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--gold:#f5a623;--silver:#b8c5d0;--bronze:#cd7941;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;--cs2skin:#7c3aed;background:var(--bg);color:var(--tx);min-height:100vh}
+    .lb-wrap{--bg:#07091c;--s1:#0d1430;--s2:#131c3e;--s3:#0f1a3a;--b1:rgba(61,142,255,0.07);--b2:rgba(61,142,255,0.13);--b3:rgba(61,142,255,0.22);--tx:#d8e8ff;--mu:rgba(180,210,255,.45);--ac:#3d8eff;--gold:#f5a623;--silver:#b8c5d0;--bronze:#cd7941;--green:#22c55e;--gamba:#22c55e;--chicken:#f2a93b;--krush:#9b5cff;background:var(--bg);color:var(--tx);min-height:100vh}
     html,body{background-color:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
     @keyframes pu{0%,100%{opacity:1}50%{opacity:.15}}
     @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -388,7 +388,6 @@
     .race-bar-fill-csgowin{height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:8px;transition:width .4s ease}
     .race-amt{width:140px;flex-shrink:0;text-align:right;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}
     .lb-cta-krush{background:var(--krush);color:#fff}
-    .lb-cta-cs2skin{background:var(--cs2skin);color:#fff}
 
     /* Prize structure */
     .prize-section{margin-bottom:48px}
@@ -1263,18 +1262,14 @@ function Navbar() {
 
 
 // ==================== HOMEPAGE ====================
-const CS2SKIN_URL = 'https://cs2skin.com/r/NIKSI';
 
 function HeroCarousel() {
     const [slide, setSlide] = React.useState(0);
     const [chickenActive, setChickenActive] = React.useState(false);
-    const [cs2skinActive, setCs2skinActive] = React.useState(false);
-    const [cs2skinPool, setCs2skinPool] = React.useState(1000);
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
-      fetch('/cs2skin-meta').then(r => r.json()).then(d => { setCs2skinActive(!!d.active); if (d.totalPool) setCs2skinPool(d.totalPool); }).catch(() => {});
     }, []);
-    const total = 3 + (chickenActive ? 1 : 0) + (cs2skinActive ? 1 : 0);
+    const total = 3 + (chickenActive ? 1 : 0);
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1377,24 +1372,6 @@ function HeroCarousel() {
           </div>
           )}
 
-          {cs2skinActive && (
-          <div className="c-slide" style={{background:[
-            'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(124,58,237,.34) 0%, rgba(124,58,237,.07) 50%, transparent 70%)',
-            'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(124,58,237,.14) 0%, transparent 58%)',
-            'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(124,58,237,.08) 0%, transparent 55%)',
-            'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
-            'linear-gradient(140deg,#0a0614 0%,#08040f 55%,#090613 100%)'
-          ].join(','),borderTop:'3px solid rgba(124,58,237,.65)'}}>
-            {logo('/assets/cs2skin.png',.55,'rgba(124,58,237,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(10,6,20),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#a78bfa','clamp(44px,6vw,68px)',.88,6)}>$500 RACE</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CS2SKIN.COM</div>
-              <div style={sub}>Wager your way to the top of the leaderboard!</div>
-              <a href="/leaderboards?tab=cs2skin" style={btn('#7c3aed','rgba(124,58,237,.4)')}>VIEW LEADERBOARD <Arr/></a>
-            </div>
-          </div>
-          )}
         </div>
 
         <div className="c-dots">
@@ -1450,10 +1427,8 @@ function HeroCarousel() {
     const Ext = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>;
 
     const [chickenActive, setChickenActive] = React.useState(false);
-    const [cs2skinActive, setCs2skinActive] = React.useState(false);
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
-      fetch('/cs2skin-meta').then(r => r.json()).then(d => setCs2skinActive(!!d.active)).catch(() => {});
     }, []);
 
     const platforms = [
@@ -1483,15 +1458,7 @@ function HeroCarousel() {
         signupHref:'https://chicken.gg?ref=niksi', signupExt:true,
         lbHref:'/leaderboards?tab=chicken',
       }] : []),
-      ...(cs2skinActive ? [{
-        logo:'/assets/cs2skin.png', color:'#7c3aed',
-        prize:'$500', lbType:'WEEKLY',
-        perks:['WAGER RACE PRIZES','USE CODE NIKSI'],
-        logoStyle:{height:'58px',width:'58px',objectFit:'contain'},
-        bigImg:'/assets/cs2skin.png',
-        signupHref:'https://cs2skin.com/r/NIKSI', signupExt:true,
-        lbHref:'/leaderboards?tab=cs2skin',
-      }] : []),
+
     ];
 
     return (
@@ -2023,49 +1990,7 @@ function KrushLeaderboard() {
   );
 }
 
-function Cs2skinLeaderboard() {
-  const [players, setPlayers] = React.useState(null);
-  const [meta, setMeta] = React.useState(null);
-  React.useEffect(() => {
-    fetch('/cs2skin-leaderboard?limit=10').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
-    fetch('/cs2skin-meta').then(r => r.json()).then(setMeta).catch(() => {});
-  }, []);
 
-  const fmtPrize = p => p.prize > 0 ? `${Number(p.prize).toLocaleString('en-US')}` : '-';
-  const fmtWager = p => `${Number(p.wager||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-  const cs2Coin = <img src="/assets/cs2skincoin.png" className="lb-coin-icon-sm" alt="" onError={e=>e.target.style.display='none'}/>;
-
-  if (players === null || meta === null) return <div className="loading">Loading...</div>;
-
-  const isEnded = meta.end && Date.now() > meta.end;
-
-  if (!meta.active && !isEnded) {
-    return (
-      <div className="f2" style={{textAlign:'center',padding:'64px 0'}}>
-        <div className="lb-prize-amt"><span style={{color:'#fff'}}>{(meta.totalPool||1000).toLocaleString('en-US')}</span><img src="/assets/cs2skincoin.png" alt="coins" style={{height:'0.55em',marginLeft:6,verticalAlign:'middle',display:'inline-block'}}/></div>
-        <div className="lb-prize-lbl">7-Day Wager Race</div>
-        <div className="lb-code" style={{marginTop:10}}>Starting soon - check back shortly</div>
-      </div>
-    );
-  }
-
-  const prizes = meta.prizes || CS2SKIN_PRIZES_FALLBACK;
-  const displayRows = prizes.map((amt, i) => {
-    const existing = players.find(r => r.position === i + 1);
-    return existing || { position: i + 1, username: 'No active player yet', avatar: null, wager: 0, prize: amt, placeholder: true };
-  });
-
-  const top3 = displayRows.slice(0, 3);
-  const rest = displayRows.slice(3);
-  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
-
-  return (
-    <LbCardContent endDate={meta.end && !isEnded ? meta.end : null} signupUrl="https://cs2skin.com/r/NIKSI" btnLabel="SIGN UP">
-      <NewLbRows rows={displayRows} prizeField="prize" wagerField="wager" currency={{type:'coin',icon:'/assets/cs2skincoin.png'}}/>
-    </LbCardContent>
-  );
-}
-const CS2SKIN_PRIZES_FALLBACK = [500,200,120,80,50,30,15,5];
 
 function DiceyRankBadge({level, sublevel, size}) {
   size = size || 44;
@@ -2647,7 +2572,7 @@ function CsgowinLeaderboard() {
 
 function LeaderboardsPage() {
   const { user, logout } = useUser();
-  const VALID_TABS = ['krush', 'chicken', 'chickenrace', 'cs2skin', 'dicey'];
+  const VALID_TABS = ['krush', 'chicken', 'chickenrace', 'dicey'];
   const [tab, setTab] = React.useState(() => {
     const t = new URLSearchParams(window.location.search).get('tab');
     return VALID_TABS.includes(t) ? t : 'gamba';
@@ -2655,12 +2580,10 @@ function LeaderboardsPage() {
   const [krushActive, setKrushActive] = React.useState(false);
   const [krushEnded, setKrushEnded] = React.useState(false);
   const [chickenActive, setChickenActive] = React.useState(false);
-  const [cs2skinActive, setCs2skinActive] = React.useState(false);
   const [gambaAmt, setGambaAmt] = React.useState(null);
   const [krushAmt, setKrushAmt] = React.useState(null);
   const [chickenAmt, setChickenAmt] = React.useState(null);
   const [chickenRaceAmt, setChickenRaceAmt] = React.useState(null);
-  const [cs2skinAmt, setCs2skinAmt] = React.useState(null);
   const [diceyActive, setDiceyActive] = React.useState(true);
   const [diceyEnded, setDiceyEnded] = React.useState(false);
   const [diceyAmt, setDiceyAmt] = React.useState(null);
@@ -2698,12 +2621,7 @@ function LeaderboardsPage() {
     fetch('/chicken-wager-race').then(r => r.json()).then(d => {
       if (d && d.prize) setChickenRaceAmt(d.prize);
     }).catch(() => {});
-    fetch('/cs2skin-meta').then(r => r.json()).then(d => {
-      const ended = !!(d.end && Date.now() > d.end);
-      setCs2skinActive(!!d.active);
-      if (d.totalPool) setCs2skinAmt(Math.round(d.totalPool));
-      if (!d.active && !ended && tab === 'cs2skin') setTab('gamba');
-    }).catch(() => {});
+
     fetch('/dicey-meta').then(r => r.json()).then(d => {
       const ended = !!(d.end && Date.now() > d.end);
       setDiceyActive(!!d.active);
@@ -2727,11 +2645,7 @@ function LeaderboardsPage() {
                 <img src="/assets/chicken.png" alt="Chicken.gg" onError={e=>e.target.style.display='none'}/>
               </button>
             )}
-            {cs2skinActive && (
-              <button className={`lb-tab${tab==='cs2skin'?' active':''}`} onClick={() => changeTab('cs2skin')}>
-                <img src="/assets/cs2skin.png" alt="CS2Skin" onError={e=>e.target.style.display='none'} style={{filter:'brightness(0) invert(1)'}}/>
-              </button>
-            )}
+
             {(diceyActive || diceyEnded) && (
               <button className={`lb-tab${tab==='dicey'?' active':''}`} onClick={() => changeTab('dicey')}>
                 <img src="/assets/dicey.png" alt="Dicey" onError={e=>e.target.style.display='none'}/>
@@ -2741,7 +2655,6 @@ function LeaderboardsPage() {
           <div style={{display: tab === 'gamba' ? 'block' : 'none'}}><GambaLeaderboard/></div>
           <div style={{display: tab === 'chicken' ? 'block' : 'none'}}><ChickenLeaderboard/></div>
           <div style={{display: tab === 'chickenrace' ? 'block' : 'none'}}><ChickenRaceLeaderboard/></div>
-          <div style={{display: tab === 'cs2skin' ? 'block' : 'none'}}><Cs2skinLeaderboard/></div>
           <div style={{display: tab === 'dicey' ? 'block' : 'none'}}><DiceyLeaderboard/></div>
         </div>
       </div>
@@ -4710,7 +4623,6 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
                 <select className="inp-sm" value={platform} onChange={e=>setPlatform(e.target.value)} style={{cursor:'pointer'}}>
                   <option>Chicken</option>
                   <option>Gamba</option>
-                  <option>CS2Skin</option>
                   <option>Other</option>
                 </select>
               </div>
