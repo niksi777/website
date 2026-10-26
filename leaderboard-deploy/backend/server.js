@@ -1397,6 +1397,11 @@ app.delete('/admin/timed-commands/:id', (req, res) => {
   res.json({ ok: true });
 });
 
+// SPA catch-all: send app.html for all unknown GET routes so F5 works on /rewards etc.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/app.html'));
+});
+
 // Start server
 app.listen(4000, () => {
   console.log("Backend running on http://127.0.0.1:4000");
