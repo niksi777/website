@@ -63,7 +63,7 @@
 
     /* Carousel */
     .carousel-outer{overflow:hidden;margin:28px 0 0}
-    .carousel-wrap{position:relative;height:214px;perspective:1400px;perspective-origin:50% 50%}
+    .carousel-wrap{position:relative;height:206px;perspective:1400px;perspective-origin:50% 50%}
     .c-track{display:flex;height:100%;gap:16px;transition:transform .52s cubic-bezier(.4,0,.2,1)}
     .c-slide{min-width:72%;height:100%;flex-shrink:0;position:relative;display:flex;align-items:center;padding:28px 40px;border-radius:12px;overflow:hidden;box-shadow:0 6px 32px rgba(0,0,0,.6)}
     .c-dots{display:flex;gap:6px;justify-content:center;padding:12px 0 20px}
@@ -1338,7 +1338,7 @@ function HeroCarousel() {
     const sub = {fontSize:13,color:'rgba(221,227,239,.45)',lineHeight:1.6};
     const btn = (color,shadow) => ({display:'inline-flex',alignItems:'center',gap:8,marginTop:20,padding:'10px 22px',background:color,color:'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none',boxShadow:`0 4px 24px ${shadow}`});
     /* logos: fixed position from right, never touching edge */
-    const logo = (src,op=.55,glow=null) => <img src={src} aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'36%',objectFit:'contain',opacity:op,pointerEvents:'none',filter:glow?`drop-shadow(0 0 28px ${glow})`:'none'}}/>;
+    const logo = (src,op=.55,glow=null) => <img src={src} aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'28%',objectFit:'contain',opacity:op,pointerEvents:'none',filter:glow?`drop-shadow(0 0 28px ${glow})`:'none'}}/>;
     const wrapRef = React.useRef(null);
     const [wrapW, setWrapW] = React.useState(900);
     React.useEffect(() => {
@@ -1356,14 +1356,14 @@ function HeroCarousel() {
       let d = ((i - slide) % total + total) % total;
       if (d > total / 2) d -= total;
       const a = Math.abs(d);
-      const tx = CX + d * (SW + GAP);
-      const ry = d === 0 ? 0 : d < 0 ? 14 : -14;
-      const sc = a === 0 ? 1 : 0.88;
+      const tx = CX + d * Math.round(SW * 0.72);
+      const ry = d === 0 ? 0 : d < 0 ? 12 : -12;
+      const sc = a === 0 ? 1 : 0.87;
       return {position:'absolute',top:0,left:0,width:SW,height:'100%',
         transform:`translateX(${tx}px) rotateY(${ry}deg) scale(${sc})`,
         transformOrigin:'center center',
         transition:'transform .52s cubic-bezier(.4,0,.2,1)',zIndex:10-a,
-        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'28px 40px'};
+        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'20px 26px'};
     }
 
     return (
@@ -1386,8 +1386,8 @@ function HeroCarousel() {
                 <span style={{width:6,height:6,borderRadius:'50%',background:'#22c55e',boxShadow:'0 0 6px rgba(34,197,94,1)',display:'inline-block',flexShrink:0}}></span>
                 <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#86efac',textTransform:'uppercase'}}>New Partner</span>
               </div>
-              <div style={txt('#22c55e','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON DICEY</div>
+              <div style={txt('#22c55e','clamp(26px,3.6vw,44px)',.88,6)}>$1,000 RACE</div>
+              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON DICEY</div>
               <div style={sub}>Sign up with code NIKSI</div>
               <a href="/leaderboards?tab=dicey" style={btn('#22c55e','rgba(34,197,94,.55)')}>GO TO LEADERBOARD <Arr/></a>
             </div>
@@ -1404,8 +1404,8 @@ function HeroCarousel() {
             {logo('/assets/gamba2.png',.58,'rgba(34,197,94,.5)')}
             <div style={{position:'absolute',inset:0,background:fade(6,14,8),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#22c55e','clamp(44px,6vw,68px)',.88,6)}>$1,000 RACE</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON GAMBA</div>
+              <div style={txt('#22c55e','clamp(26px,3.6vw,44px)',.88,6)}>$1,000 RACE</div>
+              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON GAMBA</div>
               <div style={sub}>Start wagering &amp; climbing the ladder!</div>
               <a href="/leaderboards" style={btn('#22c55e','rgba(34,197,94,.4)')}>VIEW LEADERBOARD <Arr/></a>
             </div>
@@ -1419,11 +1419,11 @@ function HeroCarousel() {
             'repeating-linear-gradient(-55deg,transparent 0,transparent 24px,rgba(255,255,255,.016) 24px,rgba(255,255,255,.016) 25px)',
             'linear-gradient(140deg,#060e03 0%,#050c03 55%,#060e04 100%)'
           ].join(','),borderTop:'3px solid rgba(83,252,24,.6)'}}>
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'36%',opacity:.55,pointerEvents:'none',filter:'drop-shadow(0 0 28px rgba(83,252,24,.55))'}}><path fill="white" d="M1.333 0h8v5.333H12V2.667h2.667V0h8v8H20v2.667h-2.667v2.666H20V16h2.667v8h-8v-2.667H12v-2.666H9.333V24h-8Z"/></svg>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'28%',opacity:.55,pointerEvents:'none',filter:'drop-shadow(0 0 28px rgba(83,252,24,.55))'}}><path fill="white" d="M1.333 0h8v5.333H12V2.667h2.667V0h8v8H20v2.667h-2.667v2.666H20V16h2.667v8h-8v-2.667H12v-2.666H9.333V24h-8Z"/></svg>
             <div style={{position:'absolute',inset:0,background:fade(6,14,3),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#53fc18','clamp(44px,6vw,68px)',.88,6)}>WATCH LIVE</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON KICK.COM</div>
+              <div style={txt('#53fc18','clamp(26px,3.6vw,44px)',.88,6)}>WATCH LIVE</div>
+              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON KICK.COM</div>
               <div style={sub}>Catch streams, bonus hunts &amp; live casino on Kick</div>
               <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer" style={btn('#53fc18','rgba(83,252,24,.4)')}>WATCH NOW <Arr/></a>
             </div>
@@ -1441,8 +1441,8 @@ function HeroCarousel() {
             {logo('/assets/chicken.png',.6,'rgba(252,154,14,.5)')}
             <div style={{position:'absolute',inset:0,background:fade(10,8,4),pointerEvents:'none'}}/>
             <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#fc9a0e','clamp(44px,6vw,68px)',.88,6)}>1.000 WEEKLY</div>
-              <div style={txt('#fff','clamp(22px,3vw,36px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CHICKEN.GG</div>
+              <div style={txt('#fc9a0e','clamp(26px,3.6vw,44px)',.88,6)}>1.000 WEEKLY</div>
+              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CHICKEN.GG</div>
               <div style={sub}>Compete for your share of the prize pool!</div>
               <a href="/leaderboards?tab=chicken" style={btn('#fc9a0e','rgba(252,154,14,.4)')}>VIEW LEADERBOARD <Arr/></a>
             </div>
