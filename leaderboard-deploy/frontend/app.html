@@ -1452,7 +1452,7 @@ function HeroCarousel() {
           <button className="c-arrow" onClick={()=>goTo((slide-1+total)%total)} aria-label="Previous">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
-          <div className="c-dot on" style={{width:48,animationDuration:'5.5s',flexShrink:0}}/>
+          <div key={slide} className="c-dot on" style={{width:56,height:6,borderRadius:3,animationDuration:'5.5s',flexShrink:0}}/>
           <button className="c-arrow" onClick={()=>goTo((slide+1)%total)} aria-label="Next">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
           </button>
