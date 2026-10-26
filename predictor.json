@@ -1,0 +1,23 @@
+{
+  "hunt": {
+    "id": "1781053372444",
+    "status": "resolved",
+    "startingBalance": 1000,
+    "endingBalance": 200,
+    "result": null,
+    "createdAt": "2026-06-10T01:02:52.444Z",
+    "closedAt": "2026-06-10T01:03:07.810Z",
+    "resolvedAt": "2026-06-10T01:03:10.802Z"
+  },
+  "predictions": [
+    {
+      "username": "niksibot",
+      "displayName": "NiksiBot",
+      "guess": 1500,
+      "wager": 50,
+      "payout": 100,
+      "createdAt": "2026-06-10T01:03:02.900Z"
+    }
+  ],
+  "history": []
+}

@@ -1,0 +1,110 @@
+{
+  "leaderboard": [
+    {
+      "rank": 1,
+      "username": "Donk****",
+      "fullUsername": "Donkeykong",
+      "score": "14852.76",
+      "vipLevel": "Gold",
+      "vipSublevel": "I",
+      "payoutAmountUsd": "400"
+    },
+    {
+      "rank": 2,
+      "username": "y****",
+      "fullUsername": "yam",
+      "score": "930.47",
+      "vipLevel": "Bronze",
+      "vipSublevel": "II",
+      "payoutAmountUsd": "200"
+    },
+    {
+      "rank": 3,
+      "username": "BotA****",
+      "fullUsername": "BotAgent",
+      "score": "806.95",
+      "vipLevel": "Gold",
+      "vipSublevel": "I",
+      "payoutAmountUsd": "150"
+    },
+    {
+      "rank": 4,
+      "username": "Gota****",
+      "fullUsername": "Gotazzzzx",
+      "score": "601.34",
+      "vipLevel": "Silver",
+      "vipSublevel": "II",
+      "payoutAmountUsd": "80"
+    },
+    {
+      "rank": 5,
+      "username": "Your****",
+      "fullUsername": "Yourmomknowsmyunderpants",
+      "score": "248.43",
+      "vipLevel": "Bronze",
+      "vipSublevel": "IV",
+      "payoutAmountUsd": "50"
+    },
+    {
+      "rank": 6,
+      "username": "Sist****",
+      "fullUsername": "Sisterleft",
+      "score": "209.88",
+      "vipLevel": "Bronze",
+      "vipSublevel": "II",
+      "payoutAmountUsd": "40"
+    },
+    {
+      "rank": 7,
+      "username": "BigN****",
+      "fullUsername": "BigNig2000",
+      "score": "79.55",
+      "vipLevel": "Bronze",
+      "vipSublevel": "I",
+      "payoutAmountUsd": "30"
+    },
+    {
+      "rank": 8,
+      "username": "Dext****",
+      "fullUsername": "Dexter",
+      "score": "20.12",
+      "vipLevel": "Bronze",
+      "vipSublevel": "I",
+      "payoutAmountUsd": "20"
+    },
+    {
+      "rank": 9,
+      "username": "Jydo****",
+      "fullUsername": "Jydoski",
+      "score": "0.42",
+      "vipLevel": "None",
+      "vipSublevel": "None",
+      "payoutAmountUsd": "20"
+    },
+    {
+      "rank": 10,
+      "username": "Spee****",
+      "fullUsername": "Speecy",
+      "score": "0.04",
+      "vipLevel": "None",
+      "vipSublevel": "None",
+      "payoutAmountUsd": "10"
+    }
+  ],
+  "prizes": [
+    400,
+    200,
+    150,
+    80,
+    50,
+    40,
+    30,
+    20,
+    20,
+    10
+  ],
+  "start": 1792641600000,
+  "end": 1793851140000,
+  "totalPool": 1000,
+  "lastUpdated": 1793016767299
+}

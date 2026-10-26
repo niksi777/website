@@ -1,0 +1,563 @@
+[
+  {
+    "id": "starter",
+    "name": "Starter Case",
+    "cost": 50,
+    "emoji": "📦",
+    "items": [
+      {
+        "name": "Nothing",
+        "points": 0,
+        "weight": 900,
+        "rarity": "bust",
+        "isGolden": false
+      },
+      {
+        "name": "40 Points",
+        "points": 40,
+        "weight": 50,
+        "rarity": "blue"
+      },
+      {
+        "name": "120 Points",
+        "points": 0,
+        "weight": 25,
+        "rarity": "purple",
+        "isGolden": true
+      },
+      {
+        "name": "350 Points",
+        "points": 0,
+        "weight": 10,
+        "rarity": "pink",
+        "isGolden": true
+      },
+      {
+        "name": "Golden Spin",
+        "points": 0,
+        "weight": 15,
+        "rarity": "golden-trigger",
+        "isGolden": true
+      }
+    ],
+    "goldenItems": [
+      {
+        "name": "100 Points",
+        "points": 100,
+        "weight": 285,
+        "rarity": "purple"
+      },
+      {
+        "name": "200 Points",
+        "points": 200,
+        "weight": 185,
+        "rarity": "purple"
+      },
+      {
+        "name": "400 Points",
+        "points": 400,
+        "weight": 140,
+        "rarity": "pink"
+      },
+      {
+        "name": "$10 Tip",
+        "storeItem": true,
+        "title": "$10 Tip",
+        "itemId": 1,
+        "points": 0,
+        "weight": 195,
+        "rarity": "gold"
+      },
+      {
+        "name": "$15 Tip",
+        "storeItem": true,
+        "title": "$15 Tip",
+        "itemId": 2,
+        "points": 0,
+        "weight": 120,
+        "rarity": "gold"
+      },
+      {
+        "name": "1,000 Points",
+        "points": 1000,
+        "weight": 60,
+        "rarity": "gold"
+      },
+      {
+        "name": "$100 Bonus Buy",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 15,
+        "rarity": "gold-ultra"
+      }
+    ]
+  },
+  {
+    "id": "premium",
+    "name": "Premium Case",
+    "cost": 100,
+    "emoji": "🎁",
+    "items": [
+      {
+        "name": "Nothing",
+        "points": 0,
+        "weight": 900,
+        "rarity": "bust"
+      },
+      {
+        "name": "80 Points",
+        "points": 80,
+        "weight": 50,
+        "rarity": "blue"
+      },
+      {
+        "name": "250 Points",
+        "points": 0,
+        "weight": 25,
+        "rarity": "purple",
+        "isGolden": true
+      },
+      {
+        "name": "700 Points",
+        "points": 0,
+        "weight": 10,
+        "rarity": "pink",
+        "isGolden": true
+      },
+      {
+        "name": "Golden Spin",
+        "points": 0,
+        "weight": 15,
+        "rarity": "golden-trigger",
+        "isGolden": true
+      }
+    ],
+    "goldenItems": [
+      {
+        "name": "200 Points",
+        "points": 200,
+        "weight": 265,
+        "rarity": "purple"
+      },
+      {
+        "name": "400 Points",
+        "points": 400,
+        "weight": 170,
+        "rarity": "purple"
+      },
+      {
+        "name": "800 Points",
+        "points": 800,
+        "weight": 100,
+        "rarity": "pink"
+      },
+      {
+        "name": "$10 Tip",
+        "storeItem": true,
+        "title": "$10 Tip",
+        "itemId": 1,
+        "points": 0,
+        "weight": 195,
+        "rarity": "gold"
+      },
+      {
+        "name": "$15 Tip",
+        "storeItem": true,
+        "title": "$15 Tip",
+        "itemId": 2,
+        "points": 0,
+        "weight": 120,
+        "rarity": "gold"
+      },
+      {
+        "name": "$40 Bonus Buy",
+        "storeItem": true,
+        "title": "$40 Bonus Buy",
+        "itemId": 4,
+        "points": 0,
+        "weight": 75,
+        "rarity": "gold"
+      },
+      {
+        "name": "2,000 Points",
+        "points": 2000,
+        "weight": 60,
+        "rarity": "gold"
+      },
+      {
+        "name": "$100 Bonus Buy",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 15,
+        "rarity": "gold-ultra"
+      }
+    ]
+  },
+  {
+    "id": "elite",
+    "name": "Elite Case",
+    "cost": 250,
+    "emoji": "💎",
+    "items": [
+      {
+        "name": "Nothing",
+        "points": 0,
+        "weight": 900,
+        "rarity": "bust"
+      },
+      {
+        "name": "200 Points",
+        "points": 200,
+        "weight": 50,
+        "rarity": "blue"
+      },
+      {
+        "name": "625 Points",
+        "points": 0,
+        "weight": 25,
+        "rarity": "purple",
+        "isGolden": true
+      },
+      {
+        "name": "1,750 Points",
+        "points": 0,
+        "weight": 10,
+        "rarity": "pink",
+        "isGolden": true
+      },
+      {
+        "name": "Golden Spin",
+        "points": 0,
+        "weight": 15,
+        "rarity": "golden-trigger",
+        "isGolden": true
+      }
+    ],
+    "goldenItems": [
+      {
+        "name": "500 Points",
+        "points": 500,
+        "weight": 250,
+        "rarity": "purple"
+      },
+      {
+        "name": "1,000 Points",
+        "points": 1000,
+        "weight": 155,
+        "rarity": "purple"
+      },
+      {
+        "name": "2,000 Points",
+        "points": 2000,
+        "weight": 85,
+        "rarity": "pink"
+      },
+      {
+        "name": "$15 Tip",
+        "storeItem": true,
+        "title": "$15 Tip",
+        "itemId": 2,
+        "points": 0,
+        "weight": 180,
+        "rarity": "gold"
+      },
+      {
+        "name": "$20 Bonus Buy",
+        "storeItem": true,
+        "title": "$20 Bonus Buy",
+        "itemId": 3,
+        "points": 0,
+        "weight": 135,
+        "rarity": "gold"
+      },
+      {
+        "name": "$40 Bonus Buy",
+        "storeItem": true,
+        "title": "$40 Bonus Buy",
+        "itemId": 4,
+        "points": 0,
+        "weight": 90,
+        "rarity": "gold"
+      },
+      {
+        "name": "5,000 Points",
+        "points": 5000,
+        "weight": 90,
+        "rarity": "gold"
+      },
+      {
+        "name": "$100 Bonus Buy",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 15,
+        "rarity": "gold-ultra"
+      }
+    ]
+  },
+  {
+    "id": "flip",
+    "name": "Flip Case",
+    "cost": 25,
+    "emoji": "🪙",
+    "items": [
+      {
+        "name": "Nothing",
+        "points": 0,
+        "weight": 500,
+        "rarity": "bust"
+      },
+      {
+        "name": "Double Up",
+        "points": 47,
+        "weight": 470,
+        "rarity": "gold"
+      },
+      {
+        "name": "Golden Spin",
+        "points": 0,
+        "weight": 30,
+        "rarity": "golden-trigger",
+        "isGolden": true
+      }
+    ],
+    "goldenItems": [
+      {
+        "name": "50 Points",
+        "points": 50,
+        "weight": 300,
+        "rarity": "purple"
+      },
+      {
+        "name": "100 Points",
+        "points": 100,
+        "weight": 250,
+        "rarity": "purple"
+      },
+      {
+        "name": "200 Points",
+        "points": 200,
+        "weight": 150,
+        "rarity": "pink"
+      },
+      {
+        "name": "$10 Tip",
+        "storeItem": true,
+        "title": "$10 Tip",
+        "itemId": 1,
+        "points": 0,
+        "weight": 200,
+        "rarity": "golden-trigger"
+      },
+      {
+        "name": "$15 Tip",
+        "storeItem": true,
+        "title": "$15 Tip",
+        "itemId": 2,
+        "points": 0,
+        "weight": 85,
+        "rarity": "golden-trigger"
+      },
+      {
+        "name": "$40 Bonus Buy",
+        "storeItem": true,
+        "title": "$40 Bonus Buy",
+        "itemId": 4,
+        "points": 0,
+        "weight": 15,
+        "rarity": "golden-trigger"
+      }
+    ]
+  },
+  {
+    "id": "mega",
+    "name": "Mega Case",
+    "cost": 500,
+    "emoji": "👑",
+    "items": [
+      {
+        "name": "Nothing",
+        "points": 0,
+        "weight": 900,
+        "rarity": "bust"
+      },
+      {
+        "name": "400 Points",
+        "points": 400,
+        "weight": 50,
+        "rarity": "blue"
+      },
+      {
+        "name": "1,250 Points",
+        "points": 0,
+        "weight": 25,
+        "rarity": "purple",
+        "isGolden": true
+      },
+      {
+        "name": "3,500 Points",
+        "points": 0,
+        "weight": 10,
+        "rarity": "pink",
+        "isGolden": true
+      },
+      {
+        "name": "Golden Spin",
+        "points": 0,
+        "weight": 15,
+        "rarity": "golden-trigger",
+        "isGolden": true
+      }
+    ],
+    "goldenItems": [
+      {
+        "name": "1,000 Points",
+        "points": 1000,
+        "weight": 240,
+        "rarity": "purple"
+      },
+      {
+        "name": "2,000 Points",
+        "points": 2000,
+        "weight": 145,
+        "rarity": "purple"
+      },
+      {
+        "name": "4,000 Points",
+        "points": 4000,
+        "weight": 75,
+        "rarity": "pink"
+      },
+      {
+        "name": "$20 Bonus Buy",
+        "storeItem": true,
+        "title": "$20 Bonus Buy",
+        "itemId": 3,
+        "points": 0,
+        "weight": 195,
+        "rarity": "gold"
+      },
+      {
+        "name": "$40 Bonus Buy",
+        "storeItem": true,
+        "title": "$40 Bonus Buy",
+        "itemId": 4,
+        "points": 0,
+        "weight": 150,
+        "rarity": "gold"
+      },
+      {
+        "name": "$100 Bonus Buy",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 90,
+        "rarity": "gold"
+      },
+      {
+        "name": "10,000 Points",
+        "points": 10000,
+        "weight": 90,
+        "rarity": "gold"
+      },
+      {
+        "name": "$140 Bonus Buy",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 15,
+        "rarity": "gold-ultra"
+      }
+    ]
+  },
+  {
+    "id": "lucky",
+    "name": "Lucky Case",
+    "cost": 50,
+    "emoji": "🍀",
+    "items": [
+      {
+        "name": "Nothing",
+        "points": 0,
+        "weight": 990,
+        "rarity": "bust"
+      },
+      {
+        "name": "Golden Spin",
+        "points": 0,
+        "weight": 10,
+        "rarity": "golden-trigger",
+        "isGolden": true
+      }
+    ],
+    "goldenItems": [
+      {
+        "name": "500 Points",
+        "points": 500,
+        "weight": 280,
+        "rarity": "purple"
+      },
+      {
+        "name": "1,000 Points",
+        "points": 1000,
+        "weight": 180,
+        "rarity": "pink"
+      },
+      {
+        "name": "$15 Tip",
+        "storeItem": true,
+        "title": "$15 Tip",
+        "itemId": 2,
+        "points": 0,
+        "weight": 180,
+        "rarity": "gold"
+      },
+      {
+        "name": "$40 Bonus Buy",
+        "storeItem": true,
+        "title": "$40 Bonus Buy",
+        "itemId": 4,
+        "points": 0,
+        "weight": 155,
+        "rarity": "gold"
+      },
+      {
+        "name": "2,000 Points",
+        "points": 2000,
+        "weight": 100,
+        "rarity": "gold"
+      },
+      {
+        "name": "$100 Bonus Buy",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 90,
+        "rarity": "gold"
+      },
+      {
+        "name": "5,000 Points",
+        "points": 5000,
+        "weight": 10,
+        "rarity": "gold-ultra"
+      },
+      {
+        "name": "$100 Bonus Buy x2",
+        "storeItem": true,
+        "title": "$100 Bonus Buy",
+        "itemId": 5,
+        "points": 0,
+        "weight": 5,
+        "rarity": "gold-ultra"
+      }
+    ]
+  }
+]

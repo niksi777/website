@@ -1,0 +1,14 @@
+[
+  {
+    "id": "gamba",
+    "text": "Join my $1,000 Leaderboard on Gamba under code NIKSI - https://gamba.com/promotions/exclusive-leaderboards/22542",
+    "enabled": false,
+    "intervalMinutes": 20
+  },
+  {
+    "id": "web",
+    "text": "Check out niksi777.com for leaderboards, cases, points and more! https://niksi777.com/",
+    "enabled": true,
+    "intervalMinutes": 10
+  }
+]

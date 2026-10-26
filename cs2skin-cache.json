@@ -1,0 +1,80 @@
+{
+  "players": [
+    {
+      "rank": 1,
+      "display_name": "Bo***nt",
+      "wagered_amount": 7015.24
+    },
+    {
+      "rank": 2,
+      "display_name": "NE***R1",
+      "wagered_amount": 4267.57
+    },
+    {
+      "rank": 3,
+      "display_name": "Yo***me",
+      "wagered_amount": 1436.78
+    },
+    {
+      "rank": 4,
+      "display_name": "ze***ve",
+      "wagered_amount": 749.12
+    },
+    {
+      "rank": 5,
+      "display_name": "Bu***si",
+      "wagered_amount": 393.94
+    },
+    {
+      "rank": 6,
+      "display_name": "Sp***cy",
+      "wagered_amount": 298.79
+    },
+    {
+      "rank": 7,
+      "display_name": "Bi***00",
+      "wagered_amount": 174.75
+    },
+    {
+      "rank": 8,
+      "display_name": "Ev***",
+      "wagered_amount": 90.81
+    },
+    {
+      "rank": 9,
+      "display_name": "go***y4",
+      "wagered_amount": 87.12
+    },
+    {
+      "rank": 10,
+      "display_name": "Jy***ki",
+      "wagered_amount": 56
+    },
+    {
+      "rank": 11,
+      "display_name": "Cr***on",
+      "wagered_amount": 4.81
+    },
+    {
+      "rank": 12,
+      "display_name": "as***ot",
+      "wagered_amount": 1.53
+    },
+    {
+      "rank": 13,
+      "display_name": "Vi***27",
+      "wagered_amount": 0.26
+    },
+    {
+      "rank": 14,
+      "display_name": "ia***ka",
+      "wagered_amount": 0.21
+    },
+    {
+      "rank": 15,
+      "display_name": "im***af",
+      "wagered_amount": 0.13
+    }
+  ],
+  "lastUpdated": 1792850350516
+}

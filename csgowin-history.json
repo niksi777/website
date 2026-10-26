@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "label": "jul/aug lb",
+    "start": "2026-07-29",
+    "end": "2026-08-12",
+    "prizePool": 500,
+    "totalWagered": 9836.83,
+    "totalUsers": 8,
+    "entries": [
+      {"position":1,"username":"Niksifan123","avatar":"https://avatars.steamstatic.com/55f66a5829663fd472550eafb6eb74c521933f30_medium.jpg","wager":4658.32,"prize":250},
+      {"position":2,"username":"Yourmomknowsme","avatar":null,"wager":3114.62,"prize":125},
+      {"position":3,"username":"Sisterleft69","avatar":"https://lh3.googleusercontent.com/a/ACg8ocIJoIWXPdF7-wyYjs6Ufi6WblmQp7dNcTnGkKgSVdTYZdrSiQ=s96-c","wager":1181.72,"prize":55},
+      {"position":4,"username":"Haruhito","avatar":"https://avatars.steamstatic.com/1e1c0a922d7f968cbe6773461e4a952ba385bd22_medium.jpg","wager":371.74,"prize":30},
+      {"position":5,"username":"Speecy","avatar":null,"wager":269.68,"prize":17.5},
+      {"position":6,"username":"BigNig2000","avatar":"https://avatars.steamstatic.com/0944a6cf8a82c82976541c59b0cb07744783cdc7_medium.jpg","wager":199.13,"prize":10},
+      {"position":7,"username":"steak0x","avatar":null,"wager":35.07,"prize":7.5},
+      {"position":8,"username":"lecful","avatar":null,"wager":6.55,"prize":5}
+    ]
+  }
+]

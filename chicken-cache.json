@@ -1,1 +1,295 @@
-{"referrals": [], "lastUpdated": null}
+{
+  "referrals": [
+    {
+      "userId": "MO0ZS5TZ3MTJJ5IH52",
+      "displayName": "neslo",
+      "imageUrl": "https://static.chicken.gg/avatars-default/008.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1749674442052
+    },
+    {
+      "userId": "CDI42Y9R8ZFMJ9S6UA",
+      "displayName": "Nesloking",
+      "imageUrl": "https://static.chicken.gg/avatars-default/009.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782169341584
+    },
+    {
+      "userId": "HWD0UHA6758FB5YW6P",
+      "displayName": "Niksifan123",
+      "imageUrl": "https://static.chicken.gg/avatars-default/008.jpg",
+      "xpEarned": 16,
+      "wagerAmount": 15.64,
+      "depositAmount": 0,
+      "commissionAmount": 0.05,
+      "acquireTime": 1782221671323
+    },
+    {
+      "userId": "HYR0967L19IZMV7RM0",
+      "displayName": "TrapyDK",
+      "imageUrl": "https://static.chicken.gg/avatars-default/013.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782232117210
+    },
+    {
+      "userId": "FUJG51DY6RXV5I7O88",
+      "displayName": "3LAU",
+      "imageUrl": "https://static.chicken.gg/avatars-default/012.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782241617993
+    },
+    {
+      "userId": "IFM3R5IO7V3T0HHY26",
+      "displayName": "backasa",
+      "imageUrl": "https://static.chicken.gg/avatars-default/016.jpg",
+      "xpEarned": 22,
+      "wagerAmount": 22.46,
+      "depositAmount": 0,
+      "commissionAmount": 0.07,
+      "acquireTime": 1782247900558
+    },
+    {
+      "userId": "VBPGOXVIHL3O03VSTW",
+      "displayName": "goofygooner",
+      "imageUrl": "https://static.chicken.gg/avatars/ommH1hKlzc6yVleN5CC95c5G.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782274299107
+    },
+    {
+      "userId": "C31XLS0U8TBT8XNJPD",
+      "displayName": "haruto",
+      "imageUrl": "https://static.chicken.gg/avatars/pvPHuXChGA3NOpLgafChaoEL.jpg",
+      "xpEarned": 3,
+      "wagerAmount": 2.2,
+      "depositAmount": 0,
+      "commissionAmount": 0.01,
+      "acquireTime": 1782409106096
+    },
+    {
+      "userId": "Z7TML88LOLUC8I2KA2",
+      "displayName": "icedout",
+      "imageUrl": "https://static.chicken.gg/avatars-default/001.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782554089656
+    },
+    {
+      "userId": "HI6SAFJBJFQX9TJK7R",
+      "displayName": "BigNIg2000",
+      "imageUrl": "https://static.chicken.gg/avatars-default/007.jpg",
+      "xpEarned": 279,
+      "wagerAmount": 215.56,
+      "depositAmount": 30,
+      "commissionAmount": 0.93,
+      "acquireTime": 1782674325986
+    },
+    {
+      "userId": "3XR2U6W6HV5109CEN3",
+      "displayName": "oliverzzzboss",
+      "imageUrl": "https://static.chicken.gg/avatars-default/009.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782674424380
+    },
+    {
+      "userId": "VKSMUWHGAPMSTD4S7Q",
+      "displayName": "morasti",
+      "imageUrl": "https://static.chicken.gg/avatars/fk9J2i1FidK7egQQY0OVGL3e.jpg",
+      "xpEarned": 4674,
+      "wagerAmount": 3317.32,
+      "depositAmount": 381.3,
+      "commissionAmount": 15.58,
+      "acquireTime": 1782674744146
+    },
+    {
+      "userId": "QEMOJAECJHAX3NB4IR",
+      "displayName": "astonstendahli",
+      "imageUrl": "https://static.chicken.gg/avatars/Pbm3UqJiqErKdY2qYPtbZdW3.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782736475259
+    },
+    {
+      "userId": "HDHKFVNI85GUOS7CDH",
+      "displayName": "humanity",
+      "imageUrl": "https://static.chicken.gg/avatars-default/012.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782738292659
+    },
+    {
+      "userId": "UWYVYOQQ2SCX0OD2TR",
+      "displayName": "sisterleft",
+      "imageUrl": "https://static.chicken.gg/avatars/MjOmpt1z45CjfWJPnlcaptxi.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1782915295699
+    },
+    {
+      "userId": "Y448CKY99Y0L39214J",
+      "displayName": "Audio",
+      "imageUrl": "https://static.chicken.gg/avatars/igHvjhdv1EgDQq4dyhfyvImY.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1783127934960
+    },
+    {
+      "userId": "26KVENQRCZ7K65BST7",
+      "displayName": "fearlessness11",
+      "imageUrl": "https://static.chicken.gg/avatars-default/011.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1783260495344
+    },
+    {
+      "userId": "HA23QJJAKFFW86JP3Q",
+      "displayName": "Damnshiii67",
+      "imageUrl": "https://static.chicken.gg/avatars-default/001.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1784504327547
+    },
+    {
+      "userId": "4JBE5OJGGVLKSKL5OL",
+      "displayName": "Mattrober",
+      "imageUrl": "https://static.chicken.gg/avatars-default/001.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1784540829701
+    },
+    {
+      "userId": "X77FUT7DST6KRWDW7S",
+      "displayName": "GiveMaxWin",
+      "imageUrl": "https://static.chicken.gg/avatars/2cN6JL9yfAPTUEsozKoR5WPD.jpg",
+      "xpEarned": 721,
+      "wagerAmount": 487.94,
+      "depositAmount": 0,
+      "commissionAmount": 2.4,
+      "acquireTime": 1784925872650
+    },
+    {
+      "userId": "AFR4381SSFD03AOAL8",
+      "displayName": "ImBLACKANDGAY",
+      "imageUrl": "https://static.chicken.gg/avatars-default/008.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1786752197099
+    },
+    {
+      "userId": "T50HN5KK40KBWURZ28",
+      "displayName": "lokeGamblelife",
+      "imageUrl": "https://static.chicken.gg/avatars-default/012.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1787895751847
+    },
+    {
+      "userId": "6FQ8SLNIAGDJ0LGN90",
+      "displayName": "LokeisGAY",
+      "imageUrl": "https://static.chicken.gg/avatars-default/011.jpg",
+      "xpEarned": 4809,
+      "wagerAmount": 3264.72,
+      "depositAmount": 1090.65,
+      "commissionAmount": 16.03,
+      "acquireTime": 1788461618469
+    },
+    {
+      "userId": "75TBHDD6F3WSETYZQS",
+      "displayName": "gobby67",
+      "imageUrl": "https://static.chicken.gg/avatars-default/010.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1789563597839
+    },
+    {
+      "userId": "LSSZJMSRKL9XK8TW9W",
+      "displayName": "SolarHawk1732",
+      "imageUrl": "https://static.chicken.gg/avatars-default/004.jpg",
+      "xpEarned": 46,
+      "wagerAmount": 30.87,
+      "depositAmount": 0,
+      "commissionAmount": 0.15,
+      "acquireTime": 1790801297399
+    },
+    {
+      "userId": "6B25EG25Q1MJUO6WUD",
+      "displayName": "Niksfan112",
+      "imageUrl": "https://static.chicken.gg/avatars-default/001.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1791119604603
+    },
+    {
+      "userId": "MTFXXERS85JU1RT3TO",
+      "displayName": "WhoIsThat",
+      "imageUrl": "https://static.chicken.gg/avatars-default/007.jpg",
+      "xpEarned": 9153,
+      "wagerAmount": 7998.4,
+      "depositAmount": 2456.34,
+      "commissionAmount": 30.51,
+      "acquireTime": 1791417365643
+    },
+    {
+      "userId": "8EG7BZB7NHSPIWQ6N8",
+      "displayName": "Bufff",
+      "imageUrl": "https://static.chicken.gg/avatars-default/016.jpg",
+      "xpEarned": 2960,
+      "wagerAmount": 2080.79,
+      "depositAmount": 0,
+      "commissionAmount": 9.87,
+      "acquireTime": 1792524678831
+    },
+    {
+      "userId": "0ZJE3P65YYEF7SSEVN",
+      "displayName": "chongu",
+      "imageUrl": "https://static.chicken.gg/avatars/9rVEv9qEThFciB9Pj5KnzqGv.jpg",
+      "xpEarned": 0,
+      "wagerAmount": 0,
+      "depositAmount": 0,
+      "commissionAmount": 0,
+      "acquireTime": 1792591768224
+    }
+  ],
+  "lastUpdated": 1793016707640
+}

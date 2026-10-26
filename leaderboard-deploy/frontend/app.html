@@ -1339,15 +1339,37 @@ function HeroCarousel() {
     const btn = (color,shadow) => ({display:'inline-flex',alignItems:'center',gap:8,marginTop:20,padding:'10px 22px',background:color,color:'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none',boxShadow:`0 4px 24px ${shadow}`});
     /* logos: fixed position from right, never touching edge */
     const logo = (src,op=.55,glow=null) => <img src={src} aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'36%',objectFit:'contain',opacity:op,pointerEvents:'none',filter:glow?`drop-shadow(0 0 28px ${glow})`:'none'}}/>;
+    const wrapRef = React.useRef(null);
+    const [wrapW, setWrapW] = React.useState(900);
+    React.useEffect(() => {
+      if (!wrapRef.current) return;
+      const upd = () => { if (wrapRef.current) setWrapW(wrapRef.current.offsetWidth); };
+      upd();
+      const ro = new ResizeObserver(upd);
+      ro.observe(wrapRef.current);
+      return () => ro.disconnect();
+    }, []);
+    const SW = Math.max(180, Math.round(wrapW * 0.60));
+    const GAP = 14;
+    const CX = Math.round((wrapW - SW) / 2);
+    function sty(i) {
+      let d = ((i - slide) % total + total) % total;
+      if (d > total / 2) d -= total;
+      const a = Math.abs(d);
+      return {position:'absolute',top:0,left:0,width:SW,height:'100%',
+        transform:`translateX(${CX + d*(SW+GAP)}px) scale(${a===0?1:.86})`,
+        transformOrigin:d<0?'right center':d>0?'left center':'center center',
+        transition:'transform .52s cubic-bezier(.4,0,.2,1)',zIndex:10-a,
+        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'28px 40px'};
+    }
 
     return (
       <div className="f1">
         <div className="carousel-outer">
-        <div className="carousel-wrap">
-        <div className="c-track" style={{transform:`translateX(calc(14% - ${slide} * (72% + 16px)))`}}>
+        <div className="carousel-wrap" ref={wrapRef}>
 
           {/* Slide 0 - DICEY */}
-          <div className="c-slide" style={{background:[
+          <div style={{...sty(0),background:[
             'radial-gradient(ellipse 80% 120% at 95% -10%, rgba(34,197,94,.45) 0%, rgba(34,197,94,.18) 38%, transparent 62%)',
             'radial-gradient(ellipse 50% 70% at 78% 65%, rgba(34,197,94,.15) 0%, transparent 55%)',
             'radial-gradient(ellipse 40% 50% at 5% 100%, rgba(20,160,70,.12) 0%, transparent 52%)',
@@ -1369,7 +1391,7 @@ function HeroCarousel() {
           </div>
 
           {/* Slide 1 - GAMBA */}
-          <div className="c-slide" style={{background:[
+          <div style={{...sty(1),background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(34,197,94,.34) 0%, rgba(34,197,94,.07) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(34,197,94,.14) 0%, transparent 58%)',
             'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(34,197,94,.08) 0%, transparent 55%)',
@@ -1387,7 +1409,7 @@ function HeroCarousel() {
           </div>
 
           {/* Slide 2 - KICK */}
-          <div className="c-slide" style={{background:[
+          <div style={{...sty(2),background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(83,252,24,.3) 0%, rgba(83,252,24,.06) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(83,252,24,.12) 0%, transparent 58%)',
             'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(83,252,24,.07) 0%, transparent 55%)',
@@ -1406,7 +1428,7 @@ function HeroCarousel() {
 
 
           {chickenActive && (
-          <div className="c-slide" style={{background:[
+          <div style={{...sty(3),background:[
             'radial-gradient(ellipse 70% 110% at 92% -5%, rgba(252,154,14,.32) 0%, rgba(252,154,14,.07) 50%, transparent 70%)',
             'radial-gradient(ellipse 45% 65% at 80% 58%, rgba(28,70,131,.22) 0%, transparent 58%)',
             'radial-gradient(ellipse 35% 45% at 8% 105%, rgba(252,154,14,.08) 0%, transparent 55%)',
@@ -1423,8 +1445,6 @@ function HeroCarousel() {
             </div>
           </div>
           )}
-
-        </div>
 
         </div>
         <div className="c-dots">

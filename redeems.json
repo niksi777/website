@@ -1,1 +1,397 @@
-[]
+[
+  {
+    "timestamp": 1788775312193,
+    "amount": 38,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788814914953,
+    "amount": 4,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1788870439658,
+    "amount": 30,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788877994124,
+    "amount": 15,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1788878810832,
+    "amount": 15,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1788879760208,
+    "amount": 75,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788879766280,
+    "amount": 100,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788879774192,
+    "amount": 25,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788879783179,
+    "amount": 20,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788879789746,
+    "amount": 35,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788894999002,
+    "amount": 100,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788895034343,
+    "amount": 10,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1788901675035,
+    "amount": 25,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1788902963405,
+    "amount": 10,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788952170937,
+    "amount": 29,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1788962727020,
+    "amount": 527,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1789130879244,
+    "amount": 20,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1789131082693,
+    "amount": 20,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1789161714532,
+    "amount": 900,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1789212215294,
+    "amount": 500,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789341124884,
+    "amount": 24.64,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789576684109,
+    "amount": 10,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789576734891,
+    "amount": 10,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789576837808,
+    "amount": 10,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789678819272,
+    "amount": 50,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1789733813737,
+    "amount": 28.9,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789737843587,
+    "amount": 9.9,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1789911714468,
+    "amount": 20,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790102186836,
+    "amount": 50,
+    "platform": "chicken"
+  },
+  {
+    "timestamp": 1790107549177,
+    "amount": 65,
+    "platform": "chicken"
+  },
+  {
+    "timestamp": 1790107555465,
+    "amount": 20,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790121110650,
+    "amount": 20,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1790198002476,
+    "amount": 10,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1790518162217,
+    "amount": 14.45,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790518891875,
+    "amount": 42,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790519268201,
+    "amount": 89,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790529969095,
+    "amount": 10,
+    "platform": "clash"
+  },
+  {
+    "timestamp": 1790612688940,
+    "amount": 15,
+    "platform": "clash"
+  },
+  {
+    "timestamp": 1790612694926,
+    "amount": 100,
+    "platform": "clash"
+  },
+  {
+    "timestamp": 1790639096217,
+    "amount": 15,
+    "platform": "clash"
+  },
+  {
+    "timestamp": 1790642401791,
+    "amount": 15,
+    "platform": "clash"
+  },
+  {
+    "timestamp": 1790696108023,
+    "amount": 17,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790697905397,
+    "amount": 75,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790706318832,
+    "amount": 20,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790706481809,
+    "amount": 15,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790715025770,
+    "amount": 30,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790759231154,
+    "amount": 150,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1790796762796,
+    "amount": 7.5,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790796834813,
+    "amount": 7.5,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790796908127,
+    "amount": 5,
+    "platform": "betfury"
+  },
+  {
+    "timestamp": 1790933927582,
+    "amount": 50,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791059056299,
+    "amount": 17.7,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791073292622,
+    "amount": 5.33,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791110722535,
+    "amount": 71,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791110917688,
+    "amount": 23.86,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791123942690,
+    "amount": 12.59,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791403419300,
+    "amount": 45,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1791404665912,
+    "amount": 20,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1791496750604,
+    "amount": 150,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1791498863903,
+    "amount": 150,
+    "platform": "chicken"
+  },
+  {
+    "timestamp": 1791537844060,
+    "amount": 50,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791586881135,
+    "amount": 5,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791586891129,
+    "amount": 150,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1791668526093,
+    "amount": 50,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1791828028920,
+    "amount": 350,
+    "platform": "cs2skin"
+  },
+  {
+    "timestamp": 1791928681962,
+    "amount": 350,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1791997654414,
+    "amount": 23.5,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1792009974440,
+    "amount": 100,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1792275238067,
+    "amount": 50,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1792275243899,
+    "amount": 49,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792344893215,
+    "amount": 5.43,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792413352510,
+    "amount": 78.21,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792413485500,
+    "amount": 25,
+    "platform": "dicey"
+  },
+  {
+    "timestamp": 1792799659623,
+    "amount": 30,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792924022625,
+    "amount": 25,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792924081571,
+    "amount": 15.5,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792944742860,
+    "amount": 25,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792945731935,
+    "amount": 25,
+    "platform": "gamba"
+  },
+  {
+    "timestamp": 1792955381249,
+    "amount": 25,
+    "platform": "gamba"
+  }
+]

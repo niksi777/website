@@ -1,0 +1,150 @@
+{
+  "users": [
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 21,
+      "name": "gobby4",
+      "prize": 250,
+      "rank": 5,
+      "avatar_selected": "https://cdn.discordapp.com/avatars/327080410448265216/034e0794eeffea42a02ac334067d4aa9.png",
+      "roles": [],
+      "uuid": "zs567y7f5x",
+      "wagered": 1875.82
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 21,
+      "name": "Astonstendahli",
+      "prize": 125,
+      "rank": 5,
+      "avatar_selected": "https://cdn.discordapp.com/avatars/1300881573591384199/664b2ed0f49f48ce0be4bb0d0c5428d2.png",
+      "roles": [],
+      "uuid": "zuwqp41cqu",
+      "wagered": 1792.09
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 17,
+      "name": "Yourmomknowsme",
+      "prize": 55,
+      "rank": 4,
+      "avatar_selected": null,
+      "roles": [],
+      "uuid": "2f7hy645cj",
+      "wagered": 1288.23
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 21,
+      "name": "nfzon",
+      "prize": 30,
+      "rank": 5,
+      "avatar_selected": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+      "roles": [],
+      "uuid": "5eej709sdy",
+      "wagered": 1156.6
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 14,
+      "name": "Sisterleft69",
+      "prize": 17.5,
+      "rank": 3,
+      "avatar_selected": "https://lh3.googleusercontent.com/a/ACg8ocIJoIWXPdF7-wyYjs6Ufi6WblmQp7dNcTnGkKgSVdTYZdrSiQ=s96-c",
+      "roles": [],
+      "uuid": "ce2vzeayl7",
+      "wagered": 86.08
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 5,
+      "name": "steak0x",
+      "prize": 10,
+      "rank": 2,
+      "avatar_selected": null,
+      "roles": [],
+      "uuid": "icvr7frkkf",
+      "wagered": 64.35
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 7,
+      "name": "Speecy",
+      "prize": 7.5,
+      "rank": 2,
+      "avatar_selected": null,
+      "roles": [],
+      "uuid": "2u8nvjszcl",
+      "wagered": 51.8
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 6,
+      "name": "BigNig2000",
+      "prize": 5,
+      "rank": 2,
+      "avatar_selected": "https://avatars.steamstatic.com/0944a6cf8a82c82976541c59b0cb07744783cdc7_medium.jpg",
+      "roles": [],
+      "uuid": "mbap9mnpcv",
+      "wagered": 24.88
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 10,
+      "name": "Haruhito",
+      "prize": null,
+      "rank": 3,
+      "avatar_selected": "https://avatars.steamstatic.com/1e1c0a922d7f968cbe6773461e4a952ba385bd22_medium.jpg",
+      "roles": [],
+      "uuid": "v4pydj9291",
+      "wagered": 22.19
+    },
+    {
+      "exchanged": 0,
+      "xpBonus": 0,
+      "hidden": false,
+      "level": 1,
+      "name": "ARREBARRE",
+      "prize": null,
+      "rank": 1,
+      "avatar_selected": "https://avatars.steamstatic.com/c26330039e39358aca0496d6a3379828ad56237b_medium.jpg",
+      "roles": [],
+      "uuid": "nfme0p17e8",
+      "wagered": 0.25
+    }
+  ],
+  "meta": {
+    "active": false,
+    "dateStart": "2026-08-12T13:26:00.000Z",
+    "dateEnd": "2026-08-26T13:26:00.000Z",
+    "prizes": [
+      250,
+      125,
+      55,
+      30,
+      17.5,
+      10,
+      7.5,
+      5
+    ]
+  },
+  "lastUpdated": 1793016167321
+}
