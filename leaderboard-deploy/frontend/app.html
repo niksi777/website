@@ -63,7 +63,7 @@
 
     /* Carousel */
     .carousel-outer{overflow:hidden;margin:28px 0 0}
-    .carousel-wrap{position:relative;height:210px}
+    .carousel-wrap{position:relative;height:214px;perspective:1400px;perspective-origin:50% 50%}
     .c-track{display:flex;height:100%;gap:16px;transition:transform .52s cubic-bezier(.4,0,.2,1)}
     .c-slide{min-width:72%;height:100%;flex-shrink:0;position:relative;display:flex;align-items:center;padding:28px 40px;border-radius:12px;overflow:hidden;box-shadow:0 6px 32px rgba(0,0,0,.6)}
     .c-dots{display:flex;gap:6px;justify-content:center;padding:12px 0 20px}
@@ -1349,16 +1349,19 @@ function HeroCarousel() {
       ro.observe(wrapRef.current);
       return () => ro.disconnect();
     }, []);
-    const SW = Math.max(180, Math.round(wrapW * 0.60));
+    const SW = Math.max(160, Math.round(wrapW * 0.54));
     const GAP = 14;
     const CX = Math.round((wrapW - SW) / 2);
     function sty(i) {
       let d = ((i - slide) % total + total) % total;
       if (d > total / 2) d -= total;
       const a = Math.abs(d);
+      const tx = CX + d * (SW + GAP);
+      const ry = d === 0 ? 0 : d < 0 ? 14 : -14;
+      const sc = a === 0 ? 1 : 0.88;
       return {position:'absolute',top:0,left:0,width:SW,height:'100%',
-        transform:`translateX(${CX + d*(SW+GAP)}px) scale(${a===0?1:.86})`,
-        transformOrigin:d<0?'right center':d>0?'left center':'center center',
+        transform:`translateX(${tx}px) rotateY(${ry}deg) scale(${sc})`,
+        transformOrigin:'center center',
         transition:'transform .52s cubic-bezier(.4,0,.2,1)',zIndex:10-a,
         borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'28px 40px'};
     }
