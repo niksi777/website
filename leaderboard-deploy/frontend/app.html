@@ -1205,10 +1205,14 @@ function useSession() {
       localStorage.setItem('kick_session', sid);
       setSessionId(sid);
       fetch('/auth/me?session=' + sid)
-        .then(r => r.ok ? r.json() : null)
-        .then(d => {
-          if (d) { setUser(d); localStorage.setItem('kick_user', JSON.stringify(d)); }
-          else { localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); setUser(null); }
+        .then(async r => {
+          if (r.ok) return { ok:true, data: await r.json() };
+          if (r.status === 401) return { ok:false, clear:true };
+          return { ok:false, clear:false };
+        })
+        .then(({ ok, clear, data }) => {
+          if (ok) { setUser(data); localStorage.setItem('kick_user', JSON.stringify(data)); }
+          else if (clear) { localStorage.removeItem('kick_session'); localStorage.removeItem('kick_user'); setUser(null); }
         })
         .catch(() => {})
         .finally(() => setLoading(false));
