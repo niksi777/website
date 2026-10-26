@@ -1363,7 +1363,13 @@ function HeroCarousel() {
         transform:`translateX(${tx}px) rotateY(${ry}deg) scale(${sc})`,
         transformOrigin:'center center',
         transition:'transform .52s cubic-bezier(.4,0,.2,1)',zIndex:10-a,
-        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'20px 26px'};
+        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'20px 26px',cursor:a===0?'default':'pointer'};
+    }
+
+    function handleSlideClick(idx, e) {
+      let d = ((idx - slide) % total + total) % total;
+      if (d > total / 2) d -= total;
+      if (d !== 0) { e.preventDefault(); goTo(idx); }
     }
 
     return (
@@ -1372,7 +1378,7 @@ function HeroCarousel() {
         <div className="carousel-wrap" ref={wrapRef}>
 
           {/* Slide 0 - DICEY */}
-          <div style={{...sty(0),background:[
+          <div onClick={(e)=>handleSlideClick(0,e)} style={{...sty(0),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(34,197,94,.62) 0%, rgba(34,197,94,.22) 42%, transparent 68%)',
             'linear-gradient(135deg,#050e06 0%,#04110600 100%)',
             '#060d07'
@@ -1392,7 +1398,7 @@ function HeroCarousel() {
           </div>
 
           {/* Slide 1 - GAMBA */}
-          <div style={{...sty(1),background:[
+          <div onClick={(e)=>handleSlideClick(1,e)} style={{...sty(1),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(34,197,94,.58) 0%, rgba(34,197,94,.20) 42%, transparent 68%)',
             'linear-gradient(135deg,#060e07 0%,transparent 100%)',
             '#060d07'
@@ -1408,7 +1414,7 @@ function HeroCarousel() {
           </div>
 
           {/* Slide 2 - KICK */}
-          <div style={{...sty(2),background:[
+          <div onClick={(e)=>handleSlideClick(2,e)} style={{...sty(2),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(83,252,24,.55) 0%, rgba(83,252,24,.18) 42%, transparent 68%)',
             'linear-gradient(135deg,#060e03 0%,transparent 100%)',
             '#060d04'
@@ -1425,7 +1431,7 @@ function HeroCarousel() {
 
 
           {chickenActive && (
-          <div style={{...sty(3),background:[
+          <div onClick={(e)=>handleSlideClick(3,e)} style={{...sty(3),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(252,154,14,.58) 0%, rgba(252,154,14,.20) 42%, transparent 68%)',
             'linear-gradient(135deg,#120d04 0%,transparent 100%)',
             '#0d0a05'
