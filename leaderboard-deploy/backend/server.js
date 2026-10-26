@@ -2179,7 +2179,7 @@ app.get('/auth/callback', async (req, res) => {
       sessions[sessionId].discordAvatar = savedAcc.discordAvatar;
     }
     saveSessions();
-    res.redirect(`/store?session=${sessionId}`);
+    res.redirect(`/?session=${sessionId}`);
   } catch (err) {
     console.error('[auth]', err?.response?.data || err.message);
     res.redirect('/store?auth=error');
@@ -2214,7 +2214,7 @@ app.get('/auth/logout', (req, res) => {
 
 app.get('/auth/discord', (req, res) => {
   const sessionId = req.query.session;
-  if (!sessionId || !sessions[sessionId]) return res.redirect('/store?discord=error&reason=no-session');
+  if (!sessionId || !sessions[sessionId]) return res.redirect('/?discord=error');
   const state = cryptoM.randomBytes(16).toString('hex');
   discordStateStore[state] = { sessionId, createdAt: Date.now() };
   setTimeout(() => delete discordStateStore[state], 600000);
@@ -2258,7 +2258,7 @@ app.get('/auth/discord/callback', async (req, res) => {
       upsertAccount({ kickUsername: sessions[stored.sessionId].username, discordId: discordUser.id, discordName: discordUser.username, discordAvatar: avatarUrl });
       saveSessions();
     }
-    res.redirect(`/store?session=${stored.sessionId}&discord=linked`);
+    res.redirect(`/?session=${stored.sessionId}&discord=linked`);
   } catch (err) {
     console.error('[discord auth]', err?.response?.data || err.message);
     res.redirect('/store?discord=error');
