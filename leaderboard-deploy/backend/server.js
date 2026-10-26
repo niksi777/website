@@ -1397,8 +1397,13 @@ app.delete('/admin/timed-commands/:id', (req, res) => {
   res.json({ ok: true });
 });
 
-// SPA catch-all: send app.html for all unknown GET routes so F5 works on /rewards etc.
+// SPA catch-all: serve app.html for known SPA routes; for everything else try <path>.html first
+const SPA_ROUTES = new Set(['/', '/leaderboards', '/store', '/cases', '/rewards', '/settings', '/admin', '/predictions']);
 app.get('*', (req, res) => {
+  if (!SPA_ROUTES.has(req.path)) {
+    const htmlFile = path.join(__dirname, '../frontend', req.path + '.html');
+    if (require('fs').existsSync(htmlFile)) return res.sendFile(htmlFile);
+  }
   res.sendFile(path.join(__dirname, '../frontend/app.html'));
 });
 
