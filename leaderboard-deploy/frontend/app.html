@@ -1427,7 +1427,6 @@ function HeroCarousel() {
         </div>
 
         </div>
-        </div>
         <div className="c-dots">
           {Array.from({length:total},(_,i) => (
             <button key={i} className={`c-dot${slide===i?' on':''}`} onClick={()=>goTo(i)} aria-label={`Slide ${i+1}`}/>
