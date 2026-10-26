@@ -66,7 +66,7 @@
     .carousel-wrap{position:relative;height:206px;perspective:1400px;perspective-origin:50% 50%}
     .c-track{display:flex;height:100%;gap:16px;transition:transform .52s cubic-bezier(.4,0,.2,1)}
     .c-slide{min-width:72%;height:100%;flex-shrink:0;position:relative;display:flex;align-items:center;padding:28px 40px;border-radius:12px;overflow:hidden;box-shadow:0 6px 32px rgba(0,0,0,.6)}
-    .c-dots{display:flex;gap:8px;justify-content:center;padding:14px 0 22px}
+    .c-dots{display:flex;gap:12px;justify-content:center;align-items:center;padding:14px 0 22px}    .c-arrow{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.55);cursor:pointer;border-radius:6px;width:32px;height:28px;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;flex-shrink:0}    .c-arrow:hover{border-color:rgba(255,255,255,.5);color:#fff}
     .c-dot{border:none;cursor:pointer;border-radius:4px;height:6px;width:72px;padding:0;background:rgba(255,255,255,.18);background-image:linear-gradient(to right,rgba(255,255,255,.82),rgba(255,255,255,.82));background-repeat:no-repeat;background-size:0% 100%;background-position:left center;transition:background-color .3s}
     .c-dot.on{background-color:rgba(255,255,255,.18);animation:dot-fill 5.5s linear forwards}
     @keyframes dot-fill{from{background-size:0% 100%}to{background-size:100% 100%}}
@@ -1449,9 +1449,13 @@ function HeroCarousel() {
 
         </div>
         <div className="c-dots">
-          {Array.from({length:total},(_,i) => (
-            <button key={i} className={`c-dot${slide===i?' on':''}`} onClick={()=>goTo(i)} aria-label={`Slide ${i+1}`}/>
-          ))}
+          <button className="c-arrow" onClick={()=>goTo((slide-1+total)%total)} aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div className="c-dot on" style={{width:48,animationDuration:'5.5s',flexShrink:0}}/>
+          <button className="c-arrow" onClick={()=>goTo((slide+1)%total)} aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
         </div>
         </div>
       </div>
