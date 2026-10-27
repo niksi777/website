@@ -1398,14 +1398,13 @@ app.delete('/admin/timed-commands/:id', (req, res) => {
 });
 
 // Broadcaster re-auth for moderation (ban) - visit /broadcaster-auth as niksi777 once
-const broadcasterPkce = {};
 const BROADCASTER_TOKENS_PATH = require('path').join(__dirname, '../../broadcaster-tokens.json');
 app.get('/broadcaster-auth', (req, res) => {
   const codeVerifier = cryptoM.randomBytes(64).toString('base64url');
   const codeChallenge = cryptoM.createHash('sha256').update(codeVerifier).digest('base64url');
-  const state = 'bcast_' + cryptoM.randomBytes(16).toString('hex');
-  broadcasterPkce[state] = { codeVerifier, createdAt: Date.now() };
-  setTimeout(() => delete broadcasterPkce[state], 600000);
+  const state = cryptoM.randomBytes(16).toString('hex');
+  pkceStore[state] = { codeVerifier, createdAt: Date.now() };
+  setTimeout(() => delete pkceStore[state], 600000);
   res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread%20channel%3Aban&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
 });
 
