@@ -107,6 +107,25 @@ async function sendMessage(text) {
 }
 
 // â”€â”€â”€ PERMISSIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Auto-ban phrases (exact match, case-insensitive)
+const AUTOBAN_PHRASES = [
+  'wsup boss, hope your day is full of wins because you deserve them',
+];
+
+async function banUser(userId, username) {
+  try {
+    await axios.post(
+      `https://kick.com/api/v2/channels/${KICK_CHANNEL_ID}/bans`,
+      { banned_user_id: userId, permanent: true },
+      { headers: { Authorization: `Bearer ${BOT_TOKEN}`, 'Content-Type': 'application/json', Accept: 'application/json' } }
+    );
+    console.log(`[autoban] Banned bot: ${username} (${userId})`);
+    sendMessage(`@${username} has been automatically banned (bot spam).`).catch(() => {});
+  } catch (e) {
+    console.error('[autoban] Ban failed for', username, e?.response?.data || e.message);
+  }
+}
+
 // Internal announce endpoint - server.js calls this to send chat messages
 const http = require('http');
 const announceServer = http.createServer((req, res) => {
@@ -348,6 +367,14 @@ async function pollChatMessages(chatroomId) {
 
         const badges = msg.sender?.identity?.badges || msg.sender?.badges || [];
         const isBadgeMod = badges.some(b => b.type === 'moderator' || b.type === 'broadcaster');
+
+        // Auto-ban bot phrases
+        const lcContent = content.toLowerCase().trim();
+        if (AUTOBAN_PHRASES.some(p => lcContent.includes(p))) {
+          const userId = msg.sender?.id;
+          if (userId) banUser(userId, username);
+          continue;
+        }
 
         if (content.startsWith('!')) console.log('[cmd]', username, content.slice(0, 60));
 
