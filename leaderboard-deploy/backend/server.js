@@ -1397,6 +1397,18 @@ app.delete('/admin/timed-commands/:id', (req, res) => {
   res.json({ ok: true });
 });
 
+// Broadcaster re-auth for moderation (ban) - visit /broadcaster-auth as niksi777 once
+const broadcasterPkce = {};
+const BROADCASTER_TOKENS_PATH = require('path').join(__dirname, '../../broadcaster-tokens.json');
+app.get('/broadcaster-auth', (req, res) => {
+  const codeVerifier = cryptoM.randomBytes(64).toString('base64url');
+  const codeChallenge = cryptoM.createHash('sha256').update(codeVerifier).digest('base64url');
+  const state = 'bcast_' + cryptoM.randomBytes(16).toString('hex');
+  broadcasterPkce[state] = { codeVerifier, createdAt: Date.now() };
+  setTimeout(() => delete broadcasterPkce[state], 600000);
+  res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread%20channel%3Aban&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
+});
+
 // SPA catch-all: serve app.html for known SPA routes; for everything else try <path>.html first
 const SPA_ROUTES = new Set(['/', '/leaderboards', '/store', '/cases', '/rewards', '/settings', '/admin', '/predictions']);
 app.get('*', (req, res) => {
@@ -2184,6 +2196,17 @@ app.get('/auth/callback', async (req, res) => {
       sessions[sessionId].discordAvatar = savedAcc.discordAvatar;
     }
     saveSessions();
+    // If this is the broadcaster doing a mod-auth, save their token for the bot
+    if (user.name.toLowerCase() === 'niksi777' && tokenData.access_token) {
+      try {
+        require('fs').writeFileSync(BROADCASTER_TOKENS_PATH, JSON.stringify({
+          access_token: tokenData.access_token,
+          refresh_token: tokenData.refresh_token,
+          saved_at: Date.now()
+        }, null, 2));
+        console.log('[broadcaster-auth] Broadcaster token saved for moderation.');
+      } catch(e) { console.error('[broadcaster-auth] Failed to save token:', e.message); }
+    }
     res.redirect(`/?session=${sessionId}`);
   } catch (err) {
     console.error('[auth]', err?.response?.data || err.message);

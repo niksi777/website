@@ -112,17 +112,34 @@ const AUTOBAN_PHRASES = [
   'wsup boss, hope your day is full of wins because you deserve them',
 ];
 
+const BROADCASTER_TOKENS_PATH = path.join(__dirname, 'broadcaster-tokens.json');
+function getBroadcasterToken() {
+  try { return JSON.parse(fs.readFileSync(BROADCASTER_TOKENS_PATH, 'utf8')).access_token || null; }
+  catch { return null; }
+}
 async function banUser(userId, username) {
+  const token = getBroadcasterToken() || BOT_TOKEN;
   try {
     await axios.post(
       `https://kick.com/api/v2/channels/${KICK_CHANNEL_ID}/bans`,
-      { banned_user_id: userId, permanent: true },
-      { headers: { Authorization: `Bearer ${BOT_TOKEN}`, 'Content-Type': 'application/json', Accept: 'application/json' } }
+      { banned_user_id: userId, permanent: true, reason: 'Automated bot spam ban' },
+      { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json' } }
     );
     console.log(`[autoban] Banned bot: ${username} (${userId})`);
     sendMessage(`@${username} has been automatically banned (bot spam).`).catch(() => {});
   } catch (e) {
     console.error('[autoban] Ban failed for', username, e?.response?.data || e.message);
+    // Try with bot token as fallback if broadcaster token failed
+    if (token !== BOT_TOKEN) {
+      try {
+        await axios.post(
+          `https://kick.com/api/v2/channels/${KICK_CHANNEL_ID}/bans`,
+          { banned_user_id: userId, permanent: true },
+          { headers: { Authorization: `Bearer ${BOT_TOKEN}`, 'Content-Type': 'application/json', Accept: 'application/json' } }
+        );
+        console.log(`[autoban] Banned (fallback) ${username}`);
+      } catch(e2) { console.error('[autoban] Fallback also failed:', e2?.response?.data || e2.message); }
+    }
   }
 }
 
