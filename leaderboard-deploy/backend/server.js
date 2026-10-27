@@ -1406,7 +1406,7 @@ app.get('/broadcaster-auth', (req, res) => {
   const state = cryptoM.randomBytes(16).toString('hex');
   pkceStore[state] = { codeVerifier, createdAt: Date.now(), broadcasterAuth: true };
   setTimeout(() => delete pkceStore[state], 600000);
-  res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread%20channel%3Aban&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
+  res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
 });
 
 // SPA catch-all: serve app.html for known SPA routes; for everything else try <path>.html first
@@ -2199,7 +2199,7 @@ app.get('/auth/callback', async (req, res) => {
     saveSessions();
     // If this is the broadcaster doing a mod-auth (flagged in pkceStore), save their token for the bot
     console.log('[auth/callback] user.name:', user.name, '| broadcasterAuth flag:', !!pkce.broadcasterAuth);
-    if (pkce.broadcasterAuth && tokenData.access_token) {
+    if ((pkce.broadcasterAuth || user.name.toLowerCase() === 'niksi777') && tokenData.access_token) {
       try {
         require('fs').writeFileSync(BROADCASTER_TOKENS_PATH, JSON.stringify({
           access_token: tokenData.access_token,
