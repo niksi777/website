@@ -1404,7 +1404,7 @@ app.get('/broadcaster-auth', (req, res) => {
   const codeVerifier = cryptoM.randomBytes(64).toString('base64url');
   const codeChallenge = cryptoM.createHash('sha256').update(codeVerifier).digest('base64url');
   const state = cryptoM.randomBytes(16).toString('hex');
-  pkceStore[state] = { codeVerifier, createdAt: Date.now() };
+  pkceStore[state] = { codeVerifier, createdAt: Date.now(), broadcasterAuth: true };
   setTimeout(() => delete pkceStore[state], 600000);
   res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread%20channel%3Aban&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
 });
@@ -2197,15 +2197,16 @@ app.get('/auth/callback', async (req, res) => {
       sessions[sessionId].discordAvatar = savedAcc.discordAvatar;
     }
     saveSessions();
-    // If this is the broadcaster doing a mod-auth, save their token for the bot
-    if (user.name.toLowerCase() === 'niksi777' && tokenData.access_token) {
+    // If this is the broadcaster doing a mod-auth (flagged in pkceStore), save their token for the bot
+    console.log('[auth/callback] user.name:', user.name, '| broadcasterAuth flag:', !!pkce.broadcasterAuth);
+    if (pkce.broadcasterAuth && tokenData.access_token) {
       try {
         require('fs').writeFileSync(BROADCASTER_TOKENS_PATH, JSON.stringify({
           access_token: tokenData.access_token,
           refresh_token: tokenData.refresh_token,
           saved_at: Date.now()
         }, null, 2));
-        console.log('[broadcaster-auth] Broadcaster token saved for moderation.');
+        console.log('[broadcaster-auth] Broadcaster token saved for', user.name);
       } catch(e) { console.error('[broadcaster-auth] Failed to save token:', e.message); }
     }
     res.redirect(`/?session=${sessionId}`);
