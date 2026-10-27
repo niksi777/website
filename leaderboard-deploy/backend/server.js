@@ -1400,6 +1400,7 @@ app.delete('/admin/timed-commands/:id', (req, res) => {
 // Broadcaster re-auth for moderation (ban) - visit /broadcaster-auth as niksi777 once
 const BROADCASTER_TOKENS_PATH = require('path').join(__dirname, '../../broadcaster-tokens.json');
 app.get('/broadcaster-auth', (req, res) => {
+  console.log('[broadcaster-auth] Initiating broadcaster OAuth');
   const codeVerifier = cryptoM.randomBytes(64).toString('base64url');
   const codeChallenge = cryptoM.createHash('sha256').update(codeVerifier).digest('base64url');
   const state = cryptoM.randomBytes(16).toString('hex');
@@ -2169,8 +2170,9 @@ app.get('/auth/login', (req, res) => {
 });
 app.get('/auth/callback', async (req, res) => {
   const { code, state } = req.query;
+  console.log('[auth/callback] hit - code:', !!code, 'state:', state, 'pkceStore keys:', Object.keys(pkceStore).length);
   const pkce = pkceStore[state];
-  if (!pkce) return res.redirect('/store?auth=error');
+  if (!pkce) { console.log('[auth/callback] No pkce for state:', state); return res.redirect('/store?auth=error'); }
   delete pkceStore[state];
   try {
     const axiosA = require('axios');
