@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>niksi777 x Gamba banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:transparent;overflow:hidden}
+@keyframes nkBorder{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes nkBreath{0%,100%{opacity:.55;transform:translateX(-50%) scale(1)}50%{opacity:.8;transform:translateX(-50%) scale(1.06)}}
+@keyframes nkBokeh{0%,100%{transform:translate(0,0);opacity:.15}50%{transform:translate(30px,-24px);opacity:.55}}
+@keyframes nkSymIn{0%{opacity:0;transform:scale(.4)}100%{opacity:.22;transform:scale(1)}}
+@keyframes nkSymFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes nkUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes nkFade{0%{opacity:0}100%{opacity:1}}
+@keyframes nkScale{0%{opacity:0;transform:scale(.92)}100%{opacity:1;transform:scale(1)}}
+@keyframes nkFromL{0%{opacity:0;transform:translateX(-40px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes nkFromR{0%{opacity:0;transform:translateX(40px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes nkLetter{0%{opacity:0;transform:translateY(-24px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes nkPulse{0%,100%{box-shadow:0 0 0 0 rgba(61,142,255,.4)}50%{box-shadow:0 0 0 12px rgba(61,142,255,0)}}
+@keyframes nkShine{0%{background-position:150% 0}55%,100%{background-position:-50% 0}}
+@keyframes nkZoomOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.18)}}
+@keyframes nkZoomIn{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
+.frame{width:1110px;height:270px;box-sizing:border-box;padding:4px;border-radius:16px;background:linear-gradient(90deg,#3d8eff,#a9cbff,#3d8eff,#a9cbff,#3d8eff);background-size:200% 100%;animation:nkBorder 8s linear infinite}
+.inner{width:100%;height:100%;position:relative;overflow:hidden;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 0 24px rgba(61,142,255,.25);background:linear-gradient(180deg,#0b1226 0%,#070b18 100%);font-family:Inter,sans-serif;color:#fff}
+.bg{position:absolute;inset:0;overflow:hidden}
+.spot{position:absolute;left:50%;bottom:-260px;width:900px;height:420px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(61,142,255,.28) 0%,rgba(61,142,255,.08) 45%,transparent 70%);animation:nkBreath 7s ease-in-out infinite}
+.bokeh{position:absolute;border-radius:50%;background:#c9d6ea;filter:blur(2px);animation:nkBokeh ease-in-out infinite}
+.sym{position:absolute;animation:nkSymIn .9s cubic-bezier(.22,1,.36,1) both}
+.sym img{display:block;width:100%;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55));animation:nkSymFloat 5s ease-in-out infinite}
+.scene{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.scene.on{display:flex}
+.out{animation:nkZoomOut .5s cubic-bezier(.55,0,.75,.25) both}
+.in{animation:nkZoomIn .85s cubic-bezier(.16,1,.3,1) .6s both}
+.up{animation:nkUp .9s cubic-bezier(.22,1,.36,1) both}
+.fade{animation:nkFade 1s ease-out both}
+.scale{animation:nkScale 1s cubic-bezier(.22,1,.36,1) both}
+.froml{animation:nkFromL 1s cubic-bezier(.22,1,.36,1) both}
+.fromr{animation:nkFromR 1s cubic-bezier(.22,1,.36,1) both}
+.letter{display:inline-block;animation:nkLetter .8s cubic-bezier(.22,1,.36,1) both}
+.cta{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border-radius:8px;background:#3d8eff;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;line-height:1;letter-spacing:.1em;text-transform:uppercase;animation:nkScale 1s cubic-bezier(.22,1,.36,1) .45s both,nkPulse 2s ease-out 1.4s infinite}
+.shine{background:linear-gradient(100deg,#fff 0%,#fff 44%,#cfe0ff 50%,#fff 56%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:nkShine 4s ease-in-out 1s infinite}
+.hl{display:inline-block;line-height:.92;background:linear-gradient(180deg,#ffffff 20%,#cfe0ff 55%,#7fb2ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(61,142,255,.45))}
+.label{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:38px;line-height:1;letter-spacing:.16em;color:#d8e8ff;text-transform:uppercase;padding-left:.16em;text-shadow:0 2px 12px rgba(4,6,15,.9)}
+.head{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:108px;line-height:.92;letter-spacing:.02em;color:#fff;text-transform:uppercase}
+.num{position:relative;display:inline-block;font-variant-numeric:tabular-nums}
+.num .ghost{visibility:hidden}
+.num .hl{position:absolute;right:0;top:0}
+</style>
+</head>
+<body>
+<div class="frame">
+<div class="inner">
+<div class="bg" aria-hidden="true">
+<div class="spot"></div>
+<span class="bokeh" style="left:80px;top:60px;width:10px;height:10px;animation-duration:11s"></span>
+<span class="bokeh" style="left:190px;top:200px;width:5px;height:5px;animation-duration:10s;animation-delay:-7s"></span>
+<span class="bokeh" style="left:260px;top:130px;width:6px;height:6px;animation-duration:9s;animation-delay:-3s"></span>
+<span class="bokeh" style="left:420px;top:30px;width:8px;height:8px;animation-duration:13s;animation-delay:-6s"></span>
+<span class="bokeh" style="left:560px;top:215px;width:6px;height:6px;animation-duration:12s;animation-delay:-4s"></span>
+<span class="bokeh" style="left:690px;top:25px;width:7px;height:7px;animation-duration:10s;animation-delay:-2s"></span>
+<span class="bokeh" style="left:880px;top:70px;width:9px;height:9px;animation-duration:12s;animation-delay:-8s"></span>
+<span class="bokeh" style="left:960px;top:205px;width:5px;height:5px;animation-duration:11s;animation-delay:-1s"></span>
+<span class="bokeh" style="left:1030px;top:130px;width:6px;height:6px;animation-duration:9.5s;animation-delay:-5s"></span>
+<div class="sym" style="left:30px;top:40px;width:64px"><div style="transform:rotate(-10deg)"><img src="/assets/stormforged.png" alt="" style="animation-delay:-1s"></div></div>
+<div class="sym" style="left:70px;top:150px;width:76px"><div style="transform:rotate(6deg)"><img src="/assets/pug.png" alt="" style="animation-delay:-3s"></div></div>
+<div class="sym" style="left:1000px;top:36px;width:72px"><div style="transform:rotate(8deg)"><img src="/assets/scatterdoghouse.png" alt="" style="animation-delay:-4s"></div></div>
+<div class="sym" style="left:960px;top:156px;width:72px"><div style="transform:rotate(-6deg)"><img src="/assets/rainbow.png" alt="" style="animation-delay:-1.5s"></div></div>
+<div class="sym" style="left:240px;top:162px;width:58px"><div style="transform:rotate(-8deg)"><img src="/assets/duck.png" alt="" style="animation-delay:-2s"></div></div>
+<div class="sym" style="left:250px;top:40px;width:56px"><div style="transform:rotate(9deg)"><img src="/assets/bonus.png" alt="" style="animation-delay:-3.5s"></div></div>
+<div class="sym" style="left:860px;top:44px;width:52px"><div style="transform:rotate(-12deg)"><img src="/assets/bottle.png" alt="" style="animation-delay:-.5s"></div></div>
+<div class="sym" style="left:830px;top:166px;width:58px"><div style="transform:rotate(5deg)"><img src="/assets/egg.png" alt="" style="animation-delay:-4.5s"></div></div>
+<div class="sym" style="left:160px;top:96px;width:46px"><div style="transform:rotate(10deg)"><img src="/assets/scatterthecount.png" alt="" style="animation-delay:-2.5s"></div></div>
+<div style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent)"></div>
+<div style="position:absolute;inset:0;box-shadow:inset 0 0 60px rgba(0,0,0,.55)"></div>
+</div>
+
+<div class="scene on" style="gap:24px">
+<div style="display:flex;align-items:center;justify-content:center;gap:36px">
+<img class="froml" src="/assets/niksi-360.png" alt="niksi777" style="display:block;width:108px;height:108px;border-radius:50%">
+<span class="fade" style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:44px;line-height:1;color:#9fb3d1;animation-delay:.4s">X</span>
+<img class="fromr" src="/assets/gamba2.png" alt="Gamba" style="display:block;height:80px">
+</div>
+<p class="label up" style="animation-delay:.6s">Exclusive rewards on Gamba</p>
+</div>
+
+<div class="scene" style="gap:14px">
+<p class="label up">Sign up with code</p>
+<h2 class="head" style="font-size:120px;letter-spacing:18px;padding-left:18px"><span class="letter" style="animation-delay:.15s"><span class="hl">N</span></span><span class="letter" style="animation-delay:.23s"><span class="hl">I</span></span><span class="letter" style="animation-delay:.31s"><span class="hl">K</span></span><span class="letter" style="animation-delay:.39s"><span class="hl">S</span></span><span class="letter" style="animation-delay:.47s"><span class="hl">I</span></span></h2>
+</div>
+
+<div class="scene" style="gap:12px">
+<h2 class="head scale"><span class="hl">Double</span> <span class="hl">Weekly</span></h2>
+<p class="label up" style="animation-delay:.2s">(100% match up to $100)</p>
+</div>
+
+<div class="scene" style="gap:12px">
+<h2 class="head scale"><span class="num"><span class="ghost">10%</span><span class="hl" data-count="10" data-fmt="{n}%">10%</span></span> <span class="hl">Lossback</span></h2>
+<p class="label up" style="animation-delay:.2s">(Every Friday up to $100)</p>
+</div>
+
+<div class="scene" style="gap:12px">
+<p class="label up">Bi-Weekly</p>
+<h2 class="head scale" style="font-size:96px;white-space:nowrap;animation-delay:.1s"><span class="num"><span class="ghost">$1.000</span><span class="hl" data-count="1000" data-fmt="${n}">$1.000</span></span> <span class="hl">Leaderboard</span></h2>
+</div>
+
+<div class="scene" style="gap:22px">
+<h2 class="head scale"><span class="shine">niksi777.com</span></h2>
+<span class="cta">Type !gamba in chat to sign up</span>
+</div>
+</div>
+</div>
+<script>
+// Optional ?s=6 sets seconds per screen
+const SECONDS = parseFloat(new URLSearchParams(location.search).get('s')) || 4;
+const scenes = [...document.querySelectorAll('.scene')];
+let cur = 0;
+
+function fmt(n) {
+  return n.toLocaleString('da-DK');
+}
+
+function runCounter(scene) {
+  const el = scene.querySelector('[data-count]');
+  if (!el) return;
+  const target = Number(el.dataset.count);
+  const tpl = el.dataset.fmt;
+  const steps = 40;
+  let n = 0;
+  el.textContent = tpl.replace('{n}', fmt(0));
+  setTimeout(() => {
+    const iv = setInterval(() => {
+      n++;
+      const eased = 1 - Math.pow(1 - n / steps, 3);
+      el.textContent = tpl.replace('{n}', fmt(Math.round(target * eased)));
+      if (n >= steps) clearInterval(iv);
+    }, 30);
+  }, 500);
+}
+
+function next() {
+  const prev = scenes[cur];
+  cur = (cur + 1) % scenes.length;
+  const now = scenes[cur];
+  prev.classList.add('out');
+  now.classList.add('on', 'in');
+  runCounter(now);
+  setTimeout(() => {
+    prev.classList.remove('on', 'out');
+    now.classList.remove('in');
+    setTimeout(next, SECONDS * 1000);
+  }, 1500);
+}
+
+setTimeout(next, SECONDS * 1000);
+</script>
+</body>
+</html>
