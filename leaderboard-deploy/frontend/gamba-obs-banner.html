@@ -9,8 +9,8 @@
 html,body{margin:0;padding:0;background:transparent;overflow:hidden}
 @keyframes nkBorder{0%{background-position:0% 50%}100%{background-position:200% 50%}}
 @keyframes nkBreath{0%,100%{opacity:.55;transform:translateX(-50%) scale(1)}50%{opacity:.8;transform:translateX(-50%) scale(1.06)}}
-@keyframes nkBokeh{0%,100%{transform:translate(0,0);opacity:.15}50%{transform:translate(30px,-24px);opacity:.55}}
-@keyframes nkSymIn{0%{opacity:0;transform:scale(.4)}100%{opacity:.22;transform:scale(1)}}
+@keyframes nkBokeh{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(30px,-24px);opacity:.85}}
+@keyframes nkSymIn{0%{opacity:0;transform:scale(.4)}100%{opacity:.42;transform:scale(1)}}
 @keyframes nkSymFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes nkUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes nkFade{0%{opacity:0}100%{opacity:1}}
@@ -22,10 +22,10 @@ html,body{margin:0;padding:0;background:transparent;overflow:hidden}
 @keyframes nkShine{0%{background-position:150% 0}55%,100%{background-position:-50% 0}}
 @keyframes nkZoomOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.18)}}
 @keyframes nkZoomIn{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
-.frame{width:1110px;height:270px;box-sizing:border-box;padding:4px;border-radius:16px;background:linear-gradient(90deg,#3d8eff,#a9cbff,#3d8eff,#a9cbff,#3d8eff);background-size:200% 100%;animation:nkBorder 8s linear infinite}
-.inner{width:100%;height:100%;position:relative;overflow:hidden;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 0 24px rgba(61,142,255,.25);background:linear-gradient(180deg,#0b1226 0%,#070b18 100%);font-family:Inter,sans-serif;color:#fff}
+.frame{width:1110px;height:270px;box-sizing:border-box;padding:4px;border-radius:30px;background:linear-gradient(90deg,#3d8eff,#a9cbff,#3d8eff,#a9cbff,#3d8eff);background-size:200% 100%;animation:nkBorder 8s linear infinite}
+.inner{width:100%;height:100%;position:relative;overflow:hidden;border-radius:26px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 0 24px rgba(61,142,255,.25);background:linear-gradient(180deg,#0b1226 0%,#070b18 100%);font-family:Inter,sans-serif;color:#fff}
 .bg{position:absolute;inset:0;overflow:hidden}
-.spot{position:absolute;left:50%;bottom:-260px;width:900px;height:420px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(61,142,255,.28) 0%,rgba(61,142,255,.08) 45%,transparent 70%);animation:nkBreath 7s ease-in-out infinite}
+.spot{position:absolute;left:50%;bottom:-260px;width:900px;height:420px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(61,142,255,.42) 0%,rgba(61,142,255,.14) 45%,transparent 70%);animation:nkBreath 7s ease-in-out infinite}
 .bokeh{position:absolute;border-radius:50%;background:#c9d6ea;filter:blur(2px);animation:nkBokeh ease-in-out infinite}
 .sym{position:absolute;animation:nkSymIn .9s cubic-bezier(.22,1,.36,1) both}
 .sym img{display:block;width:100%;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55));animation:nkSymFloat 5s ease-in-out infinite}
