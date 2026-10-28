@@ -88,6 +88,7 @@ canvas#sparks{position:fixed;inset:0;width:1920px;height:1080px;pointer-events:n
 .perk .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;line-height:1;letter-spacing:.02em;text-transform:uppercase}
 .perk .s{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:#a9c4ea}
 
+.chat-slot{flex:1;width:100%;border-radius:18px;border:1px dashed rgba(169,203,255,.22);background:rgba(7,12,31,.25)}
 .site{margin-top:auto;display:flex;align-items:center;gap:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;letter-spacing:.12em;text-transform:uppercase;color:#d8e8ff;padding-bottom:6px}
 .site .dot{width:9px;height:9px;border-radius:50%;background:#3d8eff;animation:livePulse 2s ease-out infinite}
 
@@ -104,12 +105,6 @@ canvas#sparks{position:fixed;inset:0;width:1920px;height:1080px;pointer-events:n
 <div class="glow" style="clip-path:path(evenodd,'M0 0H1920V1080H0Z M24 58H1478A18 18 0 0 1 1496 76V902A18 18 0 0 1 1478 920H24A18 18 0 0 1 6 902V76A18 18 0 0 1 24 58Z')"></div>
 <canvas id="sparks" width="1920" height="1080"></canvas>
 
-<div class="sym" style="left:1534px;top:170px;width:56px"><div style="transform:rotate(-10deg)"><img src="/assets/stormforged.png" alt="" style="animation-delay:-1s"></div></div>
-<div class="sym" style="left:1830px;top:160px;width:60px"><div style="transform:rotate(8deg)"><img src="/assets/scatterdoghouse.png" alt="" style="animation-delay:-3s"></div></div>
-<div class="sym" style="left:1528px;top:880px;width:58px"><div style="transform:rotate(6deg)"><img src="/assets/pug.png" alt="" style="animation-delay:-2s"></div></div>
-<div class="sym" style="left:1832px;top:900px;width:52px"><div style="transform:rotate(-8deg)"><img src="/assets/rainbow.png" alt="" style="animation-delay:-4s"></div></div>
-<div class="sym" style="left:1534px;top:40px;width:44px"><div style="transform:rotate(10deg)"><img src="/assets/bonus.png" alt="" style="animation-delay:-2.5s"></div></div>
-<div class="sym" style="left:1840px;top:44px;width:42px"><div style="transform:rotate(-12deg)"><img src="/assets/scatterthecount.png" alt="" style="animation-delay:-.5s"></div></div>
 
 <div class="screen-frame"></div>
 <div class="slot"></div>
@@ -127,13 +122,6 @@ canvas#sparks{position:fixed;inset:0;width:1920px;height:1080px;pointer-events:n
 </div>
 
 <div class="side">
-  <div class="brand">
-    <img src="/assets/niksi.png?v=2" alt="niksi777"/>
-    <h1><span class="shine">NIKSI777</span></h1>
-  </div>
-
-  <div class="divider"></div>
-
   <div class="code">
     <img class="gamba" src="/assets/gamba2.png" alt="Gamba"/>
     <span class="label">Sign up with code</span>
@@ -146,7 +134,7 @@ canvas#sparks{position:fixed;inset:0;width:1920px;height:1080px;pointer-events:n
     <div class="perk"><span class="t"><span class="hl">$1.000 Leaderboard</span></span><span class="s">Bi-weekly</span></div>
   </div>
 
-  <div class="site"><span class="dot"></span>niksi777.com</div>
+  <div class="chat-slot"></div>
 </div>
 
 <script>
