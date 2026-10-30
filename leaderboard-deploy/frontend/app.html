@@ -2091,7 +2091,7 @@ function DiceyLeaderboard() {
   const [players, setPlayers] = React.useState(null);
   const [meta, setMeta] = React.useState(null);
   React.useEffect(() => {
-    fetch('/dicey-leaderboard?limit=7').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
+    fetch('/dicey-leaderboard?limit=10').then(r => r.json()).then(d => setPlayers(d.leaderboard || [])).catch(() => setPlayers([]));
     fetch('/dicey-meta').then(r => r.json()).then(setMeta).catch(() => setMeta({}));
   }, []);
   const [showInfo, setShowInfo] = React.useState(false);
