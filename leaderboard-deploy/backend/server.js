@@ -1409,20 +1409,7 @@ app.get('/broadcaster-auth', (req, res) => {
   res.redirect(`https://id.kick.com/oauth/authorize?response_type=code&client_id=${KICK_CLIENT_ID_AUTH}&redirect_uri=${encodeURIComponent(AUTH_REDIRECT)}&scope=user%3Aread&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}`);
 });
 
-// SPA catch-all: serve app.html for known SPA routes; for everything else try <path>.html first
-const SPA_ROUTES = new Set(['/', '/leaderboards', '/store', '/cases', '/rewards', '/settings', '/admin', '/predictions']);
-app.get('*', (req, res) => {
-  if (!SPA_ROUTES.has(req.path)) {
-    const htmlFile = path.join(__dirname, '../frontend', req.path + '.html');
-    if (require('fs').existsSync(htmlFile)) return res.sendFile(htmlFile);
-  }
-  res.sendFile(path.join(__dirname, '../frontend/app.html'));
-});
 
-// Start server
-app.listen(4000, () => {
-  console.log("Backend running on http://127.0.0.1:4000");
-});
 
 // ─── GIVEAWAY ROUTES ────────────────────────────────────────────────────────
 let giveawayState = { giveaway: null, entries: [] };
@@ -2293,4 +2280,19 @@ app.get('/auth/discord/callback', async (req, res) => {
     console.error('[discord auth]', err?.response?.data || err.message);
     res.redirect('/store?discord=error');
   }
+});
+
+// SPA catch-all: serve app.html for known SPA routes; for everything else try <path>.html first
+const SPA_ROUTES = new Set(['/', '/leaderboards', '/store', '/cases', '/rewards', '/settings', '/admin', '/predictions']);
+app.get('*', (req, res) => {
+  if (!SPA_ROUTES.has(req.path)) {
+    const htmlFile = path.join(__dirname, '../frontend', req.path + '.html');
+    if (require('fs').existsSync(htmlFile)) return res.sendFile(htmlFile);
+  }
+  res.sendFile(path.join(__dirname, '../frontend/app.html'));
+});
+
+// Start server
+app.listen(4000, () => {
+  console.log("Backend running on http://127.0.0.1:4000");
 });
