@@ -97,39 +97,18 @@ async function updateLeaderboard() {
   try {
     const raceId = 26731;
 
-    const gql = JSON.stringify({
-      query: `query { getRaceById(raceId: ${raceId}) { id prize_pool start_date end_date race_name competitors { id display_name total_wagered position avatar vip_level_name } prize_distribution { position percentage amount } } }`
+    const response = await fetch(`https://gamba.com/promotions/exclusive-leaderboards/${raceId}.json`, {
+      headers: { "Accept": "application/json" },
     });
+    console.log("GAMBA STATUS:", response.status);
+    if (!response.ok) return;
+    const json = await response.json();
 
-    const response = await fetch("https://gamba.com/_api/@", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0",
-        "Referer": `https://gamba.com/promotions/exclusive-leaderboards/${raceId}`,
-        "Origin": "https://gamba.com",
-      },
-      body: gql,
-    });
-
-const text = await response.text();
-
-console.log("GAMBA STATUS:", response.status);
-console.log("GAMBA RAW RESPONSE:", text);
-
-let json;
-try {
-  json = JSON.parse(text);
-} catch (err) {
-  console.log("Gamba returned non-JSON");
-  return;
-}
-
-    const race = json.data.getRaceById;
+    const race = json.race;
     gambaMeta.endDate = race.end_date ? race.end_date.replace(' ', 'T') + 'Z' : null;
     gambaMeta.prizePool = race.prize_pool || null;
-    const competitors = race.competitors;
-    const prizes = race.prize_distribution;
+    const competitors = json.leaderboard;
+    const prizes = race.prize_distribution || [];
 
     console.log("Race ID:", raceId);
     console.log("Competitors:", competitors ? competitors.length : 0);
