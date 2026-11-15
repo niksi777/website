@@ -95,7 +95,7 @@ async function updateAcebet() {
 let gambaMeta = { endDate: null, prizePool: null };
 async function updateLeaderboard() {
   try {
-    const raceId = 26731;
+    const raceId = 29041;
 
     const response = await fetch(`https://gamba.com/promotions/exclusive-leaderboards/${raceId}.json`, {
       headers: { "Accept": "application/json" },
