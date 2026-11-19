@@ -368,7 +368,7 @@ app.get("/chicken-leaderboard", (req, res) => {
   res.json({ leaderboard: rows });
 });
 
-const CHICKEN_POOL_TOTAL = 1000; // coins
+const CHICKEN_POOL_TOTAL = CHICKEN_PRIZES.reduce((s, p) => s + p, 0);
 
 const CHICKEN_HIDDEN_PATH = require("path").join(__dirname, "../../chicken-hidden.json");
 function loadChickenHidden() {
