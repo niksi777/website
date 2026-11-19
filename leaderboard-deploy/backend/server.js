@@ -345,7 +345,7 @@ async function updateChickenLeaderboard() {
 setInterval(updateChickenLeaderboard, 3 * 60 * 1000);
 updateChickenLeaderboard();
 
-const CHICKEN_PRIZES = [500, 200, 100, 50, 40, 30, 30, 20, 20, 10]; // coins, sums to 1000
+const CHICKEN_PRIZES = [250, 100, 50, 25, 20, 15, 15, 10, 10, 5]; // coins, sums to 500
 
 app.get("/chicken-leaderboard", (req, res) => {
   const limit = parseInt(req.query.limit) || 20;
