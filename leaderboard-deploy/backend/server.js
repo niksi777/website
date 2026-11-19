@@ -608,68 +608,6 @@ app.post("/admin/krush/start", (req, res) => {
   res.json({ ok: true, start, end });
 });
 
-// ─── Dicey leaderboard ────────────────────────────────────────────────────
-const DICEY_API_KEY = process.env.DICEY_API_KEY;
-const DICEY_RACE_URL = 'https://api.dicey.com/v1/streamer-races/06246577-aaca-416e-ae9b-7df632214cb1/leaderboard';
-const DICEY_CACHE_PATH = require("path").join(__dirname, "../../dicey-cache.json");
-
-let diceyCache = { leaderboard: [], prizes: [], start: null, end: null, totalPool: 500, lastUpdated: null };
-try {
-  if (fs_lb.existsSync(DICEY_CACHE_PATH)) {
-    const cached = JSON.parse(fs_lb.readFileSync(DICEY_CACHE_PATH, "utf-8"));
-    diceyCache = { ...diceyCache, ...cached };
-  }
-} catch (e) {}
-
-async function updateDiceyLeaderboard() {
-  try {
-    if (!DICEY_API_KEY) return;
-    const response = await fetch(DICEY_RACE_URL, { headers: { "Authorization": `Bearer ${DICEY_API_KEY}` } });
-    const json = await response.json();
-    const d = json.data;
-    if (!d) return;
-    diceyCache.start = d.startsAt ? new Date(d.startsAt).getTime() : null;
-    diceyCache.end = d.endsAt ? new Date(d.endsAt).getTime() : null;
-    diceyCache.totalPool = d.prizePoolAmount ? Math.round(Number(d.prizePoolAmount)) : 500;
-    diceyCache.prizes = (d.prizeBreakdown || []).map(p => Number(p.payoutAmountUsd));
-    diceyCache.leaderboard = d.leaderboard || [];
-    diceyCache.lastUpdated = Date.now();
-    fs_lb.writeFileSync(DICEY_CACHE_PATH, JSON.stringify(diceyCache, null, 2));
-    console.log("Dicey leaderboard updated:", diceyCache.leaderboard.length, "players");
-  } catch (err) {
-    console.log("Dicey update error:", err.message);
-  }
-}
-
-setInterval(updateDiceyLeaderboard, 5 * 60 * 1000);
-updateDiceyLeaderboard();
-
-app.get("/dicey-leaderboard", (req, res) => {
-  const limit = parseInt(req.query.limit) || 10;
-  const rows = diceyCache.leaderboard.slice(0, limit).map((r, i) => ({
-    position: r.rank || i + 1,
-    username: r.username || r.displayName || r.name || "Hidden",
-    avatar: r.avatarUrl || r.avatar || null,
-    wager: Number(r.score || r.totalWagered || r.wagered || r.wager || 0),
-    prize: diceyCache.prizes[i] || 0,
-    vipLevel: r.vipLevel || null,
-    vipSublevel: r.vipSublevel || null,
-  }));
-  res.json({ leaderboard: rows });
-});
-
-app.get("/dicey-meta", (req, res) => {
-  const now = Date.now();
-  res.json({
-    start: diceyCache.start,
-    end: diceyCache.end,
-    active: !!(diceyCache.start && diceyCache.end && now >= diceyCache.start && now < diceyCache.end),
-    totalPool: diceyCache.totalPool,
-    prizes: diceyCache.prizes,
-    lastUpdated: diceyCache.lastUpdated,
-  });
-});
-
 // ─── CS2SKIN leaderboard ──────────────────────────────────────────────────
 const CS2SKIN_PRIZES = [333.33, 166.67, 66.67, 33.33, 20, 13.33, 10, 10, 6.67, 6.67];
 const CS2SKIN_POOL_TOTAL = CS2SKIN_PRIZES.reduce((s, p) => s + p, 0);
