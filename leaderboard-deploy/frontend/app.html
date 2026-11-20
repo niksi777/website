@@ -1323,7 +1323,7 @@ function HeroCarousel() {
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
-    const total = 2 + (chickenActive ? 1 : 0);
+    const total = 3 + (chickenActive ? 1 : 0);
     const timerRef = React.useRef(null);
 
     function startTimer() {
@@ -1380,8 +1380,28 @@ function HeroCarousel() {
         <div className="carousel-outer">
         <div className="carousel-wrap" ref={wrapRef}>
 
-          {/* Slide 0 - GAMBA */}
+          {/* Slide 0 - REELS */}
           <div onClick={(e)=>handleSlideClick(0,e)} style={{...sty(0),background:[
+            'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(214,124,224,.6) 0%, rgba(214,124,224,.2) 42%, transparent 68%)',
+            'linear-gradient(135deg,#0d0614 0%,#11061400 100%)',
+            '#0b0612'
+          ].join(','),borderTop:'3px solid rgba(214,124,224,.85)'}}>
+            {logo('/assets/reels-icon.png',.6,'rgba(214,124,224,.5)')}
+            <div style={{position:'absolute',inset:0,background:fade(11,6,18),pointerEvents:'none'}}/>
+            <div style={{position:'relative',zIndex:1}}>
+              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(214,124,224,.22)',border:'1px solid rgba(214,124,224,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:'#e07ee6',boxShadow:'0 0 6px rgba(224,126,230,1)',display:'inline-block',flexShrink:0}}></span>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#f0b8f4',textTransform:'uppercase'}}>New Partner</span>
+              </div>
+              <div style={txt('#e07ee6','clamp(26px,3.6vw,44px)',.88,6)}>REELS</div>
+              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>NOW PARTNERED WITH NIKSI</div>
+              <div style={sub}>Sign up through our link</div>
+              <a href="https://click.reelrdr.com/OC3ssDza?landing=104" target="_blank" rel="noreferrer" style={btn('#d67ce0','rgba(214,124,224,.55)')}>SIGN UP <Arr/></a>
+            </div>
+          </div>
+
+          {/* Slide 1 - GAMBA */}
+          <div onClick={(e)=>handleSlideClick(1,e)} style={{...sty(1),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(34,197,94,.58) 0%, rgba(34,197,94,.20) 42%, transparent 68%)',
             'linear-gradient(135deg,#060e07 0%,transparent 100%)',
             '#060d07'
@@ -1396,8 +1416,8 @@ function HeroCarousel() {
             </div>
           </div>
 
-          {/* Slide 1 - KICK */}
-          <div onClick={(e)=>handleSlideClick(1,e)} style={{...sty(1),background:[
+          {/* Slide 2 - KICK */}
+          <div onClick={(e)=>handleSlideClick(2,e)} style={{...sty(2),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(83,252,24,.55) 0%, rgba(83,252,24,.18) 42%, transparent 68%)',
             'linear-gradient(135deg,#060e03 0%,transparent 100%)',
             '#060d04'
@@ -1414,7 +1434,7 @@ function HeroCarousel() {
 
 
           {chickenActive && (
-          <div onClick={(e)=>handleSlideClick(2,e)} style={{...sty(2),background:[
+          <div onClick={(e)=>handleSlideClick(3,e)} style={{...sty(3),background:[
             'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(252,154,14,.58) 0%, rgba(252,154,14,.20) 42%, transparent 68%)',
             'linear-gradient(135deg,#120d04 0%,transparent 100%)',
             '#0d0a05'
@@ -1494,6 +1514,14 @@ function HeroCarousel() {
 
     const platforms = [
       {
+        logo:'/assets/reels.png', color:'#d67ce0', isNew:true,
+        title:'NEW PARTNER',
+        perks:['SIGN UP THROUGH OUR https://click.reelrdr.com/OC3ssDza?landing=104'],
+        bigImg:'/assets/reels.png',
+        signupHref:'https://click.reelrdr.com/OC3ssDza?landing=104', signupExt:true,
+        noCode:true,
+      },
+      {
         logo:'/assets/gamba2.png', color:'#22c55e',
         prize:'$1,000', lbType:'BI-WEEKLY',
         perks:['10% LOSSBACK EVERY FRIDAY (UP TO $100)','DOUBLE WEEKLY (100% MATCH UP TO $100)'],
@@ -1557,7 +1585,7 @@ function HeroCarousel() {
                  rel={p.signupExt ? 'noreferrer' : undefined}>
                 {p.btnLabel || 'SIGN UP'}
               </a>
-              <div className="plat-card-code">USE CODE <strong style={{color:'#fff',letterSpacing:'.1em'}}>NIKSI</strong></div>
+              {!p.noCode && <div className="plat-card-code">USE CODE <strong style={{color:'#fff',letterSpacing:'.1em'}}>NIKSI</strong></div>}
             </div>
           ))}
         </div>
@@ -4741,6 +4769,14 @@ function RewardsPage() {
         '0.5% Wagerback on every bet',
         'Up to 15% Lossback',
         '500 coins weekly leaderboard race',
+      ],
+    },
+    {
+      logo: '/assets/reels.png', color: '#d67ce0',
+      prize: 'NEW', raceType: 'NEW PARTNER',
+      signupHref: 'https://click.reelrdr.com/OC3ssDza?landing=104',
+      perks: [
+        'Sign up through our link',
       ],
     },
   ];
