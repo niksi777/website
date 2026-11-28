@@ -2199,8 +2199,11 @@ app.get('/auth/discord/callback', async (req, res) => {
   }
 });
 
+// Christmas calendar (doors, tickets, wheel)
+require('./xmas')(app, { sessions, isAdminUser });
+
 // SPA catch-all: serve app.html for known SPA routes; for everything else try <path>.html first
-const SPA_ROUTES = new Set(['/', '/leaderboards', '/store', '/cases', '/rewards', '/settings', '/admin', '/predictions']);
+const SPA_ROUTES = new Set(['/', '/leaderboards', '/store', '/cases', '/rewards', '/settings', '/admin', '/predictions', '/calendar']);
 app.get('*', (req, res) => {
   if (!SPA_ROUTES.has(req.path)) {
     const htmlFile = path.join(__dirname, '../frontend', req.path + '.html');
