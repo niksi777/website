@@ -1289,7 +1289,8 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:34px;p
 .xc-banner .xc-collab{margin-bottom:12px}
 .xc-banner .xc-title{font-size:clamp(34px,5.4vw,64px)}
 .xc-banner .xc-title span{color:#fff;-webkit-text-stroke:0;opacity:.82}
-.xc-banner .xc-lead{color:rgba(255,255,255,.82);margin-top:12px;max-width:500px}
+.xc-banner .xc-lead{color:rgba(255,255,255,.85);margin-top:12px;max-width:560px}
+.xc-banner .xc-lead strong{display:inline-block;color:#fff;font-size:1.18em;font-weight:600;margin-bottom:3px}
 .xc-banner .xc-pool{margin:0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 @media(max-width:860px){.xc-banner.xc-banner-link{padding:24px 16px 70px}.xc-banner{grid-template-columns:1fr;justify-items:center;gap:22px;padding:28px 18px 72px;margin-top:20px}.xc-banner::after{height:56px;background-size:auto 56px}}
   
@@ -4926,7 +4927,7 @@ function XmasBanner({ link }) {
         <div className="xc-banner-main">
           <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
           <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
-          <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door are prizes, drawn on the wheel among everyone with tickets.</p>
+          <p className="xc-lead"><strong>Every $50 you deposit on Reels = 1 ticket. Unlimited tickets.</strong><br/>Submit your deposit in my Discord with /calendar. A new door opens every day, December 1 to 24.</p>
           {link && <span className="xc-cta">OPEN THE CALENDAR</span>}
         </div>
         <div className="xc-pool"><b>$1,500</b><span>IN TOTAL PRIZES</span></div>
