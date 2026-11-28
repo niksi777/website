@@ -1168,7 +1168,7 @@ html{overflow-y:scroll;}
 /* ==== Christmas theme (red / white), 2026-11-28 ==== */
 body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 120% 60% at 50% 0%,rgba(214,32,52,.22) 0%,transparent 65%)}
 nav{background:linear-gradient(180deg,#a30f22 0%,#7d0b1a 100%)!important;border-bottom:none!important;box-shadow:0 2px 18px rgba(0,0,0,.45)}
-nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:30px;pointer-events:none;background:url(/assets/snow-edge.webp) bottom left/auto 30px repeat-x;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}
+nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:34px;pointer-events:none;background:url(/assets/snow-edge.webp?v=2) bottom left/auto 34px repeat-x;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}
 .nlinks a,.nmob-links a{color:rgba(255,255,255,.72)}
 .nlinks a.on{border-bottom-color:transparent}
 .nlogo,.nsocials,.nsoc{border-color:rgba(255,255,255,.22)!important}
@@ -1272,8 +1272,8 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:30px;p
 @media(max-width:860px){.xc-grid{grid-template-columns:repeat(4,1fr)}.xc-steps{grid-template-columns:1fr}}
 @media(max-width:520px){.xc-grid{grid-template-columns:repeat(3,1fr);gap:8px}.xc-row{padding:10px 12px;gap:8px}.xc-card-h{padding:12px}.xc-head{padding-top:30px}}
   
-.xc-banner{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:36px;margin:30px 0 16px;padding:38px 44px 74px;border-radius:18px;border:1px solid rgba(255,255,255,.22);background:radial-gradient(ellipse 55% 90% at 22% 0%,rgba(255,120,120,.35) 0%,transparent 70%),radial-gradient(ellipse 45% 80% at 88% 100%,rgba(0,0,0,.35) 0%,transparent 70%),linear-gradient(180deg,#b3132a 0%,#8c0d1e 55%,#6a0a17 100%);box-shadow:0 14px 44px rgba(0,0,0,.45)}
-.xc-banner::after{content:'';position:absolute;left:0;right:0;bottom:0;height:58px;pointer-events:none;background:url(/assets/snow-edge.webp) bottom center/auto 58px repeat-x}
+.xc-banner{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:36px;margin:30px 0 16px;padding:38px 44px 116px;border-radius:18px;border:1px solid rgba(255,255,255,.22);background:radial-gradient(ellipse 55% 90% at 22% 0%,rgba(255,120,120,.35) 0%,transparent 70%),radial-gradient(ellipse 45% 80% at 88% 100%,rgba(0,0,0,.35) 0%,transparent 70%),linear-gradient(180deg,#b3132a 0%,#8c0d1e 55%,#6a0a17 100%);box-shadow:0 14px 44px rgba(0,0,0,.45)}
+.xc-banner::after{content:'';position:absolute;left:0;right:0;bottom:0;height:96px;pointer-events:none;background:url(/assets/snow-bank.webp) -420px 100%/auto 96px repeat-x}
 .xc-banner>*{position:relative;z-index:1}
 .xc-banner-main{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
 .xc-banner .xc-collab{margin-bottom:12px}
@@ -1281,7 +1281,7 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:30px;p
 .xc-banner .xc-title span{color:#fff;-webkit-text-stroke:0;opacity:.82}
 .xc-banner .xc-lead{color:rgba(255,255,255,.82);margin-top:12px;max-width:500px}
 .xc-banner .xc-pool{margin:0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-@media(max-width:860px){.xc-banner{grid-template-columns:1fr;justify-items:center;gap:22px;padding:28px 18px 60px;margin-top:20px}.xc-banner::after{height:44px;background-size:auto 44px}}
+@media(max-width:860px){.xc-banner{grid-template-columns:1fr;justify-items:center;gap:22px;padding:28px 18px 84px;margin-top:20px}.xc-banner::after{height:68px;background-size:auto 68px}}
   </style>
 </head>
 <body>
@@ -4875,7 +4875,7 @@ function XmasWheel({ wheel, winner, prize, day, onClose }) {
   return (
     <div className="xw-overlay">
       <div className="xw-box">
-        <div className="xw-kicker">DOOR {day}</div>
+        <div className="xw-kicker">{day ? 'DOOR ' + day : 'TEST - NOTHING IS SAVED'}</div>
         <div className="xw-prize">{prize}</div>
         <div className="xw-wheel-wrap">
           <div className="xw-pointer"/>
@@ -4920,6 +4920,13 @@ function CalendarPage() {
     catch (e) { setMsg(e.message); }
     setBusy(false);
   }
+  async function testSpin() {
+    if (busy) return;
+    setBusy(true); setMsg('');
+    try { setSpin(await post('/admin/xmas/open', { test: true })); }
+    catch (e) { setMsg(e.message); }
+    setBusy(false);
+  }
   async function saveDay(day, amount, prize) {
     setMsg('');
     try { await post('/admin/xmas/day', { day, amount: Number(amount), prize }); loadState(); }
@@ -4952,6 +4959,7 @@ function CalendarPage() {
       </div>
 
       {today === 0 && <div className="xc-note">The first door opens December 1.</div>}
+      {isAdmin && <div className="xc-note">Only you see this: <button className="xc-mini" style={{borderColor:'rgba(255,255,255,.4)',color:'#fff',marginLeft:8}} disabled={busy} onClick={testSpin}>TEST THE WHEEL</button> <span style={{color:'var(--mu)',marginLeft:8}}>Spins a rehearsal draw. Nothing is saved or posted.</span></div>}
       {msg && <div className="xc-note xc-err">{msg}</div>}
 
       <div className="xc-grid">

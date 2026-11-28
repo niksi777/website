@@ -123,6 +123,12 @@ module.exports = function mountXmas(app, { sessions, isAdminUser }) {
   // open a door: only the owner, only today's door or an earlier one that was missed
   app.post('/admin/xmas/open', (req, res) => {
     if (!admin(req)) return res.status(403).json({ error: 'Forbidden' });
+    if (req.body.test) {
+      let demo = entrantList();
+      if (!demo.length) demo = ['Rudolph', 'Frosty', 'Grinch', 'Elf', 'Santa', 'Snowman'].map((name, i) => ({ id: 'demo' + i, name, tickets: [8, 5, 3, 2, 1, 1][i] }));
+      const tw = drawWinner(demo);
+      return res.json({ ok: true, test: true, day: 0, prize: 'TEST SPIN', winner: { id: tw.id, name: tw.name, tickets: tw.tickets }, wheel: demo.map(e => ({ id: e.id, name: e.name, tickets: e.tickets })) });
+    }
     const day = Number(req.body.day);
     const d = data.days[day];
     if (!d) return res.status(400).json({ error: 'Unknown day' });
