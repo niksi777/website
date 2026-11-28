@@ -1203,7 +1203,9 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:26px;p
   .lb-av{display:none}
 }
 .plat-card{background:#2a0c14;border-color:rgba(255,255,255,.2)}
-@media(max-width:680px){.carousel-wrap{height:224px}}
+@media(max-width:680px){.carousel-wrap{height:176px}}
+.c-dots{gap:8px}
+@media(max-width:940px){.nsocials{display:none}.nlinks a{padding:0 7px;font-size:13px}.nlogo{padding-right:14px;margin-right:10px}}
   </style>
 </head>
 <body>
@@ -1363,25 +1365,33 @@ function HeroCarousel() {
     React.useEffect(() => {
       fetch('/chicken-meta').then(r => r.json()).then(d => setChickenActive(!!d.active)).catch(() => {});
     }, []);
-    const total = 3 + (chickenActive ? 1 : 0);
+
+    const KickMark = (st) => <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={st}><path fill="white" d="M1.333 0h8v5.333H12V2.667h2.667V0h8v8H20v2.667h-2.667v2.666H20V16h2.667v8h-8v-2.667H12v-2.666H9.333V24h-8Z"/></svg>;
+    const SLIDES = [
+      {rgb:'214,124,224', color:'#e07ee6', base:[11,6,18], tag:'New Partner', title:'REELS', line:'NOW PARTNERED WITH NIKSI', desc:'Sign up through our link',
+        cta:'SIGN UP', href:'https://amb.reels.io/niksi', ext:true, logo:'/assets/reels-icon.png'},
+      {rgb:'34,197,94', color:'#22c55e', base:[6,14,8], tag:'Leaderboard', title:'$1,000 RACE', line:'BI-WEEKLY ON GAMBA', desc:'Start wagering and climb the ladder',
+        cta:'VIEW LEADERBOARD', href:'/leaderboards', logo:'/assets/gamba2.png'},
+      {rgb:'83,252,24', color:'#53fc18', base:[6,14,3], tag:'Live', title:'WATCH LIVE', line:'ON KICK.COM', desc:'Bonus hunts and live casino on Kick',
+        cta:'WATCH NOW', href:'https://kick.com/niksi777', ext:true, kick:true, btnText:'#06210a'},
+    ];
+    if (chickenActive) SLIDES.push(
+      {rgb:'252,154,14', color:'#fc9a0e', base:[10,8,4], tag:'Leaderboard', title:'375 WEEKLY', line:'ON CHICKEN.GG', desc:'Compete for your share of the prize pool',
+        cta:'VIEW LEADERBOARD', href:'/leaderboards?tab=chicken', logo:'/assets/chicken.png'});
+    const total = SLIDES.length;
+    const totalRef = React.useRef(total);
+    totalRef.current = total;
     const timerRef = React.useRef(null);
 
     function startTimer() {
       if (timerRef.current) clearInterval(timerRef.current);
-      timerRef.current = setInterval(() => setSlide(s => (s + 1) % total), 5500);
+      timerRef.current = setInterval(() => setSlide(s => (s + 1) % totalRef.current), 5500);
     }
     function goTo(i) { setSlide(i); startTimer(); }
     React.useEffect(() => { startTimer(); return () => clearInterval(timerRef.current); }, []);
 
     const Arr = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
 
-    /* smooth 7-stop fade so there's no banding */
-    const fade = (r,g,b) => `linear-gradient(to right,rgb(${r},${g},${b}) 28%,rgba(${r},${g},${b},.95) 36%,rgba(${r},${g},${b},.82) 44%,rgba(${r},${g},${b},.58) 53%,rgba(${r},${g},${b},.28) 62%,rgba(${r},${g},${b},.06) 70%,rgba(${r},${g},${b},0) 76%)`;
-    const txt = (color,sz,lh,mb,extra={}) => ({fontFamily:"'Barlow Condensed',sans-serif",fontSize:sz,fontWeight:800,letterSpacing:'.04em',textTransform:'uppercase',lineHeight:lh,color,marginBottom:mb,...extra});
-    const sub = {fontSize:13,color:'rgba(221,227,239,.45)',lineHeight:1.6};
-    const btn = (color,shadow) => ({display:'inline-flex',alignItems:'center',gap:8,marginTop:20,padding:'10px 22px',background:color,color:'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none',boxShadow:`0 4px 24px ${shadow}`});
-    /* logos: fixed position from right, never touching edge */
-    const logo = (src,op=.55,glow=null) => <img src={src} aria-hidden="true" onError={e=>e.target.style.display='none'} style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'72%',width:'auto',maxWidth:'28%',objectFit:'contain',opacity:op,pointerEvents:'none',filter:glow?`drop-shadow(0 0 28px ${glow})`:'none'}}/>;
     const wrapRef = React.useRef(null);
     const [wrapW, setWrapW] = React.useState(900);
     React.useEffect(() => {
@@ -1392,110 +1402,72 @@ function HeroCarousel() {
       ro.observe(wrapRef.current);
       return () => ro.disconnect();
     }, []);
-    const SW = Math.max(160, Math.round(wrapW * 0.54));
-    const GAP = 14;
+    // phones: one wide slide with the neighbours just peeking in
+    const narrow = wrapW < 560;
+    const SW = Math.max(200, Math.round(wrapW * (narrow ? 0.8 : 0.54)));
+    const STEP = Math.round(SW * (narrow ? 0.93 : 0.72));
     const CX = Math.round((wrapW - SW) / 2);
-    function sty(i) {
+    const titleSz = Math.max(24, Math.min(42, Math.round(SW * 0.08)));
+    const lineSz = Math.max(13, Math.min(20, Math.round(SW * 0.038)));
+    const pad = narrow ? '14px 16px' : '20px 28px';
+
+    function dist(i) {
       let d = ((i - slide) % total + total) % total;
       if (d > total / 2) d -= total;
-      const a = Math.abs(d);
-      const tx = CX + d * Math.round(SW * 0.72);
+      return d;
+    }
+    function sty(i, s) {
+      const d = dist(i), a = Math.abs(d);
+      const hidden = a > 1;
       const ry = d === 0 ? 0 : d < 0 ? 12 : -12;
-      const sc = a === 0 ? 1 : 0.87;
-      return {position:'absolute',top:0,left:0,width:SW,height:'100%',
-        transform:`translateX(${tx}px) rotateY(${ry}deg) scale(${sc})`,
-        transformOrigin:'center center',
-        transition:'transform .52s cubic-bezier(.4,0,.2,1)',zIndex:10-a,
-        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:'20px 26px',cursor:a===0?'default':'pointer'};
+      return {position:'absolute',top:0,left:0,width:SW,height:'100%',boxSizing:'border-box',
+        transform:`translateX(${CX + d * STEP}px) rotateY(${ry}deg) scale(${a === 0 ? 1 : 0.87})`,
+        transformOrigin:'center center',opacity:hidden ? 0 : 1,pointerEvents:hidden ? 'none' : 'auto',
+        transition:'transform .52s cubic-bezier(.4,0,.2,1),opacity .4s ease',zIndex:10-a,
+        borderRadius:12,overflow:'hidden',display:'flex',alignItems:'center',padding:pad,cursor:a===0?'default':'pointer',
+        borderTop:`3px solid rgba(${s.rgb},.75)`,
+        background:[
+          `radial-gradient(ellipse 60% 85% at 78% 50%, rgba(${s.rgb},.55) 0%, rgba(${s.rgb},.18) 42%, transparent 68%)`,
+          `rgb(${s.base.join(',')})`
+        ].join(',')};
     }
-
-    function handleSlideClick(idx, e) {
-      let d = ((idx - slide) % total + total) % total;
-      if (d > total / 2) d -= total;
-      if (d !== 0) { e.preventDefault(); goTo(idx); }
-    }
+    const fade = (b) => `linear-gradient(to right,rgb(${b}) 30%,rgba(${b},.9) 42%,rgba(${b},.55) 54%,rgba(${b},.18) 66%,rgba(${b},0) 76%)`;
+    const artSt = {position:'absolute',right:'7%',top:'50%',transform:'translateY(-50%)',height:narrow?'52%':'66%',width:'auto',maxWidth:'26%',objectFit:'contain',opacity:.7,pointerEvents:'none'};
 
     return (
       <div className="f1">
         <div className="carousel-outer">
         <div className="carousel-wrap" ref={wrapRef}>
-
-          {/* Slide 0 - REELS */}
-          <div onClick={(e)=>handleSlideClick(0,e)} style={{...sty(0),background:[
-            'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(214,124,224,.6) 0%, rgba(214,124,224,.2) 42%, transparent 68%)',
-            'linear-gradient(135deg,#0d0614 0%,#11061400 100%)',
-            '#0b0612'
-          ].join(','),borderTop:'3px solid rgba(214,124,224,.85)'}}>
-            {logo('/assets/reels-icon.png',.6,'rgba(214,124,224,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(11,6,18),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(214,124,224,.22)',border:'1px solid rgba(214,124,224,.55)',borderRadius:100,padding:'4px 12px',marginBottom:14}}>
-                <span style={{width:6,height:6,borderRadius:'50%',background:'#e07ee6',boxShadow:'0 0 6px rgba(224,126,230,1)',display:'inline-block',flexShrink:0}}></span>
-                <span style={{fontFamily:"'Inter',sans-serif",fontSize:11,fontWeight:700,letterSpacing:'.2em',color:'#f0b8f4',textTransform:'uppercase'}}>New Partner</span>
+          {SLIDES.map((s, i) => {
+            const centre = dist(i) === 0;
+            return (
+            <div key={s.title} onClick={(e) => { if (!centre) { e.preventDefault(); goTo(i); } }} style={sty(i, s)}>
+              {s.kick ? KickMark({...artSt,height:narrow?'38%':'46%',maxWidth:'18%',filter:`drop-shadow(0 0 24px rgba(${s.rgb},.5))`})
+                : <img src={s.logo} alt="" aria-hidden="true" onError={e=>e.target.style.display='none'} style={{...artSt,filter:`drop-shadow(0 0 24px rgba(${s.rgb},.5))`}}/>}
+              <div style={{position:'absolute',inset:0,background:fade(s.base.join(',')),pointerEvents:'none'}}/>
+              <div style={{position:'relative',zIndex:1,width:'68%',minWidth:0,display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+                <div style={{display:'inline-flex',alignItems:'center',gap:6,background:`rgba(${s.rgb},.16)`,border:`1px solid rgba(${s.rgb},.45)`,borderRadius:100,padding:'3px 10px',marginBottom:narrow?7:10}}>
+                  <span style={{width:5,height:5,borderRadius:'50%',background:s.color,display:'inline-block',flexShrink:0}}></span>
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:10,fontWeight:700,letterSpacing:'.18em',color:'rgba(255,255,255,.85)',textTransform:'uppercase',whiteSpace:'nowrap'}}>{s.tag}</span>
+                </div>
+                <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:titleSz,fontWeight:800,letterSpacing:'.04em',lineHeight:.95,color:s.color,whiteSpace:'nowrap',marginBottom:4}}>{s.title}</div>
+                <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:lineSz,fontWeight:700,letterSpacing:'.06em',lineHeight:1.1,color:'#fff',whiteSpace:'nowrap'}}>{s.line}</div>
+                {!narrow && <div style={{fontSize:13,color:'rgba(255,255,255,.55)',lineHeight:1.4,marginTop:6,maxWidth:'100%',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{s.desc}</div>}
+                <a href={s.href} {...(s.ext ? {target:'_blank',rel:'noreferrer'} : {})} tabIndex={centre ? 0 : -1}
+                  style={{display:'inline-flex',alignItems:'center',gap:8,marginTop:narrow?10:14,padding:narrow?'8px 14px':'9px 20px',background:s.color,color:s.btnText||'#fff',borderRadius:8,fontFamily:"'Inter',sans-serif",fontSize:narrow?11:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',textDecoration:'none',whiteSpace:'nowrap',boxShadow:`0 4px 20px rgba(${s.rgb},.4)`}}>{s.cta} <Arr/></a>
               </div>
-              <div style={txt('#e07ee6','clamp(26px,3.6vw,44px)',.88,6)}>REELS</div>
-              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>NOW PARTNERED WITH NIKSI</div>
-              <div style={sub}>Sign up through our link</div>
-              <a href="https://amb.reels.io/niksi" target="_blank" rel="noreferrer" style={btn('#d67ce0','rgba(214,124,224,.55)')}>SIGN UP <Arr/></a>
+              {!centre && <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,.45)',pointerEvents:'none'}}/>}
             </div>
-          </div>
-
-          {/* Slide 1 - GAMBA */}
-          <div onClick={(e)=>handleSlideClick(1,e)} style={{...sty(1),background:[
-            'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(34,197,94,.58) 0%, rgba(34,197,94,.20) 42%, transparent 68%)',
-            'linear-gradient(135deg,#060e07 0%,transparent 100%)',
-            '#060d07'
-          ].join(','),borderTop:'3px solid rgba(34,197,94,.68)'}}>
-            {logo('/assets/gamba2.png',.58,'rgba(34,197,94,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(6,14,8),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#22c55e','clamp(26px,3.6vw,44px)',.88,6)}>$1,000 RACE</div>
-              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>BI-WEEKLY ON GAMBA</div>
-              <div style={sub}>Start wagering &amp; climbing the ladder!</div>
-              <a href="/leaderboards" style={btn('#22c55e','rgba(34,197,94,.4)')}>VIEW LEADERBOARD <Arr/></a>
-            </div>
-          </div>
-
-          {/* Slide 2 - KICK */}
-          <div onClick={(e)=>handleSlideClick(2,e)} style={{...sty(2),background:[
-            'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(83,252,24,.55) 0%, rgba(83,252,24,.18) 42%, transparent 68%)',
-            'linear-gradient(135deg,#060e03 0%,transparent 100%)',
-            '#060d04'
-          ].join(','),borderTop:'3px solid rgba(83,252,24,.6)'}}>
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{position:'absolute',right:'9%',top:'50%',transform:'translateY(-50%)',height:'48%',width:'auto',maxWidth:'18%',opacity:.55,pointerEvents:'none',filter:'drop-shadow(0 0 28px rgba(83,252,24,.55))'}}><path fill="white" d="M1.333 0h8v5.333H12V2.667h2.667V0h8v8H20v2.667h-2.667v2.666H20V16h2.667v8h-8v-2.667H12v-2.666H9.333V24h-8Z"/></svg>
-            <div style={{position:'absolute',inset:0,background:fade(6,14,3),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#53fc18','clamp(26px,3.6vw,44px)',.88,6)}>WATCH LIVE</div>
-              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON KICK.COM</div>
-              <div style={sub}>Catch streams, bonus hunts &amp; live casino on Kick</div>
-              <a href="https://kick.com/niksi777" target="_blank" rel="noreferrer" style={btn('#53fc18','rgba(83,252,24,.4)')}>WATCH NOW <Arr/></a>
-            </div>
-          </div>
-
-
-          {chickenActive && (
-          <div onClick={(e)=>handleSlideClick(3,e)} style={{...sty(3),background:[
-            'radial-gradient(ellipse 60% 85% at 74% 50%, rgba(252,154,14,.58) 0%, rgba(252,154,14,.20) 42%, transparent 68%)',
-            'linear-gradient(135deg,#120d04 0%,transparent 100%)',
-            '#0d0a05'
-          ].join(','),borderTop:'3px solid rgba(252,154,14,.65)'}}>
-            {logo('/assets/chicken.png',.6,'rgba(252,154,14,.5)')}
-            <div style={{position:'absolute',inset:0,background:fade(10,8,4),pointerEvents:'none'}}/>
-            <div style={{position:'relative',zIndex:1}}>
-              <div style={txt('#fc9a0e','clamp(26px,3.6vw,44px)',.88,6)}>375 WEEKLY</div>
-              <div style={txt('#fff','clamp(13px,1.8vw,24px)',1,12,{fontWeight:700,letterSpacing:'.06em'})}>ON CHICKEN.GG</div>
-              <div style={sub}>Compete for your share of the prize pool!</div>
-              <a href="/leaderboards?tab=chicken" style={btn('#fc9a0e','rgba(252,154,14,.4)')}>VIEW LEADERBOARD <Arr/></a>
-            </div>
-          </div>
-          )}
-
+            );
+          })}
         </div>
         <div className="c-dots">
           <button className="c-arrow" onClick={()=>goTo((slide-1+total)%total)} aria-label="Previous">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
-          <div key={slide} className="c-dot on" style={{width:56,height:6,borderRadius:3,animationDuration:'5.5s',flexShrink:0}}/>
+          {SLIDES.map((s, i) => i === slide
+            ? <div key={'on'+i} className="c-dot on" style={{width:44,height:6,borderRadius:3,animationDuration:'5.5s',flexShrink:0}}/>
+            : <button key={i} className="c-dot" onClick={()=>goTo(i)} aria-label={'Slide '+(i+1)} style={{width:8,height:6,borderRadius:3,flexShrink:0}}/>)}
           <button className="c-arrow" onClick={()=>goTo((slide+1)%total)} aria-label="Next">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
           </button>
