@@ -1264,9 +1264,19 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:34px;p
 .xw-kicker{font-size:11px;font-weight:700;letter-spacing:.24em;color:var(--mu)}
 .xw-prize{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,6vw,44px);font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#f5a623;line-height:1}
 .xw-wheel-wrap{position:relative;width:min(78vw,56vh,440px);aspect-ratio:1/1;margin:14px 0 8px}
-.xw-wheel{width:100%;height:100%;display:block;transition:transform 8s cubic-bezier(.12,.6,.1,1)}
+.xw-wheel{width:100%;height:100%;display:block;transition:transform 7s cubic-bezier(.12,.6,.1,1)}
+.xw-list{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px;max-width:440px}
+.xw-list span{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:.03em;padding:4px 12px;border-radius:100px;border:1px dashed rgba(255,255,255,.3);color:rgba(255,255,255,.4)}
+.xw-list span.on{border:1px solid #fff;background:#fff;color:#a30f22}
+.xc-dmore{font-size:10px;font-weight:700;letter-spacing:.08em;color:#a30f22;opacity:.75}
+.xc-wrow{align-items:flex-start;flex-wrap:wrap}
+.xc-wprize{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#f5a623;width:150px;flex-shrink:0}
+.xc-wnames{flex:1;min-width:160px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;font-weight:500;color:#fff}
+.xc-wnames span{display:inline-flex;align-items:center;gap:6px}
+.xc-inp-xs{flex:0 0 52px;width:52px;text-align:right}
+.xc-x{font-size:12px;color:var(--mu);flex-shrink:0}
 .xw-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);z-index:2;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #f5a623;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
-.xw-result{transition:opacity .5s ease;margin-bottom:10px}
+.xw-result{margin-bottom:10px}.xw-winner{transition:opacity .5s ease}
 .xw-winner{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,7vw,48px);font-weight:800;letter-spacing:.03em;color:#fff;line-height:1.05;word-break:break-word}
 .xw-sub{font-size:13px;color:var(--mu)}
 @media(max-width:860px){.xc-grid{grid-template-columns:repeat(4,1fr)}.xc-steps{grid-template-columns:1fr}}
@@ -1281,7 +1291,12 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:34px;p
 .xc-banner .xc-title span{color:#fff;-webkit-text-stroke:0;opacity:.82}
 .xc-banner .xc-lead{color:rgba(255,255,255,.82);margin-top:12px;max-width:500px}
 .xc-banner .xc-pool{margin:0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-@media(max-width:860px){.xc-banner{grid-template-columns:1fr;justify-items:center;gap:22px;padding:28px 18px 72px;margin-top:20px}.xc-banner::after{height:56px;background-size:auto 56px}}
+@media(max-width:860px){.xc-banner.xc-banner-link{padding:24px 16px 70px}.xc-banner{grid-template-columns:1fr;justify-items:center;gap:22px;padding:28px 18px 72px;margin-top:20px}.xc-banner::after{height:56px;background-size:auto 56px}}
+  
+.xc-banner-link{text-decoration:none;color:inherit;margin:6px 0 0;transition:transform .15s ease,box-shadow .15s ease}
+.xc-banner.xc-banner-link{padding:26px 36px 88px;gap:24px}.xc-banner-link .xc-title{font-size:clamp(28px,4.4vw,48px)}.xc-banner-link .xc-lead{display:none}.xc-banner-link .xc-pool b{font-size:clamp(48px,8vw,76px)}
+.xc-banner-link:hover{transform:translateY(-2px);box-shadow:0 18px 50px rgba(0,0,0,.55)}
+.xc-cta{display:inline-block;margin-top:16px;padding:9px 22px;border-radius:8px;background:#fff;color:#a30f22;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.14em}
   </style>
 </head>
 <body>
@@ -1688,6 +1703,7 @@ function HeroCarousel() {
     return (<>
       <div className="page">
         <HeroCarousel/>
+        <XmasBanner link/>
         <PartneredPlatforms/>
       </div>
       <footer>
@@ -4834,16 +4850,19 @@ function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
 
 // ==================== CHRISTMAS CALENDAR ====================
 
-function XmasWheel({ wheel, winner, prize, day, onClose }) {
+function XmasWheel({ wheel, winners, prize, day, onClose }) {
   const cvRef = React.useRef(null);
+  const slices = React.useRef({});
+  const rotRef = React.useRef(0);
   const [rot, setRot] = React.useState(0);
-  const [done, setDone] = React.useState(false);
+  const [shown, setShown] = React.useState(0); // winners revealed so far
   const total = wheel.reduce((s, e) => s + e.tickets, 0);
+  const done = shown >= winners.length;
 
   React.useEffect(() => {
     const cv = cvRef.current, cx = cv.getContext('2d'), S = cv.width, R = S / 2;
     const COLORS = ['#c8102e', '#ffffff', '#1f7a3a', '#f4e3c1'];
-    let a = -Math.PI / 2, winMid = 0, winSpan = 0;
+    let a = -Math.PI / 2;
     wheel.forEach((e, i) => {
       const span = (e.tickets / total) * Math.PI * 2;
       let ci = i % COLORS.length;
@@ -4859,37 +4878,60 @@ function XmasWheel({ wheel, winner, prize, day, onClose }) {
         let label = e.name; if (label.length > 14) label = label.slice(0, 13) + '…';
         cx.fillText(label, R - 22, 0); cx.restore();
       }
-      if (e.id === winner.id) { winMid = a + span / 2 + Math.PI / 2; winSpan = span; }
+      slices.current[e.id] = { mid: a + span / 2 + Math.PI / 2, span };
       a += span;
     });
     cx.beginPath(); cx.arc(R, R, R - 6, 0, Math.PI * 2); cx.strokeStyle = '#fff'; cx.lineWidth = 8; cx.stroke();
     cx.beginPath(); cx.arc(R, R, S * 0.07, 0, Math.PI * 2); cx.fillStyle = '#fff'; cx.fill();
-    // land somewhere inside the winner's slice, never right on its edge
-    const off = (Math.random() - 0.5) * winSpan * 0.7;
-    const target = 360 * 7 - ((winMid + off) * 180 / Math.PI);
-    const t1 = setTimeout(() => setRot(target), 80);
-    const t2 = setTimeout(() => setDone(true), 8300);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
+
+  // one spin per winner, one after the other
+  React.useEffect(() => {
+    if (done) return;
+    const sl = slices.current[winners[shown].id];
+    if (!sl) { setShown(shown + 1); return; }
+    // land somewhere inside the winner's slice, never right on its edge
+    const off = (Math.random() - 0.5) * sl.span * 0.7;
+    const at = ((-(sl.mid + off) * 180 / Math.PI) % 360 + 360) % 360;
+    const next = (Math.floor(rotRef.current / 360) + 6) * 360 + at;
+    const wait = shown === 0 ? 80 : 1600;
+    const t1 = setTimeout(() => { rotRef.current = next; setRot(next); }, wait);
+    const t2 = setTimeout(() => setShown(shown + 1), wait + 7200);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [shown]);
 
   return (
     <div className="xw-overlay">
       <div className="xw-box">
         <div className="xw-kicker">{day ? 'DOOR ' + day : 'TEST - NOTHING IS SAVED'}</div>
-        <div className="xw-prize">{prize}</div>
+        <div className="xw-prize">{winners.length > 1 ? winners.length + ' x ' : ''}{prize}</div>
         <div className="xw-wheel-wrap">
           <div className="xw-pointer"/>
           <canvas ref={cvRef} width="720" height="720" className="xw-wheel" style={{transform:`rotate(${rot}deg)`}}/>
         </div>
-        <div className="xw-result" style={{opacity: done ? 1 : 0}}>
-          <div className="xw-kicker">WINNER</div>
-          <div className="xw-winner">{winner.name}</div>
-          <div className="xw-sub">{winner.tickets} of {total} tickets</div>
+        <div className="xw-result">
+          <div className="xw-kicker">{winners.length > 1 ? 'WINNERS ' + shown + ' OF ' + winners.length : 'WINNER'}</div>
+          {winners.length === 1
+            ? <div className="xw-winner" style={{opacity: done ? 1 : 0}}>{winners[0].name}</div>
+            : <div className="xw-list">{winners.map((w, i) => <span key={w.id} className={i < shown ? 'on' : ''}>{i < shown ? w.name : '?'}</span>)}</div>}
         </div>
         {done && <button className="xc-btn" onClick={onClose}>CLOSE</button>}
       </div>
     </div>
   );
+}
+
+function XmasBanner({ link }) {
+  const body = (<>
+        <div className="xc-banner-main">
+          <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
+          <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
+          <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door are prizes, drawn on the wheel among everyone with tickets.</p>
+          {link && <span className="xc-cta">OPEN THE CALENDAR</span>}
+        </div>
+        <div className="xc-pool"><b>$1,500</b><span>IN TOTAL PRIZES</span></div>
+  </>);
+  return link ? <a href="/calendar" className="xc-banner xc-banner-link">{body}</a> : <div className="xc-banner">{body}</div>;
 }
 
 function CalendarPage() {
@@ -4912,11 +4954,12 @@ function CalendarPage() {
     if (!r.ok) throw new Error(d.error || 'Error');
     return d;
   }
-  async function openDoor(day, reroll) {
+  async function openDoor(day, index, name) {
     if (busy) return;
-    if (reroll && !window.confirm('Draw a new winner for door ' + day + '? The current winner is left out of the redraw.')) return;
+    const reroll = index != null;
+    if (reroll && !window.confirm('Draw a new winner instead of ' + name + ' for door ' + day + '?')) return;
     setBusy(true); setMsg('');
-    try { const d = await post('/admin/xmas/open', { day, reroll }); setSpin(d); }
+    try { const d = await post('/admin/xmas/open', { day, reroll, index }); setSpin(d); }
     catch (e) { setMsg(e.message); }
     setBusy(false);
   }
@@ -4927,9 +4970,9 @@ function CalendarPage() {
     catch (e) { setMsg(e.message); }
     setBusy(false);
   }
-  async function saveDay(day, amount, prize) {
+  async function saveDay(day, count, amount, prize) {
     setMsg('');
-    try { await post('/admin/xmas/day', { day, amount: Number(amount), prize }); loadState(); }
+    try { await post('/admin/xmas/day', { day, count: Number(count), amount: Number(amount), prize }); loadState(); }
     catch (e) { setMsg(e.message); }
   }
   async function saveTickets(id, tickets) {
@@ -4940,17 +4983,12 @@ function CalendarPage() {
 
   if (!st) return <div className="wrap"><div className="xc-head"><div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div><h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1></div></div>;
   const today = st.today;
+  const label = (d) => (d.count > 1 ? d.count + ' x ' : '') + d.prize;
+  const opened = st.days.filter(d => d.opened);
 
   return (
     <div className="wrap xc">
-      <div className="xc-banner">
-        <div className="xc-banner-main">
-          <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
-          <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
-          <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door is a prize, and one ticket holder wins it on the wheel.</p>
-        </div>
-        <div className="xc-pool"><b>${st.totalPool.toLocaleString('en-US')}</b><span>IN TOTAL PRIZES</span></div>
-      </div>
+      <XmasBanner/>
 
       <div className="xc-steps">
         <div className="xc-step"><b>1</b><div><strong>Deposit on Reels</strong><span>Sign up through <a href="https://amb.reels.io/niksi" target="_blank" rel="noreferrer">my link</a> and deposit. Every deposit from November 28 counts.</span></div></div>
@@ -4972,14 +5010,14 @@ function CalendarPage() {
               <div className="xc-num">{d.day}</div>
               {d.opened ? (
                 <div className="xc-in">
-                  <div className="xc-dprize">{d.prize}</div>
-                  <div className="xc-dwin">{d.winner ? d.winner.name : '-'}</div>
-                  {isAdmin && <button className="xc-mini" onClick={() => openDoor(d.day, true)}>REDRAW</button>}
+                  <div className="xc-dprize">{label(d)}</div>
+                  {d.winners.slice(0, 2).map((w, i) => <div key={i} className="xc-dwin">{w.name}</div>)}
+                  {d.winners.length > 2 && <div className="xc-dmore">+{d.winners.length - 2} more</div>}
                 </div>
               ) : (
                 <div className="xc-in">
-                  {isAdmin && d.prize && <div className="xc-dprize dim">{d.prize}</div>}
-                  {canOpen ? <button className="xc-btn" disabled={busy} onClick={() => openDoor(d.day, false)}>OPEN</button>
+                  {isAdmin && d.prize && <div className="xc-dprize dim">{label(d)}</div>}
+                  {canOpen ? <button className="xc-btn" disabled={busy} onClick={() => openDoor(d.day)}>OPEN</button>
                     : <div className="xc-dstate">{isToday ? 'OPENS TODAY' : d.day < today ? 'NOT OPENED' : 'DEC ' + d.day}</div>}
                 </div>
               )}
@@ -4987,6 +5025,21 @@ function CalendarPage() {
           );
         })}
       </div>
+
+      {opened.length > 0 && (
+        <div className="xc-card">
+          <div className="xc-card-h"><span>WINNERS</span><span>{opened.reduce((n, d) => n + d.winners.length, 0)} SO FAR</span></div>
+          {opened.slice().reverse().map(d => (
+            <div key={d.day} className="xc-row xc-wrow">
+              <span className="xc-rday">DEC {d.day}</span>
+              <span className="xc-wprize">{label(d)}</span>
+              <span className="xc-wnames">{d.winners.map((w, i) => (
+                <span key={i}>{w.name}{isAdmin && <button className="xc-mini" disabled={busy} onClick={() => openDoor(d.day, i, w.name)}>REDRAW</button>}</span>
+              ))}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="xc-card">
         <div className="xc-card-h"><span>TICKETS IN THE WHEEL</span><span>{st.totalTickets} TOTAL</span></div>
@@ -5003,21 +5056,23 @@ function CalendarPage() {
 
       {isAdmin && st.planned != null && (
         <div className="xc-card">
-          <div className="xc-card-h"><span>PRIZES (ONLY YOU SEE THIS)</span>
+          <div className="xc-card-h"><span>PRIZES: WINNERS x DOLLARS EACH, PRIZE TEXT (ONLY YOU SEE THIS)</span>
             <span style={{color: st.planned === st.totalPool ? '#22c55e' : '#f5a623'}}>${st.planned.toLocaleString('en-US')} OF ${st.totalPool.toLocaleString('en-US')} PLANNED</span></div>
           {st.days.map(d => (
-            <div key={d.day + ':' + d.amount + ':' + d.prize} className="xc-row">
+            <div key={d.day + ':' + d.count + ':' + d.amount + ':' + d.prize} className="xc-row">
               <span className="xc-rday">DEC {d.day}</span>
-              <input className="xc-inp xc-inp-s" type="number" min="0" defaultValue={d.amount} disabled={d.opened} id={'xa' + d.day}/>
+              <input className="xc-inp xc-inp-xs" type="number" min="1" max="10" defaultValue={d.count} disabled={d.opened} id={'xn' + d.day} title="Number of winners"/>
+              <span className="xc-x">x $</span>
+              <input className="xc-inp xc-inp-s" type="number" min="0" defaultValue={d.amount} disabled={d.opened} id={'xa' + d.day} title="Dollars per winner"/>
               <input className="xc-inp" type="text" maxLength="80" defaultValue={d.prize} disabled={d.opened} id={'xp' + d.day}/>
               {d.opened ? <span className="xc-rt">OPEN</span>
-                : <button className="xc-mini" onClick={() => saveDay(d.day, document.getElementById('xa' + d.day).value, document.getElementById('xp' + d.day).value)}>SAVE</button>}
+                : <button className="xc-mini" onClick={() => saveDay(d.day, document.getElementById('xn' + d.day).value, document.getElementById('xa' + d.day).value, document.getElementById('xp' + d.day).value)}>SAVE</button>}
             </div>
           ))}
         </div>
       )}
 
-      {spin && <XmasWheel wheel={spin.wheel} winner={spin.winner} prize={spin.prize} day={spin.day} onClose={() => { setSpin(null); loadState(); }}/>}
+      {spin && <XmasWheel wheel={spin.wheel} winners={spin.winners} prize={spin.prize} day={spin.day} onClose={() => { setSpin(null); loadState(); }}/>}
     </div>
   );
 }

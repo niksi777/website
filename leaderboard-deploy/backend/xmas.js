@@ -1,4 +1,4 @@
-// Christmas calendar: 24 doors, one prize a day, winner drawn on a wheel weighted by tickets.
+// Christmas calendar: 24 doors, a prize a day, winners drawn on a wheel weighted by tickets.
 // Tickets come from Reels deposits ($50 = 1 ticket) that the owner confirms in a Discord ticket (ticket-bot/xmas.js).
 const fs = require('fs');
 const path = require('path');
@@ -8,16 +8,26 @@ const DATA_PATH = path.join(__dirname, '../../xmas-calendar.json');
 const BOT_URL = 'http://127.0.0.1:3003';
 const YEAR = 2026;
 const TOTAL_POOL = 1500;
-// rising towards Christmas Eve, a little extra on weekends (5-6, 12-13, 19-20); sums to 1500
-const DEFAULT_AMOUNTS = [25, 25, 25, 35, 50, 50, 30, 30, 30, 35, 45, 60, 60, 40, 40, 45, 45, 55, 80, 80, 65, 75, 125, 350];
+const MAX_WINNERS = 10;
+const SPIN_SECONDS = 7;
+// [winners, dollars each, prize]: mixed on purpose, bigger on weekends (5-6, 12-13, 19-20) and towards Christmas Eve; sums to 1500
+const DEFAULT_DAYS = [
+  [5, 5, 'Tip'], [1, 20, 'Bonus Buy'], [2, 15, 'Tip'], [1, 40, 'Bonus Buy'], [5, 10, 'Tip'], [1, 50, 'Tip'],
+  [3, 10, 'Tip'], [2, 20, 'Bonus Buy'], [6, 5, 'Tip'], [1, 40, 'Bonus Buy'], [3, 15, 'Tip'], [1, 60, 'Bonus Buy'],
+  [6, 10, 'Tip'], [2, 20, 'Bonus Buy'], [1, 40, 'Tip'], [3, 15, 'Tip'], [1, 60, 'Bonus Buy'], [5, 10, 'Tip'],
+  [1, 80, 'Bonus Buy'], [4, 20, 'Tip'], [3, 20, 'Bonus Buy'], [1, 75, 'Tip'], [5, 30, 'Tip'], [1, 300, 'Tip'],
+];
 
+function defaults() {
+  const days = {};
+  DEFAULT_DAYS.forEach(([count, amount, kind], i) => { days[i + 1] = { count, amount, prize: `$${amount} ${kind}`, opened: false, openedAt: null, winners: [] }; });
+  return { days, entrants: {}, log: [] };
+}
 function load() {
   try {
     if (fs.existsSync(DATA_PATH)) return JSON.parse(fs.readFileSync(DATA_PATH, 'utf-8'));
   } catch (e) { console.error('[xmas] could not read data:', e.message); }
-  const days = {};
-  DEFAULT_AMOUNTS.forEach((amount, i) => { days[i + 1] = { amount, prize: `$${amount} Tip`, opened: false, winner: null, openedAt: null }; });
-  return { days, entrants: {}, log: [] };
+  return defaults();
 }
 let data = load();
 function save() { fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2)); }
@@ -39,13 +49,25 @@ function entrantList() {
     .sort((a, b) => b.tickets - a.tickets || a.name.localeCompare(b.name));
 }
 
-function drawWinner(list) {
+function drawOne(list) {
   const total = list.reduce((s, e) => s + e.tickets, 0);
   if (!total) return null;
   let pick = crypto.randomInt(total);
   for (const e of list) { if (pick < e.tickets) return e; pick -= e.tickets; }
   return list[list.length - 1];
 }
+// up to n different people, each draw weighted by tickets
+function drawMany(list, n) {
+  const pool = list.slice(), out = [];
+  while (out.length < n && pool.length) {
+    const w = drawOne(pool);
+    if (!w) break;
+    out.push(w);
+    pool.splice(pool.indexOf(w), 1);
+  }
+  return out;
+}
+const slim = (e) => ({ id: e.id, name: e.name, tickets: e.tickets });
 
 async function notifyBot(route, body) {
   try {
@@ -61,19 +83,19 @@ module.exports = function mountXmas(app, { sessions, isAdminUser }) {
   };
   const fromBot = (req) => !!process.env.XMAS_SECRET && req.headers['x-xmas-secret'] === process.env.XMAS_SECRET;
 
-  // public state; the prize behind a closed door stays hidden unless the owner asks
+  // public state; what is behind a closed door stays hidden unless the owner asks
   app.get('/xmas/state', (req, res) => {
     const isAdmin = admin(req);
     const list = entrantList();
     const days = Object.keys(data.days).map(Number).sort((a, b) => a - b).map(day => {
       const d = data.days[day];
       const show = d.opened || isAdmin;
-      return { day, opened: !!d.opened, openedAt: d.openedAt || null, winner: d.winner ? { name: d.winner.name, tickets: d.winner.tickets } : null,
-        amount: show ? d.amount : null, prize: show ? d.prize : null };
+      return { day, opened: !!d.opened, openedAt: d.openedAt || null, winners: (d.winners || []).map(w => ({ name: w.name })),
+        count: show ? d.count : null, amount: show ? d.amount : null, prize: show ? d.prize : null };
     });
     res.json({
       today: todayDay(), totalPool: TOTAL_POOL, days,
-      planned: isAdmin ? Object.values(data.days).reduce((s, d) => s + (Number(d.amount) || 0), 0) : undefined,
+      planned: isAdmin ? Object.values(data.days).reduce((s, d) => s + (Number(d.amount) || 0) * (Number(d.count) || 1), 0) : undefined,
       totalTickets: list.reduce((s, e) => s + e.tickets, 0),
       entrants: list.map(e => isAdmin ? e : { name: e.name, tickets: e.tickets }),
     });
@@ -101,10 +123,12 @@ module.exports = function mountXmas(app, { sessions, isAdminUser }) {
     const d = data.days[Number(req.body.day)];
     if (!d) return res.status(400).json({ error: 'Unknown day' });
     if (d.opened) return res.status(400).json({ error: 'That door is already open' });
-    const amount = Number(req.body.amount);
+    const amount = Number(req.body.amount), count = Math.floor(Number(req.body.count));
     if (!Number.isFinite(amount) || amount < 0) return res.status(400).json({ error: 'Bad amount' });
+    if (!Number.isFinite(count) || count < 1 || count > MAX_WINNERS) return res.status(400).json({ error: `Winners must be 1 to ${MAX_WINNERS}` });
     d.amount = amount;
-    d.prize = String(req.body.prize || '').slice(0, 80) || `$${amount} Tip`;
+    d.count = count;
+    d.prize = String(req.body.prize || '').slice(0, 60) || `$${amount} Tip`;
     save();
     res.json({ ok: true });
   });
@@ -126,28 +150,40 @@ module.exports = function mountXmas(app, { sessions, isAdminUser }) {
     if (req.body.test) {
       let demo = entrantList();
       if (!demo.length) demo = ['Rudolph', 'Frosty', 'Grinch', 'Elf', 'Santa', 'Snowman'].map((name, i) => ({ id: 'demo' + i, name, tickets: [8, 5, 3, 2, 1, 1][i] }));
-      const tw = drawWinner(demo);
-      return res.json({ ok: true, test: true, day: 0, prize: 'TEST SPIN', winner: { id: tw.id, name: tw.name, tickets: tw.tickets }, wheel: demo.map(e => ({ id: e.id, name: e.name, tickets: e.tickets })) });
+      return res.json({ ok: true, test: true, day: 0, prize: 'TEST SPIN', count: 3, winners: drawMany(demo, 3).map(slim), wheel: demo.map(slim) });
     }
     const day = Number(req.body.day);
     const d = data.days[day];
     if (!d) return res.status(400).json({ error: 'Unknown day' });
-    const reroll = !!req.body.reroll;
-    if (d.opened && !reroll) return res.status(400).json({ error: 'That door is already open' });
-    if (!d.opened && reroll) return res.status(400).json({ error: 'That door is not open yet' });
     if (day > todayDay()) return res.status(400).json({ error: 'That door cannot be opened yet' });
-    let list = entrantList();
-    if (reroll && d.winner) list = list.filter(e => e.id !== d.winner.id);
-    const w = drawWinner(list);
-    if (!w) return res.status(400).json({ error: 'Nobody has tickets yet' });
-    const wheel = list.map(e => ({ id: e.id, name: e.name, tickets: e.tickets }));
+    const list = entrantList();
+
+    // redraw one winner of an open door; nobody who already won this door can be drawn
+    if (req.body.reroll) {
+      const index = Number(req.body.index);
+      if (!d.opened || !d.winners[index]) return res.status(400).json({ error: 'No such winner to redraw' });
+      const taken = new Set(d.winners.map(w => w.id));
+      const pool = list.filter(e => !taken.has(e.id));
+      const w = drawOne(pool);
+      if (!w) return res.status(400).json({ error: 'Nobody else has tickets' });
+      const old = d.winners[index];
+      d.winners[index] = { id: w.id, name: w.name, reels: w.reels, tickets: w.tickets };
+      data.log.push({ at: Date.now(), type: 'reroll', day, from: old.name, winner: w.name, discordId: w.id, prize: d.prize });
+      save();
+      setTimeout(() => notifyBot('/winner', { day, prize: d.prize, winners: [slim(w)], reroll: true }), (SPIN_SECONDS + 2) * 1000);
+      return res.json({ ok: true, day, prize: d.prize, count: 1, winners: [slim(w)], wheel: pool.map(slim) });
+    }
+
+    if (d.opened) return res.status(400).json({ error: 'That door is already open' });
+    const winners = drawMany(list, d.count || 1);
+    if (!winners.length) return res.status(400).json({ error: 'Nobody has tickets yet' });
     d.opened = true;
     d.openedAt = Date.now();
-    d.winner = { id: w.id, name: w.name, reels: w.reels, tickets: w.tickets };
-    data.log.push({ at: Date.now(), type: reroll ? 'reroll' : 'open', day, winner: w.name, discordId: w.id, prize: d.prize });
+    d.winners = winners.map(w => ({ id: w.id, name: w.name, reels: w.reels, tickets: w.tickets }));
+    data.log.push({ at: Date.now(), type: 'open', day, winners: winners.map(w => w.name), prize: d.prize });
     save();
-    // the announcement waits for the wheel on the page to stop
-    setTimeout(() => notifyBot('/winner', { day, prize: d.prize, amount: d.amount, discordId: w.id, name: w.name, tickets: w.tickets, reroll }), 9000);
-    res.json({ ok: true, day, prize: d.prize, amount: d.amount, winner: { id: w.id, name: w.name, tickets: w.tickets }, wheel });
+    // the announcement waits for the wheel on the page to finish every spin
+    setTimeout(() => notifyBot('/winner', { day, prize: d.prize, winners: winners.map(slim) }), (winners.length * (SPIN_SECONDS + 2) + 2) * 1000);
+    res.json({ ok: true, day, prize: d.prize, count: d.count, winners: winners.map(slim), wheel: list.map(slim) });
   });
 };
