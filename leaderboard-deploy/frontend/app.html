@@ -1212,12 +1212,12 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:26px;p
 .xc-head{text-align:center;padding:44px 0 26px}
 .xc-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,6vw,58px);font-weight:800;letter-spacing:.04em;line-height:.95;color:#fff}
 .xc-title span{color:#f0394d}
-.xc-pool{display:inline-flex;flex-direction:column;align-items:center;margin:18px auto 4px;padding:14px 38px 12px;border-radius:16px;background:linear-gradient(160deg,#fff,#ffe9d6);box-shadow:0 10px 36px rgba(200,16,46,.5)}
+.xc-pool{display:inline-flex;flex-direction:column;align-items:center;margin:16px auto 18px;padding:14px 38px 12px;border-radius:16px;background:linear-gradient(160deg,#fff,#ffe9d6);box-shadow:0 10px 36px rgba(200,16,46,.5)}
 .xc-pool b{font-family:'Barlow Condensed',sans-serif;font-size:clamp(56px,11vw,96px);font-weight:800;letter-spacing:.02em;line-height:.9;color:#c8102e}
 .xc-pool span{font-family:'Barlow Condensed',sans-serif;font-size:clamp(16px,2.6vw,24px);font-weight:800;letter-spacing:.2em;color:#5a0a14;margin-top:6px}
-.xc-collab{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:.14em;color:#fff}
-.xc-collab img{height:clamp(30px,5vw,40px);width:auto;border-radius:50%}
-.xc-collab img.xc-reels{border-radius:0;height:clamp(28px,4.6vw,38px)}
+.xc-collab{--h:clamp(34px,5.4vw,46px);display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;font-size:calc(var(--h)*.82);font-weight:800;letter-spacing:.1em;line-height:1;color:#fff}
+.xc-collab img{height:var(--h);width:auto;border-radius:50%}
+.xc-collab img.xc-reels{border-radius:0;height:calc(var(--h)*1.16)}
 .xc-collab i{font-style:normal;font-size:.7em;color:rgba(255,255,255,.55);margin:0 4px}
 .xc-lead{font-size:14px;line-height:1.6;color:var(--mu);max-width:520px;margin:10px auto 0}
 .xc-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
@@ -1436,7 +1436,7 @@ function HeroCarousel() {
 
     const KickMark = (st) => <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={st}><path fill="white" d="M1.333 0h8v5.333H12V2.667h2.667V0h8v8H20v2.667h-2.667v2.666H20V16h2.667v8h-8v-2.667H12v-2.666H9.333V24h-8Z"/></svg>;
     const SLIDES = [
-      {rgb:'214,124,224', color:'#e07ee6', base:[11,6,18], tag:'New Partner', title:'REELS', line:'NOW PARTNERED WITH NIKSI', desc:'Sign up through our link',
+      {rgb:'214,124,224', color:'#e07ee6', base:[11,6,18], tag:'New Partner', title:'REELS', line:'NOW PARTNERED WITH NIKSI', desc:'Sign up through my link',
         cta:'SIGN UP', href:'https://amb.reels.io/niksi', ext:true, logo:'/assets/reels-icon.png'},
       {rgb:'34,197,94', color:'#22c55e', base:[6,14,8], tag:'Leaderboard', title:'$1,000 RACE', line:'BI-WEEKLY ON GAMBA', desc:'Start wagering and climb the ladder',
         cta:'VIEW LEADERBOARD', href:'/leaderboards', logo:'/assets/gamba2.png'},
@@ -1596,7 +1596,7 @@ function HeroCarousel() {
       {
         logo:'/assets/reels.png', color:'#d67ce0', isNew:true,
         title:'NEW PARTNER',
-        perks:['SIGN UP THROUGH OUR LINK','LEADERBOARD TO BE ANNOUNCED'],
+        perks:['SIGN UP THROUGH MY LINK','LEADERBOARD TO BE ANNOUNCED'],
         bigImg:'/assets/reels.png',
         signupHref:'https://amb.reels.io/niksi', signupExt:true,
         noCode:true,
@@ -4927,14 +4927,14 @@ function CalendarPage() {
     <div className="wrap xc">
       <div className="xc-head">
         <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
-        <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
         <div className="xc-pool"><b>${st.totalPool.toLocaleString('en-US')}</b><span>IN TOTAL PRIZES</span></div>
+        <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
         <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door is a prize, and one ticket holder wins it on the wheel.</p>
       </div>
 
       <div className="xc-steps">
-        <div className="xc-step"><b>1</b><div><strong>Deposit on Reels</strong><span>Sign up through <a href="https://amb.reels.io/niksi" target="_blank" rel="noreferrer">our link</a> and deposit. Every deposit from November 28 counts.</span></div></div>
-        <div className="xc-step"><b>2</b><div><strong>Send your proof</strong><span>Use <em>/calendar</em> in our <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer">Discord</a> with a screenshot of the deposit.</span></div></div>
+        <div className="xc-step"><b>1</b><div><strong>Deposit on Reels</strong><span>Sign up through <a href="https://amb.reels.io/niksi" target="_blank" rel="noreferrer">my link</a> and deposit. Every deposit from November 28 counts.</span></div></div>
+        <div className="xc-step"><b>2</b><div><strong>Send your proof</strong><span>Use <em>/calendar</em> in my <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer">Discord</a> with a screenshot of the deposit.</span></div></div>
         <div className="xc-step"><b>3</b><div><strong>$50 = 1 ticket</strong><span>Tickets stay in for every door until December 24. Deposit again for more.</span></div></div>
       </div>
 
@@ -5035,7 +5035,7 @@ function RewardsPage() {
       prize: 'NEW', raceType: 'NEW PARTNER',
       signupHref: 'https://amb.reels.io/niksi',
       perks: [
-        'Sign up through our link',
+        'Sign up through my link',
         'Leaderboard to be announced',
       ],
     },
