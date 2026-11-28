@@ -4913,7 +4913,7 @@ function XmasWheel({ wheel, winners, prize, day, onClose }) {
           <div className="xw-kicker">{winners.length > 1 ? 'WINNERS ' + shown + ' OF ' + winners.length : 'WINNER'}</div>
           {winners.length === 1
             ? <div className="xw-winner" style={{opacity: done ? 1 : 0}}>{winners[0].name}</div>
-            : <div className="xw-list">{winners.map((w, i) => <span key={w.id} className={i < shown ? 'on' : ''}>{i < shown ? w.name : '?'}</span>)}</div>}
+            : <div className="xw-list">{winners.map((w, i) => <span key={i} className={i < shown ? 'on' : ''}>{i < shown ? w.name : '?'}</span>)}</div>}
         </div>
         {done && <button className="xc-btn" onClick={onClose}>CLOSE</button>}
       </div>

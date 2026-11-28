@@ -15,7 +15,7 @@ const DEFAULT_DAYS = [
   [5, 5, 'Tip'], [1, 20, 'Bonus Buy'], [2, 15, 'Tip'], [1, 40, 'Bonus Buy'], [5, 10, 'Tip'], [1, 50, 'Tip'],
   [3, 10, 'Tip'], [2, 20, 'Bonus Buy'], [6, 5, 'Tip'], [1, 40, 'Bonus Buy'], [3, 15, 'Tip'], [1, 60, 'Bonus Buy'],
   [6, 10, 'Tip'], [2, 20, 'Bonus Buy'], [1, 40, 'Tip'], [3, 15, 'Tip'], [1, 60, 'Bonus Buy'], [5, 10, 'Tip'],
-  [1, 80, 'Bonus Buy'], [4, 20, 'Tip'], [3, 20, 'Bonus Buy'], [1, 75, 'Tip'], [5, 30, 'Tip'], [1, 300, 'Tip'],
+  [1, 80, 'Bonus Buy'], [4, 20, 'Tip'], [3, 20, 'Bonus Buy'], [1, 75, 'Tip'], [5, 30, 'Tip'], [2, 150, 'Tip'],
 ];
 
 function defaults() {
@@ -56,14 +56,13 @@ function drawOne(list) {
   for (const e of list) { if (pick < e.tickets) return e; pick -= e.tickets; }
   return list[list.length - 1];
 }
-// up to n different people, each draw weighted by tickets
+// n separate draws, each weighted by tickets; the same person can win more than once, so more tickets always help
 function drawMany(list, n) {
-  const pool = list.slice(), out = [];
-  while (out.length < n && pool.length) {
-    const w = drawOne(pool);
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const w = drawOne(list);
     if (!w) break;
     out.push(w);
-    pool.splice(pool.indexOf(w), 1);
   }
   return out;
 }
@@ -158,12 +157,11 @@ module.exports = function mountXmas(app, { sessions, isAdminUser }) {
     if (day > todayDay()) return res.status(400).json({ error: 'That door cannot be opened yet' });
     const list = entrantList();
 
-    // redraw one winner of an open door; nobody who already won this door can be drawn
+    // redraw one winner of an open door; only the person being replaced is left out
     if (req.body.reroll) {
       const index = Number(req.body.index);
       if (!d.opened || !d.winners[index]) return res.status(400).json({ error: 'No such winner to redraw' });
-      const taken = new Set(d.winners.map(w => w.id));
-      const pool = list.filter(e => !taken.has(e.id));
+      const pool = list.filter(e => e.id !== d.winners[index].id);
       const w = drawOne(pool);
       if (!w) return res.status(400).json({ error: 'Nobody else has tickets' });
       const old = d.winners[index];
