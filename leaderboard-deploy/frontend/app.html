@@ -1212,7 +1212,13 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:26px;p
 .xc-head{text-align:center;padding:44px 0 26px}
 .xc-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,6vw,58px);font-weight:800;letter-spacing:.04em;line-height:.95;color:#fff}
 .xc-title span{color:#f0394d}
-.xc-pool{font-family:'Barlow Condensed',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:.12em;color:#f5a623;margin-top:10px}
+.xc-pool{display:inline-flex;flex-direction:column;align-items:center;margin:18px auto 4px;padding:14px 38px 12px;border-radius:16px;background:linear-gradient(160deg,#fff,#ffe9d6);box-shadow:0 10px 36px rgba(200,16,46,.5)}
+.xc-pool b{font-family:'Barlow Condensed',sans-serif;font-size:clamp(56px,11vw,96px);font-weight:800;letter-spacing:.02em;line-height:.9;color:#c8102e}
+.xc-pool span{font-family:'Barlow Condensed',sans-serif;font-size:clamp(16px,2.6vw,24px);font-weight:800;letter-spacing:.2em;color:#5a0a14;margin-top:6px}
+.xc-collab{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:.14em;color:#fff}
+.xc-collab img{height:clamp(30px,5vw,40px);width:auto;border-radius:50%}
+.xc-collab img.xc-reels{border-radius:0;height:clamp(28px,4.6vw,38px)}
+.xc-collab i{font-style:normal;font-size:.7em;color:rgba(255,255,255,.55);margin:0 4px}
 .xc-lead{font-size:14px;line-height:1.6;color:var(--mu);max-width:520px;margin:10px auto 0}
 .xc-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
 .xc-step{display:flex;gap:12px;align-items:flex-start;background:#2a0c14;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px;min-width:0}
@@ -4914,19 +4920,20 @@ function CalendarPage() {
     catch (e) { setMsg(e.message); }
   }
 
-  if (!st) return <div className="wrap"><div className="xc-head"><h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1></div></div>;
+  if (!st) return <div className="wrap"><div className="xc-head"><div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div><h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1></div></div>;
   const today = st.today;
 
   return (
     <div className="wrap xc">
       <div className="xc-head">
+        <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
         <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
-        <div className="xc-pool">${st.totalPool.toLocaleString('en-US')} IN PRIZES</div>
+        <div className="xc-pool"><b>${st.totalPool.toLocaleString('en-US')}</b><span>IN TOTAL PRIZES</span></div>
         <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door is a prize, and one ticket holder wins it on the wheel.</p>
       </div>
 
       <div className="xc-steps">
-        <div className="xc-step"><b>1</b><div><strong>Deposit on Reels</strong><span>Sign up through <a href="https://amb.reels.io/niksi" target="_blank" rel="noreferrer">our link</a> and deposit from December 1.</span></div></div>
+        <div className="xc-step"><b>1</b><div><strong>Deposit on Reels</strong><span>Sign up through <a href="https://amb.reels.io/niksi" target="_blank" rel="noreferrer">our link</a> and deposit. Every deposit from November 28 counts.</span></div></div>
         <div className="xc-step"><b>2</b><div><strong>Send your proof</strong><span>Use <em>/calendar</em> in our <a href="https://discord.com/invite/Gnyv25SHg7" target="_blank" rel="noreferrer">Discord</a> with a screenshot of the deposit.</span></div></div>
         <div className="xc-step"><b>3</b><div><strong>$50 = 1 ticket</strong><span>Tickets stay in for every door until December 24. Deposit again for more.</span></div></div>
       </div>
