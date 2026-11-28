@@ -1271,6 +1271,15 @@ nav::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:26px;p
 .xw-sub{font-size:13px;color:var(--mu)}
 @media(max-width:860px){.xc-grid{grid-template-columns:repeat(4,1fr)}.xc-steps{grid-template-columns:1fr}}
 @media(max-width:520px){.xc-grid{grid-template-columns:repeat(3,1fr);gap:8px}.xc-row{padding:10px 12px;gap:8px}.xc-card-h{padding:12px}.xc-head{padding-top:30px}}
+  
+.xc-banner{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:36px;margin:30px 0 16px;padding:38px 44px;border-radius:18px;border:1px solid rgba(255,255,255,.22);background:radial-gradient(circle,rgba(255,255,255,.1) 1.5px,transparent 2px) 0 0/34px 34px,linear-gradient(115deg,#b01226 0%,#8a0c1c 50%,#560914 100%);box-shadow:0 14px 44px rgba(0,0,0,.45)}
+.xc-banner-main{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.xc-banner .xc-collab{margin-bottom:12px}
+.xc-banner .xc-title{font-size:clamp(34px,5.4vw,64px)}
+.xc-banner .xc-title span{color:#fff;-webkit-text-stroke:0;opacity:.82}
+.xc-banner .xc-lead{color:rgba(255,255,255,.82);margin-top:12px;max-width:500px}
+.xc-banner .xc-pool{margin:0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+@media(max-width:860px){.xc-banner{grid-template-columns:1fr;justify-items:center;gap:22px;padding:28px 18px;margin-top:20px}}
   </style>
 </head>
 <body>
@@ -4925,11 +4934,13 @@ function CalendarPage() {
 
   return (
     <div className="wrap xc">
-      <div className="xc-head">
-        <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
+      <div className="xc-banner">
+        <div className="xc-banner-main">
+          <div className="xc-collab"><img src="/assets/niksi.png" alt=""/><span>NIKSI</span><i>X</i><img className="xc-reels" src="/assets/reels.png" alt="REELS"/></div>
+          <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
+          <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door is a prize, and one ticket holder wins it on the wheel.</p>
+        </div>
         <div className="xc-pool"><b>${st.totalPool.toLocaleString('en-US')}</b><span>IN TOTAL PRIZES</span></div>
-        <h1 className="xc-title">CHRISTMAS <span>CALENDAR</span></h1>
-        <p className="xc-lead">One door opens every day from December 1 to 24. Behind each door is a prize, and one ticket holder wins it on the wheel.</p>
       </div>
 
       <div className="xc-steps">
